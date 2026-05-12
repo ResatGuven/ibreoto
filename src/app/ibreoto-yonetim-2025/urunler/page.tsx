@@ -6,7 +6,7 @@ import { Plus, Edit, Trash2, Image as ImageIcon } from 'lucide-react';
 export default function AdminUrunlerPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [isAdding, setIsAdding] = useState(false);
-  const [formData, setFormData] = useState({ id: '', name: '', price: '', category: '', image: '', description: '' });
+  const [formData, setFormData] = useState({ id: '', name: '', price: '', category: '', image: '', description: '', stock: '0' });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -37,13 +37,16 @@ export default function AdminUrunlerPage() {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          stock: parseInt(formData.stock) || 0
+        }),
       });
 
       if (res.ok) {
         fetchProducts();
         setIsAdding(false);
-        setFormData({ id: '', name: '', price: '', category: '', image: '', description: '' });
+        setFormData({ id: '', name: '', price: '', category: '', image: '', description: '', stock: '0' });
       } else {
         alert('Failed to save product');
       }
@@ -86,7 +89,7 @@ export default function AdminUrunlerPage() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-heading font-bold text-secondary uppercase">Ürün Yönetimi</h1>
         <button 
-          onClick={() => { setIsAdding(true); setFormData({ id: '', name: '', price: '', category: '', image: '', description: '' }); }}
+          onClick={() => { setIsAdding(true); setFormData({ id: '', name: '', price: '', category: '', image: '', description: '', stock: '0' }); }}
           className="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase flex items-center transition-colors"
         >
           <Plus className="w-4 h-4 mr-1" /> Yeni Ürün Ekle
@@ -97,7 +100,7 @@ export default function AdminUrunlerPage() {
         <div className="bg-white p-6 rounded-xl border border-gray-100 mb-6 shadow-sm">
           <h2 className="text-lg font-heading font-bold text-secondary mb-4 uppercase">{formData.id ? 'Ürünü Düzenle' : 'Yeni Ürün Ekle'}</h2>
           <form className="space-y-4" onSubmit={handleSave}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-text-muted mb-1 text-sm font-body">Ürün Adı</label>
                 <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" required />
@@ -105,6 +108,10 @@ export default function AdminUrunlerPage() {
               <div>
                 <label className="block text-text-muted mb-1 text-sm font-body">Fiyat (₺)</label>
                 <input type="text" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" required />
+              </div>
+              <div>
+                <label className="block text-text-muted mb-1 text-sm font-body">Stok Adedi</label>
+                <input type="number" value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" required />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -149,13 +156,14 @@ export default function AdminUrunlerPage() {
               <th className="p-4">Ürün Adı</th>
               <th className="p-4">Kategori</th>
               <th className="p-4">Fiyat</th>
+              <th className="p-4">Stok</th>
               <th className="p-4 text-right">İşlemler</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={5} className="p-4 text-center text-gray-500">Yükleniyor...</td>
+                <td colSpan={6} className="p-4 text-center text-gray-500">Yükleniyor...</td>
               </tr>
             ) : products.map((product) => (
               <tr key={product.id} className="border-t border-gray-100 hover:bg-surface/50 transition-colors">
@@ -167,15 +175,16 @@ export default function AdminUrunlerPage() {
                 <td className="p-4 font-medium text-secondary">{product.name}</td>
                 <td className="p-4 text-text-muted">{product.category}</td>
                 <td className="p-4 font-heading font-bold text-primary">₺{product.price}</td>
+                <td className="p-4 text-text-muted">{product.stock}</td>
                 <td className="p-4 text-right space-x-2">
-                  <button onClick={() => { setIsAdding(true); setFormData(product); }} className="text-blue-500 hover:text-blue-700 transition-colors"><Edit className="w-4 h-4" /></button>
+                  <button onClick={() => { setIsAdding(true); setFormData({...product, stock: product.stock.toString()}); }} className="text-blue-500 hover:text-blue-700 transition-colors"><Edit className="w-4 h-4" /></button>
                   <button onClick={() => handleDelete(product.id)} className="text-red-500 hover:text-red-700 transition-colors"><Trash2 className="w-4 h-4" /></button>
                 </td>
               </tr>
             ))}
             {!loading && products.length === 0 && (
               <tr>
-                <td colSpan={5} className="p-4 text-center text-gray-500">Ürün bulunamadı.</td>
+                <td colSpan={6} className="p-4 text-center text-gray-500">Ürün bulunamadı.</td>
               </tr>
             )}
           </tbody>

@@ -24,7 +24,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, price, category, image, description } = body;
+    const { name, price, category, image, description, stock } = body;
 
     const categoryRecord = await prisma.category.findUnique({
       where: { slug: category },
@@ -39,6 +39,7 @@ export async function PUT(
       data: {
         name,
         price: parseFloat(price),
+        stock: parseInt(stock) || 0, // Stok güncelleniyor
         images: JSON.stringify([image]),
         description,
         categoryId: categoryRecord.id,
