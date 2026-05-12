@@ -1,14 +1,16 @@
-"use client";
 import React from 'react';
 import { FolderTree } from 'lucide-react';
+import prisma from '@/lib/prisma'; // Prisma bağlantısı
 
-export default function AdminKategorilerPage() {
-  const categories = [
-    { id: 1, name: 'İç Aksesuar', slug: 'ic-aksesuar', count: 3 },
-    { id: 2, name: 'Dış Aksesuar', slug: 'dis-aksesuar', count: 3 },
-    { id: 3, name: 'Teknoloji & Elektronik', slug: 'teknoloji', count: 3 },
-    { id: 4, name: 'Bakım & Temizlik', slug: 'bakim', count: 3 },
-  ];
+export default async function AdminKategorilerPage() {
+  // Veritabanından kategorileri ve içlerindeki ürün sayılarını çekiyoruz
+  const categories = await prisma.category.findMany({
+    include: {
+      _count: {
+        select: { products: true }
+      }
+    }
+  });
 
   return (
     <div className="p-6 bg-background min-h-screen">
@@ -31,9 +33,14 @@ export default function AdminKategorilerPage() {
                   {cat.name}
                 </td>
                 <td className="p-4 text-text-muted">{cat.slug}</td>
-                <td className="p-4 text-text-muted">{cat.count}</td>
+                <td className="p-4 text-text-muted">{cat._count.products}</td>
               </tr>
             ))}
+            {categories.length === 0 && (
+              <tr>
+                <td colSpan={3} className="p-4 text-center text-gray-500">Henüz kategori yok.</td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
