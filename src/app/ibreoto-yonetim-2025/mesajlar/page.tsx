@@ -5,26 +5,43 @@ import { Mail, Trash2, Eye } from 'lucide-react';
 
 export default function AdminMesajlarPage() {
   const [messages, setMessages] = useState<any[]>([]);
-
-  const defaultMessages = [
-    { id: 1, name: 'Ahmet Yılmaz', email: 'ahmet@test.com', message: 'Ürünleriniz hakkında bilgi almak istiyorum.', date: '11.05.2026' },
-    { id: 2, name: 'Mehmet Demir', email: 'mehmet@test.com', message: 'Kargom ne zaman ulaşır?', date: '10.05.2026' },
-  ];
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedMessages = localStorage.getItem('app_messages');
-    if (savedMessages) {
-      setMessages(JSON.parse(savedMessages));
-    } else {
-      setMessages(defaultMessages);
-      localStorage.setItem('app_messages', JSON.stringify(defaultMessages));
-    }
+    fetchMessages();
   }, []);
 
-  const handleDelete = (id: number) => {
-    const updated = messages.filter(m => m.id !== id);
-    setMessages(updated);
-    localStorage.setItem('app_messages', JSON.stringify(updated));
+  const fetchMessages = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/admin/messages');
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setMessages(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch messages:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Bu mesajı silmek istediğinize emin misiniz?')) return;
+    
+    try {
+      const res = await fetch(`/api/admin/messages/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        fetchMessages();
+      } else {
+        alert('Failed to delete message');
+      }
+    } catch (error) {
+      console.error('Error deleting message:', error);
+    }
   };
 
   return (
@@ -43,9 +60,15 @@ export default function AdminMesajlarPage() {
             </tr>
           </thead>
           <tbody>
-            {messages.map((message) => (
+            {loading ? (
+              <tr>
+                <td colSpan={5} className="p-4 text-center text-gray-500">Yükleniyor...</td>
+              </tr>
+            ) : messages.map((message) => (
               <tr key={message.id} className="border-t border-gray-100 hover:bg-surface/50 transition-colors">
-                <td className="p-4 text-text-muted">{message.date}</td>
+                <td className="p-4 text-text-muted">
+                  {message.createdAt ? new Date(message.createdAt).toLocaleDateString('tr-TR') : '---'}
+                </td>
                 <td className="p-4 font-medium text-secondary">{message.name}</td>
                 <td className="p-4 text-text-muted">{message.email}</td>
                 <td className="p-4 text-text-muted truncate max-w-xs">{message.message}</td>
@@ -59,6 +82,11 @@ export default function AdminMesajlarPage() {
                 </td>
               </tr>
             ))}
+            {!loading && messages.length === 0 && (
+              <tr>
+                <td colSpan={5} className="p-4 text-center text-gray-500">Henüz mesaj yok.</td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

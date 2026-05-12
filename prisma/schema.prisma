@@ -113,3 +113,12 @@ model OrderItem {
   quantity  Int
   price     Float
 }
+
+model Message {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  createdAt DateTime @default(now())
+}
