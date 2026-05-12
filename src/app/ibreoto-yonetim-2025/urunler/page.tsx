@@ -6,64 +6,68 @@ import { Plus, Edit, Trash2, Image as ImageIcon } from 'lucide-react';
 export default function AdminUrunlerPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [isAdding, setIsAdding] = useState(false);
-  const [formData, setFormData] = useState({ id: 0, name: '', price: '', category: '', image: '', description: '' });
-
-  const defaultProducts = [
-    { id: 1, name: 'Karbon Fiber Direksiyon Kılıfı', price: '350', category: 'ic-aksesuar', image: '/images/products/steering_wheel_cover.png', description: 'Yüksek kaliteli karbon fiber görünüm.' },
-    { id: 2, name: '3D Havuzlu Paspas Seti - VW Golf', price: '850', category: 'ic-aksesuar', image: '/images/products/paspas_seti.png', description: 'Tam uyumlu havuzlu paspas.' },
-    { id: 3, name: 'Ortopedik Bel Destekli Koltuk Minderi', price: '450', category: 'ic-aksesuar', image: '/images/products/koltuk_minderi.png', description: 'Uzun sürüşler için konfor.' },
-    { id: 4, name: 'Dört Mevsim Branda - Su Geçirmez', price: '1200', category: 'dis-aksesuar', image: '/images/products/araba_brandasi.png', description: 'Aracınızı dış etkenlerden korur.' },
-    { id: 5, name: 'Muz Tipi Silecek Takımı', price: '150', category: 'dis-aksesuar', image: '/images/products/silecek_takimi.png', description: 'Sessiz ve temiz silme.' },
-    { id: 6, name: 'Krom Kapı Kolu Kaplaması', price: '250', category: 'dis-aksesuar', image: '/images/products/krom_kapi_kolu.png', description: 'Şık krom görünüm.' },
-    { id: 7, name: '4K Çift Kameralı Araç İçi Kamera', price: '2500', category: 'teknoloji', image: '/images/products/dash_cam.png', description: 'Ön ve arka kayıt.' },
-    { id: 8, name: 'RGB Uygulama Kontrollü Ambiyans Led', price: '650', category: 'teknoloji', image: '/images/products/interior_led.png', description: 'Telefon kontrollü renkler.' },
-    { id: 9, name: 'Kablosuz Şarjlı Telefon Tutucu', price: '350', category: 'teknoloji', image: '/images/products/telefon_tutucu.png', description: 'Otomatik kavrama.' },
-    { id: 10, name: 'Seramik Katkılı Hızlı Cila 500ml', price: '250', category: 'bakim', image: '/images/products/seramik_cila.png', description: 'Derin parlaklık ve koruma.' },
-    { id: 11, name: 'Cilalı Oto Şampuanı 1 Litre', price: '120', category: 'bakim', image: '/images/products/oto_sampuani.png', description: 'Temizler ve parlatır.' },
-    { id: 12, name: 'Mikrofiber Kurulama Bezi 3\'lü', price: '80', category: 'bakim', image: '/images/products/kurulama_bezi.png', description: 'Hav bırakmaz.' },
-  ];
+  const [formData, setFormData] = useState({ id: '', name: '', price: '', category: '', image: '', description: '' });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let allProducts = [];
-    const savedProducts = localStorage.getItem('app_products');
-    if (savedProducts) {
-      const parsed = JSON.parse(savedProducts);
-      // Merge with default products to get images if missing
-      allProducts = parsed.map((p: any) => {
-        const def = defaultProducts.find(d => d.id === p.id);
-        return {
-          ...p,
-          image: p.image || (def ? def.image : '')
-        };
-      });
-    } else {
-      allProducts = defaultProducts;
-      localStorage.setItem('app_products', JSON.stringify(defaultProducts));
-    }
-    setProducts(allProducts);
+    fetchProducts();
   }, []);
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    let updated;
-    if (formData.id) {
-      // Edit
-      updated = products.map(p => p.id === formData.id ? formData : p);
-    } else {
-      // Add
-      const newProduct = { ...formData, id: Date.now() };
-      updated = [...products, newProduct];
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/admin/products');
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setProducts(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch products:', error);
+    } finally {
+      setLoading(false);
     }
-    setProducts(updated);
-    localStorage.setItem('app_products', JSON.stringify(updated));
-    setIsAdding(false);
-    setFormData({ id: 0, name: '', price: '', category: '', image: '', description: '' });
   };
 
-  const handleDelete = (id: number) => {
-    const updated = products.filter(p => p.id !== id);
-    setProducts(updated);
-    localStorage.setItem('app_products', JSON.stringify(updated));
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const method = formData.id ? 'PUT' : 'POST';
+      const url = formData.id ? `/api/admin/products/${formData.id}` : '/api/admin/products';
+      
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        fetchProducts();
+        setIsAdding(false);
+        setFormData({ id: '', name: '', price: '', category: '', image: '', description: '' });
+      } else {
+        alert('Failed to save product');
+      }
+    } catch (error) {
+      console.error('Error saving product:', error);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Bu ürünü silmek istediğinize emin misiniz?')) return;
+    
+    try {
+      const res = await fetch(`/api/admin/products/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        fetchProducts();
+      } else {
+        alert('Failed to delete product');
+      }
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +86,7 @@ export default function AdminUrunlerPage() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-heading font-bold text-secondary uppercase">Ürün Yönetimi</h1>
         <button 
-          onClick={() => { setIsAdding(true); setFormData({ id: 0, name: '', price: '', category: '', image: '', description: '' }); }}
+          onClick={() => { setIsAdding(true); setFormData({ id: '', name: '', price: '', category: '', image: '', description: '' }); }}
           className="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase flex items-center transition-colors"
         >
           <Plus className="w-4 h-4 mr-1" /> Yeni Ürün Ekle
@@ -149,7 +153,11 @@ export default function AdminUrunlerPage() {
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => (
+            {loading ? (
+              <tr>
+                <td colSpan={5} className="p-4 text-center text-gray-500">Yükleniyor...</td>
+              </tr>
+            ) : products.map((product) => (
               <tr key={product.id} className="border-t border-gray-100 hover:bg-surface/50 transition-colors">
                 <td className="p-4">
                   <div className="w-12 h-12 bg-surface rounded flex items-center justify-center text-gray-400 overflow-hidden">
@@ -165,6 +173,11 @@ export default function AdminUrunlerPage() {
                 </td>
               </tr>
             ))}
+            {!loading && products.length === 0 && (
+              <tr>
+                <td colSpan={5} className="p-4 text-center text-gray-500">Ürün bulunamadı.</td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

@@ -1,14 +1,50 @@
 import React from 'react';
 import { DollarSign, ShoppingCart, Users, TrendingUp } from 'lucide-react';
+import prisma from '@/lib/prisma';
 
-const stats = [
-  { label: 'Aylık Gelir', value: '₺124.500', icon: DollarSign, color: 'bg-green-100 text-green-600', trend: '+12.5%' },
-  { label: 'Yeni Siparişler', value: '145', icon: ShoppingCart, color: 'bg-blue-100 text-blue-600', trend: '+5.2%' },
-  { label: 'Aktif Müşteriler', value: '8.432', icon: Users, color: 'bg-purple-100 text-purple-600', trend: '+2.4%' },
-  { label: 'Dönüşüm Oranı', value: '%3.2', icon: TrendingUp, color: 'bg-orange-100 text-orange-600', trend: '+1.1%' },
-];
+export default async function AdminDashboardPage() {
+  // 1. Toplam Gelir
+  const orders = await prisma.order.findMany();
+  const totalRevenue = orders.reduce((sum, order) => sum + order.totalAmount, 0);
 
-export default function AdminDashboardPage() {
+  // 2. Yeni Siparişler
+  const totalOrders = orders.length;
+
+  // 3. Aktif Müşteriler
+  const uniqueUsers = await prisma.order.findMany({
+    select: { userId: true },
+    distinct: ['userId'],
+  });
+  const activeCustomers = uniqueUsers.length;
+
+  // 4. Son Siparişler
+  const recentOrders = await prisma.order.findMany({
+    take: 5,
+    orderBy: { createdAt: 'desc' },
+    include: {
+      user: {
+        select: { name: true },
+      },
+    },
+  });
+
+  // 5. Kritik Stok Uyarısı
+  const lowStockProducts = await prisma.product.findMany({
+    where: {
+      stock: {
+        lt: 5,
+      },
+    },
+    take: 5,
+  });
+
+  const stats = [
+    { label: 'Toplam Gelir', value: `₺${totalRevenue.toLocaleString('tr-TR')}`, icon: DollarSign, color: 'bg-green-100 text-green-600', trend: '+0%' },
+    { label: 'Yeni Siparişler', value: totalOrders.toString(), icon: ShoppingCart, color: 'bg-blue-100 text-blue-600', trend: '+0%' },
+    { label: 'Aktif Müşteriler', value: activeCustomers.toString(), icon: Users, color: 'bg-purple-100 text-purple-600', trend: '+0%' },
+    { label: 'Dönüşüm Oranı', value: '%0', icon: TrendingUp, color: 'bg-orange-100 text-orange-600', trend: '+0%' },
+  ];
+
   return (
     <div>
       <h1 className="text-3xl font-heading font-bold text-secondary mb-8">Dashboard</h1>
@@ -35,7 +71,7 @@ export default function AdminDashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Recent Orders Placeholder */}
+        {/* Recent Orders */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
           <h3 className="font-heading font-bold text-lg text-secondary mb-4">Son Siparişler</h3>
           <div className="overflow-x-auto">
@@ -49,51 +85,52 @@ export default function AdminDashboardPage() {
                 </tr>
               </thead>
               <tbody className="text-sm">
-                <tr className="border-b border-gray-100">
-                  <td className="py-3 font-medium text-primary">#ORD-001</td>
-                  <td className="py-3 text-gray-700">Ahmet Yılmaz</td>
-                  <td className="py-3 font-medium">₺1.250</td>
-                  <td className="py-3"><span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-medium">Bekliyor</span></td>
-                </tr>
-                <tr className="border-b border-gray-100">
-                  <td className="py-3 font-medium text-primary">#ORD-002</td>
-                  <td className="py-3 text-gray-700">Mehmet Demir</td>
-                  <td className="py-3 font-medium">₺3.450</td>
-                  <td className="py-3"><span className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-medium">Hazırlanıyor</span></td>
-                </tr>
-                <tr className="border-b border-gray-100">
-                  <td className="py-3 font-medium text-primary">#ORD-003</td>
-                  <td className="py-3 text-gray-700">Ayşe Kaya</td>
-                  <td className="py-3 font-medium">₺850</td>
-                  <td className="py-3"><span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium">Teslim Edildi</span></td>
-                </tr>
+                {recentOrders.map((order) => (
+                  <tr key={order.id} className="border-b border-gray-100">
+                    <td className="py-3 font-medium text-primary">#{order.id.substring(0, 8)}</td>
+                    <td className="py-3 text-gray-700">{order.user?.name || 'Bilinmeyen'}</td>
+                    <td className="py-3 font-medium">₺{order.totalAmount.toLocaleString('tr-TR')}</td>
+                    <td className="py-3">
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${
+                        order.status === 'PENDING' ? 'bg-yellow-100 text-yellow-700' :
+                        order.status === 'DELIVERED' ? 'bg-green-100 text-green-700' :
+                        'bg-blue-100 text-blue-700'
+                      }`}>
+                        {order.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+                {recentOrders.length === 0 && (
+                  <tr>
+                    <td colSpan={4} className="py-4 text-center text-gray-500">Henüz sipariş yok.</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
         </div>
 
-        {/* Low Stock Placeholder */}
+        {/* Low Stock */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
           <h3 className="font-heading font-bold text-lg text-secondary mb-4 border-b border-gray-100 pb-2">Stok Uyarısı (Kritik Seviye)</h3>
           <ul className="space-y-4 mt-4">
-             <li className="flex justify-between items-center">
-                <div>
-                   <p className="text-sm font-medium text-gray-900">Karbon Fiber Direksiyon Kılıfı</p>
-                   <p className="text-xs text-gray-500">SKU: CF-STR-01</p>
-                </div>
-                <div className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">
-                   Son 2 Adet
-                </div>
-             </li>
-             <li className="flex justify-between items-center">
-                <div>
-                   <p className="text-sm font-medium text-gray-900">3D Havuzlu Paspas Seti - VW Golf</p>
-                   <p className="text-xs text-gray-500">SKU: 3D-VW-GOLF</p>
-                </div>
-                <div className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">
-                   Stok Tükendi
-                </div>
-             </li>
+             {lowStockProducts.map((product) => (
+                <li key={product.id} className="flex justify-between items-center">
+                   <div>
+                      <p className="text-sm font-medium text-gray-900">{product.name}</p>
+                      <p className="text-xs text-gray-500">SKU: {product.id.substring(0, 8)}</p>
+                   </div>
+                   <div className={`px-3 py-1 rounded-full text-xs font-bold ${
+                      product.stock === 0 ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
+                   }`}>
+                      {product.stock === 0 ? 'Stok Tükendi' : `Son ${product.stock} Adet`}
+                   </div>
+                </li>
+             ))}
+             {lowStockProducts.length === 0 && (
+                <li className="text-sm text-gray-500 text-center py-4">Kritik stokta ürün yok.</li>
+             )}
           </ul>
         </div>
       </div>
