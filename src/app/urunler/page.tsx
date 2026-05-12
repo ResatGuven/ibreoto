@@ -13,6 +13,7 @@ export default function UrunlerPage() {
   const [maxPrice, setMaxPrice] = useState('');
   const [appliedMin, setAppliedMin] = useState<number | null>(null);
   const [appliedMax, setAppliedMax] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const categoryNames: { [key: string]: string } = {
     'ic-aksesuar': 'İç Aksesuar',
@@ -21,41 +22,25 @@ export default function UrunlerPage() {
     'bakim': 'Bakım & Temizlik'
   };
 
-  const defaultProducts = [
-    { id: 1, name: 'Karbon Fiber Direksiyon Kılıfı', price: '350', category: 'ic-aksesuar', image: '/images/products/steering_wheel_cover.png', description: 'Yüksek kaliteli karbon fiber görünüm.' },
-    { id: 2, name: '3D Havuzlu Paspas Seti - VW Golf', price: '850', category: 'ic-aksesuar', image: '/images/products/paspas_seti.png', description: 'Tam uyumlu havuzlu paspas.' },
-    { id: 3, name: 'Ortopedik Bel Destekli Koltuk Minderi', price: '450', category: 'ic-aksesuar', image: '/images/products/koltuk_minderi.png', description: 'Uzun sürüşler için konfor.' },
-    { id: 4, name: 'Dört Mevsim Branda - Su Geçirmez', price: '1200', category: 'dis-aksesuar', image: '/images/products/araba_brandasi.png', description: 'Aracınızı dış etkenlerden korur.' },
-    { id: 5, name: 'Muz Tipi Silecek Takımı', price: '150', category: 'dis-aksesuar', image: '/images/products/silecek_takimi.png', description: 'Sessiz ve temiz silme.' },
-    { id: 6, name: 'Krom Kapı Kolu Kaplaması', price: '250', category: 'dis-aksesuar', image: '/images/products/krom_kapi_kolu.png', description: 'Şık krom görünüm.' },
-    { id: 7, name: '4K Çift Kameralı Araç İçi Kamera', price: '2500', category: 'teknoloji', image: '/images/products/dash_cam.png', description: 'Ön ve arka kayıt.' },
-    { id: 8, name: 'RGB Uygulama Kontrollü Ambiyans Led', price: '650', category: 'teknoloji', image: '/images/products/interior_led.png', description: 'Telefon kontrollü renkler.' },
-    { id: 9, name: 'Kablosuz Şarjlı Telefon Tutucu', price: '350', category: 'teknoloji', image: '/images/products/telefon_tutucu.png', description: 'Otomatik kavrama.' },
-    { id: 10, name: 'Seramik Katkılı Hızlı Cila 500ml', price: '250', category: 'bakim', image: '/images/products/seramik_cila.png', description: 'Derin parlaklık ve koruma.' },
-    { id: 11, name: 'Cilalı Oto Şampuanı 1 Litre', price: '120', category: 'bakim', image: '/images/products/oto_sampuani.png', description: 'Temizler ve parlatır.' },
-    { id: 12, name: 'Mikrofiber Kurulama Bezi 3\'lü', price: '80', category: 'bakim', image: '/images/products/kurulama_bezi.png', description: 'Hav bırakmaz.' },
-  ];
-
   useEffect(() => {
-    let allProducts = [];
-    const savedProducts = localStorage.getItem('app_products');
-    if (savedProducts) {
-      const parsed = JSON.parse(savedProducts);
-      // Merge with default products to get images if missing
-      allProducts = parsed.map((p: any) => {
-        const def = defaultProducts.find(d => d.id === p.id);
-        return {
-          ...p,
-          image: p.image || (def ? def.image : '')
-        };
-      });
-    } else {
-      allProducts = defaultProducts;
-      localStorage.setItem('app_products', JSON.stringify(defaultProducts));
-    }
-    setProducts(allProducts);
-    setFilteredProducts(allProducts);
+    fetchProducts();
   }, []);
+
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/admin/products');
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setProducts(data);
+        setFilteredProducts(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     let filtered = products;
@@ -175,7 +160,9 @@ export default function UrunlerPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProducts.map((product) => (
+            {loading ? (
+              <div className="col-span-3 text-center py-12 text-gray-500">Ürünler yükleniyor...</div>
+            ) : filteredProducts.map((product) => (
               <div key={product.id} className="group bg-white border border-surface hover:border-primary rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all flex flex-col">
                 <Link href={`/urun/${product.id}`} className="block relative w-full h-48 bg-surface p-4 flex items-center justify-center overflow-hidden">
                   {product.image ? (
@@ -205,7 +192,7 @@ export default function UrunlerPage() {
             ))}
           </div>
 
-          {filteredProducts.length === 0 && (
+          {!loading && filteredProducts.length === 0 && (
             <p className="text-text-muted text-center py-12 font-body">Seçili kriterlere uygun ürün bulunamadı.</p>
           )}
         </div>
