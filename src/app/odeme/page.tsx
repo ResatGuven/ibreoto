@@ -96,6 +96,7 @@ ${newOrder.items.map((item: any) => `- ${item.name} (x${item.qty})`).join('\n')}
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ message }),
+      cache: 'no-store',
     }).catch(error => console.error('Telegram error:', error));
 
     // Simulate payment processing
