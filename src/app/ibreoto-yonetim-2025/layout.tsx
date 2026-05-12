@@ -23,15 +23,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="flex h-screen bg-gray-100 font-body">
       {/* Sidebar */}
       <aside className="w-64 bg-secondary text-white flex flex-col shadow-xl">
-        <div className="p-6 border-b border-gray-700 flex items-center justify-center">
-           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold text-lg italic font-heading">
-              i
-            </div>
-            <span className="text-xl font-heading font-bold text-white">
-              ibre<span className="text-primary">oto</span>
-            </span>
-          </div>
+        <div className="p-4 border-b border-gray-700 flex items-center justify-center bg-white">
+          <Link href="/">
+            <img src="/images/logo.jpg" alt="ibreoto" className="h-12 w-auto" />
+          </Link>
         </div>
         <div className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">
           Yönetim Paneli
