@@ -75,6 +75,29 @@ export default function OdemePage() {
     orders.unshift(newOrder); // Add to top
     localStorage.setItem('app_orders', JSON.stringify(orders));
 
+    // Telegram Bildirimi Gönder
+    const message = `
+<b>🔔 YENİ SİPARİŞ ALINDI!</b>
+
+<b>Müşteri:</b> ${newOrder.customer}
+<b>E-Posta:</b> ${newOrder.email}
+<b>Telefon:</b> ${newOrder.phone}
+<b>Adres:</b> ${newOrder.address}
+<b>Tutar:</b> ${newOrder.total}
+<b>Tarih:</b> ${newOrder.date}
+
+<b>Ürünler:</b>
+${newOrder.items.map((item: any) => `- ${item.name} (x${item.qty})`).join('\n')}
+    `;
+
+    fetch('/api/telegram', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message }),
+    }).catch(error => console.error('Telegram error:', error));
+
     // Simulate payment processing
     setTimeout(() => {
       setIsProcessing(false);
