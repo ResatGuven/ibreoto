@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #D41B1B;
+  --color-primary-hover: #B01515;
+  --color-secondary: #4A4A4A;
+  --color-accent: #B01515;
+  --color-background: #FFFFFF;
+  --color-surface: #F5F5F5;
+  --color-text-main: #1A1A1A;
+  --color-text-muted: #6B6B6B;
+  
+  --color-gradient-start: #D41B1B;
+  --color-gradient-end: #FF4D4D;
+  
+  --font-heading: "Oswald", "Barlow Condensed", sans-serif;
+  --font-body: "Nunito Sans", "Source Sans 3", sans-serif;
+}
+
+@layer base {
+  :root {
+    --background: #FFFFFF;
+    --foreground: #1A1A1A;
+  }
+
+  body {
+    @apply bg-[var(--background)] text-[var(--foreground)] font-body antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading uppercase font-bold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .text-gradient {
+    background: linear-gradient(to right, var(--color-gradient-start), var(--color-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
