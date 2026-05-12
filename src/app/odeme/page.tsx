@@ -90,6 +90,7 @@ export default function OdemePage() {
 ${newOrder.items.map((item: any) => `- ${item.name} (x${item.qty})`).join('\n')}
     `;
 
+    console.log('TELEGRAM MESAJI GÖNDERİLİYOR...');
     fetch('/api/telegram', {
       method: 'POST',
       headers: {
