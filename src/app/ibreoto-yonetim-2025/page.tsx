@@ -1,5 +1,4 @@
 import React from 'react';
-import { DollarSign, ShoppingCart, Users, TrendingUp } from 'lucide-react';
 import prisma from '@/lib/prisma';
 import StatsCards from './components/StatsCards';
 import DashboardCharts from './components/DashboardCharts';
@@ -40,11 +39,12 @@ export default async function AdminDashboardPage() {
     take: 5,
   });
 
+  // İkonları string olarak geçiyoruz ki RSC (Server Component) serialization hatası vermesin.
   const stats = [
-    { label: 'Toplam Gelir', value: `₺${totalRevenue.toLocaleString('tr-TR')}`, icon: DollarSign, color: 'bg-green-100 text-green-600', trend: '+12.5%' },
-    { label: 'Yeni Siparişler', value: totalOrders.toString(), icon: ShoppingCart, color: 'bg-blue-100 text-blue-600', trend: '+5.2%' },
-    { label: 'Aktif Müşteriler', value: activeCustomers.toString(), icon: Users, color: 'bg-purple-100 text-purple-600', trend: '+2.4%' },
-    { label: 'Dönüşüm Oranı', value: '%3.2', icon: TrendingUp, color: 'bg-orange-100 text-orange-600', trend: '+1.1%' },
+    { label: 'Toplam Gelir', value: `₺${totalRevenue.toLocaleString('tr-TR')}`, icon: 'DollarSign', color: 'bg-green-100 text-green-600', trend: '+12.5%' },
+    { label: 'Yeni Siparişler', value: totalOrders.toString(), icon: 'ShoppingCart', color: 'bg-blue-100 text-blue-600', trend: '+5.2%' },
+    { label: 'Aktif Müşteriler', value: activeCustomers.toString(), icon: 'Users', color: 'bg-purple-100 text-purple-600', trend: '+2.4%' },
+    { label: 'Dönüşüm Oranı', value: '%3.2', icon: 'TrendingUp', color: 'bg-orange-100 text-orange-600', trend: '+1.1%' },
   ];
 
   return (

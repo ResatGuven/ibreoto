@@ -2,12 +2,20 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { LucideIcon } from 'lucide-react';
+import { DollarSign, ShoppingCart, Users, TrendingUp, HelpCircle } from 'lucide-react';
+
+// İkon haritası
+const iconMap: { [key: string]: any } = {
+  DollarSign,
+  ShoppingCart,
+  Users,
+  TrendingUp,
+};
 
 interface Stat {
   label: string;
   value: string;
-  icon: LucideIcon;
+  icon: string; // Artık string
   color: string;
   trend: string;
 }
@@ -20,7 +28,7 @@ export default function StatsCards({ stats }: StatsCardsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       {stats.map((stat, i) => {
-        const Icon = stat.icon;
+        const Icon = iconMap[stat.icon] || HelpCircle; // Eşleşme yoksa soru işareti göster
         return (
           <motion.div
             key={i}
