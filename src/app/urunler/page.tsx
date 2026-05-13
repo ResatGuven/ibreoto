@@ -1,11 +1,19 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { ShoppingBag, Star } from 'lucide-react';
 
 export default function UrunlerPage() {
+  return (
+    <Suspense fallback={<div className="pt-40 pb-20 text-center text-gray-500 font-body">Ürünler Yükleniyor...</div>}>
+      <UrunlerContent />
+    </Suspense>
+  );
+}
+
+function UrunlerContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
 
