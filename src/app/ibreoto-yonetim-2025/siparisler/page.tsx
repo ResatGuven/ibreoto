@@ -6,6 +6,7 @@ import { ShoppingBag, Eye } from 'lucide-react';
 
 export default function AdminSiparislerPage() {
   const [orders, setOrders] = useState<any[]>([]);
+  const [selectedOrder, setSelectedOrder] = useState<any>(null);
 
   const defaultOrders = [
     { id: 1001, customer: 'Ahmet Yılmaz', total: '₺1.200', status: 'Hazırlanıyor', date: '11.05.2026', cargoNo: '' },
@@ -86,7 +87,11 @@ export default function AdminSiparislerPage() {
                   />
                 </td>
                 <td className="p-4 text-right">
-                  <button className="text-blue-400 hover:text-blue-300 transition-colors" title="Detayları Gör">
+                  <button 
+                    onClick={() => setSelectedOrder(order)}
+                    className="text-blue-400 hover:text-blue-300 transition-colors" 
+                    title="Detayları Gör"
+                  >
                     <Eye className="w-4 h-4" />
                   </button>
                 </td>
@@ -95,6 +100,45 @@ export default function AdminSiparislerPage() {
           </tbody>
         </table>
       </div>
+
+      {/* Modal */}
+      {selectedOrder && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-[#111827] border border-gray-800 rounded-2xl p-6 max-w-lg w-full shadow-2xl transform transition-all">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-heading font-bold text-white uppercase">Sipariş Detayı</h2>
+              <button onClick={() => setSelectedOrder(null)} className="text-gray-500 hover:text-white text-2xl">&times;</button>
+            </div>
+            <div className="space-y-3 text-sm font-body">
+              <p><span className="text-gray-500">Sipariş No:</span> <span className="text-red-400 font-medium font-heading">#{selectedOrder.id}</span></p>
+              <p><span className="text-gray-500">Tarih:</span> <span className="text-white">{selectedOrder.date || '11.05.2026'}</span></p>
+              <p><span className="text-gray-500">Müşteri:</span> <span className="text-white font-medium">{selectedOrder.customer}</span></p>
+              <p><span className="text-gray-500">E-Posta:</span> <span className="text-white">{selectedOrder.email || 'Belirtilmemiş'}</span></p>
+              <p><span className="text-gray-500">Telefon:</span> <span className="text-white">{selectedOrder.phone || 'Belirtilmemiş'}</span></p>
+              <p><span className="text-gray-500">Adres:</span> <span className="text-white">{selectedOrder.address || 'Belirtilmemiş'}</span></p>
+              <p><span className="text-gray-500">Toplam:</span> <span className="text-red-500 font-bold font-heading">{selectedOrder.total}</span></p>
+              <p><span className="text-gray-500">Durum:</span> <span className="text-white">{selectedOrder.status}</span></p>
+              <p><span className="text-gray-500">Kargo No:</span> <span className="text-white">{selectedOrder.cargoNo || 'Girilmemiş'}</span></p>
+              
+              <div className="border-t border-gray-800 pt-3 mt-3">
+                <p className="text-gray-500 mb-2 font-medium">Satın Alınan Ürünler:</p>
+                {selectedOrder.items ? (
+                  <ul className="space-y-2">
+                    {selectedOrder.items.map((item: any, index: number) => (
+                      <li key={index} className="text-white flex justify-between items-center bg-[#1F2937] p-2 rounded">
+                        <span>{item.name} <span className="text-gray-500">x{item.qty}</span></span>
+                        <span className="text-red-400 font-heading font-bold">{item.price}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-600 text-xs">Ürün detayı bulunamadı.</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

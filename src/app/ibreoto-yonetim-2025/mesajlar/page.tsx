@@ -7,6 +7,7 @@ import { Mail, Trash2, Eye } from 'lucide-react';
 export default function AdminMesajlarPage() {
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedMessage, setSelectedMessage] = useState<any>(null);
 
   useEffect(() => {
     fetchMessages();
@@ -84,7 +85,11 @@ export default function AdminMesajlarPage() {
                 </td>
                 <td className="p-4 text-gray-400 truncate max-w-xs">{message.message}</td>
                 <td className="p-4 text-right space-x-2">
-                  <button className="text-blue-400 hover:text-blue-300 transition-colors" title="Oku">
+                  <button 
+                    onClick={() => setSelectedMessage(message)}
+                    className="text-blue-400 hover:text-blue-300 transition-colors" 
+                    title="Oku"
+                  >
                     <Eye className="w-4 h-4" />
                   </button>
                   <button onClick={() => handleDelete(message.id)} className="text-red-400 hover:text-red-300 transition-colors" title="Sil">
@@ -101,6 +106,31 @@ export default function AdminMesajlarPage() {
           </tbody>
         </table>
       </div>
+
+      {/* Modal */}
+      {selectedMessage && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-[#111827] border border-gray-800 rounded-2xl p-6 max-w-lg w-full shadow-2xl transform transition-all">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-heading font-bold text-white uppercase">Mesaj Detayı</h2>
+              <button onClick={() => setSelectedMessage(null)} className="text-gray-500 hover:text-white text-2xl">&times;</button>
+            </div>
+            <div className="space-y-3 text-sm font-body">
+              <p><span className="text-gray-500">Gönderen:</span> <span className="text-white font-medium">{selectedMessage.name}</span></p>
+              <p><span className="text-gray-500">E-Posta:</span> <span className="text-red-400">{selectedMessage.email}</span></p>
+              <p><span className="text-gray-500">Konu:</span> <span className="text-white font-medium">{selectedMessage.subject || 'İletişim Mesajı'}</span></p>
+              <p><span className="text-gray-500">Tarih:</span> <span className="text-white">{selectedMessage.createdAt ? new Date(selectedMessage.createdAt).toLocaleString('tr-TR') : '---'}</span></p>
+              
+              <div className="border-t border-gray-800 pt-3 mt-3">
+                <p className="text-gray-500 mb-2 font-medium">Mesaj:</p>
+                <div className="text-white bg-[#1F2937] p-4 rounded-lg whitespace-pre-wrap max-h-60 overflow-y-auto">
+                  {selectedMessage.message}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -8,6 +8,9 @@ export default function OdemePage() {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [couponCode, setCouponCode] = useState('');
+  const [couponMessage, setCouponMessage] = useState('');
+  const [discountAmount, setDiscountAmount] = useState(0);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -33,6 +36,31 @@ export default function OdemePage() {
       const price = parseFloat(item.price.replace('₺', '').replace('.', ''));
       return acc + (price * item.qty);
     }, 0);
+  };
+
+  const handleApplyCoupon = () => {
+    const savedCoupons = localStorage.getItem('app_coupons');
+    if (!savedCoupons) {
+      setCouponMessage('Hata: Kupon bulunamadı.');
+      return;
+    }
+    const coupons = JSON.parse(savedCoupons);
+    const coupon = coupons.find((c: any) => c.code === couponCode);
+
+    if (coupon) {
+      const total = calculateTotal();
+      let discount = 0;
+      if (coupon.type === 'percentage') {
+        discount = (total * parseFloat(coupon.discount)) / 100;
+      } else {
+        discount = parseFloat(coupon.discount);
+      }
+      setDiscountAmount(discount);
+      setCouponMessage(`Başarılı: ₺${discount.toLocaleString('tr-TR')} indirim uygulandı.`);
+    } else {
+      setCouponMessage('Hata: Geçersiz kupon kodu.');
+      setDiscountAmount(0);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -67,7 +95,7 @@ export default function OdemePage() {
       email: formData.email,
       phone: formData.phone,
       address: `${formData.address}, ${formData.city}`,
-      total: `₺${calculateTotal().toLocaleString('tr-TR')}`,
+      total: `₺${(calculateTotal() - discountAmount).toLocaleString('tr-TR')}`,
       date: new Date().toLocaleDateString('tr-TR'),
       status: 'Beklemede',
       items: cartItems
@@ -242,13 +270,41 @@ ${newOrder.items.map((item: any) => `- ${item.name} (x${item.qty})`).join('\n')}
                   <span>Ara Toplam</span>
                   <span>₺{calculateTotal().toLocaleString('tr-TR')}</span>
                 </div>
+                {/* Kupon Kodu */}
+                <div className="mt-2 mb-2 flex space-x-2">
+                  <input
+                    type="text"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                    placeholder="Kupon Kodu"
+                    className="w-full p-2 border border-gray-200 rounded-lg focus:border-primary outline-none text-xs"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleApplyCoupon}
+                    className="bg-secondary hover:bg-secondary-hover text-white px-3 py-1 rounded-lg font-heading font-bold text-xs uppercase transition-colors"
+                  >
+                    Uygula
+                  </button>
+                </div>
+                {couponMessage && (
+                  <p className={`text-xs mt-1 ${couponMessage.startsWith('Hata') ? 'text-red-500' : 'text-green-500'}`}>
+                    {couponMessage}
+                  </p>
+                )}
+                {discountAmount > 0 && (
+                  <div className="flex justify-between text-green-500">
+                    <span>İndirim</span>
+                    <span>-₺{discountAmount.toLocaleString('tr-TR')}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-text-muted">
                   <span>Kargo</span>
                   <span>Ücretsiz</span>
                 </div>
                 <div className="flex justify-between font-heading font-bold text-lg text-secondary pt-2">
                   <span>Toplam</span>
-                  <span>₺{calculateTotal().toLocaleString('tr-TR')}</span>
+                  <span>₺{(calculateTotal() - discountAmount).toLocaleString('tr-TR')}</span>
                 </div>
               </div>
               

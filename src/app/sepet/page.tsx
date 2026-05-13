@@ -6,6 +6,16 @@ import { Trash2, ShoppingBag } from 'lucide-react';
 
 export default function SepetPage() {
   const [cartItems, setCartItems] = useState<any[]>([]);
+  const [couponCode, setCouponCode] = useState('');
+  const [couponMessage, setCouponMessage] = useState('');
+  const [discountAmount, setDiscountAmount] = useState(0);
+
+  useEffect(() => {
+    const savedDiscount = localStorage.getItem('applied_discount');
+    if (savedDiscount) {
+      setDiscountAmount(parseFloat(savedDiscount));
+    }
+  }, []);
 
   useEffect(() => {
     const updateCart = () => {
@@ -49,6 +59,35 @@ export default function SepetPage() {
       const price = parseFloat(priceStr);
       return acc + (price * item.qty);
     }, 0);
+  };
+
+  const handleApplyCoupon = () => {
+    const savedCoupons = localStorage.getItem('app_coupons');
+    if (!savedCoupons) {
+      setCouponMessage('Hata: Kupon bulunamadı.');
+      return;
+    }
+    const coupons = JSON.parse(savedCoupons);
+    const coupon = coupons.find((c: any) => c.code === couponCode);
+
+    if (coupon) {
+      const total = calculateTotal();
+      let discount = 0;
+      if (coupon.type === 'percentage') {
+        discount = (total * parseFloat(coupon.discount)) / 100;
+      } else {
+        discount = parseFloat(coupon.discount);
+      }
+      setDiscountAmount(discount);
+      localStorage.setItem('applied_discount', discount.toString());
+      localStorage.setItem('applied_coupon', couponCode);
+      setCouponMessage(`Başarılı: ₺${discount.toLocaleString('tr-TR')} indirim uygulandı.`);
+    } else {
+      setCouponMessage('Hata: Geçersiz kupon kodu.');
+      setDiscountAmount(0);
+      localStorage.removeItem('applied_discount');
+      localStorage.removeItem('applied_coupon');
+    }
   };
 
   return (
@@ -103,6 +142,34 @@ export default function SepetPage() {
                   <span>Ara Toplam</span>
                   <span>₺{calculateTotal().toLocaleString('tr-TR')}</span>
                 </div>
+                {/* Kupon Kodu */}
+                <div className="mt-2 mb-2 flex space-x-2">
+                  <input
+                    type="text"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                    placeholder="Kupon Kodu"
+                    className="w-full p-2 border border-gray-200 rounded-lg focus:border-primary outline-none text-xs"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleApplyCoupon}
+                    className="bg-secondary hover:bg-secondary-hover text-white px-3 py-1 rounded-lg font-heading font-bold text-xs uppercase transition-colors"
+                  >
+                    Uygula
+                  </button>
+                </div>
+                {couponMessage && (
+                  <p className={`text-xs mt-1 ${couponMessage.startsWith('Hata') ? 'text-red-500' : 'text-green-500'}`}>
+                    {couponMessage}
+                  </p>
+                )}
+                {discountAmount > 0 && (
+                  <div className="flex justify-between text-green-500">
+                    <span>İndirim</span>
+                    <span>-₺{discountAmount.toLocaleString('tr-TR')}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-text-muted">
                   <span>Kargo</span>
                   <span>Ücretsiz</span>
@@ -110,7 +177,7 @@ export default function SepetPage() {
               </div>
               <div className="flex justify-between font-heading font-bold text-lg text-secondary mb-6">
                 <span>Toplam</span>
-                <span>₺{calculateTotal().toLocaleString('tr-TR')}</span>
+                <span>₺{(calculateTotal() - discountAmount).toLocaleString('tr-TR')}</span>
               </div>
               
               <Link href="/odeme" className="w-full bg-primary hover:bg-primary-hover text-white py-3 rounded-xl font-heading font-bold uppercase text-center block transition-colors shadow-lg shadow-primary/20">
