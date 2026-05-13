@@ -1,3 +1,4 @@
+// Güncellendi
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -28,12 +29,12 @@ export default function AdminYorumlarPage() {
   };
 
   return (
-    <div className="p-6 bg-background min-h-screen">
-      <h1 className="text-2xl font-heading font-bold text-secondary uppercase mb-6">Yorum Yönetimi</h1>
+    <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
+      <h1 className="text-2xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700 uppercase mb-6">Yorum Yönetimi</h1>
       
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+      <div className="bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 overflow-hidden shadow-lg">
         <table className="w-full text-left font-body text-sm">
-          <thead className="bg-surface font-heading font-bold text-secondary text-xs uppercase">
+          <thead className="bg-[#1F2937] font-heading font-bold text-gray-300 text-xs uppercase">
             <tr>
               <th className="p-4">Tarih</th>
               <th className="p-4">Kullanıcı</th>
@@ -43,19 +44,19 @@ export default function AdminYorumlarPage() {
               <th className="p-4 text-right">İşlemler</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-gray-300">
             {reviews.map((rev) => (
-              <tr key={rev.id} className="border-t border-gray-100 hover:bg-surface/50 transition-colors">
-                <td className="p-4 text-text-muted">{rev.date || '11.05.2026'}</td>
-                <td className="p-4 font-medium text-secondary">{rev.name}</td>
-                <td className="p-4 text-text-muted">{rev.productId}</td>
-                <td className="p-4 text-text-muted truncate max-w-xs">{rev.text}</td>
+              <tr key={rev.id} className="border-t border-gray-800 hover:bg-[#1F2937]/50 transition-colors">
+                <td className="p-4 text-gray-400">{rev.date || '11.05.2026'}</td>
+                <td className="p-4 font-medium text-white">{rev.name}</td>
+                <td className="p-4 text-gray-400">{rev.productId}</td>
+                <td className="p-4 text-gray-400 truncate max-w-xs">{rev.text}</td>
                 <td className="p-4 flex items-center">
-                  <span className="font-heading font-bold text-primary mr-1">{rev.rating}</span>
+                  <span className="font-heading font-bold text-red-500 mr-1">{rev.rating}</span>
                   <Star className="w-4 h-4 text-yellow-400 fill-current" />
                 </td>
                 <td className="p-4 text-right">
-                  <button onClick={() => handleDelete(rev.id)} className="text-red-500 hover:text-red-700 transition-colors" title="Sil">
+                  <button onClick={() => handleDelete(rev.id)} className="text-red-400 hover:text-red-300 transition-colors" title="Sil">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </td>
