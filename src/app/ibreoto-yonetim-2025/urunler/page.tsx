@@ -9,6 +9,10 @@ export default function AdminUrunlerPage() {
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState({ id: '', name: '', price: '', category: '', image: '', description: '', stock: '0' });
   const [loading, setLoading] = useState(true);
+  
+  // Hızlı stok güncelleme için state'ler
+  const [editingStockId, setEditingStockId] = useState<string | null>(null);
+  const [tempStock, setTempStock] = useState<string>('');
 
   useEffect(() => {
     fetchProducts();
@@ -53,6 +57,31 @@ export default function AdminUrunlerPage() {
       }
     } catch (error) {
       console.error('Error saving product:', error);
+    }
+  };
+
+  const handleQuickStockUpdate = async (product: any) => {
+    setEditingStockId(null);
+    const stockValue = parseInt(tempStock);
+    if (isNaN(stockValue)) return;
+
+    try {
+      const res = await fetch(`/api/admin/products/${product.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...product,
+          stock: stockValue
+        }),
+      });
+
+      if (res.ok) {
+        fetchProducts();
+      } else {
+        alert('Failed to update stock');
+      }
+    } catch (error) {
+      console.error('Error updating stock:', error);
     }
   };
 
@@ -176,7 +205,27 @@ export default function AdminUrunlerPage() {
                 <td className="p-4 font-medium text-white">{product.name}</td>
                 <td className="p-4 text-gray-400">{product.category}</td>
                 <td className="p-4 font-heading font-bold text-red-500">₺{product.price}</td>
-                <td className="p-4 text-gray-400">{product.stock}</td>
+                <td className="p-4 text-gray-400">
+                  {editingStockId === product.id ? (
+                    <input
+                      type="number"
+                      value={tempStock}
+                      onChange={e => setTempStock(e.target.value)}
+                      onBlur={() => handleQuickStockUpdate(product)}
+                      onKeyDown={e => e.key === 'Enter' && handleQuickStockUpdate(product)}
+                      className="w-20 p-1 bg-[#1F2937] border border-red-500 rounded text-white text-center"
+                      autoFocus
+                    />
+                  ) : (
+                    <span 
+                      onClick={() => { setEditingStockId(product.id); setTempStock(product.stock.toString()); }} 
+                      className="cursor-pointer hover:text-red-500 transition-colors border-b border-dashed border-gray-600"
+                      title="Hızlı güncellemek için tıklayın"
+                    >
+                      {product.stock}
+                    </span>
+                  )}
+                </td>
                 <td className="p-4 text-right space-x-2">
                   <button onClick={() => { setIsAdding(true); setFormData({...product, stock: product.stock.toString()}); }} className="text-red-400 hover:text-red-300 transition-colors"><Edit className="w-4 h-4" /></button>
                   <button onClick={() => handleDelete(product.id)} className="text-red-500 hover:text-red-700 transition-colors"><Trash2 className="w-4 h-4" /></button>

@@ -8,9 +8,9 @@ export default function AdminSiparislerPage() {
   const [orders, setOrders] = useState<any[]>([]);
 
   const defaultOrders = [
-    { id: 1001, customer: 'Ahmet Yılmaz', total: '₺1.200', status: 'Hazırlanıyor', date: '11.05.2026' },
-    { id: 1002, customer: 'Mehmet Demir', total: '₺350', status: 'Kargoya Verildi', date: '10.05.2026' },
-    { id: 1003, customer: 'Ayşe Kaya', total: '₺850', status: 'Teslim Edildi', date: '09.05.2026' },
+    { id: 1001, customer: 'Ahmet Yılmaz', total: '₺1.200', status: 'Hazırlanıyor', date: '11.05.2026', cargoNo: '' },
+    { id: 1002, customer: 'Mehmet Demir', total: '₺350', status: 'Kargoya Verildi', date: '10.05.2026', cargoNo: 'TR123456789' },
+    { id: 1003, customer: 'Ayşe Kaya', total: '₺850', status: 'Teslim Edildi', date: '09.05.2026', cargoNo: 'TR987654321' },
   ];
 
   useEffect(() => {
@@ -29,6 +29,12 @@ export default function AdminSiparislerPage() {
     localStorage.setItem('app_orders', JSON.stringify(updated));
   };
 
+  const updateCargoNo = (id: number, cargoNo: string) => {
+    const updated = orders.map(order => order.id === id ? { ...order, cargoNo } : order);
+    setOrders(updated);
+    localStorage.setItem('app_orders', JSON.stringify(updated));
+  };
+
   return (
     <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
       <h1 className="text-2xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700 uppercase mb-6">Sipariş Yönetimi</h1>
@@ -42,6 +48,7 @@ export default function AdminSiparislerPage() {
               <th className="p-4">Müşteri</th>
               <th className="p-4">Toplam</th>
               <th className="p-4">Durum</th>
+              <th className="p-4">Kargo No</th>
               <th className="p-4 text-right">İşlemler</th>
             </tr>
           </thead>
@@ -68,6 +75,15 @@ export default function AdminSiparislerPage() {
                     <option value="Teslim Edildi">Teslim Edildi</option>
                     <option value="İptal Edildi">İptal Edildi</option>
                   </select>
+                </td>
+                <td className="p-4">
+                  <input
+                    type="text"
+                    value={order.cargoNo || ''}
+                    onChange={(e) => updateCargoNo(order.id, e.target.value)}
+                    placeholder="Kargo No Girin"
+                    className="p-1 bg-[#1F2937] border border-gray-700 rounded text-white text-sm w-32 focus:border-red-500 outline-none transition-all"
+                  />
                 </td>
                 <td className="p-4 text-right">
                   <button className="text-blue-400 hover:text-blue-300 transition-colors" title="Detayları Gör">

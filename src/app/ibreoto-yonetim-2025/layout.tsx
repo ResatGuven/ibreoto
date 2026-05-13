@@ -1,7 +1,7 @@
 // Güncellendi
 import React from 'react';
 import Link from 'next/link';
-import { LayoutDashboard, ShoppingBag, Users, Settings, LogOut, FileText, Tag, MessageSquare, Mail } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Users, Settings, LogOut, FileText, Tag, MessageSquare, Mail, Ticket, BookOpen } from 'lucide-react';
 
 export const metadata = {
   title: 'ibreoto Admin Paneli',
@@ -16,6 +16,8 @@ const menuItems = [
   { icon: FileText, label: 'Siparişler', href: '/ibreoto-yonetim-2025/siparisler' },
   { icon: Users, label: 'Müşteriler', href: '/ibreoto-yonetim-2025/musteriler' },
   { icon: MessageSquare, label: 'Yorumlar', href: '/ibreoto-yonetim-2025/yorumlar' },
+  { icon: Ticket, label: 'Kuponlar', href: '/ibreoto-yonetim-2025/kuponlar' },
+  { icon: BookOpen, label: 'Blog', href: '/ibreoto-yonetim-2025/blog' },
   { icon: Settings, label: 'Ayarlar', href: '/ibreoto-yonetim-2025/ayarlar' },
 ];
 
