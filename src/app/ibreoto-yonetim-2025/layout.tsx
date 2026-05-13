@@ -1,3 +1,4 @@
+// Güncellendi
 import React from 'react';
 import Link from 'next/link';
 import { LayoutDashboard, ShoppingBag, Users, Settings, LogOut, FileText, Tag, MessageSquare, Mail } from 'lucide-react';
