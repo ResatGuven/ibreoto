@@ -3,6 +3,8 @@ import prisma from '@/lib/prisma';
 import StatsCards from './components/StatsCards';
 import DashboardCharts from './components/DashboardCharts';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminDashboardPage() {
   // 1. Toplam Gelir
   const orders = await prisma.order.findMany();
