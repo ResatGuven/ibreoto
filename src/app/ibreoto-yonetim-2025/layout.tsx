@@ -14,7 +14,6 @@ const menuItems = [
   { icon: Mail, label: 'Mesajlar', href: '/ibreoto-yonetim-2025/mesajlar' },
   { icon: Tag, label: 'Kategoriler', href: '/ibreoto-yonetim-2025/kategoriler' },
   { icon: FileText, label: 'Siparişler', href: '/ibreoto-yonetim-2025/siparisler' },
-  { icon: Users, label: 'Müşteriler', href: '/ibreoto-yonetim-2025/musteriler' },
   { icon: MessageSquare, label: 'Yorumlar', href: '/ibreoto-yonetim-2025/yorumlar' },
   { icon: Ticket, label: 'Kuponlar', href: '/ibreoto-yonetim-2025/kuponlar' },
   { icon: BookOpen, label: 'Blog', href: '/ibreoto-yonetim-2025/blog' },
