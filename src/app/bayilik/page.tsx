@@ -8,11 +8,26 @@ export default function BayilikPage() {
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({ company: '', name: '', email: '', phone: '', message: '' });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Bayilik başvurusu:', formData);
-    setSubmitted(true);
-    setFormData({ company: '', name: '', email: '', phone: '', message: '' });
+    try {
+      const res = await fetch('/api/admin/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: 'Bayilik Başvurusu',
+          message: `Firma Adı: ${formData.company}\nTelefon: ${formData.phone}\nMesaj: ${formData.message}`,
+        }),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+        setFormData({ company: '', name: '', email: '', phone: '', message: '' });
+      }
+    } catch (error) {
+      console.error('Failed to submit application:', error);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

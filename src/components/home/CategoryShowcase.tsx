@@ -6,8 +6,8 @@ import { motion } from 'framer-motion';
 import { Armchair, Car, Camera, Sparkles } from 'lucide-react';
 
 const categories = [
-  { id: 'ic', title: 'İç Aksesuar', desc: 'Koltuk Kılıfı, Paspas, Direksiyon...', icon: Armchair },
-  { id: 'dis', title: 'Dış Aksesuar', desc: 'Rüzgarlık, Jant Kapağı, Spoiler...', icon: Car },
+  { id: 'ic-aksesuar', title: 'İç Aksesuar', desc: 'Koltuk Kılıfı, Paspas, Direksiyon...', icon: Armchair },
+  { id: 'dis-aksesuar', title: 'Dış Aksesuar', desc: 'Rüzgarlık, Jant Kapağı, Spoiler...', icon: Car },
   { id: 'teknoloji', title: 'Teknoloji', desc: 'Kamera, Multimedya, Sensör...', icon: Camera },
   { id: 'bakim', title: 'Bakım & Temizlik', desc: 'Seramik Kaplama, Cila, Bez...', icon: Sparkles },
 ];
@@ -41,7 +41,7 @@ export const CategoryShowcase = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="h-full"
               >
-                <Link href={`/kategori/${cat.id}`} className="block group h-full">
+                <Link href={`/urunler?category=${cat.id}`} className="block group h-full">
                   <div className="bg-white p-8 rounded-2xl shadow-lg shadow-gray-100 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 border border-gray-100 hover:border-primary/20 flex flex-col items-center text-center h-full transform hover:-translate-y-2">
                     <div className="w-16 h-16 bg-surface group-hover:bg-primary/10 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-300">
                       <Icon className="w-8 h-8 text-secondary group-hover:text-primary transition-colors duration-300" />

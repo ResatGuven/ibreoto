@@ -8,24 +8,26 @@ export default function IletisimPage() {
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Save message to localStorage for Admin Panel
-    const savedMessages = localStorage.getItem('app_messages');
-    let messages = savedMessages ? JSON.parse(savedMessages) : [];
-    const newMessage = {
-      id: Date.now(),
-      name: formData.name,
-      email: formData.email,
-      message: formData.message,
-      date: new Date().toLocaleDateString('tr-TR')
-    };
-    messages.unshift(newMessage);
-    localStorage.setItem('app_messages', JSON.stringify(messages));
-
-    setSubmitted(true);
-    setFormData({ name: '', email: '', message: '' });
+    try {
+      const res = await fetch('/api/admin/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: 'İletişim Mesajı',
+          message: formData.message,
+        }),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+        setFormData({ name: '', email: '', message: '' });
+      }
+    } catch (error) {
+      console.error('Failed to submit message:', error);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

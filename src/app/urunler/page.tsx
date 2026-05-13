@@ -2,9 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { ShoppingBag, Star } from 'lucide-react';
 
 export default function UrunlerPage() {
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get('category');
+
   const [products, setProducts] = useState<any[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -23,8 +27,11 @@ export default function UrunlerPage() {
   };
 
   useEffect(() => {
+    if (categoryParam) {
+      setSelectedCategories([categoryParam]);
+    }
     fetchProducts();
-  }, []);
+  }, [categoryParam]);
 
   const fetchProducts = async () => {
     setLoading(true);

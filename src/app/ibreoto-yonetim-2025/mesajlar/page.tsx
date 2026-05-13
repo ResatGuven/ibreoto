@@ -48,35 +48,45 @@ export default function AdminMesajlarPage() {
     <div className="p-6 bg-background min-h-screen">
       <h1 className="text-2xl font-heading font-bold text-secondary uppercase mb-6">Gelen Mesajlar</h1>
       
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+      <div className="bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 overflow-hidden shadow-lg">
         <table className="w-full text-left font-body text-sm">
-          <thead className="bg-surface font-heading font-bold text-secondary text-xs uppercase">
+          <thead className="bg-[#1F2937] font-heading font-bold text-gray-300 text-xs uppercase">
             <tr>
               <th className="p-4">Tarih</th>
               <th className="p-4">Ad Soyad</th>
               <th className="p-4">E-Posta</th>
+              <th className="p-4">Konu</th>
               <th className="p-4">Mesaj</th>
               <th className="p-4 text-right">İşlemler</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-gray-300">
             {loading ? (
               <tr>
-                <td colSpan={5} className="p-4 text-center text-gray-500">Yükleniyor...</td>
+                <td colSpan={6} className="p-4 text-center text-gray-500">Yükleniyor...</td>
               </tr>
             ) : messages.map((message) => (
-              <tr key={message.id} className="border-t border-gray-100 hover:bg-surface/50 transition-colors">
-                <td className="p-4 text-text-muted">
+              <tr key={message.id} className="border-t border-gray-800 hover:bg-[#1F2937]/50 transition-colors">
+                <td className="p-4 text-gray-400">
                   {message.createdAt ? new Date(message.createdAt).toLocaleDateString('tr-TR') : '---'}
                 </td>
-                <td className="p-4 font-medium text-secondary">{message.name}</td>
-                <td className="p-4 text-text-muted">{message.email}</td>
-                <td className="p-4 text-text-muted truncate max-w-xs">{message.message}</td>
+                <td className="p-4 font-medium text-white">{message.name}</td>
+                <td className="p-4 text-gray-400">{message.email}</td>
+                <td className="p-4">
+                  <span className={`px-2 py-1 rounded-md text-xs font-bold ${
+                    message.subject === 'Bayilik Başvurusu' 
+                      ? 'bg-purple-900/50 text-purple-300 border border-purple-700' 
+                      : 'bg-blue-900/50 text-blue-300 border border-blue-700'
+                  }`}>
+                    {message.subject || 'İletişim Mesajı'}
+                  </span>
+                </td>
+                <td className="p-4 text-gray-400 truncate max-w-xs">{message.message}</td>
                 <td className="p-4 text-right space-x-2">
-                  <button className="text-secondary hover:text-primary transition-colors" title="Oku">
+                  <button className="text-blue-400 hover:text-blue-300 transition-colors" title="Oku">
                     <Eye className="w-4 h-4" />
                   </button>
-                  <button onClick={() => handleDelete(message.id)} className="text-red-500 hover:text-red-700 transition-colors" title="Sil">
+                  <button onClick={() => handleDelete(message.id)} className="text-red-400 hover:text-red-300 transition-colors" title="Sil">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </td>
@@ -84,7 +94,7 @@ export default function AdminMesajlarPage() {
             ))}
             {!loading && messages.length === 0 && (
               <tr>
-                <td colSpan={5} className="p-4 text-center text-gray-500">Henüz mesaj yok.</td>
+                <td colSpan={6} className="p-4 text-center text-gray-500">Henüz mesaj yok.</td>
               </tr>
             )}
           </tbody>
