@@ -1,3 +1,4 @@
+// Güncellendi
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -85,39 +86,39 @@ export default function AdminUrunlerPage() {
   };
 
   return (
-    <div className="p-6 bg-background min-h-screen">
+    <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-heading font-bold text-secondary uppercase">Ürün Yönetimi</h1>
+        <h1 className="text-2xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 uppercase">Ürün Yönetimi</h1>
         <button 
           onClick={() => { setIsAdding(true); setFormData({ id: '', name: '', price: '', category: '', image: '', description: '', stock: '0' }); }}
-          className="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase flex items-center transition-colors"
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2 rounded-xl font-heading font-bold text-sm uppercase flex items-center transition-all duration-300 shadow-lg shadow-blue-500/20 transform hover:scale-105"
         >
           <Plus className="w-4 h-4 mr-1" /> Yeni Ürün Ekle
         </button>
       </div>
 
       {isAdding && (
-        <div className="bg-white p-6 rounded-xl border border-gray-100 mb-6 shadow-sm">
-          <h2 className="text-lg font-heading font-bold text-secondary mb-4 uppercase">{formData.id ? 'Ürünü Düzenle' : 'Yeni Ürün Ekle'}</h2>
+        <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 mb-6 shadow-lg">
+          <h2 className="text-lg font-heading font-bold text-white mb-4 uppercase">{formData.id ? 'Ürünü Düzenle' : 'Yeni Ürün Ekle'}</h2>
           <form className="space-y-4" onSubmit={handleSave}>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-text-muted mb-1 text-sm font-body">Ürün Adı</label>
-                <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" required />
+                <label className="block text-gray-400 mb-1 text-sm font-body">Ürün Adı</label>
+                <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white" required />
               </div>
               <div>
-                <label className="block text-text-muted mb-1 text-sm font-body">Fiyat (₺)</label>
-                <input type="text" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" required />
+                <label className="block text-gray-400 mb-1 text-sm font-body">Fiyat (₺)</label>
+                <input type="text" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white" required />
               </div>
               <div>
-                <label className="block text-text-muted mb-1 text-sm font-body">Stok Adedi</label>
-                <input type="number" value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" required />
+                <label className="block text-gray-400 mb-1 text-sm font-body">Stok Adedi</label>
+                <input type="number" value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white" required />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-text-muted mb-1 text-sm font-body">Kategori</label>
-                <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" required>
+                <label className="block text-gray-400 mb-1 text-sm font-body">Kategori</label>
+                <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white" required>
                   <option value="">Seçiniz</option>
                   <option value="ic-aksesuar">İç Aksesuar</option>
                   <option value="dis-aksesuar">Dış Aksesuar</option>
@@ -126,10 +127,10 @@ export default function AdminUrunlerPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-text-muted mb-1 text-sm font-body">Görsel (Dosya veya URL)</label>
+                <label className="block text-gray-400 mb-1 text-sm font-body">Görsel (Dosya veya URL)</label>
                 <div className="flex space-x-2">
-                  <input type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-sm" placeholder="URL girin veya dosya seçin" />
-                  <label className="bg-surface hover:bg-gray-200 text-secondary px-4 py-3 rounded-lg font-heading font-bold text-sm uppercase cursor-pointer transition-colors flex items-center">
+                  <input type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white text-sm" placeholder="URL girin veya dosya seçin" />
+                  <label className="bg-[#1F2937] hover:bg-gray-700 text-white px-4 py-3 rounded-lg font-heading font-bold text-sm uppercase cursor-pointer transition-colors flex items-center border border-gray-700">
                     <ImageIcon className="w-4 h-4 mr-1" /> Seç
                     <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
                   </label>
@@ -137,20 +138,20 @@ export default function AdminUrunlerPage() {
               </div>
             </div>
             <div>
-              <label className="block text-text-muted mb-1 text-sm font-body">Açıklama</label>
-              <textarea value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} rows={3} className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"></textarea>
+              <label className="block text-gray-400 mb-1 text-sm font-body">Açıklama</label>
+              <textarea value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} rows={3} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white"></textarea>
             </div>
             <div className="flex justify-end space-x-2">
-              <button type="button" onClick={() => setIsAdding(false)} className="bg-gray-200 hover:bg-gray-300 text-secondary px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase transition-colors">Vazgeç</button>
-              <button type="submit" className="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase transition-colors">Kaydet</button>
+              <button type="button" onClick={() => setIsAdding(false)} className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase transition-colors">Vazgeç</button>
+              <button type="submit" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase transition-colors">Kaydet</button>
             </div>
           </form>
         </div>
       )}
 
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+      <div className="bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 overflow-hidden shadow-lg">
         <table className="w-full text-left font-body text-sm">
-          <thead className="bg-surface font-heading font-bold text-secondary text-xs uppercase">
+          <thead className="bg-[#1F2937] font-heading font-bold text-gray-300 text-xs uppercase">
             <tr>
               <th className="p-4">Görsel</th>
               <th className="p-4">Ürün Adı</th>
@@ -160,25 +161,25 @@ export default function AdminUrunlerPage() {
               <th className="p-4 text-right">İşlemler</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-gray-300">
             {loading ? (
               <tr>
                 <td colSpan={6} className="p-4 text-center text-gray-500">Yükleniyor...</td>
               </tr>
             ) : products.map((product) => (
-              <tr key={product.id} className="border-t border-gray-100 hover:bg-surface/50 transition-colors">
+              <tr key={product.id} className="border-t border-gray-800 hover:bg-[#1F2937]/50 transition-colors">
                 <td className="p-4">
-                  <div className="w-12 h-12 bg-surface rounded flex items-center justify-center text-gray-400 overflow-hidden">
+                  <div className="w-12 h-12 bg-[#1F2937] rounded flex items-center justify-center text-gray-500 overflow-hidden border border-gray-700">
                     {product.image ? <img src={product.image} alt="" className="w-full h-full object-cover" /> : <ImageIcon className="w-5 h-5" />}
                   </div>
                 </td>
-                <td className="p-4 font-medium text-secondary">{product.name}</td>
-                <td className="p-4 text-text-muted">{product.category}</td>
-                <td className="p-4 font-heading font-bold text-primary">₺{product.price}</td>
-                <td className="p-4 text-text-muted">{product.stock}</td>
+                <td className="p-4 font-medium text-white">{product.name}</td>
+                <td className="p-4 text-gray-400">{product.category}</td>
+                <td className="p-4 font-heading font-bold text-blue-400">₺{product.price}</td>
+                <td className="p-4 text-gray-400">{product.stock}</td>
                 <td className="p-4 text-right space-x-2">
-                  <button onClick={() => { setIsAdding(true); setFormData({...product, stock: product.stock.toString()}); }} className="text-blue-500 hover:text-blue-700 transition-colors"><Edit className="w-4 h-4" /></button>
-                  <button onClick={() => handleDelete(product.id)} className="text-red-500 hover:text-red-700 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                  <button onClick={() => { setIsAdding(true); setFormData({...product, stock: product.stock.toString()}); }} className="text-blue-400 hover:text-blue-300 transition-colors"><Edit className="w-4 h-4" /></button>
+                  <button onClick={() => handleDelete(product.id)} className="text-red-400 hover:text-red-300 transition-colors"><Trash2 className="w-4 h-4" /></button>
                 </td>
               </tr>
             ))}
