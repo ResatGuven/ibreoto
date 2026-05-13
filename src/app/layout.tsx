@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Oswald, Nunito_Sans } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import NavbarWrapper from "@/components/layout/NavbarWrapper";
+import FooterWrapper from "@/components/layout/FooterWrapper";
 
 const oswald = Oswald({
   variable: "--font-heading",
@@ -32,9 +32,9 @@ export default function RootLayout({
       <body
         className={`${oswald.variable} ${nunitoSans.variable} antialiased bg-background text-text-main flex flex-col min-h-screen`}
       >
-        <Navbar />
+        <NavbarWrapper />
         <main className="flex-grow pt-20">{children}</main>
-        <Footer />
+        <FooterWrapper />
       </body>
     </html>
   );
