@@ -221,7 +221,7 @@ export default function AdminUrunlerPage() {
 
       <div className="bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 overflow-hidden shadow-lg">
         <div className="overflow-x-auto">
-          <table className="w-full text-left font-body text-sm">
+          <table className="w-full min-w-[800px] text-left font-body text-sm">
           <thead className="bg-[#1F2937] font-heading font-bold text-gray-300 text-xs uppercase">
             <tr>
               <th className="p-4">Görsel</th>
