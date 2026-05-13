@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic'; // Statik cache'i devre dışı bırakır
+
 export async function GET() {
   try {
     const products = await prisma.product.findMany({
@@ -51,7 +53,7 @@ export async function POST(request: Request) {
         name,
         slug: `${slug}-${Date.now()}`,
         price: parseFloat(price),
-        stock: parseInt(stock) || 0, // İstekten gelen stok kullanılıyor
+        stock: parseInt(stock) || 0,
         images: JSON.stringify([image]),
         description,
         categoryId: categoryRecord.id,

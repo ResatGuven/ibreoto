@@ -16,7 +16,7 @@ export default function AdminUrunlerPage() {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/products');
+      const res = await fetch('/api/admin/products', { cache: 'no-store' });
       const data = await res.json();
       if (Array.isArray(data)) {
         setProducts(data);

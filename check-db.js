@@ -2,21 +2,12 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-  try {
-    const users = await prisma.user.findMany();
-    console.log('Users count:', users.length);
-    console.log('Users:', users);
-    
-    const products = await prisma.product.findMany();
-    console.log('Products count:', products.length);
-    
-    const categories = await prisma.category.findMany();
-    console.log('Categories count:', categories.length);
-  } catch (error) {
-    console.error('Error querying DB:', error);
-  } finally {
-    await prisma.$disconnect();
-  }
+  const count = await prisma.product.count();
+  console.log(`Product count in DB: ${count}`);
+  const products = await prisma.product.findMany({ take: 5 });
+  console.log('Sample products:', products.map(p => p.name));
 }
 
-main();
+main()
+  .catch((e) => console.error(e))
+  .finally(async () => await prisma.$disconnect());
