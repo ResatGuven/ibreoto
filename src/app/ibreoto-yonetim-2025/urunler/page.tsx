@@ -2,12 +2,12 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Image as ImageIcon } from 'lucide-react';
+import { Plus, Edit, Trash2, Image as ImageIcon, Search } from 'lucide-react';
 
 export default function AdminUrunlerPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [isAdding, setIsAdding] = useState(false);
-  const [formData, setFormData] = useState({ id: '', name: '', price: '', category: '', image: '', description: '', stock: '0' });
+  const [formData, setFormData] = useState({ id: '', name: '', price: '', category: '', image: '', description: '', stock: '0', metaTitle: '', metaDescription: '' });
   const [loading, setLoading] = useState(true);
   
   // Hızlı stok güncelleme için state'ler
@@ -24,7 +24,13 @@ export default function AdminUrunlerPage() {
       const res = await fetch('/api/admin/products', { cache: 'no-store' });
       const data = await res.json();
       if (Array.isArray(data)) {
-        setProducts(data);
+        // LocalStorage'dan SEO verilerini oku ve birleştir
+        const mergedProducts = data.map((p: any) => {
+          const savedSeo = localStorage.getItem(`seo_product_${p.id}`);
+          const seo = savedSeo ? JSON.parse(savedSeo) : { metaTitle: '', metaDescription: '' };
+          return { ...p, ...seo };
+        });
+        setProducts(mergedProducts);
       }
     } catch (error) {
       console.error('Failed to fetch products:', error);
@@ -43,15 +49,31 @@ export default function AdminUrunlerPage() {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...formData,
+          name: formData.name,
+          price: formData.price,
+          category: formData.category,
+          image: formData.image,
+          description: formData.description,
           stock: parseInt(formData.stock) || 0
         }),
       });
 
       if (res.ok) {
+        const savedProduct = await res.json();
+        const productId = formData.id || savedProduct.id;
+
+        // SEO verilerini LocalStorage'a kaydet (Boşsa otomatik doldur)
+        const metaTitle = formData.metaTitle || `${formData.name} - En Uygun Fiyatlarla ibreoto'da!`;
+        const metaDescription = formData.metaDescription || `${formData.name} ürününü en uygun fiyat ve hızlı kargo avantajıyla ibreoto'dan satın alın. Hemen tıklayın!`;
+
+        localStorage.setItem(`seo_product_${productId}`, JSON.stringify({
+          metaTitle,
+          metaDescription
+        }));
+
         fetchProducts();
         setIsAdding(false);
-        setFormData({ id: '', name: '', price: '', category: '', image: '', description: '', stock: '0' });
+        setFormData({ id: '', name: '', price: '', category: '', image: '', description: '', stock: '0', metaTitle: '', metaDescription: '' });
       } else {
         alert('Failed to save product');
       }
@@ -94,6 +116,7 @@ export default function AdminUrunlerPage() {
       });
 
       if (res.ok) {
+        localStorage.removeItem(`seo_product_${id}`); // SEO verisini de sil
         fetchProducts();
       } else {
         alert('Failed to delete product');
@@ -119,7 +142,7 @@ export default function AdminUrunlerPage() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700 uppercase">Ürün Yönetimi</h1>
         <button 
-          onClick={() => { setIsAdding(true); setFormData({ id: '', name: '', price: '', category: '', image: '', description: '', stock: '0' }); }}
+          onClick={() => { setIsAdding(true); setFormData({ id: '', name: '', price: '', category: '', image: '', description: '', stock: '0', metaTitle: '', metaDescription: '' }); }}
           className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-4 py-2 rounded-xl font-heading font-bold text-sm uppercase flex items-center transition-all duration-300 shadow-lg shadow-red-500/20 transform hover:scale-105"
         >
           <Plus className="w-4 h-4 mr-1" /> Yeni Ürün Ekle
@@ -170,6 +193,24 @@ export default function AdminUrunlerPage() {
               <label className="block text-gray-400 mb-1 text-sm font-body">Açıklama</label>
               <textarea value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} rows={3} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all text-white"></textarea>
             </div>
+            
+            {/* SEO Alanları */}
+            <div className="border-t border-gray-800 pt-4 mt-4">
+              <h3 className="text-md font-heading font-bold text-white mb-3 uppercase flex items-center">
+                <Search className="w-4 h-4 mr-1 text-red-500" /> SEO Yönetimi (Google'da Öne Çıkın)
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-gray-400 mb-1 text-sm font-body">SEO Başlığı (Meta Title)</label>
+                  <input type="text" value={formData.metaTitle} onChange={e => setFormData({...formData, metaTitle: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all text-white text-sm" placeholder="Boş bırakılırsa ürün adı kullanılır" />
+                </div>
+                <div>
+                  <label className="block text-gray-400 mb-1 text-sm font-body">SEO Açıklaması (Meta Description)</label>
+                  <input type="text" value={formData.metaDescription} onChange={e => setFormData({...formData, metaDescription: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all text-white text-sm" placeholder="Arama sonuçlarında görünecek kısa açıklama" />
+                </div>
+              </div>
+            </div>
+
             <div className="flex justify-end space-x-2">
               <button type="button" onClick={() => setIsAdding(false)} className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase transition-colors">Vazgeç</button>
               <button type="submit" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase transition-colors">Kaydet</button>

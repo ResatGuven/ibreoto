@@ -4,6 +4,7 @@ import "./globals.css";
 import NavbarWrapper from "@/components/layout/NavbarWrapper";
 import FooterWrapper from "@/components/layout/FooterWrapper";
 import MainContentWrapper from "@/components/layout/MainContentWrapper";
+import WhatsAppButton from "@/components/layout/WhatsAppButton";
 
 const oswald = Oswald({
   variable: "--font-heading",
@@ -36,6 +37,7 @@ export default function RootLayout({
         <NavbarWrapper />
         <MainContentWrapper>{children}</MainContentWrapper>
         <FooterWrapper />
+        <WhatsAppButton />
       </body>
     </html>
   );
