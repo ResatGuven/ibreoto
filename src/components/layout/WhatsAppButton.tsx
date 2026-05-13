@@ -11,7 +11,7 @@ export default function WhatsAppButton() {
 
   return (
     <a
-      href="https://wa.me/905061578963" // Kullanıcı numarası güncellendi
+      href="https://wa.me/905061578963?text=Merhaba,%20ibreoto%20sitenizden%20ula%C5%9F%C4%B1yorum.%20%C3%9Cr%C3%BCnler%20hakk%C4%B1nda%20bilgi%20alabilir%20miyim%3F" // Varsayılan mesaj eklendi
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 bg-[#25D366] text-white p-4 rounded-full shadow-lg hover:bg-[#128C7E] transition-all duration-300 z-50 flex items-center justify-center transform hover:scale-110"

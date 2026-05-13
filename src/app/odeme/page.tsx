@@ -29,6 +29,16 @@ export default function OdemePage() {
     if (savedCart) {
       setCartItems(JSON.parse(savedCart));
     }
+
+    const savedDiscount = localStorage.getItem('applied_discount');
+    const savedCoupon = localStorage.getItem('applied_coupon');
+    if (savedDiscount) {
+      setDiscountAmount(parseFloat(savedDiscount));
+    }
+    if (savedCoupon) {
+      setCouponCode(savedCoupon);
+      setCouponMessage(`Kupon uygulandı.`);
+    }
   }, []);
 
   const calculateTotal = () => {
@@ -243,7 +253,7 @@ ${newOrder.items.map((item: any) => `- ${item.name} (x${item.qty})`).join('\n')}
                   </span>
                 ) : (
                   <>
-                    <ShieldCheck className="w-5 h-5 mr-2" /> ₺{calculateTotal().toLocaleString('tr-TR')} ÖDE
+                    <ShieldCheck className="w-5 h-5 mr-2" /> ₺{(calculateTotal() - discountAmount).toLocaleString('tr-TR')} ÖDE
                   </>
                 )}
               </button>
