@@ -88,10 +88,10 @@ export default function AdminUrunlerPage() {
   return (
     <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 uppercase">Ürün Yönetimi</h1>
+        <h1 className="text-2xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700 uppercase">Ürün Yönetimi</h1>
         <button 
           onClick={() => { setIsAdding(true); setFormData({ id: '', name: '', price: '', category: '', image: '', description: '', stock: '0' }); }}
-          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2 rounded-xl font-heading font-bold text-sm uppercase flex items-center transition-all duration-300 shadow-lg shadow-blue-500/20 transform hover:scale-105"
+          className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-4 py-2 rounded-xl font-heading font-bold text-sm uppercase flex items-center transition-all duration-300 shadow-lg shadow-red-500/20 transform hover:scale-105"
         >
           <Plus className="w-4 h-4 mr-1" /> Yeni Ürün Ekle
         </button>
@@ -104,21 +104,21 @@ export default function AdminUrunlerPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-gray-400 mb-1 text-sm font-body">Ürün Adı</label>
-                <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white" required />
+                <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all text-white" required />
               </div>
               <div>
                 <label className="block text-gray-400 mb-1 text-sm font-body">Fiyat (₺)</label>
-                <input type="text" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white" required />
+                <input type="text" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all text-white" required />
               </div>
               <div>
                 <label className="block text-gray-400 mb-1 text-sm font-body">Stok Adedi</label>
-                <input type="number" value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white" required />
+                <input type="number" value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all text-white" required />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-gray-400 mb-1 text-sm font-body">Kategori</label>
-                <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white" required>
+                <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all text-white" required>
                   <option value="">Seçiniz</option>
                   <option value="ic-aksesuar">İç Aksesuar</option>
                   <option value="dis-aksesuar">Dış Aksesuar</option>
@@ -129,7 +129,7 @@ export default function AdminUrunlerPage() {
               <div>
                 <label className="block text-gray-400 mb-1 text-sm font-body">Görsel (Dosya veya URL)</label>
                 <div className="flex space-x-2">
-                  <input type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white text-sm" placeholder="URL girin veya dosya seçin" />
+                  <input type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all text-white text-sm" placeholder="URL girin veya dosya seçin" />
                   <label className="bg-[#1F2937] hover:bg-gray-700 text-white px-4 py-3 rounded-lg font-heading font-bold text-sm uppercase cursor-pointer transition-colors flex items-center border border-gray-700">
                     <ImageIcon className="w-4 h-4 mr-1" /> Seç
                     <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
@@ -139,11 +139,11 @@ export default function AdminUrunlerPage() {
             </div>
             <div>
               <label className="block text-gray-400 mb-1 text-sm font-body">Açıklama</label>
-              <textarea value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} rows={3} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white"></textarea>
+              <textarea value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} rows={3} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all text-white"></textarea>
             </div>
             <div className="flex justify-end space-x-2">
               <button type="button" onClick={() => setIsAdding(false)} className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase transition-colors">Vazgeç</button>
-              <button type="submit" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase transition-colors">Kaydet</button>
+              <button type="submit" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase transition-colors">Kaydet</button>
             </div>
           </form>
         </div>
@@ -175,11 +175,11 @@ export default function AdminUrunlerPage() {
                 </td>
                 <td className="p-4 font-medium text-white">{product.name}</td>
                 <td className="p-4 text-gray-400">{product.category}</td>
-                <td className="p-4 font-heading font-bold text-blue-400">₺{product.price}</td>
+                <td className="p-4 font-heading font-bold text-red-500">₺{product.price}</td>
                 <td className="p-4 text-gray-400">{product.stock}</td>
                 <td className="p-4 text-right space-x-2">
-                  <button onClick={() => { setIsAdding(true); setFormData({...product, stock: product.stock.toString()}); }} className="text-blue-400 hover:text-blue-300 transition-colors"><Edit className="w-4 h-4" /></button>
-                  <button onClick={() => handleDelete(product.id)} className="text-red-400 hover:text-red-300 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                  <button onClick={() => { setIsAdding(true); setFormData({...product, stock: product.stock.toString()}); }} className="text-red-400 hover:text-red-300 transition-colors"><Edit className="w-4 h-4" /></button>
+                  <button onClick={() => handleDelete(product.id)} className="text-red-500 hover:text-red-700 transition-colors"><Trash2 className="w-4 h-4" /></button>
                 </td>
               </tr>
             ))}

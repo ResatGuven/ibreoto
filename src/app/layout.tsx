@@ -3,6 +3,7 @@ import { Oswald, Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import NavbarWrapper from "@/components/layout/NavbarWrapper";
 import FooterWrapper from "@/components/layout/FooterWrapper";
+import MainContentWrapper from "@/components/layout/MainContentWrapper";
 
 const oswald = Oswald({
   variable: "--font-heading",
@@ -33,7 +34,7 @@ export default function RootLayout({
         className={`${oswald.variable} ${nunitoSans.variable} antialiased bg-background text-text-main flex flex-col min-h-screen`}
       >
         <NavbarWrapper />
-        <main className="flex-grow pt-20">{children}</main>
+        <MainContentWrapper>{children}</MainContentWrapper>
         <FooterWrapper />
       </body>
     </html>
