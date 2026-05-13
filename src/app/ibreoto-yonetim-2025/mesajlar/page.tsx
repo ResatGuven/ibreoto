@@ -46,8 +46,8 @@ export default function AdminMesajlarPage() {
   };
 
   return (
-    <div className="p-6 bg-background min-h-screen">
-      <h1 className="text-2xl font-heading font-bold text-secondary uppercase mb-6">Gelen Mesajlar</h1>
+    <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
+      <h1 className="text-2xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700 uppercase mb-6">Gelen Mesajlar</h1>
       
       <div className="bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 overflow-hidden shadow-lg">
         <table className="w-full text-left font-body text-sm">
@@ -76,7 +76,7 @@ export default function AdminMesajlarPage() {
                 <td className="p-4">
                   <span className={`px-2 py-1 rounded-md text-xs font-bold ${
                     message.subject === 'Bayilik Başvurusu' 
-                      ? 'bg-purple-900/50 text-purple-300 border border-purple-700' 
+                      ? 'bg-red-900/50 text-red-300 border border-red-700' 
                       : 'bg-blue-900/50 text-blue-300 border border-blue-700'
                   }`}>
                     {message.subject || 'İletişim Mesajı'}

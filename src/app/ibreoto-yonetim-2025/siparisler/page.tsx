@@ -1,3 +1,4 @@
+// Güncellendi
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -29,12 +30,12 @@ export default function AdminSiparislerPage() {
   };
 
   return (
-    <div className="p-6 bg-background min-h-screen">
-      <h1 className="text-2xl font-heading font-bold text-secondary uppercase mb-6">Sipariş Yönetimi</h1>
+    <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
+      <h1 className="text-2xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700 uppercase mb-6">Sipariş Yönetimi</h1>
       
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+      <div className="bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 overflow-hidden shadow-lg">
         <table className="w-full text-left font-body text-sm">
-          <thead className="bg-surface font-heading font-bold text-secondary text-xs uppercase">
+          <thead className="bg-[#1F2937] font-heading font-bold text-gray-300 text-xs uppercase">
             <tr>
               <th className="p-4">Sipariş No</th>
               <th className="p-4">Tarih</th>
@@ -44,21 +45,21 @@ export default function AdminSiparislerPage() {
               <th className="p-4 text-right">İşlemler</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-gray-300">
             {orders.map((order) => (
-              <tr key={order.id} className="border-t border-gray-100 hover:bg-surface/50 transition-colors">
-                <td className="p-4 font-medium text-secondary">#{order.id}</td>
-                <td className="p-4 text-text-muted">{order.date || '11.05.2026'}</td>
-                <td className="p-4 text-secondary font-medium">{order.customer}</td>
-                <td className="p-4 font-heading font-bold text-primary">{order.total}</td>
+              <tr key={order.id} className="border-t border-gray-800 hover:bg-[#1F2937]/50 transition-colors">
+                <td className="p-4 font-medium text-white">#{order.id}</td>
+                <td className="p-4 text-gray-400">{order.date || '11.05.2026'}</td>
+                <td className="p-4 text-white font-medium">{order.customer}</td>
+                <td className="p-4 font-heading font-bold text-red-500">{order.total}</td>
                 <td className="p-4">
                   <select 
                     value={order.status} 
                     onChange={(e) => updateStatus(order.id, e.target.value)}
-                    className={`px-2 py-1 rounded-full text-xs font-bold bg-white border outline-none ${
-                      order.status === 'Teslim Edildi' ? 'border-green-500 text-green-700' :
-                      order.status === 'Kargoya Verildi' ? 'border-blue-500 text-blue-700' :
-                      'border-yellow-500 text-yellow-700'
+                    className={`px-2 py-1 rounded-full text-xs font-bold bg-[#1F2937] border outline-none ${
+                      order.status === 'Teslim Edildi' ? 'border-green-500 text-green-400' :
+                      order.status === 'Kargoya Verildi' ? 'border-blue-500 text-blue-400' :
+                      'border-yellow-500 text-yellow-400'
                     }`}
                   >
                     <option value="Beklemede">Beklemede</option>
@@ -69,7 +70,7 @@ export default function AdminSiparislerPage() {
                   </select>
                 </td>
                 <td className="p-4 text-right">
-                  <button className="text-secondary hover:text-primary transition-colors" title="Detayları Gör">
+                  <button className="text-blue-400 hover:text-blue-300 transition-colors" title="Detayları Gör">
                     <Eye className="w-4 h-4" />
                   </button>
                 </td>
