@@ -115,16 +115,16 @@ export default function OdemePage() {
 
     // Telegram Bildirimi Gönder
     const message = `
-<b>🔔 YENİ SİPARİŞ ALINDI!</b>
+🔔 YENİ SİPARİŞ ALINDI!
 
-<b>Müşteri:</b> ${newOrder.customer}
-<b>E-Posta:</b> ${newOrder.email}
-<b>Telefon:</b> ${newOrder.phone}
-<b>Adres:</b> ${newOrder.address}
-<b>Tutar:</b> ${newOrder.total}
-<b>Tarih:</b> ${newOrder.date}
+Müşteri: ${newOrder.customer}
+E-Posta: ${newOrder.email}
+Telefon: ${newOrder.phone}
+Adres: ${newOrder.address}
+Tutar: ${newOrder.total}
+Tarih: ${newOrder.date}
 
-<b>Ürünler:</b>
+Ürünler:
 ${newOrder.items.map((item: any) => `- ${item.name} (x${item.qty})`).join('\n')}
     `;
 

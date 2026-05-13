@@ -1,12 +1,9 @@
 // Güncellendi
-import React from 'react';
-import Link from 'next/link';
-import { LayoutDashboard, ShoppingBag, Users, Settings, LogOut, FileText, Tag, MessageSquare, Mail, Ticket, BookOpen } from 'lucide-react';
+"use client";
 
-export const metadata = {
-  title: 'ibreoto Admin Paneli',
-  robots: { index: false, follow: false },
-};
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { LayoutDashboard, ShoppingBag, Settings, LogOut, FileText, Tag, MessageSquare, Mail, Ticket, BookOpen, Menu, X } from 'lucide-react';
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/ibreoto-yonetim-2025' },
@@ -21,10 +18,33 @@ const menuItems = [
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   return (
-    <div className="flex h-screen bg-[#0B0F19] text-gray-100 font-body overflow-hidden">
+    <div className="flex h-screen bg-[#0B0F19] text-gray-100 font-body overflow-hidden relative">
+      {/* Mobile Toggle Button */}
+      <button 
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)} 
+        className="md:hidden fixed top-4 left-4 z-30 bg-[#1F2937] p-2 rounded-lg border border-gray-700 text-white shadow-lg"
+      >
+        {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+      </button>
+
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-10 md:hidden" 
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
+
       {/* Sidebar */}
-      <aside className="w-64 bg-[#111827] border-r border-gray-800 flex flex-col z-20">
+      <aside className={`
+        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
+        md:translate-x-0 
+        w-64 bg-[#111827] border-r border-gray-800 flex flex-col z-20 
+        fixed md:static h-full transition-transform duration-300 ease-in-out
+      `}>
         <div className="p-5 border-b border-gray-800 flex items-center justify-center bg-[#1F2937]">
           <Link href="/">
             <img src="/images/logo.jpg" alt="ibreoto" className="h-10 w-auto rounded" />
@@ -42,6 +62,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link 
                 key={item.href} 
                 href={item.href} 
+                onClick={() => setIsSidebarOpen(false)} // Menüye tıklanınca mobilde kapat
                 className="flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-[#1F2937] hover:text-white transition-all duration-200 group"
               >
                 <Icon size={20} className="group-hover:text-red-500 transition-colors" />
@@ -62,7 +83,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden bg-[#0B0F19]">
         {/* Page Content */}
-        <div className="flex-1 overflow-y-auto p-8 bg-[#0B0F19]">
+        <div className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#0B0F19]">
+          {/* Mobilde butonun arkasında kalmaması için boşluk */}
+          <div className="h-12 md:hidden"></div> 
           {children}
         </div>
       </main>
