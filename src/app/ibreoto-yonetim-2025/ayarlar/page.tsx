@@ -48,10 +48,10 @@ export default function AdminSettingsPage() {
         body: JSON.stringify(settings)
       });
       if (res.ok) {
-        alert('Ayarlar başarıyla kaydedildi!');
+        showToast('Ayarlar başarıyla kaydedildi!', 'success');
       }
     } catch (error) {
-      alert('Kaydedilirken hata oluştu.');
+      showToast('Kaydedilirken hata oluştu.', 'error');
     } finally {
       setSaving(false);
     }

@@ -24,11 +24,41 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const slider = await prisma.slider.create({
-      data: body
-    });
-    return NextResponse.json(slider);
+    const { id, ...data } = body;
+
+    if (id) {
+      const slider = await prisma.slider.update({
+        where: { id },
+        data
+      });
+      return NextResponse.json(slider);
+    } else {
+      const slider = await prisma.slider.create({
+        data
+      });
+      return NextResponse.json(slider);
+    }
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to create slider' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to save slider' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session || (session.user as any).role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
+
+    await prisma.slider.delete({
+      where: { id }
+    });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to delete slider' }, { status: 500 });
   }
 }

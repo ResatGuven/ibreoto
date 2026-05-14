@@ -24,25 +24,63 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { title, content, image, excerpt } = body;
+    const { id, title, content, image, excerpt, category } = body;
     
     const slug = title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)+/g, '');
 
-    const post = await prisma.blogPost.create({
-      data: {
-        title,
-        slug: `${slug}-${Date.now()}`,
-        content,
-        image,
-        excerpt,
-        published: true
-      }
-    });
-    return NextResponse.json(post);
+    if (id) {
+      // Update
+      const post = await prisma.blogPost.update({
+        where: { id },
+        data: {
+          title,
+          content,
+          image,
+          excerpt,
+          category: category || 'Genel'
+        }
+      });
+      return NextResponse.json(post);
+    } else {
+      // Create
+      const post = await prisma.blogPost.create({
+        data: {
+          title,
+          slug: `${slug}-${Date.now()}`,
+          content,
+          image,
+          excerpt,
+          category: category || 'Genel',
+          published: true
+        }
+      });
+      return NextResponse.json(post);
+    }
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });
+    console.error('Blog error:', error);
+    return NextResponse.json({ error: 'Failed to save post' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session || (session.user as any).role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
+
+    await prisma.blogPost.delete({
+      where: { id }
+    });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to delete post' }, { status: 500 });
   }
 }
