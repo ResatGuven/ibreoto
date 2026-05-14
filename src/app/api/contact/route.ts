@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { sendTelegramMessage } from '@/lib/telegram';
+import { sendTelegramMessage, escapeHtml } from '@/lib/telegram';
 
 export async function POST(request: Request) {
   try {
@@ -18,10 +18,10 @@ export async function POST(request: Request) {
 
     // Telegram Notification
     const telegramMessage = `✉️ <b>YENİ MESAJ ALINDI!</b> \n\n` +
-      `👤 <b>Ad:</b> ${name}\n` +
-      `📧 <b>E-Posta:</b> ${email}\n` +
-      `📌 <b>Konu:</b> ${subject || 'İletişim Mesajı'}\n\n` +
-      `📝 <b>Mesaj:</b> \n${message}`;
+      `👤 <b>Ad:</b> ${escapeHtml(name)}\n` +
+      `📧 <b>E-Posta:</b> ${escapeHtml(email)}\n` +
+      `📌 <b>Konu:</b> ${escapeHtml(subject || 'İletişim Mesajı')}\n\n` +
+      `📝 <b>Mesaj:</b> \n${escapeHtml(message)}`;
 
     await sendTelegramMessage(telegramMessage).catch(e => console.error('Telegram Notify Error:', e));
 

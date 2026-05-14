@@ -22,8 +22,8 @@ const faqs = [
     answer: "Web sitemiz üzerinden kredi kartı, banka kartı ve havale/EFT yöntemleri ile güvenli ödeme yapabilirsiniz. Kredi kartlarına taksit imkanımız bulunmaktadır."
   },
   {
-    question: "Aracıma uygun ürünü nasıl bulabilirim?",
-    answer: "Ürün sayfalarındaki 'Uyumluluk' sekmesini kontrol edebilir veya aracınızın marka, model ve yıl bilgilerini filtreleme özelliğimizi kullanarak size uygun parçaları listeleyebilirsiniz. Emin olamadığınız durumlarda WhatsApp destek hattımızdan yardım alabilirsiniz."
+    question: "Ürünleriniz doğal mı?",
+    answer: "Evet, tüm ArıHayat ürünleri %100 doğaldır. Ham ballarımız ısıl işlem görmez, propolislerimiz ise en saf yöntemlerle elde edilir. Üreticiden doğrudan sofranıza ulaştırılır."
   }
 ];
 
@@ -76,7 +76,7 @@ export default function SSSPage() {
             <Link href="/iletisim" className="bg-primary text-white font-heading font-bold py-3 px-8 rounded-lg hover:bg-secondary transition-colors uppercase text-sm">
               Bize Ulaşın
             </Link>
-            <a href="https://wa.me/905061578963" target="_blank" rel="noopener noreferrer" className="bg-green-600 text-white font-heading font-bold py-3 px-8 rounded-lg hover:bg-green-700 transition-colors uppercase text-sm">
+            <a href="https://wa.me/905353377251" target="_blank" rel="noopener noreferrer" className="bg-green-600 text-white font-heading font-bold py-3 px-8 rounded-lg hover:bg-green-700 transition-colors uppercase text-sm">
               WhatsApp Destek
             </a>
           </div>

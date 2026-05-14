@@ -70,8 +70,8 @@ export default function AdminUrunlerPage() {
         const productId = formData.id || savedProduct.id;
 
         // SEO verilerini LocalStorage'a kaydet (Boşsa otomatik doldur)
-        const metaTitle = formData.metaTitle || `${formData.name} - En Uygun Fiyatlarla ibreoto'da!`;
-        const metaDescription = formData.metaDescription || `${formData.name} ürününü en uygun fiyat ve hızlı kargo avantajıyla ibreoto'dan satın alın. Hemen tıklayın!`;
+        const metaTitle = formData.metaTitle || `${formData.name} - En Uygun Fiyatlarla ArıHayat'ta!`;
+        const metaDescription = formData.metaDescription || `${formData.name} ürününü en uygun fiyat ve taze üretim avantajıyla ArıHayat'tan satın alın. Hemen tıklayın!`;
 
         localStorage.setItem(`seo_product_${productId}`, JSON.stringify({
           metaTitle,
@@ -190,10 +190,13 @@ export default function AdminUrunlerPage() {
                 <label className="block text-gray-400 mb-1 text-sm font-body">Kategori</label>
                 <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all text-white" required>
                   <option value="">Seçiniz</option>
-                  <option value="ic-aksesuar">İç Aksesuar</option>
-                  <option value="dis-aksesuar">Dış Aksesuar</option>
-                  <option value="teknoloji">Teknoloji & Elektronik</option>
-                  <option value="bakim">Bakım & Temizlik</option>
+                  <option value="ari-sutu">Arı Sütü</option>
+                  <option value="karisim">Karışım</option>
+                  <option value="propolis">Propolis</option>
+                  <option value="polen-ari-ekmegi">Polen & Arı Ekmeği</option>
+                  <option value="bal">Bal</option>
+                  <option value="bitkisel-yaglar">Bitkisel Yağlar</option>
+                  <option value="ozel-setler">Özel Setler</option>
                 </select>
               </div>
               <div>

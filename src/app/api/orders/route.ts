@@ -3,7 +3,7 @@ import prisma from '@/lib/prisma';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { sendOrderConfirmationEmail } from "@/lib/email";
-import { sendTelegramMessage } from "@/lib/telegram";
+import { sendTelegramMessage, escapeHtml } from "@/lib/telegram";
 
 export async function POST(request: Request) {
   try {
@@ -87,11 +87,11 @@ export async function POST(request: Request) {
       // Telegram Notification
       const telegramMessage = `🛍 <b>YENİ SİPARİŞ ALINDI!</b> \n\n` +
         `📦 <b>No:</b> #${fullOrder.id}\n` +
-        `👤 <b>Müşteri:</b> ${fullOrder.customerName}\n` +
+        `👤 <b>Müşteri:</b> ${escapeHtml(fullOrder.customerName)}\n` +
         `💰 <b>Tutar:</b> ₺${fullOrder.totalAmount.toLocaleString('tr-TR')}\n` +
-        `📍 <b>Şehir:</b> ${fullOrder.customerCity}\n\n` +
+        `📍 <b>Şehir:</b> ${escapeHtml(fullOrder.customerCity)}\n\n` +
         `<b>Ürünler:</b> \n` +
-        fullOrder.items.map(i => `• ${i.product.name} (x${i.quantity})`).join('\n') + 
+        fullOrder.items.map(i => `• ${escapeHtml(i.product.name)} (x${i.quantity})`).join('\n') + 
         `\n\n<i>Hayırlı işler bol kazançlar!</i> 🚀`;
 
       await sendTelegramMessage(telegramMessage).catch(e => console.error('Telegram Notify Error:', e));

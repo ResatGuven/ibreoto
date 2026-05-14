@@ -152,7 +152,7 @@ export default function SiparisTakipPage() {
                         </p>
                       </div>
                       <a 
-                        href={`https://wa.me/905061578963?text=${encodeURIComponent(`Merhaba, #${orderResult.id} nolu siparişimi iptal etmek istiyorum.`)}`}
+                        href={`https://wa.me/905353377251?text=${encodeURIComponent(`Merhaba, #${orderResult.id} nolu siparişimi iptal etmek istiyorum.`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-heading font-bold uppercase text-xs tracking-widest transition-all flex items-center justify-center shadow-lg shadow-red-200"
@@ -170,7 +170,7 @@ export default function SiparisTakipPage() {
                         </p>
                       </div>
                       <a 
-                        href={`https://wa.me/905061578963?text=${encodeURIComponent(`Merhaba, #${orderResult.id} nolu siparişim için iade talebi oluşturmak istiyorum.`)}`}
+                        href={`https://wa.me/905353377251?text=${encodeURIComponent(`Merhaba, #${orderResult.id} nolu siparişim için iade talebi oluşturmak istiyorum.`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-heading font-bold uppercase text-xs tracking-widest transition-all flex items-center justify-center shadow-lg shadow-blue-200"
@@ -200,7 +200,7 @@ export default function SiparisTakipPage() {
               Siparişinizle ilgili bir sorun mu yaşıyorsunuz? Destek ekibimiz size yardımcı olmaktan mutluluk duyacaktır.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <a href="https://wa.me/905061578963" className="bg-[#25D366] hover:bg-[#128C7E] text-white px-6 py-3 rounded-lg font-heading font-bold text-xs uppercase transition-all flex items-center justify-center">
+              <a href="https://wa.me/905353377251" className="bg-[#25D366] hover:bg-[#128C7E] text-white px-6 py-3 rounded-lg font-heading font-bold text-xs uppercase transition-all flex items-center justify-center">
                 WHATSAPP DESTEK
               </a>
               <Link href="/iletisim" className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg font-heading font-bold text-xs uppercase transition-all border border-white/20 flex items-center justify-center">

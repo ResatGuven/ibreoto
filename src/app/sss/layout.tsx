@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sıkça Sorulan Sorular | ibreoto",
-  description: "Kargo, iade, ödeme yöntemleri ve ürün uyumluluğu hakkında merak ettiğiniz tüm soruların yanıtları.",
+  title: "Sıkça Sorulan Sorular | ArıHayat",
+  description: "Kargo, iade, ödeme yöntemleri ve doğal ürünlerimiz hakkında merak ettiğiniz tüm soruların yanıtları.",
 };
 
 export default function SssLayout({

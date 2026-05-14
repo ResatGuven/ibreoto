@@ -14,9 +14,9 @@ export async function GET() {
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
   <channel>
-    <title>İbreOto Aksesuar</title>
+    <title>ArıHayat - Doğal Arı Ürünleri</title>
     <link>${baseUrl}</link>
-    <description>Aracını Tamamla, Yola Koy. Orijinal Araba Aksesuarları</description>
+    <description>Doğanın kalbinden taze ve %100 doğal arı sütü, propolis ve ballar.</description>
 `;
 
     products.forEach(product => {
@@ -29,8 +29,8 @@ export async function GET() {
       <g:condition>new</g:condition>
       <g:availability>${product.stock > 0 ? 'in_stock' : 'out_of_stock'}</g:availability>
       <g:price>${product.price} TRY</g:price>
-      <g:brand>İbreOto</g:brand>
-      <g:google_product_category>Araba Aksesuarları</g:google_product_category>
+      <g:brand>ArıHayat</g:brand>
+      <g:google_product_category>Sağlık & Gıda</g:google_product_category>
     </item>
 `;
     });

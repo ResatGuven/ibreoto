@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Tüm Ürünler | ibreoto",
-  description: "Aracınız için en kaliteli iç ve dış aksesuarları keşfedin. 500'den fazla ürün çeşidi, hızlı kargo ve uygun fiyatlar.",
+  title: "Tüm Ürünler | ArıHayat",
+  description: "Doğanın en saf haliyle sunulan arı sütü, propolis, ham bal ve doğal karışımları keşfedin. Üreticiden doğrudan sofranıza şifa.",
 };
 
 export default function ProductsLayout({

@@ -31,7 +31,7 @@ export default function DestekPage() {
             </div>
             <h3 className="font-heading font-bold text-secondary uppercase mb-2">WhatsApp Destek</h3>
             <p className="text-text-muted font-body text-sm mb-6">En hızlı çözüm için bize WhatsApp üzerinden yazın.</p>
-            <a href="https://wa.me/905061578963" target="_blank" rel="noopener noreferrer" className="inline-block bg-green-600 text-white font-heading font-bold py-2 px-6 rounded hover:bg-green-700 transition-colors uppercase text-xs">
+            <a href="https://wa.me/905353377251" target="_blank" rel="noopener noreferrer" className="inline-block bg-green-600 text-white font-heading font-bold py-2 px-6 rounded hover:bg-green-700 transition-colors uppercase text-xs">
               Sohbeti Başlat
             </a>
           </div>
@@ -43,7 +43,7 @@ export default function DestekPage() {
             </div>
             <h3 className="font-heading font-bold text-secondary uppercase mb-2">Müşteri Hattı</h3>
             <p className="text-text-muted font-body text-sm mb-6">Hafta içi 09:00 - 18:00 saatleri arasında bizi arayın.</p>
-            <a href="tel:05061578963" className="inline-block bg-secondary text-white font-heading font-bold py-2 px-6 rounded hover:bg-primary transition-colors uppercase text-xs">
+            <a href="tel:05353377251" className="inline-block bg-secondary text-white font-heading font-bold py-2 px-6 rounded hover:bg-primary transition-colors uppercase text-xs">
               Hemen Ara
             </a>
           </div>
@@ -55,7 +55,7 @@ export default function DestekPage() {
             </div>
             <h3 className="font-heading font-bold text-secondary uppercase mb-2">E-Posta</h3>
             <p className="text-text-muted font-body text-sm mb-6">Sorularınızı e-posta yoluyla bize iletebilirsiniz.</p>
-            <a href="mailto:destek@ibreoto.com" className="inline-block bg-primary text-white font-heading font-bold py-2 px-6 rounded hover:bg-secondary transition-colors uppercase text-xs">
+            <a href="mailto:destek@arihayat.com" className="inline-block bg-primary text-white font-heading font-bold py-2 px-6 rounded hover:bg-secondary transition-colors uppercase text-xs">
               E-Posta Gönder
             </a>
           </div>

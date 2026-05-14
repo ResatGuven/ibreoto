@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Flower, Droplets, Shield, Zap } from 'lucide-react';
+import { Flower, Droplets, Shield, Zap, Leaf, Gift, ArrowRight } from 'lucide-react';
 
 const categories = [
   { id: 'ari-sutu', title: 'Saf Arı Sütü', desc: 'Taze, Yerli Üretim ve Yüksek Değerli Şifa Kaynağı', icon: Droplets },

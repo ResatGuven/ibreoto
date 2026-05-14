@@ -1,11 +1,11 @@
 {
-  "name": "İbreOto Aksesuar",
-  "short_name": "İbreOto",
-  "description": "Aracını Tamamla, Yola Koy. Orijinal Araba Aksesuarları",
+  "name": "ArıHayat",
+  "short_name": "ArıHayat",
+  "description": "Arıdan Gelen Sağlık. %100 Doğal Arı Ürünleri",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FFFFFF",
-  "theme_color": "#D41B1B",
+  "theme_color": "#DDA83B",
   "icons": [
     {
       "src": "/favicon.ico",

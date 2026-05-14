@@ -30,7 +30,7 @@ export default function KargoTeslimatPage() {
           
           <h2>1. Kargo Firmaları</h2>
           <p>
-            İbreoto olarak tüm Türkiye'ye Yurtiçi Kargo, MNG Kargo ve Aras Kargo aracılığıyla teslimat yapmaktayız. Siparişiniz sırasında size en uygun olan kargo firmasını seçebilirsiniz (belirli bölgelerde kısıtlı olabilir).
+            ArıHayat olarak tüm Türkiye'ye Yurtiçi Kargo, MNG Kargo ve Aras Kargo aracılığıyla teslimat yapmaktayız. Siparişiniz sırasında size en uygun olan kargo firmasını seçebilirsiniz (belirli bölgelerde kısıtlı olabilir).
           </p>
 
           <h2>2. Gönderim Süresi</h2>
@@ -45,7 +45,7 @@ export default function KargoTeslimatPage() {
 
           <h2>4. Kargo Ücretleri</h2>
           <p>
-            299 TL ve üzerindeki alışverişlerinizde kargo ücretsizdir. Bu tutarın altındaki siparişlerde kargo ücreti, sepet sayfasında ve ödeme adımında şeffaf bir şekilde gösterilmektedir.
+            1000 TL ve üzerindeki alışverişlerinizde kargo ücretsizdir. Bu tutarın altındaki siparişlerde kargo ücreti, sepet sayfasında ve ödeme adımında şeffaf bir şekilde gösterilmektedir.
           </p>
 
           <h2>5. Hasarlı Kargo ve Paket Kontrolü</h2>
