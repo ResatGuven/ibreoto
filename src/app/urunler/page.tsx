@@ -4,7 +4,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { ShoppingBag, Star } from 'lucide-react';
+import { ShoppingBag, Star, Heart } from 'lucide-react';
 import { ProductsSkeleton } from '@/components/ui/ProductsSkeleton';
 
 export default function UrunlerPage() {
@@ -38,6 +38,7 @@ function UrunlerContent() {
   const [appliedMin, setAppliedMin] = useState<number | null>(null);
   const [appliedMax, setAppliedMax] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   const categoryNames: { [key: string]: string } = {
     'ic-aksesuar': 'İç Aksesuar',
@@ -45,6 +46,13 @@ function UrunlerContent() {
     'teknoloji': 'Teknoloji & Elektronik',
     'bakim': 'Bakım & Temizlik'
   };
+
+  useEffect(() => {
+    const savedFavs = localStorage.getItem('favorites');
+    if (savedFavs) {
+      setFavorites(JSON.parse(savedFavs).map((p: any) => String(p.id)));
+    }
+  }, []);
 
   useEffect(() => {
     if (categoryParam) {
@@ -108,6 +116,23 @@ function UrunlerContent() {
   const handleApplyPrice = () => {
     setAppliedMin(minPrice ? parseFloat(minPrice) : null);
     setAppliedMax(maxPrice ? parseFloat(maxPrice) : null);
+  };
+
+  const toggleFavorite = (product: any) => {
+    const savedFavs = localStorage.getItem('favorites');
+    let favs = savedFavs ? JSON.parse(savedFavs) : [];
+    const isFav = favs.find((p: any) => String(p.id) === String(product.id));
+    
+    if (isFav) {
+      favs = favs.filter((p: any) => String(p.id) !== String(product.id));
+      setFavorites(favorites.filter(id => id !== String(product.id)));
+    } else {
+      favs.push(product);
+      setFavorites([...favorites, String(product.id)]);
+    }
+    
+    localStorage.setItem('favorites', JSON.stringify(favs));
+    window.dispatchEvent(new Event('favoritesUpdated'));
   };
 
   const addToCart = (product: any) => {
@@ -204,14 +229,22 @@ function UrunlerContent() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
                 <div key={product.id} className="group bg-white border border-surface hover:border-primary/30 rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col transform hover:-translate-y-1">
-                  <Link href={`/urun/${product.id}`} className="block relative w-full h-48 bg-surface p-4 flex items-center justify-center overflow-hidden">
-                    {product.image ? (
-                      <img src={product.image} alt={product.name} className="object-contain max-h-full transform group-hover:scale-110 transition-transform duration-700" />
-                    ) : (
-                      <div className="text-text-muted text-xs font-body">[ Görsel ]</div>
-                    )}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500"></div>
-                  </Link>
+                  <div className="relative w-full h-48 bg-surface p-4 flex items-center justify-center overflow-hidden">
+                    <Link href={`/urun/${product.id}`} className="block w-full h-full flex items-center justify-center">
+                      {product.image ? (
+                        <img src={product.image} alt={product.name} className="object-contain max-h-full transform group-hover:scale-110 transition-transform duration-700" />
+                      ) : (
+                        <div className="text-text-muted text-xs font-body">[ Görsel ]</div>
+                      )}
+                    </Link>
+                    <button 
+                      onClick={() => toggleFavorite(product)}
+                      className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all duration-300 z-10 ${favorites.includes(String(product.id)) ? 'bg-primary text-white' : 'bg-white text-secondary hover:text-primary'}`}
+                    >
+                      <Heart className={`w-4 h-4 ${favorites.includes(String(product.id)) ? 'fill-current' : ''}`} />
+                    </button>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500 pointer-events-none"></div>
+                  </div>
                   <div className="p-4 flex flex-col flex-grow">
                     <p className="text-[10px] text-primary mb-1 font-heading font-bold uppercase tracking-widest">{categoryNames[product.category] || product.category}</p>
                     <Link href={`/urun/${product.id}`} className="font-heading font-bold text-secondary hover:text-primary mb-2 line-clamp-2 uppercase text-sm leading-tight transition-colors">

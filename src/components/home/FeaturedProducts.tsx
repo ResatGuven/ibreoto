@@ -4,10 +4,11 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Star, ShoppingCart, ArrowRight } from 'lucide-react';
+import { Star, ShoppingCart, ArrowRight, Heart } from 'lucide-react';
 
 export const FeaturedProducts = () => {
   const [products, setProducts] = useState<any[]>([]);
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   const defaultProducts = [
     { id: 1, name: 'Karbon Fiber Direksiyon Kılıfı', price: '350', category: 'ic-aksesuar', image: '/images/products/steering_wheel_cover.png', description: 'Yüksek kaliteli karbon fiber görünüm.', rating: 5, reviews: 24, badge: 'YENİ' },
@@ -17,10 +18,15 @@ export const FeaturedProducts = () => {
   ];
 
   useEffect(() => {
+    // Load favorites
+    const savedFavs = localStorage.getItem('favorites');
+    if (savedFavs) {
+      setFavorites(JSON.parse(savedFavs).map((p: any) => String(p.id)));
+    }
+
     const savedProducts = localStorage.getItem('app_products');
     if (savedProducts) {
       const all = JSON.parse(savedProducts);
-      // Merge with default products to get images if missing
       const merged = all.map((p: any) => {
         const def = defaultProducts.find(d => d.id === p.id);
         return {
@@ -28,7 +34,6 @@ export const FeaturedProducts = () => {
           image: p.image || (def ? def.image : '')
         };
       });
-      // Take first 4 for display, adding some dummy fields if missing
       const display = merged.slice(0, 4).map((p: any, idx: number) => {
         const def = defaultProducts.find(d => d.id === p.id);
         return {
@@ -43,7 +48,33 @@ export const FeaturedProducts = () => {
       setProducts(defaultProducts);
       localStorage.setItem('app_products', JSON.stringify(defaultProducts));
     }
+
+    const updateFavorites = () => {
+      const saved = localStorage.getItem('favorites');
+      if (saved) {
+        setFavorites(JSON.parse(saved).map((p: any) => String(p.id)));
+      }
+    };
+    window.addEventListener('favoritesUpdated', updateFavorites);
+    return () => window.removeEventListener('favoritesUpdated', updateFavorites);
   }, []);
+
+  const toggleFavorite = (product: any) => {
+    const savedFavs = localStorage.getItem('favorites');
+    let favs = savedFavs ? JSON.parse(savedFavs) : [];
+    const isFav = favs.find((p: any) => String(p.id) === String(product.id));
+    
+    if (isFav) {
+      favs = favs.filter((p: any) => String(p.id) !== String(product.id));
+      setFavorites(favorites.filter(id => id !== String(product.id)));
+    } else {
+      favs.push(product);
+      setFavorites([...favorites, String(product.id)]);
+    }
+    
+    localStorage.setItem('favorites', JSON.stringify(favs));
+    window.dispatchEvent(new Event('favoritesUpdated'));
+  };
 
   const addToCart = (product: any) => {
     const savedCart = localStorage.getItem('cart');
@@ -107,19 +138,28 @@ export const FeaturedProducts = () => {
                 </div>
               )}
 
+              <button 
+                onClick={() => toggleFavorite(product)}
+                className={`absolute top-4 right-4 z-20 w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-all duration-300 ${favorites.includes(String(product.id)) ? 'bg-primary text-white' : 'bg-white text-secondary hover:text-primary'}`}
+              >
+                <Heart className={`w-5 h-5 ${favorites.includes(String(product.id)) ? 'fill-current' : ''}`} />
+              </button>
+
               {/* Image */}
               <div className="relative w-full h-64 bg-surface p-6 flex items-center justify-center overflow-hidden">
-                {product.image ? (
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    width={300}
-                    height={300}
-                    className="object-contain max-h-full transform group-hover:scale-110 transition-transform duration-700 ease-out"
-                  />
-                ) : (
-                  <div className="text-text-muted text-xs font-body">[ Görsel ]</div>
-                )}
+                <Link href={`/urun/${product.id}`} className="block w-full h-full flex items-center justify-center">
+                  {product.image ? (
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      width={300}
+                      height={300}
+                      className="object-contain max-h-full transform group-hover:scale-110 transition-transform duration-700 ease-out"
+                    />
+                  ) : (
+                    <div className="text-text-muted text-xs font-body">[ Görsel ]</div>
+                  )}
+                </Link>
               </div>
 
               {/* Content */}
@@ -134,8 +174,8 @@ export const FeaturedProducts = () => {
                   <span className="text-text-muted text-xs ml-2">({product.reviews})</span>
                 </div>
                 
-                <h3 className="font-heading font-bold text-text-main text-lg mb-2 line-clamp-2 uppercase tracking-tight group-hover:text-primary transition-colors">
-                  {product.name}
+                <h3 className="font-heading font-bold text-secondary text-lg mb-2 line-clamp-2 uppercase tracking-tight group-hover:text-primary transition-colors">
+                  <Link href={`/urun/${product.id}`}>{product.name}</Link>
                 </h3>
                 
                 <div className="mt-auto pt-4 flex items-center justify-between">

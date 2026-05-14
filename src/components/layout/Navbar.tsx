@@ -9,24 +9,32 @@ export default function Navbar() {
   const router = useRouter();
   const [searchOpen, setSearchOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [favoritesCount, setFavoritesCount] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    const updateCount = () => {
+    const updateCounts = () => {
+      // Cart count
       const savedCart = localStorage.getItem('cart');
       const cart = savedCart ? JSON.parse(savedCart) : [];
-      const count = cart.reduce((acc: number, item: any) => acc + item.qty, 0);
-      setCartCount(count);
+      setCartCount(cart.reduce((acc: number, item: any) => acc + item.qty, 0));
+
+      // Favorites count
+      const savedFavs = localStorage.getItem('favorites');
+      const favs = savedFavs ? JSON.parse(savedFavs) : [];
+      setFavoritesCount(favs.length);
     };
 
-    updateCount(); // Initial load
-    window.addEventListener('cartUpdated', updateCount);
-    window.addEventListener('storage', updateCount);
+    updateCounts();
+    window.addEventListener('cartUpdated', updateCounts);
+    window.addEventListener('favoritesUpdated', updateCounts);
+    window.addEventListener('storage', updateCounts);
     
     return () => {
-      window.removeEventListener('cartUpdated', updateCount);
-      window.removeEventListener('storage', updateCount);
+      window.removeEventListener('cartUpdated', updateCounts);
+      window.removeEventListener('favoritesUpdated', updateCounts);
+      window.removeEventListener('storage', updateCounts);
     };
   }, []);
 
@@ -97,6 +105,11 @@ export default function Navbar() {
           
           <Link href="/favoriler" className="text-secondary hover:text-primary hidden sm:block p-2 relative group">
             <Heart className="w-5 h-5 group-hover:scale-110 transition-transform" />
+            {favoritesCount > 0 && (
+              <span className="absolute top-1 right-1 bg-primary text-white text-[9px] w-5 h-5 rounded-full flex items-center justify-center font-bold border-2 border-white shadow-sm animate-in zoom-in duration-300">
+                {favoritesCount}
+              </span>
+            )}
           </Link>
           
           <Link href="/sepet" className="text-secondary hover:text-primary relative group p-2">
