@@ -156,12 +156,25 @@ ${newOrder.items.map((item: any) => `- ${item.name} (x${item.qty})`).join('\n')}
             <CheckCircle2 className="w-10 h-10" />
           </div>
           <h1 className="text-2xl font-heading font-bold text-secondary mb-2 uppercase">SİPARİŞİNİZ ALINDI!</h1>
-          <p className="text-text-muted font-body text-sm mb-6">
-            Ödemeniz başarıyla gerçekleşti. Siparişiniz oluşturuldu ve yönetim paneline iletildi.
+          <p className="text-text-muted font-body text-sm mb-6 leading-relaxed">
+            Ödemeniz başarıyla gerçekleşti. Siparişiniz oluşturuldu ve hazırlık sürecine başlandı.
           </p>
-          <Link href="/" className="bg-primary hover:bg-primary-hover text-white px-6 py-3 rounded-lg font-heading font-bold text-sm uppercase transition-colors inline-block">
-            Alışverişe Devam Et
-          </Link>
+          
+          <div className="bg-yellow-50 p-4 rounded-xl border border-yellow-100 text-left mb-8">
+            <h4 className="text-yellow-800 font-heading font-bold text-xs uppercase mb-1">Önemli Bilgilendirme</h4>
+            <p className="text-yellow-700 font-body text-[11px] leading-relaxed">
+              Siparişiniz kargoya verilmeden önce iptal etmek veya değişiklik yapmak isterseniz <strong>WhatsApp destek hattımız</strong> üzerinden bizimle iletişime geçebilirsiniz.
+            </p>
+          </div>
+
+          <div className="flex flex-col space-y-3">
+            <Link href="/siparis-takip" className="bg-secondary hover:bg-secondary-hover text-white px-6 py-3 rounded-lg font-heading font-bold text-sm uppercase transition-colors inline-block">
+              Siparişi Takip Et
+            </Link>
+            <Link href="/" className="text-text-muted hover:text-primary font-heading font-bold text-xs uppercase transition-colors inline-block">
+              Anasayfaya Dön
+            </Link>
+          </div>
         </div>
       </div>
     );

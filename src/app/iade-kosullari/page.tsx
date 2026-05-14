@@ -45,7 +45,20 @@ export default function IadeKosullariPage() {
 
           <h2>4. İade Süreci ve Geri Ödeme</h2>
           <p>
-            İade talebiniz tarafımıza ulaştıktan sonra ürünün incelenmesi yapılır. İade onaylandığında, ödemeniz kullandığınız ödeme yöntemine (Kredi Kartı/Havale) uygun olarak 7-10 iş günü içerisinde iade edilir. Banka kaynaklı gecikmelerden firmamız sorumlu değildir.
+            İade talebiniz tarafımıza ulaştıktan sonra ürünün incelenmesi yapılır. İade şartlarına uygunluğu onaylanan ürünler için geri ödeme süreci başlatılır.
+          </p>
+          
+          <div className="bg-surface p-6 rounded-xl border-l-4 border-primary mb-6">
+            <h4 className="font-heading font-bold text-secondary mb-2 uppercase text-sm">Geri Ödeme Nasıl Yapılır?</h4>
+            <ul className="list-disc ml-5 space-y-2 text-sm font-body">
+              <li><strong>Kredi Kartı:</strong> İade onaylandığında, tutar otomatik olarak kartınıza iade edilir. Ekstrenize yansıması bankanıza bağlı olarak 7-10 iş günü sürebilir.</li>
+              <li><strong>Havale/EFT:</strong> İade onayı sonrası tarafınızdan IBAN bilgisi istenir ve ödeme belirttiğiniz hesaba 3 iş günü içinde yatırılır.</li>
+              <li><strong>Taksitli Ödemeler:</strong> Banka prosedürleri gereği taksitli işlemler ekstrenize yine taksitli olarak iade edilebilir.</li>
+            </ul>
+          </div>
+
+          <p className="text-xs text-text-muted italic">
+            * Banka kaynaklı gecikmelerden firmamız sorumlu değildir. İadeniz gerçekleştiğinde tarafınıza e-posta veya SMS ile bilgi verilecektir.
           </p>
 
           <h2>5. Kusurlu Ürünler</h2>

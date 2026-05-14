@@ -143,6 +143,42 @@ export default function SiparisTakipPage() {
                       </div>
                     </div>
                   </div>
+
+                  {orderResult.status === 'Beklemede' && (
+                    <div className="pt-6 border-t border-gray-100">
+                      <div className="bg-yellow-50 p-4 rounded-xl border border-yellow-100 mb-4">
+                        <p className="text-xs text-yellow-800 font-body leading-relaxed">
+                          <strong>Not:</strong> Siparişiniz henüz kargoya verilmediği için iptal edilebilir durumdadır. İptal talebinizi iletmek için aşağıdaki butonu kullanabilirsiniz.
+                        </p>
+                      </div>
+                      <a 
+                        href={`https://wa.me/905061578963?text=${encodeURIComponent(`Merhaba, #${orderResult.id} nolu siparişimi iptal etmek istiyorum.`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-heading font-bold uppercase text-xs tracking-widest transition-all flex items-center justify-center shadow-lg shadow-red-200"
+                      >
+                        SİPARİŞİ İPTAL ET
+                      </a>
+                    </div>
+                  )}
+
+                  {orderResult.status === 'Tamamlandı' && (
+                    <div className="pt-6 border-t border-gray-100">
+                      <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 mb-4">
+                        <p className="text-xs text-blue-800 font-body leading-relaxed">
+                          <strong>İade Bilgisi:</strong> Ürünü teslim aldıktan sonra 14 gün içerisinde iade etme hakkınız bulunmaktadır. İade süreci için lütfen aşağıdaki butondan talep oluşturun.
+                        </p>
+                      </div>
+                      <a 
+                        href={`https://wa.me/905061578963?text=${encodeURIComponent(`Merhaba, #${orderResult.id} nolu siparişim için iade talebi oluşturmak istiyorum.`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-heading font-bold uppercase text-xs tracking-widest transition-all flex items-center justify-center shadow-lg shadow-blue-200"
+                      >
+                        İADE TALEBİ OLUŞTUR
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
             ) : (
