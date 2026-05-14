@@ -3,8 +3,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, FolderTree } from 'lucide-react';
+import { useAdminToast } from '@/context/AdminToastContext';
 
 export default function AdminKategorilerPage() {
+  const { showToast } = useAdminToast();
   const [categories, setCategories] = useState<any[]>([]);
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState({ id: '', name: '', slug: '' });
@@ -42,11 +44,12 @@ export default function AdminKategorilerPage() {
       });
 
       if (res.ok) {
+        showToast(formData.id ? 'Kategori güncellendi' : 'Kategori eklendi', 'success');
         fetchCategories();
         setIsAdding(false);
         setFormData({ id: '', name: '', slug: '' });
       } else {
-        alert('Failed to save category');
+        showToast('Kategori kaydedilemedi', 'error');
       }
     } catch (error) {
       console.error('Error saving category:', error);
@@ -62,9 +65,10 @@ export default function AdminKategorilerPage() {
       });
 
       if (res.ok) {
+        showToast('Kategori silindi', 'success');
         fetchCategories();
       } else {
-        alert('Failed to delete category');
+        showToast('Kategori silinemedi', 'error');
       }
     } catch (error) {
       console.error('Error deleting category:', error);

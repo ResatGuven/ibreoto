@@ -2,8 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { Save, Globe, Phone, Mail, MapPin, MessageSquare, Facebook, Instagram, Twitter, ShieldAlert } from 'lucide-react';
+import { useAdminToast } from '@/context/AdminToastContext';
 
 export default function AdminSettingsPage() {
+  const { showToast } = useAdminToast();
   const [settings, setSettings] = useState<any>({
     siteName: 'İbreOto',
     siteDescription: '',
