@@ -179,6 +179,7 @@ ${cartItems.map((item: any) => `- ${item.name} (x${item.qty})`).join('\n')}
       localStorage.removeItem('cart');
       window.dispatchEvent(new Event('cartUpdated'));
     }, 2000);
+    });
   };
 
   if (isSuccess) {
