@@ -360,6 +360,4 @@ function UrunlerContent() {
     </div>
   );
 }
-  );
-}
 
