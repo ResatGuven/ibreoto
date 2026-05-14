@@ -8,6 +8,7 @@ export default function OdemePage() {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [orderId, setOrderId] = useState<string | null>(null);
   const [couponCode, setCouponCode] = useState('');
   const [couponMessage, setCouponMessage] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
@@ -125,6 +126,7 @@ export default function OdemePage() {
       }
       
       const newOrder = data;
+      setOrderId(newOrder.id);
 
       // Telegram Bildirimi Gönder
       const message = `
@@ -190,6 +192,12 @@ ${cartItems.map((item: any) => `- ${item.name} (x${item.qty})`).join('\n')}
             <CheckCircle2 className="w-10 h-10" />
           </div>
           <h1 className="text-2xl font-heading font-bold text-secondary mb-2 uppercase">SİPARİŞİNİZ ALINDI!</h1>
+          
+          <div className="bg-gray-50 py-3 px-4 rounded-xl border border-gray-100 mb-4">
+            <p className="text-[10px] text-gray-500 uppercase font-bold mb-1">Sipariş Numaranız</p>
+            <p className="text-xl font-heading font-bold text-primary">#{orderId}</p>
+          </div>
+
           <p className="text-text-muted font-body text-sm mb-6 leading-relaxed">
             Ödemeniz başarıyla gerçekleşti. Siparişiniz oluşturuldu ve hazırlık sürecine başlandı.
           </p>
