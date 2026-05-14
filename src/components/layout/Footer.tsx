@@ -45,34 +45,31 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Kurumsal */}
+        {/* Hızlı Linkler */}
         <div>
-          <h3 className="font-heading uppercase font-bold text-lg mb-6 border-b border-gray-700 pb-2 inline-block">Kurumsal</h3>
+          <h3 className="font-heading uppercase font-bold text-lg mb-6 border-b border-gray-700 pb-2 inline-block tracking-wider">HIZLI LİNKLER</h3>
           <ul className="space-y-3 font-body text-gray-400 text-sm">
             <li><Link href="/hakkimizda" className="hover:text-primary transition-colors">Hakkımızda</Link></li>
             <li><Link href="/iletisim" className="hover:text-primary transition-colors">İletişim</Link></li>
             <li><Link href="/bayilik" className="hover:text-primary transition-colors">Bayilik & Toptan</Link></li>
-            <li><Link href="/blog" className="hover:text-primary transition-colors">Blog</Link></li>
-            <li><Link href="/sss" className="hover:text-primary transition-colors">Sıkça Sorulan Sorular</Link></li>
+            <li><Link href="/blog" className="hover:text-primary transition-colors font-bold text-white">Blog</Link></li>
           </ul>
         </div>
 
-        {/* Müşteri Hizmetleri */}
+        {/* Kategoriler */}
         <div>
-          <h3 className="font-heading uppercase font-bold text-lg mb-6 border-b border-gray-700 pb-2 inline-block">Müşteri Hizmetleri</h3>
+          <h3 className="font-heading uppercase font-bold text-lg mb-6 border-b border-gray-700 pb-2 inline-block tracking-wider">KATEGORİLER</h3>
           <ul className="space-y-3 font-body text-gray-400 text-sm">
-            <li><Link href="/mesafeli-satis-sozlesmesi" className="hover:text-primary transition-colors">Mesafeli Satış Sözleşmesi</Link></li>
-            <li><Link href="/iade-kosullari" className="hover:text-primary transition-colors">İptal ve İade Koşulları</Link></li>
-            <li><Link href="/kargo-teslimat" className="hover:text-primary transition-colors">Kargo ve Teslimat</Link></li>
-            <li><Link href="/gizlilik" className="hover:text-primary transition-colors">Gizlilik Politikası</Link></li>
-            <li><Link href="/kvkk" className="hover:text-primary transition-colors">KVKK Aydınlatma Metni</Link></li>
-            <li><Link href="/siparis-takip" className="hover:text-primary transition-colors font-bold text-white">Siparişim Nerede?</Link></li>
+            <li><Link href="/kategori/ic-aksesuar" className="hover:text-primary transition-colors">İç Aksesuar</Link></li>
+            <li><Link href="/kategori/dis-aksesuar" className="hover:text-primary transition-colors">Dış Aksesuar</Link></li>
+            <li><Link href="/kategori/teknoloji" className="hover:text-primary transition-colors">Teknoloji & Elektronik</Link></li>
+            <li><Link href="/kategori/bakim" className="hover:text-primary transition-colors">Bakım & Temizlik</Link></li>
           </ul>
         </div>
 
-        {/* Contact */}
+        {/* İletişim */}
         <div className="space-y-6">
-          <h3 className="font-heading uppercase font-bold text-lg mb-6 border-b border-gray-700 pb-2 inline-block">İletişim</h3>
+          <h3 className="font-heading uppercase font-bold text-lg mb-6 border-b border-gray-700 pb-2 inline-block tracking-wider">İLETİŞİM</h3>
           <ul className="space-y-4 font-body text-gray-400 text-sm">
             <li className="flex items-start">
               <Phone className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
