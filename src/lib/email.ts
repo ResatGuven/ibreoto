@@ -1,8 +1,13 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 export async function sendOrderConfirmationEmail(order: any) {
+  if (!resend) {
+    console.warn('Resend API Key missing. Skipping email.');
+    return;
+  }
+  
   try {
     const { customerEmail, customerName, totalAmount, id, items } = order;
 
