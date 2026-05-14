@@ -49,28 +49,30 @@ export default function OdemePage() {
     }, 0);
   };
 
-  const handleApplyCoupon = () => {
-    const savedCoupons = localStorage.getItem('app_coupons');
-    if (!savedCoupons) {
-      setCouponMessage('Hata: Kupon bulunamadı.');
-      return;
-    }
-    const coupons = JSON.parse(savedCoupons);
-    const coupon = coupons.find((c: any) => c.code === couponCode);
-
-    if (coupon) {
-      const total = calculateTotal();
-      let discount = 0;
-      if (coupon.type === 'percentage') {
-        discount = (total * parseFloat(coupon.discount)) / 100;
+  const handleApplyCoupon = async () => {
+    if (!couponCode) return;
+    
+    try {
+      const response = await fetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          code: couponCode, 
+          totalAmount: calculateTotal() 
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setDiscountAmount(data.discount);
+        setCouponMessage(`Başarılı: ₺${data.discount.toLocaleString('tr-TR')} indirim uygulandı.`);
       } else {
-        discount = parseFloat(coupon.discount);
+        setCouponMessage(`Hata: ${data.error}`);
+        setDiscountAmount(0);
       }
-      setDiscountAmount(discount);
-      setCouponMessage(`Başarılı: ₺${discount.toLocaleString('tr-TR')} indirim uygulandı.`);
-    } else {
-      setCouponMessage('Hata: Geçersiz kupon kodu.');
-      setDiscountAmount(0);
+    } catch (error) {
+      setCouponMessage('Hata: Kupon doğrulanırken bir sorun oluştu.');
     }
   };
 
@@ -97,52 +99,57 @@ export default function OdemePage() {
     e.preventDefault();
     setIsProcessing(true);
     
-    // Save order to localStorage for Admin Panel
-    const savedOrders = localStorage.getItem('app_orders');
-    let orders = savedOrders ? JSON.parse(savedOrders) : [];
-    const newOrder = {
-      id: Date.now(),
-      customer: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      address: `${formData.address}, ${formData.city}`,
-      total: `₺${(calculateTotal() - discountAmount).toLocaleString('tr-TR')}`,
-      date: new Date().toLocaleDateString('tr-TR'),
-      status: 'Beklemede',
+    const orderPayload = {
+      customerName: formData.name,
+      customerEmail: formData.email,
+      customerPhone: formData.phone,
+      customerAddress: formData.address,
+      customerCity: formData.city,
+      totalAmount: calculateTotal() - discountAmount,
+      discountAmount: discountAmount,
+      couponCode: couponCode,
       items: cartItems
     };
-    orders.unshift(newOrder); // Add to top
-    localStorage.setItem('app_orders', JSON.stringify(orders));
 
-    // Telegram Bildirimi Gönder
-    const message = `
-🔔 YENİ SİPARİŞ ALINDI!
+    fetch('/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderPayload)
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        setIsProcessing(false);
+        alert(data.error);
+        return;
+      }
+      
+      const newOrder = data;
 
-Müşteri: ${newOrder.customer}
-E-Posta: ${newOrder.email}
-Telefon: ${newOrder.phone}
-Adres: ${newOrder.address}
-Tutar: ${newOrder.total}
-Tarih: ${newOrder.date}
+      // Telegram Bildirimi Gönder
+      const message = `
+🔔 YENİ SİPARİŞ ALINDI! (ID: ${newOrder.id})
+
+Müşteri: ${newOrder.customerName}
+E-Posta: ${newOrder.customerEmail}
+Telefon: ${newOrder.customerPhone}
+Adres: ${newOrder.customerAddress} / ${newOrder.customerCity}
+Tutar: ₺${newOrder.totalAmount.toLocaleString('tr-TR')}
 
 Ürünler:
-${newOrder.items.map((item: any) => `- ${item.name} (x${item.qty})`).join('\n')}
-    `;
+${cartItems.map((item: any) => `- ${item.name} (x${item.qty})`).join('\n')}
+      `;
 
-    console.log('TELEGRAM MESAJI GÖNDERİLİYOR...');
-    fetch('/api/telegram', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message }),
-      cache: 'no-store',
-    }).catch(error => console.error('Telegram error:', error));
+      fetch('/api/telegram', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message }),
+      }).catch(error => console.error('Telegram error:', error));
 
-    // Simulate payment processing
-    setTimeout(() => {
-      setIsProcessing(false);
-      setIsSuccess(true);
+      // Success logic
+      setTimeout(() => {
+        setIsProcessing(false);
+        setIsSuccess(true);
 
       // Analytics Events
       if (typeof window !== 'undefined') {

@@ -9,49 +9,48 @@ export default function AdminKuponlarPage() {
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState({ id: '', code: '', discount: '', type: 'percentage', expiry: '' });
 
-  const defaultCoupons = [
-    { id: 1, code: 'YENI20', discount: '20', type: 'percentage', expiry: '2026-12-31' },
-    { id: 2, code: 'HOŞGELDİN50', discount: '50', type: 'fixed', expiry: '2026-06-30' },
-  ];
-
   useEffect(() => {
-    const savedCoupons = localStorage.getItem('app_coupons');
-    if (savedCoupons) {
-      setCoupons(JSON.parse(savedCoupons));
-    } else {
-      setCoupons(defaultCoupons);
-      localStorage.setItem('app_coupons', JSON.stringify(defaultCoupons));
-    }
+    fetchCoupons();
   }, []);
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newCoupon = {
-      id: formData.id || Date.now(),
-      code: formData.code.toUpperCase(),
-      discount: formData.discount,
-      type: formData.type,
-      expiry: formData.expiry
-    };
-
-    let updated;
-    if (formData.id) {
-      updated = coupons.map(c => c.id === formData.id ? newCoupon : c);
-    } else {
-      updated = [...coupons, newCoupon];
+  const fetchCoupons = async () => {
+    try {
+      const res = await fetch('/api/admin/coupons');
+      const data = await res.json();
+      if (!data.error) setCoupons(data);
+    } catch (error) {
+      console.error('Failed to fetch coupons:', error);
     }
-
-    setCoupons(updated);
-    localStorage.setItem('app_coupons', JSON.stringify(updated));
-    setIsAdding(false);
-    setFormData({ id: '', code: '', discount: '', type: 'percentage', expiry: '' });
   };
 
-  const handleDelete = (id: number) => {
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('/api/admin/coupons', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      if (res.ok) {
+        fetchCoupons();
+        setIsAdding(false);
+        setFormData({ id: '', code: '', discount: '', type: 'percentage', expiry: '' });
+      }
+    } catch (error) {
+      console.error('Failed to save coupon:', error);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
     if (!confirm('Bu kuponu silmek istediğinize emin misiniz?')) return;
-    const updated = coupons.filter(c => c.id !== id);
-    setCoupons(updated);
-    localStorage.setItem('app_coupons', JSON.stringify(updated));
+    try {
+      const res = await fetch(`/api/admin/coupons?id=${id}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) fetchCoupons();
+    } catch (error) {
+      console.error('Failed to delete coupon:', error);
+    }
   };
 
   return (

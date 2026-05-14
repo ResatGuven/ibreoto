@@ -7,33 +7,42 @@ import { ShoppingBag, Eye } from 'lucide-react';
 export default function AdminSiparislerPage() {
   const [orders, setOrders] = useState<any[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
-
-  const defaultOrders = [
-    { id: 1001, customer: 'Ahmet Yılmaz', total: '₺1.200', status: 'Hazırlanıyor', date: '11.05.2026', cargoNo: '' },
-    { id: 1002, customer: 'Mehmet Demir', total: '₺350', status: 'Kargoya Verildi', date: '10.05.2026', cargoNo: 'TR123456789' },
-    { id: 1003, customer: 'Ayşe Kaya', total: '₺850', status: 'Teslim Edildi', date: '09.05.2026', cargoNo: 'TR987654321' },
-  ];
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedOrders = localStorage.getItem('app_orders');
-    if (savedOrders) {
-      setOrders(JSON.parse(savedOrders));
-    } else {
-      setOrders(defaultOrders);
-      localStorage.setItem('app_orders', JSON.stringify(defaultOrders));
-    }
+    fetchOrders();
   }, []);
 
-  const updateStatus = (id: number, newStatus: string) => {
-    const updated = orders.map(order => order.id === id ? { ...order, status: newStatus } : order);
-    setOrders(updated);
-    localStorage.setItem('app_orders', JSON.stringify(updated));
+  const fetchOrders = async () => {
+    try {
+      const res = await fetch('/api/admin/orders');
+      const data = await res.json();
+      if (!data.error) setOrders(data);
+    } catch (error) {
+      console.error('Failed to fetch orders:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const updateCargoNo = (id: number, cargoNo: string) => {
-    const updated = orders.map(order => order.id === id ? { ...order, cargoNo } : order);
-    setOrders(updated);
-    localStorage.setItem('app_orders', JSON.stringify(updated));
+  const updateStatus = async (id: string, newStatus: string) => {
+    try {
+      const res = await fetch('/api/admin/orders', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status: newStatus })
+      });
+      if (res.ok) {
+        setOrders(orders.map(order => order.id === id ? { ...order, status: newStatus } : order));
+      }
+    } catch (error) {
+      console.error('Failed to update status:', error);
+    }
+  };
+
+  const updateCargoNo = (id: string, cargoNo: string) => {
+    // Placeholder for now as cargoNo is not in DB yet
+    setOrders(orders.map(order => order.id === id ? { ...order, cargoNo } : order));
   };
 
   return (

@@ -165,9 +165,15 @@ export default function ProductDetailClient({ product, slug }: { product: any, s
                 {'★'.repeat(Math.round(product.rating))}{'☆'.repeat(5 - Math.round(product.rating))}
               </div>
               <span className="text-sm text-text-muted font-body">({comments.length} Değerlendirme)</span>
-              <span className="text-sm text-green-600 font-bold font-body bg-green-50 px-2 py-1 rounded">
-                Stokta Var
-              </span>
+              {product.stock > 0 ? (
+                <span className={`text-sm font-bold font-body px-2 py-1 rounded ${product.stock < 5 ? 'text-red-600 bg-red-50 animate-pulse' : 'text-green-600 bg-green-50'}`}>
+                  {product.stock < 5 ? `Son ${product.stock} Ürün!` : 'Stokta Var'}
+                </span>
+              ) : (
+                <span className="text-sm text-gray-500 font-bold font-body bg-gray-100 px-2 py-1 rounded">
+                  Stokta Yok
+                </span>
+              )}
             </div>
 
             <div className="mb-6 border-b border-surface pb-6">
@@ -214,8 +220,9 @@ export default function ProductDetailClient({ product, slug }: { product: any, s
               <Button 
                 className="flex-grow text-lg shadow-lg shadow-primary/30 font-heading font-bold uppercase"
                 onClick={addToCart}
+                disabled={product.stock === 0}
               >
-                SEPETE EKLE
+                {product.stock === 0 ? 'STOKTA YOK' : 'SEPETE EKLE'}
               </Button>
               <button 
                 onClick={toggleFavorite}

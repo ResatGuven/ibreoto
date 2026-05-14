@@ -19,6 +19,8 @@
     "bcrypt": "^5.1.1",
     "@prisma/client": "^5.10.0",
     "@next-auth/prisma-adapter": "^1.0.7",
+    "@sentry/nextjs": "^8.0.0",
+    "resend": "^3.0.0",
     "lucide-react": "^0.330.0"
   },
   "devDependencies": {
