@@ -5,7 +5,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { ShoppingBag, Star, Heart } from 'lucide-react';
+import { ShoppingBag, Star, Heart, Truck } from 'lucide-react';
 import { ProductsSkeleton } from '@/components/ui/ProductsSkeleton';
 
 export default function UrunlerPage() {
