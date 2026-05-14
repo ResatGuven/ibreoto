@@ -13,7 +13,11 @@ export default function MesafeliSatisPage() {
             <h2 className="text-xl font-heading font-bold text-secondary mb-3 uppercase">1. TARAFLAR</h2>
             <p>İşbu Sözleşme aşağıdaki taraflar arasında aşağıda belirtilen hüküm ve şartlar çerçevesinde imzalanmıştır.</p>
             <p><strong>ALICI:</strong> (Sipariş sırasında belirtilen müşteri bilgileri)</p>
-            <p><strong>SATICI:</strong> ibreoto (Bundan sonra "SATICI" olarak anılacaktır)</p>
+            <p><strong>SATICI:</strong><br />
+            <strong>Ünvan:</strong> İbreoto Otomotiv Aksesuar ve San. Tic. Ltd. Şti.<br />
+            <strong>Adres:</strong> Oto Sanayi Sitesi, 34. Sokak, Maslak / İstanbul<br />
+            <strong>Telefon:</strong> 0506 157 89 63<br />
+            <strong>E-posta:</strong> destek@ibreoto.com</p>
           </section>
 
           <section>
@@ -37,7 +41,7 @@ export default function MesafeliSatisPage() {
             <p>ALICI; mal satışına ilişkin mesafeli sözleşmelerde, ürünün kendisine veya gösterdiği adresteki kişi/kuruluşa teslim tarihinden itibaren 14 (on dört) gün içerisinde, SATICI’ya bildirmek şartıyla hiçbir hukuki ve cezai sorumluluk üstlenmeksizin ve hiçbir gerekçe göstermeksizin malı reddederek sözleşmeden cayma hakkını kullanabilir.</p>
           </section>
           
-          <p className="text-gray-500 italic mt-8">Son Güncelleme: 14.05.2025</p>
+          <p className="text-gray-500 italic mt-8">Son Güncelleme: 14.05.2026</p>
         </div>
       </div>
     </div>

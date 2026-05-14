@@ -5,10 +5,20 @@ import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { ShoppingBag, Star } from 'lucide-react';
+import { ProductsSkeleton } from '@/components/ui/ProductsSkeleton';
 
 export default function UrunlerPage() {
   return (
-    <Suspense fallback={<div className="pt-40 pb-20 text-center text-gray-500 font-body">Ürünler Yükleniyor...</div>}>
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-8 pt-24">
+        <div className="flex flex-col md:flex-row gap-8">
+          <aside className="w-full md:w-1/4 h-64 bg-gray-50 rounded-lg animate-pulse"></aside>
+          <div className="w-full md:w-3/4">
+            <ProductsSkeleton />
+          </div>
+        </div>
+      </div>
+    }>
       <UrunlerContent />
     </Suspense>
   );
@@ -17,6 +27,7 @@ export default function UrunlerPage() {
 function UrunlerContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
+  const searchQuery = searchParams.get('search')?.toLowerCase() || '';
 
   const [products, setProducts] = useState<any[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
@@ -54,13 +65,22 @@ function UrunlerContent() {
     } catch (error) {
       console.error('Failed to fetch products:', error);
     } finally {
-      setLoading(false);
+      setTimeout(() => setLoading(false), 500); // Yumuşak geçiş için
     }
   };
 
   useEffect(() => {
     let filtered = products;
     
+    // Search filter
+    if (searchQuery) {
+      filtered = filtered.filter(p => 
+        p.name.toLowerCase().includes(searchQuery) || 
+        p.category.toLowerCase().includes(searchQuery) ||
+        (categoryNames[p.category]?.toLowerCase().includes(searchQuery))
+      );
+    }
+
     // Category filter
     if (selectedCategories.length > 0) {
       filtered = filtered.filter(p => selectedCategories.includes(p.category));
@@ -75,7 +95,7 @@ function UrunlerContent() {
     }
     
     setFilteredProducts(filtered);
-  }, [selectedCategories, products, appliedMin, appliedMax]);
+  }, [selectedCategories, products, appliedMin, appliedMax, searchQuery]);
 
   const handleCategoryChange = (slug: string) => {
     if (selectedCategories.includes(slug)) {
@@ -110,25 +130,26 @@ function UrunlerContent() {
     <div className="container mx-auto px-4 py-8 pt-24">
       {/* Breadcrumb */}
       <div className="text-sm text-text-muted mb-8 font-body">
-        <Link href="/" className="hover:text-primary">Ana Sayfa</Link> &gt; <span>Tüm Ürünler</span>
+        <Link href="/" className="hover:text-primary transition-colors">Ana Sayfa</Link> &gt; <span>Tüm Ürünler</span>
+        {searchQuery && <span className="ml-2 text-primary font-bold">/ "{searchQuery}" arama sonuçları</span>}
       </div>
 
       <div className="flex flex-col md:flex-row gap-8">
         {/* Sidebar Filters */}
         <aside className="w-full md:w-1/4">
           <div className="bg-white p-6 rounded-lg shadow-sm border border-surface mb-6">
-            <h3 className="font-heading font-bold uppercase text-secondary mb-4 border-b pb-2">Kategoriler</h3>
+            <h3 className="font-heading font-bold uppercase text-secondary mb-4 border-b pb-2 tracking-tight">Kategoriler</h3>
             <ul className="space-y-2 font-body text-text-muted text-sm">
               {Object.entries(categoryNames).map(([slug, name]) => (
                 <li key={slug}>
-                  <label className="flex items-center space-x-2 cursor-pointer">
+                  <label className="flex items-center space-x-2 cursor-pointer group">
                     <input 
                       type="checkbox" 
                       className="accent-primary" 
                       checked={selectedCategories.includes(slug)}
                       onChange={() => handleCategoryChange(slug)}
                     /> 
-                    <span>{name}</span>
+                    <span className="group-hover:text-primary transition-colors">{name}</span>
                   </label>
                 </li>
               ))}
@@ -137,12 +158,12 @@ function UrunlerContent() {
           
           {/* Price Filter */}
           <div className="bg-white p-6 rounded-lg shadow-sm border border-surface mb-6">
-            <h3 className="font-heading font-bold uppercase text-secondary mb-4 border-b pb-2">Fiyat Aralığı</h3>
+            <h3 className="font-heading font-bold uppercase text-secondary mb-4 border-b pb-2 tracking-tight">Fiyat Aralığı</h3>
             <div className="flex items-center space-x-2 font-body">
               <input 
                 type="number" 
                 placeholder="Min" 
-                className="w-full border border-surface rounded p-2 focus:outline-none focus:border-primary text-sm" 
+                className="w-full border border-surface rounded p-2 focus:outline-none focus:border-primary text-sm transition-colors" 
                 value={minPrice}
                 onChange={e => setMinPrice(e.target.value)}
               />
@@ -150,13 +171,13 @@ function UrunlerContent() {
               <input 
                 type="number" 
                 placeholder="Max" 
-                className="w-full border border-surface rounded p-2 focus:outline-none focus:border-primary text-sm" 
+                className="w-full border border-surface rounded p-2 focus:outline-none focus:border-primary text-sm transition-colors" 
                 value={maxPrice}
                 onChange={e => setMaxPrice(e.target.value)}
               />
             </div>
             <button 
-              className="w-full mt-4 bg-secondary text-white font-heading uppercase py-2 rounded hover:bg-primary transition-colors text-sm font-bold"
+              className="w-full mt-4 bg-secondary text-white font-heading uppercase py-2 rounded hover:bg-primary transition-all duration-300 text-sm font-bold tracking-wider transform hover:scale-[1.02]"
               onClick={handleApplyPrice}
             >
               Uygula
@@ -167,52 +188,72 @@ function UrunlerContent() {
         {/* Product Grid */}
         <div className="w-full md:w-3/4">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-heading font-bold uppercase">Tüm Ürünler</h1>
-            <select className="border border-surface rounded p-2 font-body text-sm focus:outline-none focus:border-primary">
+            <h1 className="text-2xl font-heading font-bold uppercase tracking-tight">
+              {searchQuery ? `Arama Sonuçları (${filteredProducts.length})` : 'Tüm Ürünler'}
+            </h1>
+            <select className="border border-surface rounded p-2 font-body text-sm focus:outline-none focus:border-primary bg-white cursor-pointer transition-colors">
               <option>Önerilen Sıralama</option>
               <option>En Düşük Fiyat</option>
               <option>En Yüksek Fiyat</option>
             </select>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {loading ? (
-              <div className="col-span-3 text-center py-12 text-gray-500">Ürünler yükleniyor...</div>
-            ) : filteredProducts.map((product) => (
-              <div key={product.id} className="group bg-white border border-surface hover:border-primary rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all flex flex-col">
-                <Link href={`/urun/${product.id}`} className="block relative w-full h-48 bg-surface p-4 flex items-center justify-center overflow-hidden">
-                  {product.image ? (
-                    <img src={product.image} alt={product.name} className="object-contain max-h-full transform group-hover:scale-105 transition-transform duration-500" />
-                  ) : (
-                    <div className="text-text-muted text-xs font-body">[ Görsel ]</div>
-                  )}
-                </Link>
-                <div className="p-4 flex flex-col flex-grow">
-                  <p className="text-xs text-text-muted mb-1 font-body uppercase">{categoryNames[product.category] || product.category}</p>
-                  <Link href={`/urun/${product.id}`} className="font-heading font-bold text-text-main hover:text-primary mb-2 line-clamp-2 uppercase text-sm">
-                    {product.name}
+          {loading ? (
+            <ProductsSkeleton />
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredProducts.map((product) => (
+                <div key={product.id} className="group bg-white border border-surface hover:border-primary/30 rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col transform hover:-translate-y-1">
+                  <Link href={`/urun/${product.id}`} className="block relative w-full h-48 bg-surface p-4 flex items-center justify-center overflow-hidden">
+                    {product.image ? (
+                      <img src={product.image} alt={product.name} className="object-contain max-h-full transform group-hover:scale-110 transition-transform duration-700" />
+                    ) : (
+                      <div className="text-text-muted text-xs font-body">[ Görsel ]</div>
+                    )}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500"></div>
                   </Link>
-                  <div className="mt-auto pt-4 flex items-center justify-between">
-                    <span className="font-body font-bold text-lg text-primary">
-                      ₺{product.price}
-                    </span>
-                    <button 
-                      className="bg-surface hover:bg-primary text-text-main hover:text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors font-bold text-lg"
-                      onClick={() => addToCart(product)}
-                    >
-                      +
-                    </button>
+                  <div className="p-4 flex flex-col flex-grow">
+                    <p className="text-[10px] text-primary mb-1 font-heading font-bold uppercase tracking-widest">{categoryNames[product.category] || product.category}</p>
+                    <Link href={`/urun/${product.id}`} className="font-heading font-bold text-secondary hover:text-primary mb-2 line-clamp-2 uppercase text-sm leading-tight transition-colors">
+                      {product.name}
+                    </Link>
+                    <div className="mt-auto pt-4 flex items-center justify-between">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] text-text-muted font-body line-through">₺{(parseFloat(product.price) * 1.2).toFixed(0)}</span>
+                        <span className="font-body font-extrabold text-lg text-primary">
+                          ₺{product.price}
+                        </span>
+                      </div>
+                      <button 
+                        className="bg-secondary hover:bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 transform hover:rotate-90 shadow-md hover:shadow-primary/20"
+                        onClick={() => addToCart(product)}
+                        title="Sepete Ekle"
+                      >
+                        <ShoppingBag className="w-5 h-5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {!loading && filteredProducts.length === 0 && (
-            <p className="text-text-muted text-center py-12 font-body">Seçili kriterlere uygun ürün bulunamadı.</p>
+            <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-200">
+              <ShoppingBag className="w-16 h-16 text-gray-200 mx-auto mb-4" />
+              <h3 className="text-xl font-heading font-bold text-secondary uppercase mb-2">Ürün Bulunamadı</h3>
+              <p className="text-text-muted font-body text-sm max-w-xs mx-auto">Seçili kriterlere veya aramanıza uygun ürün bulamadık. Lütfen filtreleri kontrol edin.</p>
+              <button 
+                onClick={() => {setSelectedCategories([]); setAppliedMin(null); setAppliedMax(null);}}
+                className="mt-6 text-primary font-heading font-bold uppercase text-xs hover:underline"
+              >
+                Tüm Filtreleri Temizle
+              </button>
+            </div>
           )}
         </div>
       </div>
     </div>
   );
 }
+

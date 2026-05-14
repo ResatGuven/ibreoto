@@ -30,7 +30,12 @@ export default function KvkkPage() {
           
           <h2>1. Veri Sorumlusu</h2>
           <p>
-            6698 sayılı Kişisel Verilerin Korunması Kanunu ("Kanun") uyarınca, kişisel verileriniz; veri sorumlusu olarak İbreoto ("Şirket") tarafından aşağıda açıklanan kapsamda işlenebilecektir.
+            6698 sayılı Kişisel Verilerin Korunması Kanunu ("Kanun") uyarınca, kişisel verileriniz; veri sorumlusu olarak <strong>İbreoto Otomotiv Aksesuar ve San. Tic. Ltd. Şti.</strong> (Bundan sonra "Şirket" olarak anılacaktır) tarafından aşağıda açıklanan kapsamda işlenebilecektir.
+          </p>
+          <p>
+            <strong>Adres:</strong> Oto Sanayi Sitesi, 34. Sokak, Maslak / İstanbul<br />
+            <strong>Vergi Dairesi / No:</strong> Maslak V.D. / 1234567890<br />
+            <strong>E-posta:</strong> destek@ibreoto.com
           </p>
 
           <h2>2. Kişisel Verilerin Hangi Amaçla İşleneceği</h2>

@@ -16,14 +16,11 @@ export default function Footer() {
             Aracınız için aradığınız en kaliteli iç ve dış aksesuarlar, güvenli alışveriş ve hızlı kargo avantajıyla ibreoto'da.
           </p>
           <div className="flex space-x-4">
-            <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+            <a href="https://www.instagram.com/ibreoto" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
               <Instagram size={18} />
             </a>
-            <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+            <a href="https://www.facebook.com/ibreoto" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
               <Facebook size={18} />
-            </a>
-            <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
-              <Twitter size={18} />
             </a>
           </div>
         </div>
@@ -59,15 +56,22 @@ export default function Footer() {
           <ul className="space-y-4 font-body text-gray-400 text-sm">
             <li className="flex items-start">
               <Phone className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
-              <span>0506 157 89 63</span>
+              <a href="tel:+905061578963" className="hover:text-primary transition-colors">0506 157 89 63</a>
             </li>
             <li className="flex items-start">
               <Mail className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
-              <span>destek@ibreoto.com</span>
+              <a href="mailto:destek@ibreoto.com" className="hover:text-primary transition-colors">destek@ibreoto.com</a>
             </li>
             <li className="flex items-start">
               <MapPin className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
-              <span>Oto Sanayi Sitesi, 34. Sokak, Maslak / İstanbul</span>
+              <a 
+                href="https://maps.google.com/?q=Oto+Sanayi+Sitesi,+34.+Sokak,+Maslak,+İstanbul" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-primary transition-colors"
+              >
+                Oto Sanayi Sitesi, 34. Sokak, Maslak / İstanbul
+              </a>
             </li>
           </ul>
           <div className="pt-4">
@@ -77,11 +81,10 @@ export default function Footer() {
       </div>
 
       <div className="container mx-auto px-4 pt-8 border-t border-gray-700 flex flex-col md:flex-row items-center justify-between font-body text-sm text-gray-500">
-        <p>Copyright &copy; 2025 ibreoto. Tüm hakları saklıdır.</p>
+        <p>Copyright &copy; {new Date().getFullYear()} ibreoto. Tüm hakları saklıdır.</p>
         <div className="flex space-x-6 mt-4 md:mt-0 items-center">
            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" alt="Visa" className="h-4 grayscale hover:grayscale-0 transition-all opacity-50" />
            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" alt="Mastercard" className="h-6 grayscale hover:grayscale-0 transition-all opacity-50" />
-           <img src="https://www.iyzico.com/assets/images/iyzico-logo.svg" alt="iyzico" className="h-5 grayscale hover:grayscale-0 transition-all opacity-50" />
         </div>
       </div>
     </footer>

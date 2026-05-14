@@ -45,7 +45,7 @@ export default function KargoTeslimatPage() {
 
           <h2>4. Kargo Ücretleri</h2>
           <p>
-            Belirli bir tutarın üzerindeki alışverişlerinizde kargo ücretsizdir. Bu tutarın altındaki siparişlerde kargo ücreti, sepet sayfasında ve ödeme adımında şeffaf bir şekilde gösterilmektedir.
+            299 TL ve üzerindeki alışverişlerinizde kargo ücretsizdir. Bu tutarın altındaki siparişlerde kargo ücreti, sepet sayfasında ve ödeme adımında şeffaf bir şekilde gösterilmektedir.
           </p>
 
           <h2>5. Hasarlı Kargo ve Paket Kontrolü</h2>

@@ -43,6 +43,7 @@ export default function SiparisTakipPage() {
         </div>
 
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mb-8">
+          <h2 className="text-lg font-heading font-bold text-secondary mb-4 uppercase">SİPARİŞ NUMARASI İLE SORGULA</h2>
           <p className="text-text-muted font-body text-sm mb-6">
             Sipariş numaranızı girerek kargonuzun durumunu anlık olarak takip edebilirsiniz.
           </p>
@@ -59,6 +60,24 @@ export default function SiparisTakipPage() {
               <Search className="w-4 h-4 mr-2" /> SORGULA
             </button>
           </form>
+        </div>
+
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mb-8">
+          <h2 className="text-lg font-heading font-bold text-secondary mb-4 uppercase">KARGO TAKİP NO İLE SORGULA</h2>
+          <p className="text-text-muted font-body text-sm mb-6">
+            Elinizde kargo takip numarası varsa, aşağıdaki butonlardan ilgili kargo firmasının sitesine giderek sorgulama yapabilirsiniz.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <a href="https://www.yurticikargo.com/tr/online-servisler/gonderi-sorgula" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center p-3 border border-gray-200 rounded-xl hover:border-primary hover:text-primary transition-all font-heading font-bold text-xs uppercase">
+              Yurtiçi Kargo
+            </a>
+            <a href="https://www.mngkargo.com.tr/gonderitakip" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center p-3 border border-gray-200 rounded-xl hover:border-primary hover:text-primary transition-all font-heading font-bold text-xs uppercase">
+              MNG Kargo
+            </a>
+            <a href="https://www.araskargo.com.tr/tr/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center p-3 border border-gray-200 rounded-xl hover:border-primary hover:text-primary transition-all font-heading font-bold text-xs uppercase">
+              Aras Kargo
+            </a>
+          </div>
         </div>
 
         {searched && (
@@ -96,9 +115,16 @@ export default function SiparisTakipPage() {
                   <div>
                     <span className="text-xs font-heading font-bold text-text-muted uppercase block mb-1">Kargo Takip No</span>
                     <div className="bg-surface p-3 rounded-xl border border-dashed border-gray-300">
-                      <p className="font-heading font-bold text-secondary">
+                      <p className="font-heading font-bold text-secondary mb-2">
                         {orderResult.cargoNo || 'Kargo takip numarası henüz girilmemiş.'}
                       </p>
+                      {orderResult.cargoNo && (
+                        <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-100">
+                          <a href={`https://www.yurticikargo.com/tr/online-servisler/gonderi-sorgula?code=${orderResult.cargoNo}`} target="_blank" rel="noopener noreferrer" className="text-[10px] bg-white border border-gray-200 px-2 py-1 rounded hover:border-primary hover:text-primary transition-colors uppercase font-bold">Yurtiçi Takip</a>
+                          <a href={`https://www.mngkargo.com.tr/gonderitakip/${orderResult.cargoNo}`} target="_blank" rel="noopener noreferrer" className="text-[10px] bg-white border border-gray-200 px-2 py-1 rounded hover:border-primary hover:text-primary transition-colors uppercase font-bold">MNG Takip</a>
+                          <a href={`https://www.araskargo.com.tr/tr/index.aspx?search=${orderResult.cargoNo}`} target="_blank" rel="noopener noreferrer" className="text-[10px] bg-white border border-gray-200 px-2 py-1 rounded hover:border-primary hover:text-primary transition-colors uppercase font-bold">Aras Takip</a>
+                        </div>
+                      )}
                     </div>
                   </div>
 

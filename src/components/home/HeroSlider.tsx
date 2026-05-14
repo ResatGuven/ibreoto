@@ -96,7 +96,7 @@ export const HeroSlider = () => {
           </div>
           <div className="flex items-center space-x-2 group cursor-pointer">
             <span className="text-primary text-xl group-hover:scale-125 transition-transform duration-300">✓</span>
-            <span className="group-hover:text-primary transition-colors duration-300">Ücretsiz Kargo</span>
+            <span className="group-hover:text-primary transition-colors duration-300">299 TL+ Ücretsiz Kargo</span>
           </div>
           <div className="flex items-center space-x-2 group cursor-pointer">
             <span className="text-primary text-xl group-hover:scale-125 transition-transform duration-300">✓</span>

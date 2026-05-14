@@ -43,7 +43,7 @@ export default function HakkimizdaPage() {
               <span className="text-text-muted text-sm font-body uppercase">Ürün Çeşidi</span>
             </div>
             <div className="p-4">
-              <span className="text-4xl font-heading font-bold text-secondary block mb-1">15+</span>
+              <span className="text-4xl font-heading font-bold text-secondary block mb-1">7+</span>
               <span className="text-text-muted text-sm font-body uppercase">Yıllık Tecrübe</span>
             </div>
             <div className="p-4">

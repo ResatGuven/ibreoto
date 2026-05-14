@@ -62,9 +62,13 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
             <div className="container mx-auto px-4 max-w-4xl mb-12">
                 <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-lg">
                     <img 
-                        src={post.image} 
+                        src={post.image || '/images/logo.jpg'} 
                         alt={post.title} 
                         className="w-full h-full object-cover"
+                        onError={(e: any) => {
+                            e.target.onerror = null;
+                            e.target.src = '/images/logo.jpg';
+                        }}
                     />
                 </div>
             </div>

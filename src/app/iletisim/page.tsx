@@ -64,14 +64,25 @@ export default function IletisimPage() {
                 <MapPin className="w-6 h-6 text-primary" />
               </div>
               <h3 className="font-heading font-bold text-lg text-secondary mb-2 uppercase">Adres</h3>
-              <p className="text-text-muted font-body text-xs">İkitelli O.S.B. Dolapdere Sanayi Sitesi, Başakşehir / İstanbul</p>
+              <p className="text-text-muted font-body text-xs">
+                <a 
+                  href="https://maps.google.com/?q=Oto+Sanayi+Sitesi,+34.+Sokak,+Maslak,+İstanbul" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors"
+                >
+                  Oto Sanayi Sitesi, 34. Sokak, Maslak / İstanbul
+                </a>
+              </p>
             </div>
             <div className="bg-surface p-6 rounded-xl border border-gray-100 text-center">
               <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Phone className="w-6 h-6 text-primary" />
               </div>
               <h3 className="font-heading font-bold text-lg text-secondary mb-2 uppercase">Telefon</h3>
-              <p className="text-text-muted font-body text-xs mb-1">0850 123 45 67</p>
+              <p className="text-text-muted font-body text-xs mb-1">
+                <a href="tel:+905061578963" className="hover:text-primary transition-colors font-bold">0506 157 89 63</a>
+              </p>
               <p className="text-text-muted font-body text-xs">Pzt - Cmt: 09:00 - 18:00</p>
             </div>
             <div className="bg-surface p-6 rounded-xl border border-gray-100 text-center">
@@ -79,7 +90,9 @@ export default function IletisimPage() {
                 <Mail className="w-6 h-6 text-primary" />
               </div>
               <h3 className="font-heading font-bold text-lg text-secondary mb-2 uppercase">E-Posta</h3>
-              <p className="text-text-muted font-body text-xs mb-1">destek@ibreoto.com</p>
+              <p className="text-text-muted font-body text-xs mb-1">
+                <a href="mailto:destek@ibreoto.com" className="hover:text-primary transition-colors font-bold">destek@ibreoto.com</a>
+              </p>
               <p className="text-text-muted font-body text-xs">7/24 Mail Gönderebilirsiniz</p>
             </div>
           </div>
@@ -138,7 +151,7 @@ export default function IletisimPage() {
             {/* Google Map */}
             <div className="bg-surface rounded-2xl border border-gray-100 overflow-hidden h-[400px] md:h-auto">
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d192697.793276837!2d28.86701!3d41.0082376!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14caa7040068086b%3A0xe1ccfe98bc01b0d!2sIstanbul!5e0!3m2!1sen!2str!4v1715450000000!5m2!1sen!2str" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3005.5186259461144!2d29.0234!3d41.1114!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab5c00a000001%3A0x6a0a0a0a0a0a0a0a!2zTWFzbGFrIE90byBTYW5heWkgU2l0ZXNp!5e0!3m2!1str!2str!4v1715670000000!5m2!1str!2str" 
                 width="100%" 
                 height="100%" 
                 style={{ border: 0 }} 

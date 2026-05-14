@@ -10,7 +10,7 @@ export default function BlogPage() {
 
   useEffect(() => {
     const savedPosts = localStorage.getItem('app_blogs');
-    if (savedPosts) {
+    if (savedPosts && JSON.parse(savedPosts).length > 0) {
       setPosts(JSON.parse(savedPosts));
     } else {
       setPosts(blogPosts);
