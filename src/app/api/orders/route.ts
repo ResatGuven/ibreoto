@@ -82,6 +82,22 @@ export async function POST(request: Request) {
     if (fullOrder) {
       // Send email (non-blocking)
       sendOrderConfirmationEmail(fullOrder).catch(console.error);
+
+      // Telegram Notification
+      const telegramMessage = `🛍️ *YENİ SİPARİŞ ALINDI!* \n\n` +
+        `📦 *No:* #${fullOrder.id}\n` +
+        `👤 *Müşteri:* ${fullOrder.customerName}\n` +
+        `💰 *Tutar:* ₺${fullOrder.totalAmount.toLocaleString('tr-TR')}\n` +
+        `📍 *Şehir:* ${fullOrder.customerCity}\n\n` +
+        `*Ürünler:* \n` +
+        fullOrder.items.map(i => `- ${i.product.name} (x${i.quantity})`).join('\n') + 
+        `\n\n_Hayırlı işler bol kazançlar!_ 🚀`;
+
+      fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/telegram`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: telegramMessage })
+      }).catch(e => console.error('Telegram Notify Error:', e));
     }
 
     return NextResponse.json(result);

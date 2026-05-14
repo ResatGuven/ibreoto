@@ -14,6 +14,7 @@ export default function AdminDashboardPage() {
   ]);
   const [loading, setLoading] = useState(true);
   const [lowStock, setLowStock] = useState<any[]>([]);
+  const [weeklySales, setWeeklySales] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -33,6 +34,7 @@ export default function AdminDashboardPage() {
 
         setOrders(data.recentOrders);
         setLowStock(data.lowStock);
+        setWeeklySales(data.weeklySales || []);
       } catch (error) {
         console.error('Failed to fetch dashboard stats:', error);
       } finally {
@@ -42,6 +44,8 @@ export default function AdminDashboardPage() {
 
     fetchStats();
   }, []);
+
+  const maxSale = Math.max(...weeklySales.map(s => s.total), 1);
 
   return (
     <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
@@ -72,19 +76,32 @@ export default function AdminDashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-        {/* Sales Chart (Mock) */}
+        {/* Sales Chart (Live) */}
         <div className="lg:col-span-2 bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 p-6 shadow-lg">
-          <h3 className="font-heading font-bold text-lg text-white mb-4 uppercase">Haftalık Satış Analizi</h3>
+          <h3 className="font-heading font-bold text-lg text-white mb-4 uppercase flex justify-between items-center">
+            Haftalık Satış Analizi
+            <span className="text-[10px] text-gray-500 font-body">Son 7 Gün</span>
+          </h3>
           <div className="h-64 flex items-end justify-between space-x-2 pt-4">
-            {['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'].map((day, index) => {
-              const heights = ['h-20', 'h-32', 'h-16', 'h-40', 'h-48', 'h-24', 'h-56'];
+            {weeklySales.map((data, index) => {
+              const heightPercentage = (data.total / maxSale) * 100;
               return (
-                <div key={index} className="flex-1 flex flex-col items-center">
-                  <div className={`w-full bg-gradient-to-t from-red-600 to-red-400 rounded-t-lg ${heights[index]} transition-all duration-500 hover:from-red-500 hover:to-red-300`}></div>
-                  <span className="text-xs text-gray-500 mt-2">{day}</span>
+                <div key={index} className="flex-1 flex flex-col items-center group relative">
+                  {/* Tooltip */}
+                  <div className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-opacity bg-red-600 text-white text-[10px] px-2 py-1 rounded font-bold z-10 whitespace-nowrap">
+                    ₺{data.total.toLocaleString('tr-TR')}
+                  </div>
+                  <div 
+                    style={{ height: `${Math.max(heightPercentage, 5)}%` }}
+                    className="w-full bg-gradient-to-t from-red-600 to-red-400 rounded-t-lg transition-all duration-700 hover:from-red-500 hover:to-red-300 shadow-lg shadow-red-600/20"
+                  ></div>
+                  <span className="text-[10px] text-gray-500 mt-3 font-bold uppercase">{data.day}</span>
                 </div>
               );
             })}
+            {weeklySales.length === 0 && (
+              <div className="w-full h-full flex items-center justify-center text-gray-600 italic text-sm">Veri yükleniyor...</div>
+            )}
           </div>
         </div>
 

@@ -58,6 +58,34 @@ export async function GET() {
         status: o.status
       }));
 
+    // 5. Haftalık Satış Verisi (Son 7 Gün)
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    const weeklyStats = await prisma.order.findMany({
+      where: {
+        createdAt: {
+          gte: sevenDaysAgo
+        }
+      },
+      select: {
+        totalAmount: true,
+        createdAt: true
+      }
+    });
+
+    const days = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
+    const salesByDay = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dayName = days[d.getDay()];
+      const dayTotal = weeklyStats
+        .filter(o => o.createdAt.toDateString() === d.toDateString())
+        .reduce((sum, o) => sum + o.totalAmount, 0);
+      
+      return { day: dayName, total: dayTotal, date: d.toDateString() };
+    }).reverse();
+
     return NextResponse.json({
       totalRevenue: `₺${totalRevenue.toLocaleString('tr-TR')}`,
       orderCount: orderCount.toString(),
@@ -67,7 +95,8 @@ export async function GET() {
         stock: p.stock,
         status: p.stock === 0 ? 'Stok Tükendi' : `Son ${p.stock} Adet`
       })),
-      recentOrders
+      recentOrders,
+      weeklySales: salesByDay
     });
   } catch (error) {
     console.error('Stats fetch error:', error);
