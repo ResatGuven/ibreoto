@@ -101,6 +101,7 @@ model Order {
   customerAddress String
   customerCity    String
   status          String      @default("PENDING")
+  cargoNo         String?     @default("")
   totalAmount     Float
   discountAmount  Float       @default(0)
   shippingCost    Float       @default(0)

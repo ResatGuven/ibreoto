@@ -30,6 +30,7 @@ export async function GET() {
       city: order.customerCity,
       total: `₺${order.totalAmount.toLocaleString('tr-TR')}`,
       status: order.status,
+      cargoNo: order.cargoNo || '',
       date: new Date(order.createdAt).toLocaleDateString('tr-TR'),
       items: order.items.map(item => ({
         name: item.product.name,
@@ -56,9 +57,7 @@ export async function PATCH(request: Request) {
       where: { id },
       data: { 
         status: status,
-        // Assuming we might add cargoNo to model later if needed, 
-        // for now we'll just handle status as requested by the plan.
-        // Actually, let's add cargoNo to the model in next step if I want full fidelity.
+        cargoNo: cargoNo
       }
     });
     return NextResponse.json(order);

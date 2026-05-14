@@ -61,32 +61,35 @@ export default function SepetPage() {
     }, 0);
   };
 
-  const handleApplyCoupon = () => {
-    const savedCoupons = localStorage.getItem('app_coupons');
-    if (!savedCoupons) {
-      setCouponMessage('Hata: Kupon bulunamadı.');
-      return;
-    }
-    const coupons = JSON.parse(savedCoupons);
-    const coupon = coupons.find((c: any) => c.code === couponCode);
+  const handleApplyCoupon = async () => {
+    try {
+      const res = await fetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: couponCode })
+      });
+      const data = await res.json();
 
-    if (coupon) {
-      const total = calculateTotal();
-      let discount = 0;
-      if (coupon.type === 'percentage') {
-        discount = (total * parseFloat(coupon.discount)) / 100;
+      if (data.valid) {
+        const total = calculateTotal();
+        let discount = 0;
+        if (data.type === 'percentage') {
+          discount = (total * data.discount) / 100;
+        } else {
+          discount = data.discount;
+        }
+        setDiscountAmount(discount);
+        localStorage.setItem('applied_discount', discount.toString());
+        localStorage.setItem('applied_coupon', couponCode);
+        setCouponMessage(`Başarılı: ₺${discount.toLocaleString('tr-TR')} indirim uygulandı.`);
       } else {
-        discount = parseFloat(coupon.discount);
+        setCouponMessage(`Hata: ${data.message || 'Geçersiz kupon kodu.'}`);
+        setDiscountAmount(0);
+        localStorage.removeItem('applied_discount');
+        localStorage.removeItem('applied_coupon');
       }
-      setDiscountAmount(discount);
-      localStorage.setItem('applied_discount', discount.toString());
-      localStorage.setItem('applied_coupon', couponCode);
-      setCouponMessage(`Başarılı: ₺${discount.toLocaleString('tr-TR')} indirim uygulandı.`);
-    } else {
-      setCouponMessage('Hata: Geçersiz kupon kodu.');
-      setDiscountAmount(0);
-      localStorage.removeItem('applied_discount');
-      localStorage.removeItem('applied_coupon');
+    } catch (error) {
+      setCouponMessage('Hata: Kupon doğrulanırken bir sorun oluştu.');
     }
   };
 

@@ -9,11 +9,13 @@ type Props = {
 };
 
 async function getProduct(slug: string) {
-  // If slug is numeric ID, find by ID, otherwise by slug
-  const isNumeric = !isNaN(Number(slug));
-  
   const product = await prisma.product.findFirst({
-    where: isNumeric ? { id: Number(slug) } : { slug: slug }
+    where: {
+      OR: [
+        { id: slug },
+        { slug: slug }
+      ]
+    }
   });
 
   return product;
@@ -25,13 +27,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!product) return { title: 'Ürün Bulunamadı | İbreOto' };
 
+  let firstImage = '/images/products/placeholder.png';
+  try {
+    const images = JSON.parse(product.images);
+    if (Array.isArray(images) && images.length > 0) {
+      firstImage = images[0];
+    }
+  } catch (e) {}
+
   return {
     title: `${product.name} | İbreOto Aksesuar`,
     description: product.description.substring(0, 160),
     openGraph: {
       title: product.name,
       description: product.description,
-      images: [product.image || ''],
+      images: [firstImage],
     },
   };
 }
@@ -44,15 +54,27 @@ export default async function ProductDetailPage({ params }: Props) {
     notFound();
   }
 
+  // Parse images JSON
+  let images = ['/images/products/placeholder.png'];
+  try {
+    const parsed = JSON.parse(productData.images);
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      images = parsed;
+    }
+  } catch (e) {
+    console.error('Failed to parse product images:', e);
+  }
+
   // Convert prisma model to plain object for client component
   const product = {
     id: productData.id,
     name: productData.name,
     price: Number(productData.price),
     description: productData.description,
-    images: [productData.image || '/images/products/placeholder.png'],
-    category: productData.category,
-    rating: 4.8, // Mock for now or add to DB
+    images: images,
+    category: '', // productData.category.name if we include it
+    stock: productData.stock,
+    rating: 4.8,
     features: [
       'Yüksek Kalite Malzeme',
       'Kolay Montaj',

@@ -1,0 +1,33 @@
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+
+export const dynamic = 'force-dynamic';
+
+export async function GET() {
+  try {
+    const products = await prisma.product.findMany({
+      include: {
+        category: {
+          select: { slug: true, name: true },
+        },
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+    
+    const mappedProducts = products.map(p => ({
+      id: p.id,
+      name: p.name,
+      price: p.price.toString(),
+      category: p.category.slug,
+      image: JSON.parse(p.images)[0] || '',
+      description: p.description,
+      stock: p.stock,
+      createdAt: p.createdAt
+    }));
+    
+    return NextResponse.json(mappedProducts);
+  } catch (error) {
+    console.error('Failed to fetch products:', error);
+    return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
+  }
+}

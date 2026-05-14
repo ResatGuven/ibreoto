@@ -24,30 +24,7 @@ export const FeaturedProducts = () => {
       setFavorites(JSON.parse(savedFavs).map((p: any) => String(p.id)));
     }
 
-    const savedProducts = localStorage.getItem('app_products');
-    if (savedProducts) {
-      const all = JSON.parse(savedProducts);
-      const merged = all.map((p: any) => {
-        const def = defaultProducts.find(d => d.id === p.id);
-        return {
-          ...p,
-          image: p.image || (def ? def.image : '')
-        };
-      });
-      const display = merged.slice(0, 4).map((p: any, idx: number) => {
-        const def = defaultProducts.find(d => d.id === p.id);
-        return {
-          ...p,
-          rating: p.rating || (def ? def.rating : 4),
-          reviews: p.reviews || (def ? def.reviews : 10),
-          badge: p.badge || (def ? def.badge : null)
-        };
-      });
-      setProducts(display);
-    } else {
-      setProducts(defaultProducts);
-      localStorage.setItem('app_products', JSON.stringify(defaultProducts));
-    }
+    fetchProducts();
 
     const updateFavorites = () => {
       const saved = localStorage.getItem('favorites');
@@ -58,6 +35,26 @@ export const FeaturedProducts = () => {
     window.addEventListener('favoritesUpdated', updateFavorites);
     return () => window.removeEventListener('favoritesUpdated', updateFavorites);
   }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const res = await fetch('/api/products');
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        setProducts(data.slice(0, 4).map((p: any) => ({
+          ...p,
+          rating: 5,
+          reviews: 24,
+          badge: null
+        })));
+      } else {
+        setProducts(defaultProducts);
+      }
+    } catch (error) {
+      console.error('Failed to fetch featured products:', error);
+      setProducts(defaultProducts);
+    }
+  };
 
   const toggleFavorite = (product: any) => {
     const savedFavs = localStorage.getItem('favorites');
