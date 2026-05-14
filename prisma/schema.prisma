@@ -64,19 +64,22 @@ model Category {
 }
 
 model Product {
-  id          String    @id @default(cuid())
-  name        String
-  slug        String    @unique
-  description String
-  price       Float
-  stock       Int       @default(0)
-  images      String // JSON string array of URLs
-  categoryId  String
-  category    Category  @relation(fields: [categoryId], references: [id])
-  reviews     Review[]
-  orderItems  OrderItem[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id              String      @id @default(cuid())
+  name            String
+  slug            String      @unique
+  description     String      @db.Text
+  price           Float
+  oldPrice        Float?
+  stock           Int         @default(0)
+  images          String      // JSON string array of URLs
+  categoryId      String
+  category        Category    @relation(fields: [categoryId], references: [id])
+  reviews         Review[]
+  orderItems      OrderItem[]
+  isFreeShipping  Boolean     @default(false)
+  isNew           Boolean     @default(false)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 }
 
 model Review {

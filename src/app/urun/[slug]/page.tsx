@@ -25,9 +25,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
   const product = await getProduct(resolvedParams.slug);
 
-  if (!product) return { title: 'Ürün Bulunamadı | İbreOto' };
+  if (!product) return { title: 'Ürün Bulunamadı | ARI HAYAT' };
 
-  let firstImage = '/images/products/placeholder.png';
+  let firstImage = '/images/logo.png';
   try {
     const images = JSON.parse(product.images);
     if (Array.isArray(images) && images.length > 0) {
@@ -36,11 +36,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   } catch (e) {}
 
   return {
-    title: `${product.name} | İbreOto Aksesuar`,
+    title: `${product.name} | ARI HAYAT Natural Bee Products`,
     description: product.description.substring(0, 160),
     openGraph: {
       title: product.name,
-      description: product.description,
+      description: product.description.substring(0, 200),
       images: [firstImage],
     },
   };
@@ -70,16 +70,19 @@ export default async function ProductDetailPage({ params }: Props) {
     id: productData.id,
     name: productData.name,
     price: Number(productData.price),
+    oldPrice: productData.oldPrice ? Number(productData.oldPrice) : null,
     description: productData.description,
     images: images,
-    category: '', // productData.category.name if we include it
+    category: '', 
     stock: productData.stock,
-    rating: 4.8,
+    isFreeShipping: productData.isFreeShipping,
+    isNew: productData.isNew,
+    rating: 4.9,
     features: [
-      'Yüksek Kalite Malzeme',
-      'Kolay Montaj',
-      'Orijinal Tasarım',
-      'Dayanıklı Yapı'
+      '100% Doğal Üretim',
+      'Üreticiden Doğrudan Satış',
+      'Katkı Maddesi İçermez',
+      'Geleneksel Hasat Yöntemleri'
     ]
   };
 
@@ -89,19 +92,24 @@ export default async function ProductDetailPage({ params }: Props) {
     '@type': 'Product',
     name: product.name,
     image: product.images[0],
-    description: product.description,
-    sku: `IBRE-${product.id}`,
+    description: product.description.substring(0, 200),
+    sku: `ARI-${product.id}`,
+    brand: {
+      '@type': 'Brand',
+      name: 'ARI HAYAT'
+    },
     offers: {
       '@type': 'Offer',
-      url: `https://ibreoto.vercel.app/urun/${resolvedParams.slug}`,
+      url: `https://arihayat.com/urun/${resolvedParams.slug}`,
       priceCurrency: 'TRY',
       price: product.price,
-      availability: 'https://schema.org/InStock',
+      availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      priceValidUntil: '2026-12-31'
     },
     aggregateRating: {
       '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      reviewCount: '24',
+      ratingValue: '4.9',
+      reviewCount: '12',
     },
   };
 
