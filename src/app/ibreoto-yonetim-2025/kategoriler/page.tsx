@@ -1,5 +1,5 @@
-// Güncellendi
 "use client";
+
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, FolderTree } from 'lucide-react';

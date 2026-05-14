@@ -1,5 +1,5 @@
-// Güncellendi
 "use client";
+
 
 import React, { useState, useEffect } from 'react';
 import { DollarSign, ShoppingCart, Users, TrendingUp } from 'lucide-react';

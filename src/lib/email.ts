@@ -11,8 +11,8 @@ export async function sendOrderConfirmationEmail(order: any) {
   try {
     const { customerEmail, customerName, totalAmount, id, items } = order;
 
-    await resend.emails.send({
-      from: 'İbreOto <siparis@ibreoto.com>',
+    const data = await resend.emails.send({
+      from: 'İbreOto <onboarding@resend.dev>', // Test için bu kullanılır, domain onaylıysa değiştirilebilir
       to: customerEmail,
       subject: `Siparişiniz Alındı! #${id}`,
       html: `
@@ -41,6 +41,7 @@ export async function sendOrderConfirmationEmail(order: any) {
         </div>
       `,
     });
+    console.log('Email sent successfully:', data);
   } catch (error) {
     console.error('Email sending failed:', error);
   }

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Trash2, Edit, Save, Image as ImageIcon, ExternalLink } from 'lucide-react';
 import { useAdminToast } from '@/context/AdminToastContext';

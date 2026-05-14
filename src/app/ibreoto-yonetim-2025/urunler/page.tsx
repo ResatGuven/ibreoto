@@ -1,5 +1,5 @@
-// Güncellendi
 "use client";
+
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Edit, Trash2, Image as ImageIcon, Search } from 'lucide-react';

@@ -1,5 +1,5 @@
-// Güncellendi
 "use client";
+
 
 import React, { useState, useEffect } from 'react';
 import { Mail, Trash2, Eye } from 'lucide-react';

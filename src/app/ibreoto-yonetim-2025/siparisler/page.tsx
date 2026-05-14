@@ -1,5 +1,5 @@
-// Güncellendi
 "use client";
+
 
 import React, { useState, useEffect } from 'react';
 import { ShoppingBag, Eye } from 'lucide-react';
