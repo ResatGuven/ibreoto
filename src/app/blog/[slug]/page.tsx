@@ -11,7 +11,9 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
 
     const post = blogPosts.find((p: any) => p.slug === slug);
 
-
+    const sanitizeHtml = (html: string) => {
+        return html.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gim, "");
+    };
 
     if (!post) {
         return (
@@ -81,7 +83,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                                prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3
                                prose-p:mb-4
                                prose-strong:text-secondary"
-                    dangerouslySetInnerHTML={{ __html: post.content }}
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
                 />
 
                 {/* Share & Actions */}

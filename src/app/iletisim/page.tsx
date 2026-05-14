@@ -8,11 +8,12 @@ import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 export default function IletisimPage() {
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [kvkkAccepted, setKvkkAccepted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('/api/admin/messages', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -141,7 +142,24 @@ export default function IletisimPage() {
                       required
                     ></textarea>
                   </div>
-                  <button type="submit" className="w-full bg-primary hover:bg-primary-hover text-white px-4 py-3 rounded-xl font-heading font-bold uppercase tracking-wider transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-primary/20">
+                  <div className="flex items-start space-x-2 mb-4">
+                    <input 
+                      type="checkbox" 
+                      id="kvkk" 
+                      checked={kvkkAccepted}
+                      onChange={(e) => setKvkkAccepted(e.target.checked)}
+                      className="mt-1 accent-primary" 
+                      required 
+                    />
+                    <label htmlFor="kvkk" className="text-[11px] text-text-muted font-body leading-tight cursor-pointer">
+                      <Link href="/kvkk" className="text-primary hover:underline font-bold">KVKK Aydınlatma Metni</Link>'ni okudum ve kişisel verilerimin işlenmesini kabul ediyorum.
+                    </label>
+                  </div>
+                  <button 
+                    type="submit" 
+                    disabled={!kvkkAccepted}
+                    className="w-full bg-primary hover:bg-primary-hover text-white px-4 py-3 rounded-xl font-heading font-bold uppercase tracking-wider transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-primary/20 disabled:opacity-50 disabled:transform-none"
+                  >
                     Mesajı Gönder
                   </button>
                 </form>

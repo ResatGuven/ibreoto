@@ -61,7 +61,21 @@ async function main() {
       });
     }
   }
-  console.log('Products seeded');
+  // 3. Create Admin User
+  const bcrypt = require('bcrypt');
+  const adminPassword = await bcrypt.hash('ibreoto-admin-2025', 10);
+  
+  await prisma.user.upsert({
+    where: { email: 'admin@ibreoto.com' },
+    update: {},
+    create: {
+      email: 'admin@ibreoto.com',
+      name: 'İbreOto Admin',
+      password: adminPassword,
+      role: 'ADMIN',
+    },
+  });
+  console.log('Admin user seeded');
 }
 
 main()

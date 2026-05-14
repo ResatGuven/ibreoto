@@ -11,6 +11,7 @@ export default function OdemePage() {
   const [couponCode, setCouponCode] = useState('');
   const [couponMessage, setCouponMessage] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
+  const [agreements, setAgreements] = useState({ kvkk: false, mss: false });
 
   const [formData, setFormData] = useState({
     name: '',
@@ -142,6 +143,31 @@ ${newOrder.items.map((item: any) => `- ${item.name} (x${item.qty})`).join('\n')}
     setTimeout(() => {
       setIsProcessing(false);
       setIsSuccess(true);
+
+      // Analytics Events
+      if (typeof window !== 'undefined') {
+        const totalValue = calculateTotal() - discountAmount;
+        // GA4
+        (window as any).gtag('event', 'purchase', {
+          transaction_id: newOrder.id,
+          value: totalValue,
+          currency: 'TRY',
+          items: cartItems.map(item => ({
+            item_id: item.id,
+            item_name: item.name,
+            price: parseFloat(item.price.replace('₺', '').replace('.', '')),
+            quantity: item.qty
+          }))
+        });
+        // Meta Pixel
+        (window as any).fbq('track', 'Purchase', {
+          value: totalValue,
+          currency: 'TRY',
+          content_type: 'product',
+          content_ids: cartItems.map(item => item.id)
+        });
+      }
+
       // Clear cart
       localStorage.removeItem('cart');
       window.dispatchEvent(new Event('cartUpdated'));
@@ -231,9 +257,15 @@ ${newOrder.items.map((item: any) => `- ${item.name} (x${item.qty})`).join('\n')}
                     <CreditCard className="w-5 h-5 mr-2" />
                     <h2 className="text-lg font-heading font-bold uppercase">Kart Bilgileri</h2>
                   </div>
-                  <div className="flex items-center text-xs text-text-muted">
-                    <Lock className="w-3 h-3 mr-1" /> SSL Korumalı
+                  <div className="flex items-center text-xs text-red-500 font-bold uppercase animate-pulse">
+                    <Lock className="w-3 h-3 mr-1" /> TEST MODU AKTİF
                   </div>
+                </div>
+
+                <div className="bg-red-50 p-4 rounded-xl border border-red-100 mb-6">
+                  <p className="text-[11px] text-red-700 font-body leading-relaxed">
+                    <strong>DİKKAT:</strong> Bu site şu an <strong>test/demo</strong> aşamasındadır. Lütfen <strong>gerçek kredi kartı bilgilerinizi girmeyiniz.</strong> Test amacıyla rastgele rakamlar kullanabilirsiniz.
+                  </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="md:col-span-2">
@@ -255,7 +287,40 @@ ${newOrder.items.map((item: any) => `- ${item.name} (x${item.qty})`).join('\n')}
                 </div>
               </div>
 
-              <button type="submit" disabled={isProcessing || cartItems.length === 0} className="w-full bg-primary hover:bg-primary-hover text-white py-4 rounded-lg font-heading font-bold uppercase transition-colors flex items-center justify-center shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed">
+              <div className="space-y-3">
+                <div className="flex items-start space-x-2">
+                  <input 
+                    type="checkbox" 
+                    id="kvkk" 
+                    checked={agreements.kvkk}
+                    onChange={(e) => setAgreements({ ...agreements, kvkk: e.target.checked })}
+                    className="mt-1 accent-primary" 
+                    required 
+                  />
+                  <label htmlFor="kvkk" className="text-[10px] text-text-muted font-body leading-tight cursor-pointer">
+                    <Link href="/kvkk" className="text-primary hover:underline font-bold">KVKK Aydınlatma Metni</Link>'ni okudum ve verilerimin işlenmesini onaylıyorum.
+                  </label>
+                </div>
+                <div className="flex items-start space-x-2">
+                  <input 
+                    type="checkbox" 
+                    id="mss" 
+                    checked={agreements.mss}
+                    onChange={(e) => setAgreements({ ...agreements, mss: e.target.checked })}
+                    className="mt-1 accent-primary" 
+                    required 
+                  />
+                  <label htmlFor="mss" className="text-[10px] text-text-muted font-body leading-tight cursor-pointer">
+                    <Link href="/mesafeli-satis-sozlesmesi" className="text-primary hover:underline font-bold">Mesafeli Satış Sözleşmesi</Link>'ni ve <Link href="/iade-kosullari" className="text-primary hover:underline font-bold">İade Koşullarını</Link> okudum, onaylıyorum.
+                  </label>
+                </div>
+              </div>
+
+              <button 
+                type="submit" 
+                disabled={isProcessing || cartItems.length === 0 || !agreements.kvkk || !agreements.mss} 
+                className="w-full bg-primary hover:bg-primary-hover text-white py-4 rounded-lg font-heading font-bold uppercase transition-colors flex items-center justify-center shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
                 {isProcessing ? (
                   <span className="flex items-center">
                     <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

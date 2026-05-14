@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { LayoutDashboard, ShoppingBag, Settings, LogOut, FileText, Tag, MessageSquare, Mail, Ticket, BookOpen, Menu, X } from 'lucide-react';
+import { signOut } from 'next-auth/react';
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/ibreoto-yonetim-2025' },
@@ -73,7 +74,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
         
         <div className="p-4 border-t border-gray-800">
-          <button className="flex items-center space-x-3 px-4 py-3 w-full rounded-xl text-red-400 hover:bg-red-900/20 transition-all duration-200 group">
+          <button 
+            onClick={() => signOut({ callbackUrl: '/' })}
+            className="flex items-center space-x-3 px-4 py-3 w-full rounded-xl text-red-400 hover:bg-red-900/20 transition-all duration-200 group"
+          >
             <LogOut size={20} className="group-hover:translate-x-1 transition-transform" />
             <span className="font-medium">Çıkış Yap</span>
           </button>

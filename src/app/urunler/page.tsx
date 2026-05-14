@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { ShoppingBag, Star, Heart } from 'lucide-react';
 import { ProductsSkeleton } from '@/components/ui/ProductsSkeleton';
@@ -37,6 +38,7 @@ function UrunlerContent() {
   const [maxPrice, setMaxPrice] = useState('');
   const [appliedMin, setAppliedMin] = useState<number | null>(null);
   const [appliedMax, setAppliedMax] = useState<number | null>(null);
+  const [sortBy, setSortBy] = useState('recommended');
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<string[]>([]);
 
@@ -101,9 +103,19 @@ function UrunlerContent() {
     if (appliedMax !== null) {
       filtered = filtered.filter(p => parseFloat(p.price) <= appliedMax);
     }
+
+    // Sort products
+    let sorted = [...filtered];
+    if (sortBy === 'price-asc') {
+      sorted.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    } else if (sortBy === 'price-desc') {
+      sorted.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    } else if (sortBy === 'newest') {
+      sorted.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+    }
     
-    setFilteredProducts(filtered);
-  }, [selectedCategories, products, appliedMin, appliedMax, searchQuery]);
+    setFilteredProducts(sorted);
+  }, [selectedCategories, products, appliedMin, appliedMax, searchQuery, sortBy]);
 
   const handleCategoryChange = (slug: string) => {
     if (selectedCategories.includes(slug)) {
@@ -216,10 +228,15 @@ function UrunlerContent() {
             <h1 className="text-2xl font-heading font-bold uppercase tracking-tight">
               {searchQuery ? `Arama Sonuçları (${filteredProducts.length})` : 'Tüm Ürünler'}
             </h1>
-            <select className="border border-surface rounded p-2 font-body text-sm focus:outline-none focus:border-primary bg-white cursor-pointer transition-colors">
-              <option>Önerilen Sıralama</option>
-              <option>En Düşük Fiyat</option>
-              <option>En Yüksek Fiyat</option>
+            <select 
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="border border-surface rounded p-2 font-body text-sm focus:outline-none focus:border-primary bg-white cursor-pointer transition-colors"
+            >
+              <option value="recommended">Önerilen Sıralama</option>
+              <option value="price-asc">En Düşük Fiyat</option>
+              <option value="price-desc">En Yüksek Fiyat</option>
+              <option value="newest">En Yeni Ürünler</option>
             </select>
           </div>
 
@@ -230,11 +247,16 @@ function UrunlerContent() {
               {filteredProducts.map((product) => (
                 <div key={product.id} className="group bg-white border border-surface hover:border-primary/30 rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col transform hover:-translate-y-1">
                   <div className="relative w-full h-48 bg-surface p-4 flex items-center justify-center overflow-hidden">
-                    <Link href={`/urun/${product.id}`} className="block w-full h-full flex items-center justify-center">
+                    <Link href={`/urun/${product.id}`} className="block w-full h-full relative">
                       {product.image ? (
-                        <img src={product.image} alt={product.name} className="object-contain max-h-full transform group-hover:scale-110 transition-transform duration-700" />
+                        <Image 
+                          src={product.image} 
+                          alt={product.name} 
+                          fill
+                          className="object-contain transform group-hover:scale-110 transition-transform duration-700" 
+                        />
                       ) : (
-                        <div className="text-text-muted text-xs font-body">[ Görsel ]</div>
+                        <div className="flex items-center justify-center h-full text-text-muted text-xs font-body">[ Görsel ]</div>
                       )}
                     </Link>
                     <button 
