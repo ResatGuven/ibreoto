@@ -1,19 +1,37 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Calendar, User, ArrowLeft, Share2, Bookmark } from 'lucide-react';
-import blogPosts from '@/data/blog-posts.json';
 
 export default function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
     const resolvedParams = React.use(params);
     const { slug } = resolvedParams;
+    const [post, setPost] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
 
-    const post = blogPosts.find((p: any) => p.slug === slug);
+    useEffect(() => {
+        const fetchPost = async () => {
+            try {
+                const res = await fetch(`/api/blog/${slug}`);
+                const data = await res.json();
+                if (!data.error) setPost(data);
+            } catch (e) {
+                console.error(e);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchPost();
+    }, [slug]);
 
     const sanitizeHtml = (html: string) => {
         return html.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gim, "");
     };
+
+    if (loading) {
+        return <div className="pt-24 min-h-screen bg-white flex items-center justify-center">Yükleniyor...</div>;
+    }
 
     if (!post) {
         return (
@@ -51,7 +69,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                 <div className="flex items-center text-sm text-text-muted mb-8 space-x-6 font-body">
                     <div className="flex items-center">
                         <Calendar className="w-4 h-4 mr-2" />
-                        {post.date}
+                        {new Date(post.createdAt).toLocaleDateString('tr-TR')}
                     </div>
                     <div className="flex items-center">
                         <User className="w-4 h-4 mr-2" />

@@ -9,12 +9,14 @@ export default function BlogPage() {
   const [posts, setPosts] = useState<any[]>([]);
 
   useEffect(() => {
-    const savedPosts = localStorage.getItem('app_blogs');
-    if (savedPosts && JSON.parse(savedPosts).length > 0) {
-      setPosts(JSON.parse(savedPosts));
-    } else {
-      setPosts(blogPosts);
-    }
+    const fetchPosts = async () => {
+      try {
+        const res = await fetch('/api/site-info');
+        const data = await res.json();
+        if (data.latestPosts) setPosts(data.latestPosts);
+      } catch (e) {}
+    };
+    fetchPosts();
   }, []);
 
   return (
@@ -53,7 +55,7 @@ export default function BlogPage() {
                 <div className="flex items-center text-xs text-text-muted mb-3 space-x-4 font-body">
                   <div className="flex items-center">
                     <Calendar className="w-3 h-3 mr-1" />
-                    {post.date}
+                    {new Date(post.createdAt).toLocaleDateString('tr-TR')}
                   </div>
                   <div className="flex items-center">
                     <User className="w-3 h-3 mr-1" />

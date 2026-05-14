@@ -3,17 +3,19 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { LayoutDashboard, ShoppingBag, Settings, LogOut, FileText, Tag, MessageSquare, Mail, Ticket, BookOpen, Menu, X } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Settings, LogOut, FileText, Tag, MessageSquare, Mail, Ticket, BookOpen, Menu, X, Image as ImageIcon, Users } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/ibreoto-yonetim-2025' },
   { icon: ShoppingBag, label: 'Ürün Yönetimi', href: '/ibreoto-yonetim-2025/urunler' },
   { icon: Mail, label: 'Mesajlar', href: '/ibreoto-yonetim-2025/mesajlar' },
+  { icon: Users, label: 'Müşteriler', href: '/ibreoto-yonetim-2025/musteriler' },
   { icon: Tag, label: 'Kategoriler', href: '/ibreoto-yonetim-2025/kategoriler' },
   { icon: FileText, label: 'Siparişler', href: '/ibreoto-yonetim-2025/siparisler' },
   { icon: MessageSquare, label: 'Yorumlar', href: '/ibreoto-yonetim-2025/yorumlar' },
   { icon: Ticket, label: 'Kuponlar', href: '/ibreoto-yonetim-2025/kuponlar' },
+  { icon: ImageIcon, label: 'Slider Yönetimi', href: '/ibreoto-yonetim-2025/slider' },
   { icon: BookOpen, label: 'Blog', href: '/ibreoto-yonetim-2025/blog' },
   { icon: Settings, label: 'Ayarlar', href: '/ibreoto-yonetim-2025/ayarlar' },
 ];
