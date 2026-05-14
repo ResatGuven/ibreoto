@@ -140,3 +140,45 @@ model Message {
   message   String
   createdAt DateTime @default(now())
 }
+
+model SiteSettings {
+  id              String   @id @default("current")
+  siteName        String   @default("İbreOto")
+  siteDescription String?  @default("Aracını Tamamla, Yola Koy.")
+  contactEmail    String?  @default("iletisim@ibreoto.com")
+  contactPhone    String?  @default("+90 5XX XXX XX XX")
+  address         String?
+  whatsappNumber  String?
+  facebookUrl     String?
+  instagramUrl    String?
+  twitterUrl      String?
+  logoUrl         String?
+  announcementBar String?
+  isMaintenance   Boolean  @default(false)
+  updatedAt       DateTime @updatedAt
+}
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String   @db.Text
+  excerpt     String?
+  image       String?
+  author      String   @default("İbreOto")
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Slider {
+  id          String   @id @default(cuid())
+  title       String?
+  subtitle    String?
+  image       String
+  buttonText  String?
+  buttonLink  String?  @default("/urunler")
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
