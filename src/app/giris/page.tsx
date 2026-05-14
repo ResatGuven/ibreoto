@@ -21,7 +21,7 @@ export default function GirisPage() {
       const result = await signIn('credentials', {
         email,
         password,
-        redirect: false,
+        callbackUrl: '/ibreoto-yonetim-2025',
       });
 
       if (result?.error) {
