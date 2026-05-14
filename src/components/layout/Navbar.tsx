@@ -60,6 +60,9 @@ export default function Navbar() {
           <Link href="/iletisim" className="font-heading uppercase font-bold text-text-main hover:text-primary transition-colors">
             İletişim
           </Link>
+          <Link href="/siparis-takip" className="font-heading uppercase font-bold text-primary hover:text-secondary transition-colors">
+            Siparişim Nerede?
+          </Link>
         </nav>
 
         {/* Right Actions */}
@@ -111,8 +114,11 @@ export default function Navbar() {
           <Link href="/blog" onClick={() => setIsMobileMenuOpen(false)} className="block font-heading uppercase font-bold text-text-main hover:text-primary transition-colors py-2 border-b border-gray-50">
             Blog
           </Link>
-          <Link href="/iletisim" onClick={() => setIsMobileMenuOpen(false)} className="block font-heading uppercase font-bold text-text-main hover:text-primary transition-colors py-2">
+          <Link href="/iletisim" onClick={() => setIsMobileMenuOpen(false)} className="block font-heading uppercase font-bold text-text-main hover:text-primary transition-colors py-2 border-b border-gray-50">
             İletişim
+          </Link>
+          <Link href="/siparis-takip" onClick={() => setIsMobileMenuOpen(false)} className="block font-heading uppercase font-bold text-primary hover:text-secondary transition-colors py-2">
+            Siparişim Nerede?
           </Link>
           
           {/* Mobile Only Actions */}
