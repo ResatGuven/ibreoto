@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export default withAuth(
   function middleware(req) {
     const token = req.nextauth.token;
-    const isAdminPath = req.nextUrl.pathname.startsWith("/ibreoto-yonetim-2025");
+    const isAdminPath = req.nextUrl.pathname.startsWith("/yonetim");
 
     if (isAdminPath && token?.role !== "ADMIN") {
       return NextResponse.redirect(new URL("/", req.url));
@@ -18,5 +18,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/ibreoto-yonetim-2025/:path*", "/api/admin/:path*"],
+  matcher: ["/yonetim/:path*", "/api/admin/:path*"],
 };

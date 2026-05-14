@@ -7,7 +7,7 @@ export default function FooterWrapper() {
   const pathname = usePathname();
   
   // Admin panelinde footer'ı gizle
-  if (pathname?.startsWith('/ibreoto-yonetim-2025')) {
+  if (pathname?.startsWith('/yonetim')) {
     return null;
   }
   

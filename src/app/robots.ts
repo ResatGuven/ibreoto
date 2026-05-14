@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/ibreoto-yonetim-2025/', '/sepet/', '/odeme/', '/giris/'],
+      disallow: ['/yonetim/', '/sepet/', '/odeme/', '/giris/'],
     },
     sitemap: 'https://ibreoto.vercel.app/sitemap.xml',
   }

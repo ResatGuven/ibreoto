@@ -17,17 +17,17 @@ export default function GirisPage() {
     setLoading(true);
     setError('');
 
-    try {
+        try {
       const result = await signIn('credentials', {
         email,
         password,
-        callbackUrl: '/ibreoto-yonetim-2025',
+        callbackUrl: '/yonetim',
       });
 
       if (result?.error) {
         setError('Hatalı e-posta veya şifre.');
       } else {
-        router.push('/ibreoto-yonetim-2025');
+        router.push('/yonetim');
         router.refresh();
       }
     } catch (err) {
@@ -62,7 +62,7 @@ export default function GirisPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@ibreoto.com" 
+              placeholder="admin@arihayat.com" 
               className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body text-sm" 
             />
           </div>
@@ -88,7 +88,7 @@ export default function GirisPage() {
         </form>
 
         <div className="mt-6 text-center text-[10px] text-text-muted font-body uppercase tracking-widest">
-          İbreOto Güvenli Yönetim Sistemi
+          ArıHayat Güvenli Yönetim Sistemi
         </div>
       </motion.div>
     </div>

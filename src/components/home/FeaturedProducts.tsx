@@ -11,9 +11,9 @@ export const FeaturedProducts = () => {
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const defaultProducts = [
-    { id: '1', name: 'Yerli Üretim Arı Sütü 100 gr', price: 4000, oldPrice: 4500, category: 'ari-sutu', image: '/images/products/ari-sutu/ari-sutu-100gr-main.webp', description: 'Saf taze yerli üretim arı sütü.', rating: 5, reviews: 24, isNew: true, isFreeShipping: true },
-    { id: '2', name: 'ARI EKMEKLİ Yetişkin Karışımı 850 gr', price: 2150, oldPrice: 2450, category: 'karisim', image: '/images/products/karisim/ari-ekmekli-yetiskin-850gr.webp', description: 'Bal, polen, propolis ve arı sütü karışımı.', rating: 5, reviews: 12, isNew: false, isFreeShipping: true },
-    { id: '3', name: 'Çiçek Balı 850 gr', price: 600, category: 'bal', image: '/images/products/bal/cicek-bali-850gr.webp', description: 'Doğal süzme çiçek balı.', rating: 5, reviews: 30, isNew: false, isFreeShipping: false },
+    { id: '1', name: 'Yerli Üretim Arı Sütü 100 gr', price: 4000, oldPrice: 4500, category: 'ari-sutu', image: '/images/products/ari-sutu/ari-sutu-100gr-main.png', description: 'Saf taze yerli üretim arı sütü.', rating: 5, reviews: 24, isNew: true, isFreeShipping: true },
+    { id: '2', name: 'ARI EKMEKLİ Yetişkin Karışımı 850 gr', price: 2150, oldPrice: 2450, category: 'karisim', image: '/images/products/karisim/ari-ekmekli-yetiskin-850gr.png', description: 'Bal, polen, propolis ve arı sütü karışımı.', rating: 5, reviews: 12, isNew: false, isFreeShipping: true },
+    { id: '3', name: 'Çiçek Balı 850 gr', price: 600, category: 'bal', image: '/images/products/bal/cicek-bali-850gr.png', description: 'Doğal süzme çiçek balı.', rating: 5, reviews: 30, isNew: false, isFreeShipping: false },
     { id: '4', name: 'Propolis 50 ml (Zeytin Yağında)', price: 350, oldPrice: 400, category: 'propolis', image: '/images/products/propolis/propolis-50ml.webp', description: 'Zeytinyağında çözülmüş doğal propolis.', rating: 5, reviews: 18, isNew: true, isFreeShipping: false },
   ];
 
