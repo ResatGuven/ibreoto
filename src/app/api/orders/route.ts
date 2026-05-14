@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { sendOrderConfirmationEmail } from "@/lib/email";
+import { sendTelegramMessage } from "@/lib/telegram";
 
 export async function POST(request: Request) {
   try {
@@ -93,11 +94,7 @@ export async function POST(request: Request) {
         fullOrder.items.map(i => `- ${i.product.name} (x${i.quantity})`).join('\n') + 
         `\n\n_Hayırlı işler bol kazançlar!_ 🚀`;
 
-      fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/telegram`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: telegramMessage })
-      }).catch(e => console.error('Telegram Notify Error:', e));
+      sendTelegramMessage(telegramMessage).catch(e => console.error('Telegram Notify Error:', e));
     }
 
     return NextResponse.json(result);

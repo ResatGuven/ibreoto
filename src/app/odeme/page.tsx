@@ -128,26 +128,6 @@ export default function OdemePage() {
       const newOrder = data;
       setOrderId(newOrder.id);
 
-      // Telegram Bildirimi Gönder
-      const message = `
-🔔 YENİ SİPARİŞ ALINDI! (ID: ${newOrder.id})
-
-Müşteri: ${newOrder.customerName}
-E-Posta: ${newOrder.customerEmail}
-Telefon: ${newOrder.customerPhone}
-Adres: ${newOrder.customerAddress} / ${newOrder.customerCity}
-Tutar: ₺${newOrder.totalAmount.toLocaleString('tr-TR')}
-
-Ürünler:
-${cartItems.map((item: any) => `- ${item.name} (x${item.qty})`).join('\n')}
-      `;
-
-      fetch('/api/telegram', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message }),
-      }).catch(error => console.error('Telegram error:', error));
-
       // Success logic
       setTimeout(() => {
         setIsProcessing(false);

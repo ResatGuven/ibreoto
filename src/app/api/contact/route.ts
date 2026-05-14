@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { sendTelegramMessage } from '@/lib/telegram';
 
 export async function POST(request: Request) {
   try {
@@ -14,6 +15,15 @@ export async function POST(request: Request) {
         message,
       },
     });
+
+    // Telegram Notification
+    const telegramMessage = `✉️ *YENİ MESAJ ALINDI!* \n\n` +
+      `👤 *Ad:* ${name}\n` +
+      `📧 *E-Posta:* ${email}\n` +
+      `📌 *Konu:* ${subject || 'İletişim Mesajı'}\n\n` +
+      `📝 *Mesaj:* \n${message}`;
+
+    sendTelegramMessage(telegramMessage).catch(e => console.error('Telegram Notify Error:', e));
 
     return NextResponse.json(newMessage);
   } catch (error) {
