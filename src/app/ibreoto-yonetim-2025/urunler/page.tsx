@@ -1,8 +1,9 @@
 // Güncellendi
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Edit, Trash2, Image as ImageIcon, Search } from 'lucide-react';
+import { useAdminToast } from '@/context/AdminToastContext';
 
 export default function AdminUrunlerPage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -13,9 +14,15 @@ export default function AdminUrunlerPage() {
   // Hızlı stok güncelleme için state'ler
   const [editingStockId, setEditingStockId] = useState<string | null>(null);
   const [tempStock, setTempStock] = useState<string>('');
+  
+  const { showToast } = useAdminToast();
+  const deleteTimeouts = useRef<{ [key: string]: NodeJS.Timeout }>({});
 
   useEffect(() => {
     fetchProducts();
+    return () => {
+      Object.values(deleteTimeouts.current).forEach(clearTimeout);
+    };
   }, []);
 
   const fetchProducts = async () => {
@@ -107,23 +114,34 @@ export default function AdminUrunlerPage() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Bu ürünü silmek istediğinize emin misiniz?')) return;
-    
-    try {
-      const res = await fetch(`/api/admin/products/${id}`, {
-        method: 'DELETE',
-      });
+  const handleDelete = (id: string) => {
+    const productToDelete = products.find(p => p.id === id);
+    if (!productToDelete) return;
 
-      if (res.ok) {
-        localStorage.removeItem(`seo_product_${id}`); // SEO verisini de sil
-        fetchProducts();
-      } else {
-        alert('Failed to delete product');
+    // 1. Remove from local state immediately
+    const originalProducts = [...products];
+    setProducts(prev => prev.filter(p => p.id !== id)); 
+
+    showToast(`"${productToDelete.name}" siliniyor...`, 'undo', () => {
+      setProducts(originalProducts);
+      if (deleteTimeouts.current[id]) {
+        clearTimeout(deleteTimeouts.current[id]);
+        delete deleteTimeouts.current[id];
       }
-    } catch (error) {
-      console.error('Error deleting product:', error);
-    }
+      showToast('İşlem geri alındı', 'success');
+    });
+
+    deleteTimeouts.current[id] = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/admin/products/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          localStorage.removeItem(`seo_product_${id}`);
+        }
+        delete deleteTimeouts.current[id];
+      } catch (error) {
+        console.error('Delete failed:', error);
+      }
+    }, 15000);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

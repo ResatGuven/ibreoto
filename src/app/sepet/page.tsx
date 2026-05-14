@@ -12,8 +12,13 @@ export default function SepetPage() {
 
   useEffect(() => {
     const savedDiscount = localStorage.getItem('applied_discount');
+    const savedCoupon = localStorage.getItem('applied_coupon');
     if (savedDiscount) {
       setDiscountAmount(parseFloat(savedDiscount));
+    }
+    if (savedCoupon) {
+      setCouponCode(savedCoupon);
+      setCouponMessage(`Kupon uygulandı: ${savedCoupon}`);
     }
   }, []);
 
@@ -62,6 +67,7 @@ export default function SepetPage() {
   };
 
   const handleApplyCoupon = async () => {
+    if (!couponCode) return;
     try {
       const res = await fetch('/api/coupons/validate', {
         method: 'POST',
@@ -84,13 +90,19 @@ export default function SepetPage() {
         setCouponMessage(`Başarılı: ₺${discount.toLocaleString('tr-TR')} indirim uygulandı.`);
       } else {
         setCouponMessage(`Hata: ${data.message || 'Geçersiz kupon kodu.'}`);
-        setDiscountAmount(0);
-        localStorage.removeItem('applied_discount');
-        localStorage.removeItem('applied_coupon');
+        handleRemoveCoupon();
       }
     } catch (error) {
       setCouponMessage('Hata: Kupon doğrulanırken bir sorun oluştu.');
     }
+  };
+
+  const handleRemoveCoupon = () => {
+    setDiscountAmount(0);
+    setCouponCode('');
+    setCouponMessage('');
+    localStorage.removeItem('applied_discount');
+    localStorage.removeItem('applied_coupon');
   };
 
   return (
@@ -163,9 +175,19 @@ export default function SepetPage() {
                   </button>
                 </div>
                 {couponMessage && (
-                  <p className={`text-xs mt-1 ${couponMessage.startsWith('Hata') ? 'text-red-500' : 'text-green-500'}`}>
-                    {couponMessage}
-                  </p>
+                  <div className="flex items-center justify-between mt-1">
+                    <p className={`text-xs ${couponMessage.startsWith('Hata') ? 'text-red-500' : 'text-green-500'}`}>
+                      {couponMessage}
+                    </p>
+                    {!couponMessage.startsWith('Hata') && (
+                      <button 
+                        onClick={handleRemoveCoupon}
+                        className="text-[10px] text-red-500 hover:underline font-bold uppercase"
+                      >
+                        Kaldır
+                      </button>
+                    )}
+                  </div>
                 )}
                 {discountAmount > 0 && (
                   <div className="flex justify-between text-green-500">
