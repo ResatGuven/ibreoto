@@ -12,29 +12,35 @@ export default function AdminDashboardPage() {
     { label: 'Aktif Müşteriler', value: '0', icon: Users, color: 'text-purple-500', trend: '+0%' },
     { label: 'Dönüşüm Oranı', value: '%3.2', icon: TrendingUp, color: 'text-orange-500', trend: '+1.1%' },
   ]);
+  const [loading, setLoading] = useState(true);
+  const [lowStock, setLowStock] = useState<any[]>([]);
 
   useEffect(() => {
-    // LocalStorage'dan siparişleri oku
-    const savedOrders = localStorage.getItem('app_orders');
-    if (savedOrders) {
-      const parsedOrders = JSON.parse(savedOrders);
-      setOrders(parsedOrders);
+    const fetchStats = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch('/api/admin/stats');
+        const data = await res.json();
+        
+        if (data.error) throw new Error(data.error);
 
-      // İstatistikleri hesapla
-      const totalRevenue = parsedOrders.reduce((sum: number, order: any) => {
-        const amount = parseFloat(order.total.replace('₺', '').replace('.', '')) || 0;
-        return sum + amount;
-      }, 0);
+        setStats([
+          { label: 'Toplam Gelir', value: data.totalRevenue, icon: DollarSign, color: 'text-green-500', trend: '+12.5%' },
+          { label: 'Yeni Siparişler', value: data.orderCount, icon: ShoppingCart, color: 'text-red-500', trend: '+5.2%' },
+          { label: 'Aktif Müşteriler', value: data.customerCount, icon: Users, color: 'text-purple-500', trend: '+2.4%' },
+          { label: 'Dönüşüm Oranı', value: '%3.2', icon: TrendingUp, color: 'text-orange-500', trend: '+1.1%' },
+        ]);
 
-      const uniqueCustomers = new Set(parsedOrders.map((o: any) => o.customer)).size;
+        setOrders(data.recentOrders);
+        setLowStock(data.lowStock);
+      } catch (error) {
+        console.error('Failed to fetch dashboard stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      setStats([
-        { label: 'Toplam Gelir', value: `₺${totalRevenue.toLocaleString('tr-TR')}`, icon: DollarSign, color: 'text-green-500', trend: '+12.5%' },
-        { label: 'Yeni Siparişler', value: parsedOrders.length.toString(), icon: ShoppingCart, color: 'text-red-500', trend: '+5.2%' },
-        { label: 'Aktif Müşteriler', value: uniqueCustomers.toString(), icon: Users, color: 'text-purple-500', trend: '+2.4%' },
-        { label: 'Dönüşüm Oranı', value: '%3.2', icon: TrendingUp, color: 'text-orange-500', trend: '+1.1%' },
-      ]);
-    }
+    fetchStats();
   }, []);
 
   return (
@@ -86,24 +92,21 @@ export default function AdminDashboardPage() {
         <div className="bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 p-6 shadow-lg">
           <h3 className="font-heading font-bold text-lg text-white mb-4 uppercase">Kritik Stok Uyarısı</h3>
           <ul className="space-y-4 mt-4">
-            <li className="flex justify-between items-center">
-              <div>
-                <p className="text-sm font-medium text-white">Karbon Fiber Direksiyon Kılıfı</p>
-                <p className="text-xs text-gray-500">SKU: 12345678</p>
-              </div>
-              <div className="px-3 py-1 rounded-full text-xs font-bold bg-yellow-900/50 text-yellow-300 border border-yellow-700">
-                Son 3 Adet
-              </div>
-            </li>
-            <li className="flex justify-between items-center">
-              <div>
-                <p className="text-sm font-medium text-white">3D Havuzlu Paspas Seti</p>
-                <p className="text-xs text-gray-500">SKU: 87654321</p>
-              </div>
-              <div className="px-3 py-1 rounded-full text-xs font-bold bg-red-900/50 text-red-300 border border-red-700">
-                Stok Tükendi
-              </div>
-            </li>
+            {lowStock.map((item, index) => (
+              <li key={index} className="flex justify-between items-center">
+                <div>
+                  <p className="text-sm font-medium text-white">{item.name}</p>
+                </div>
+                <div className={`px-3 py-1 rounded-full text-xs font-bold ${
+                  item.stock === 0 ? 'bg-red-900/50 text-red-300 border border-red-700' : 'bg-yellow-900/50 text-yellow-300 border border-yellow-700'
+                }`}>
+                  {item.status}
+                </div>
+              </li>
+            ))}
+            {lowStock.length === 0 && (
+              <li className="text-sm text-gray-500 italic">Kritik stokta ürün bulunmuyor.</li>
+            )}
           </ul>
         </div>
       </div>

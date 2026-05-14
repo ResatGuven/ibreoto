@@ -1,31 +1,203 @@
-// Güncellendi
 "use client";
-import React from 'react';
 
-export default function AdminAyarlarPage() {
+import React, { useState, useEffect } from 'react';
+import { Save, Globe, Phone, Mail, MapPin, MessageSquare, Facebook, Instagram, Twitter, ShieldAlert } from 'lucide-react';
+
+export default function AdminSettingsPage() {
+  const [settings, setSettings] = useState<any>({
+    siteName: 'İbreOto',
+    siteDescription: '',
+    contactEmail: '',
+    contactPhone: '',
+    address: '',
+    whatsappNumber: '',
+    facebookUrl: '',
+    instagramUrl: '',
+    twitterUrl: '',
+    announcementBar: '',
+    isMaintenance: false
+  });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const res = await fetch('/api/admin/settings');
+      const data = await res.json();
+      if (data && !data.error) {
+        setSettings(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch settings:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      const res = await fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(settings)
+      });
+      if (res.ok) {
+        alert('Ayarlar başarıyla kaydedildi!');
+      }
+    } catch (error) {
+      alert('Kaydedilirken hata oluştu.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) return <div className="p-8 text-white">Yükleniyor...</div>;
+
   return (
     <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
-      <h1 className="text-2xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700 uppercase mb-6">Sistem Ayarları</h1>
-      
-      <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg max-w-2xl">
-        <form className="space-y-4">
-          <div>
-            <label className="block text-gray-400 mb-1 text-sm font-body">Site Başlığı</label>
-            <input type="text" defaultValue="ibreoto | İbreni Yüksel, Yolunu Belirle" className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all text-white" />
-          </div>
-          <div>
-            <label className="block text-gray-400 mb-1 text-sm font-body">Site Açıklaması</label>
-            <textarea defaultValue="Aracını Tamamla, Yola Koy. 500'den fazla orijinal araba aksesuarı..." rows={3} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all text-white"></textarea>
-          </div>
-          <div>
-            <label className="block text-gray-400 mb-1 text-sm font-body">İletişim E-postası</label>
-            <input type="email" defaultValue="destek@ibreoto.com" className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all text-white" />
-          </div>
-          <button type="button" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 py-3 rounded-xl font-heading font-bold uppercase tracking-wider transition-all duration-300 shadow-lg shadow-red-500/20 transform hover:scale-105">
-            Ayarları Kaydet
-          </button>
-        </form>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700 uppercase">Genel Site Ayarları</h1>
+        <button 
+          onClick={handleSave}
+          disabled={saving}
+          className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 py-2 rounded-xl font-heading font-bold text-sm uppercase flex items-center transition-all shadow-lg shadow-red-500/20"
+        >
+          <Save className="w-4 h-4 mr-2" /> {saving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
+        </button>
       </div>
+
+      <form onSubmit={handleSave} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Temel Bilgiler */}
+        <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-4">
+          <h2 className="text-lg font-heading font-bold text-white mb-4 flex items-center uppercase">
+            <Globe className="w-5 h-5 mr-2 text-red-500" /> Kurumsal Bilgiler
+          </h2>
+          <div>
+            <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Site Başlığı</label>
+            <input 
+              type="text" 
+              value={settings.siteName} 
+              onChange={e => setSettings({...settings, siteName: e.target.value})} 
+              className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" 
+            />
+          </div>
+          <div>
+            <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Site Açıklaması (Slogan)</label>
+            <input 
+              type="text" 
+              value={settings.siteDescription} 
+              onChange={e => setSettings({...settings, siteDescription: e.target.value})} 
+              className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" 
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-gray-400 mb-1 text-xs font-body uppercase">E-Posta</label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-3.5 w-4 h-4 text-gray-500" />
+                <input 
+                  type="email" 
+                  value={settings.contactEmail} 
+                  onChange={e => setSettings({...settings, contactEmail: e.target.value})} 
+                  className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" 
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Telefon</label>
+              <div className="relative">
+                <Phone className="absolute left-3 top-3.5 w-4 h-4 text-gray-500" />
+                <input 
+                  type="text" 
+                  value={settings.contactPhone} 
+                  onChange={e => setSettings({...settings, contactPhone: e.target.value})} 
+                  className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" 
+                />
+              </div>
+            </div>
+          </div>
+          <div>
+            <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Adres</label>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-3.5 w-4 h-4 text-gray-500" />
+              <textarea 
+                value={settings.address} 
+                onChange={e => setSettings({...settings, address: e.target.value})} 
+                className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" 
+                rows={2}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Sosyal Medya & İletişim */}
+        <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-4">
+          <h2 className="text-lg font-heading font-bold text-white mb-4 flex items-center uppercase">
+            <MessageSquare className="w-5 h-5 mr-2 text-red-500" /> Sosyal Medya & Kanallar
+          </h2>
+          <div>
+            <label className="block text-gray-400 mb-1 text-xs font-body uppercase">WhatsApp Hattı (Numara)</label>
+            <input 
+              type="text" 
+              value={settings.whatsappNumber} 
+              onChange={e => setSettings({...settings, whatsappNumber: e.target.value})} 
+              placeholder="905XXXXXXXXX"
+              className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" 
+            />
+          </div>
+          <div className="space-y-4">
+            <div className="relative">
+              <Facebook className="absolute left-3 top-3.5 w-4 h-4 text-gray-500" />
+              <input type="text" value={settings.facebookUrl} onChange={e => setSettings({...settings, facebookUrl: e.target.value})} placeholder="Facebook Linki" className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" />
+            </div>
+            <div className="relative">
+              <Instagram className="absolute left-3 top-3.5 w-4 h-4 text-gray-500" />
+              <input type="text" value={settings.instagramUrl} onChange={e => setSettings({...settings, instagramUrl: e.target.value})} placeholder="Instagram Linki" className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" />
+            </div>
+            <div className="relative">
+              <Twitter className="absolute left-3 top-3.5 w-4 h-4 text-gray-500" />
+              <input type="text" value={settings.twitterUrl} onChange={e => setSettings({...settings, twitterUrl: e.target.value})} placeholder="Twitter Linki" className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" />
+            </div>
+          </div>
+        </div>
+
+        {/* Duyuru & Bakım Modu */}
+        <div className="lg:col-span-2 bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg">
+          <h2 className="text-lg font-heading font-bold text-white mb-4 flex items-center uppercase">
+            <ShieldAlert className="w-5 h-5 mr-2 text-red-500" /> Kritik Durumlar & Duyurular
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Üst Duyuru Barı (Announcement)</label>
+              <input 
+                type="text" 
+                value={settings.announcementBar} 
+                onChange={e => setSettings({...settings, announcementBar: e.target.value})} 
+                placeholder="Örn: Tüm ürünlerde %15 indirim! Kod: IBRE15"
+                className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" 
+              />
+            </div>
+            <div className="flex items-center space-x-4 p-4 bg-[#1F2937] rounded-xl border border-gray-700 mt-5">
+              <input 
+                type="checkbox" 
+                checked={settings.isMaintenance} 
+                onChange={e => setSettings({...settings, isMaintenance: e.target.checked})}
+                className="w-6 h-6 accent-red-600 cursor-pointer" 
+              />
+              <div>
+                <p className="font-heading font-bold text-sm text-white uppercase">Siteyi Bakım Moduna Al</p>
+                <p className="text-[10px] text-gray-500 uppercase">Aktif edilirse ziyaretçiler "Bakım Çalışması Var" ekranı görür.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
   );
 }

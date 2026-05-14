@@ -12,6 +12,18 @@ export default function Navbar() {
   const [favoritesCount, setFavoritesCount] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [siteSettings, setSiteSettings] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch('/api/site-info');
+        const data = await res.json();
+        if (data.settings) setSiteSettings(data.settings);
+      } catch (e) {}
+    };
+    fetchSettings();
+  }, []);
 
   useEffect(() => {
     const updateCounts = () => {
@@ -48,6 +60,12 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-white shadow-md z-50 transition-all duration-300">
+      {/* Announcement Bar */}
+      {siteSettings?.announcementBar && (
+        <div className="bg-gradient-to-r from-red-600 to-red-800 text-white text-[10px] md:text-xs py-2 text-center font-heading font-bold uppercase tracking-widest px-4">
+          {siteSettings.announcementBar}
+        </div>
+      )}
       <div className="container mx-auto px-4 h-20 flex items-center justify-between">
         {/* Hamburger Menu (Mobile) */}
         <button 
