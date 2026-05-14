@@ -30,7 +30,7 @@ export default function GizlilikPage() {
           
           <h2>1. Genel Bilgilendirme</h2>
           <p>
-            İbreoto olarak, kullanıcılarımızın gizliliğine büyük önem veriyoruz. Bu gizlilik politikası, web sitemizi ziyaret ettiğinizde veya hizmetlerimizi kullandığınızda kişisel verilerinizin nasıl toplandığını, kullanıldığını ve korunduğunu açıklamaktadır.
+            ARI HAYAT olarak, kullanıcılarımızın gizliliğine büyük önem veriyoruz. Bu gizlilik politikası, web sitemizi ziyaret ettiğinizde veya hizmetlerimizi kullandığınızda kişisel verilerinizin nasıl toplandığını, kullanıldığını ve korunduğunu açıklamaktadır.
           </p>
 
           <h2>2. Toplanan Veriler</h2>

@@ -7,7 +7,7 @@ import { useAdminToast } from '@/context/AdminToastContext';
 export default function AdminSettingsPage() {
   const { showToast } = useAdminToast();
   const [settings, setSettings] = useState<any>({
-    siteName: 'İbreOto',
+    siteName: 'ARI HAYAT',
     siteDescription: '',
     contactEmail: '',
     contactPhone: '',
@@ -59,16 +59,16 @@ export default function AdminSettingsPage() {
     }
   };
 
-  if (loading) return <div className="p-8 text-white">Yükleniyor...</div>;
+  if (loading) return <div className="p-8 text-white text-center">Yükleniyor...</div>;
 
   return (
     <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700 uppercase">Genel Site Ayarları</h1>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <h1 className="text-3xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-700 uppercase">Genel Site Ayarları</h1>
         <button 
           onClick={handleSave}
           disabled={saving}
-          className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 py-2 rounded-xl font-heading font-bold text-sm uppercase flex items-center transition-all shadow-lg shadow-red-500/20"
+          className="bg-gradient-to-r from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-secondary px-8 py-3 rounded-xl font-heading font-bold text-sm uppercase flex items-center transition-all shadow-lg shadow-primary/20"
         >
           <Save className="w-4 h-4 mr-2" /> {saving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
         </button>
@@ -78,7 +78,7 @@ export default function AdminSettingsPage() {
         {/* Temel Bilgiler */}
         <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-4">
           <h2 className="text-lg font-heading font-bold text-white mb-4 flex items-center uppercase">
-            <Globe className="w-5 h-5 mr-2 text-red-500" /> Kurumsal Bilgiler
+            <Globe className="w-5 h-5 mr-2 text-primary" /> Kurumsal Bilgiler
           </h2>
           <div>
             <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Site Başlığı</label>
@@ -86,7 +86,7 @@ export default function AdminSettingsPage() {
               type="text" 
               value={settings.siteName} 
               onChange={e => setSettings({...settings, siteName: e.target.value})} 
-              className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" 
+              className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" 
             />
           </div>
           <div>
@@ -95,10 +95,10 @@ export default function AdminSettingsPage() {
               type="text" 
               value={settings.siteDescription} 
               onChange={e => setSettings({...settings, siteDescription: e.target.value})} 
-              className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" 
+              className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" 
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-400 mb-1 text-xs font-body uppercase">E-Posta</label>
               <div className="relative">
@@ -107,7 +107,7 @@ export default function AdminSettingsPage() {
                   type="email" 
                   value={settings.contactEmail} 
                   onChange={e => setSettings({...settings, contactEmail: e.target.value})} 
-                  className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" 
+                  className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" 
                 />
               </div>
             </div>
@@ -119,7 +119,7 @@ export default function AdminSettingsPage() {
                   type="text" 
                   value={settings.contactPhone} 
                   onChange={e => setSettings({...settings, contactPhone: e.target.value})} 
-                  className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" 
+                  className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" 
                 />
               </div>
             </div>
@@ -131,7 +131,7 @@ export default function AdminSettingsPage() {
               <textarea 
                 value={settings.address} 
                 onChange={e => setSettings({...settings, address: e.target.value})} 
-                className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" 
+                className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" 
                 rows={2}
               />
             </div>
@@ -141,7 +141,7 @@ export default function AdminSettingsPage() {
         {/* Sosyal Medya & İletişim */}
         <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-4">
           <h2 className="text-lg font-heading font-bold text-white mb-4 flex items-center uppercase">
-            <MessageSquare className="w-5 h-5 mr-2 text-red-500" /> Sosyal Medya & Kanallar
+            <MessageSquare className="w-5 h-5 mr-2 text-primary" /> Sosyal Medya & Kanallar
           </h2>
           <div>
             <label className="block text-gray-400 mb-1 text-xs font-body uppercase">WhatsApp Hattı (Numara)</label>
@@ -150,21 +150,21 @@ export default function AdminSettingsPage() {
               value={settings.whatsappNumber} 
               onChange={e => setSettings({...settings, whatsappNumber: e.target.value})} 
               placeholder="905XXXXXXXXX"
-              className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" 
+              className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" 
             />
           </div>
           <div className="space-y-4">
             <div className="relative">
               <Facebook className="absolute left-3 top-3.5 w-4 h-4 text-gray-500" />
-              <input type="text" value={settings.facebookUrl} onChange={e => setSettings({...settings, facebookUrl: e.target.value})} placeholder="Facebook Linki" className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" />
+              <input type="text" value={settings.facebookUrl} onChange={e => setSettings({...settings, facebookUrl: e.target.value})} placeholder="Facebook Linki" className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" />
             </div>
             <div className="relative">
               <Instagram className="absolute left-3 top-3.5 w-4 h-4 text-gray-500" />
-              <input type="text" value={settings.instagramUrl} onChange={e => setSettings({...settings, instagramUrl: e.target.value})} placeholder="Instagram Linki" className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" />
+              <input type="text" value={settings.instagramUrl} onChange={e => setSettings({...settings, instagramUrl: e.target.value})} placeholder="Instagram Linki" className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" />
             </div>
             <div className="relative">
               <Twitter className="absolute left-3 top-3.5 w-4 h-4 text-gray-500" />
-              <input type="text" value={settings.twitterUrl} onChange={e => setSettings({...settings, twitterUrl: e.target.value})} placeholder="Twitter Linki" className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" />
+              <input type="text" value={settings.twitterUrl} onChange={e => setSettings({...settings, twitterUrl: e.target.value})} placeholder="X (Twitter) Linki" className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" />
             </div>
           </div>
         </div>
@@ -172,7 +172,7 @@ export default function AdminSettingsPage() {
         {/* Duyuru & Bakım Modu */}
         <div className="lg:col-span-2 bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg">
           <h2 className="text-lg font-heading font-bold text-white mb-4 flex items-center uppercase">
-            <ShieldAlert className="w-5 h-5 mr-2 text-red-500" /> Kritik Durumlar & Duyurular
+            <ShieldAlert className="w-5 h-5 mr-2 text-primary" /> Kritik Durumlar & Duyurular
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
@@ -181,8 +181,8 @@ export default function AdminSettingsPage() {
                 type="text" 
                 value={settings.announcementBar} 
                 onChange={e => setSettings({...settings, announcementBar: e.target.value})} 
-                placeholder="Örn: Tüm ürünlerde %15 indirim! Kod: IBRE15"
-                className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" 
+                placeholder="Örn: Tüm ürünlerde %15 indirim! Kod: ARI15"
+                className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" 
               />
             </div>
             <div className="flex items-center space-x-4 p-4 bg-[#1F2937] rounded-xl border border-gray-700 mt-5">
@@ -190,7 +190,7 @@ export default function AdminSettingsPage() {
                 type="checkbox" 
                 checked={settings.isMaintenance} 
                 onChange={e => setSettings({...settings, isMaintenance: e.target.checked})}
-                className="w-6 h-6 accent-red-600 cursor-pointer" 
+                className="w-6 h-6 accent-primary cursor-pointer" 
               />
               <div>
                 <p className="font-heading font-bold text-sm text-white uppercase">Siteyi Bakım Moduna Al</p>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Gizlilik Politikası | ibreoto",
+  title: "Gizlilik Politikası | ARI HAYAT",
   description: "Müşteri verilerinin gizliliği ve güvenliği konusundaki politikalarımız.",
 };
 

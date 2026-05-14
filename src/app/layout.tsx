@@ -22,9 +22,9 @@ const nunitoSans = Nunito_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "ibreoto | İbreni Yüksel, Yolunu Belirle",
-  description: "Aracını Tamamla, Yola Koy. 500'den fazla orijinal araba aksesuarı, hızlı teslimat ve güvenilir alışveriş.",
-  keywords: ["araba aksesuarı", "oto aksesuar", "ibreoto", "araç içi aksesuar", "araç dışı aksesuar", "tuning"],
+  title: "ArıHayat | %100 Doğal Bal, Propolis ve Arı Ürünleri",
+  description: "Doğanın kalbinden, ısıl işlem görmemiş %100 doğal ham bal, propolis ve arı sütü. Üreticiden kapınıza taze ve sağlıklı arı ürünleri.",
+  keywords: ["doğal bal", "propolis", "arı sütü", "polen", "ham bal", "sağlıklı beslenme", "arı hayat"],
   manifest: "/manifest.json",
 };
 

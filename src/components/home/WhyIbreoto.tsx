@@ -2,20 +2,20 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ShieldCheck, Truck, RotateCcw, Headset, Zap, Lock } from 'lucide-react';
+import { ShieldCheck, Truck, RotateCcw, Headset, Zap, Lock, Leaf, Home } from 'lucide-react';
 
 const features = [
-  { title: 'Orijinal & Sertifikalı', desc: 'Tüm ürünlerimiz garantili ve %100 orijinaldir.', icon: ShieldCheck },
-  { title: 'Ücretsiz Kargo', desc: '299 TL ve üzeri tüm siparişlerinizde ücretsiz kargo.', icon: Truck },
-  { title: '30 Gün İade', desc: 'Koşulsuz şartsız 30 gün içinde iade garantisi.', icon: RotateCcw },
-  { title: '7/24 Destek', desc: 'Uzman ekibimizle her an yanınızdayız.', icon: Headset },
-  { title: 'Hızlı Teslimat', desc: 'Siparişleriniz 1-3 iş günü içinde kapınızda.', icon: Zap },
-  { title: 'Güvenli Ödeme', desc: '256-bit SSL ve 3D Secure ile güvenli alışveriş.', icon: Lock },
+  { title: '%100 Doğal & Katkısız', desc: 'Isıl işlem görmemiş, katkısız ve %100 doğal arı ürünleri.', icon: Leaf },
+  { title: 'Üreticiden Direkt', desc: 'Aracı olmadan, taze üretim ürünler doğrudan kapınıza.', icon: Home },
+  { title: 'Ücretsiz Kargo', desc: '1000 TL ve üzeri tüm siparişlerinizde ücretsiz kargo.', icon: Truck },
+  { title: '14 Gün İade', desc: 'Memnun kalmadığınız ürünlerde 14 gün iade garantisi.', icon: RotateCcw },
+  { title: 'Hızlı Teslimat', desc: 'Siparişleriniz taze şekilde 1-3 iş günü içinde kapınızda.', icon: Zap },
+  { title: 'Güvenli Ödeme', desc: 'Esnekpos altyapısı ile 3D Secure güvenli alışveriş.', icon: Lock },
 ];
 
 export const WhyIbreoto = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-surface overflow-hidden">
+    <section className="py-20 bg-gradient-to-b from-white to-background overflow-hidden">
       <div className="container mx-auto px-4">
         <motion.div 
           className="text-center mb-16"
@@ -25,9 +25,9 @@ export const WhyIbreoto = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-3xl md:text-5xl font-heading font-bold text-secondary mb-4 uppercase tracking-tight">
-            Neden <span className="text-primary">ibreoto?</span>
+            Neden <span className="text-primary">ARI HAYAT?</span>
           </h2>
-          <div className="w-24 h-1.5 bg-gradient-to-r from-primary to-red-400 mx-auto rounded-full"></div>
+          <div className="w-24 h-1.5 bg-gradient-to-r from-primary to-amber-600 mx-auto rounded-full"></div>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -42,7 +42,7 @@ export const WhyIbreoto = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <div className="w-14 h-14 bg-surface group-hover:bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
+                <div className="w-14 h-14 bg-background group-hover:bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
                   <Icon className="w-7 h-7 text-primary" />
                 </div>
                 <div>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "KVKK Aydınlatma Metni | ibreoto",
+  title: "KVKK Aydınlatma Metni | ARI HAYAT",
   description: "Kişisel verilerinizin korunması ve işlenmesi hakkında detaylı aydınlatma metni.",
 };
 

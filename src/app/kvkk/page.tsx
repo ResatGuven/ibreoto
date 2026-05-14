@@ -30,17 +30,16 @@ export default function KvkkPage() {
           
           <h2>1. Veri Sorumlusu</h2>
           <p>
-            6698 sayılı Kişisel Verilerin Korunması Kanunu ("Kanun") uyarınca, kişisel verileriniz; veri sorumlusu olarak <strong>İbreoto Otomotiv Aksesuar ve San. Tic. Ltd. Şti.</strong> (Bundan sonra "Şirket" olarak anılacaktır) tarafından aşağıda açıklanan kapsamda işlenebilecektir.
+            6698 sayılı Kişisel Verilerin Korunması Kanunu ("Kanun") uyarınca, kişisel verileriniz; veri sorumlusu olarak <strong>ARI HAYAT Gıda Sanayi ve Ticaret Ltd. Şti.</strong> (Bundan sonra "Şirket" olarak anılacaktır) tarafından aşağıda açıklanan kapsamda işlenebilecektir.
           </p>
           <p>
-            <strong>Adres:</strong> Oto Sanayi Sitesi, 34. Sokak, Maslak / İstanbul<br />
-            <strong>Vergi Dairesi / No:</strong> Maslak V.D. / 1234567890<br />
-            <strong>E-posta:</strong> destek@ibreoto.com
+            <strong>Adres:</strong> Güneştepe, 1. Tuğlalı Sk No:3, 16165 Osmangazi/Bursa<br />
+            <strong>E-posta:</strong> arihayat.tr@gmail.com
           </p>
 
           <h2>2. Kişisel Verilerin Hangi Amaçla İşleneceği</h2>
           <p>
-            Toplanan kişisel verileriniz, Şirketimiz tarafından sunulan ürün ve hizmetlerden sizleri faydalandırmak için gerekli çalışmaların iş birimlerimiz tarafından yapılması; Şirketimiz tarafından sunulan ürün ve hizmetlerin sizlerin beğeni, kullanım alışkanlıkları ve ihtiyaçlarına göre özelleştirilerek sizlere önerilmesi; Şirketimizin ve Şirketimizle iş ilişkisi içerisinde olan kişilerin hukuki ve ticari güvenliğinin temini amaçlarıyla işlenebilecektir.
+            Toplanan kişisel verileriniz, Şirketimiz tarafından sunulan doğal arı ürünlerinden sizleri faydalandırmak için gerekli çalışmaların iş birimlerimiz tarafından yapılması; Şirketimiz tarafından sunulan ürünlerin sizlerin beğeni, kullanım alışkanlıkları ve ihtiyaçlarına göre özelleştirilerek sizlere önerilmesi; Şirketimizin ve Şirketimizle iş ilişkisi içerisinde olan kişilerin hukuki ve ticari güvenliğinin temini amaçlarıyla işlenebilecektir.
           </p>
 
           <h2>3. İşlenen Kişisel Verilerin Kimlere ve Hangi Amaçla Aktarılabileceği</h2>

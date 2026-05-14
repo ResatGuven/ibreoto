@@ -11,10 +11,10 @@ export const FeaturedProducts = () => {
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const defaultProducts = [
-    { id: 1, name: 'Karbon Fiber Direksiyon Kılıfı', price: '350', category: 'ic-aksesuar', image: '/images/products/steering_wheel_cover.png', description: 'Yüksek kaliteli karbon fiber görünüm.', rating: 5, reviews: 24, badge: 'YENİ' },
-    { id: 2, name: '3D Havuzlu Paspas Seti - VW Golf', price: '850', category: 'ic-aksesuar', image: '/images/products/paspas_seti.png', description: 'Tam uyumlu havuzlu paspas.', rating: 4, reviews: 12, badge: 'ÇOK SATAN' },
-    { id: 3, name: 'Ortopedik Bel Destekli Koltuk Minderi', price: '450', category: 'ic-aksesuar', image: '/images/products/koltuk_minderi.png', description: 'Uzun sürüşler için konfor.', rating: 5, reviews: 30, badge: null },
-    { id: 4, name: 'Dört Mevsim Branda - Su Geçirmez', price: '1200', category: 'dis-aksesuar', image: '/images/products/araba_brandasi.png', description: 'Aracınızı dış etkenlerden korur.', rating: 4, reviews: 8, badge: 'İNDİRİM %15' },
+    { id: '1', name: 'Yerli Üretim Arı Sütü 20 gr', price: 450, category: 'ari-sutu', image: 'https://images.unsplash.com/photo-1587049352860-12000d68c937?q=80&w=800', description: 'Saf taze yerli üretim arı sütü.', rating: 5, reviews: 24, badge: 'YENİ' },
+    { id: '2', name: 'ARI EKMEKLİ Yetişkin Karışımı 225 gr', price: 550, category: 'karisim', image: 'https://images.unsplash.com/photo-1587049352860-12000d68c937?q=80&w=800', description: 'Bal, polen, propolis ve arı sütü karışımı.', rating: 5, reviews: 12, badge: 'ÇOK SATAN' },
+    { id: '3', name: 'Çiçek Balı 850 gr', price: 350, category: 'bal', image: 'https://images.unsplash.com/photo-1587049352860-12000d68c937?q=80&w=800', description: 'Doğal süzme çiçek balı.', rating: 5, reviews: 30, badge: null },
+    { id: '4', name: 'Propolis 20cc (Zeytin Yağında)', price: 280, category: 'propolis', image: 'https://images.unsplash.com/photo-1587049352860-12000d68c937?q=80&w=800', description: 'Zeytinyağında çözülmüş doğal propolis.', rating: 5, reviews: 8, badge: 'DOĞAL' },
   ];
 
   useEffect(() => {
@@ -41,12 +41,23 @@ export const FeaturedProducts = () => {
       const res = await fetch('/api/products');
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
-        setProducts(data.slice(0, 4).map((p: any) => ({
-          ...p,
-          rating: 5,
-          reviews: 24,
-          badge: null
-        })));
+        setProducts(data.slice(0, 4).map((p: any) => {
+          let imageUrl = '';
+          try {
+            const imgs = typeof p.images === 'string' ? JSON.parse(p.images) : p.images;
+            imageUrl = Array.isArray(imgs) ? imgs[0] : imgs;
+          } catch (e) {
+            imageUrl = p.images;
+          }
+          
+          return {
+            ...p,
+            image: imageUrl,
+            rating: 5,
+            reviews: Math.floor(Math.random() * 50) + 10,
+            badge: null
+          };
+        }));
       } else {
         setProducts(defaultProducts);
       }
@@ -81,18 +92,17 @@ export const FeaturedProducts = () => {
     if (existing) {
       existing.qty += 1;
     } else {
-      cart.push({ ...product, qty: 1, price: `₺${product.price}` });
+      cart.push({ ...product, qty: 1 });
     }
     
     localStorage.setItem('cart', JSON.stringify(cart));
     window.dispatchEvent(new Event('cartUpdated'));
-    alert(`${product.name} sepete eklendi!`);
   };
 
   return (
     <section className="py-20 bg-white">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 border-b border-surface pb-6">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 border-b border-background pb-6">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -102,7 +112,7 @@ export const FeaturedProducts = () => {
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-secondary uppercase tracking-tight">
               Öne Çıkan <span className="text-primary">Ürünler</span>
             </h2>
-            <p className="text-text-muted font-body text-sm mt-1">En çok tercih edilen ve en yeni ürünlerimiz</p>
+            <p className="text-text-muted font-body text-sm mt-1">En taze ve doğal ürünlerimiz kapınıza geliyor</p>
           </motion.div>
           
           <motion.div
@@ -130,20 +140,20 @@ export const FeaturedProducts = () => {
             >
               {/* Badge */}
               {product.badge && (
-                <div className="absolute top-4 left-4 z-10 bg-gradient-to-r from-primary to-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg font-heading uppercase tracking-wider">
+                <div className="absolute top-4 left-4 z-10 bg-gradient-to-r from-primary to-amber-600 text-secondary text-[10px] font-bold px-3 py-1.5 rounded-lg font-heading uppercase tracking-wider">
                   {product.badge}
                 </div>
               )}
 
               <button 
                 onClick={() => toggleFavorite(product)}
-                className={`absolute top-4 right-4 z-20 w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-all duration-300 ${favorites.includes(String(product.id)) ? 'bg-primary text-white' : 'bg-white text-secondary hover:text-primary'}`}
+                className={`absolute top-4 right-4 z-20 w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-all duration-300 ${favorites.includes(String(product.id)) ? 'bg-primary text-secondary' : 'bg-white text-secondary hover:text-primary'}`}
               >
                 <Heart className={`w-5 h-5 ${favorites.includes(String(product.id)) ? 'fill-current' : ''}`} />
               </button>
 
               {/* Image */}
-              <div className="relative w-full h-64 bg-surface p-6 flex items-center justify-center overflow-hidden">
+              <div className="relative w-full h-64 bg-background p-6 flex items-center justify-center overflow-hidden">
                 <Link href={`/urun/${product.id}`} className="block w-full h-full flex items-center justify-center">
                   {product.image ? (
                     <Image
@@ -154,18 +164,18 @@ export const FeaturedProducts = () => {
                       className="object-contain max-h-full transform group-hover:scale-110 transition-transform duration-700 ease-out"
                     />
                   ) : (
-                    <div className="text-text-muted text-xs font-body">[ Görsel ]</div>
+                    <div className="text-text-muted text-xs font-body uppercase">[ Görsel ]</div>
                   )}
                 </Link>
               </div>
 
               {/* Content */}
               <div className="p-6 flex flex-col flex-grow">
-                <div className="flex items-center text-yellow-400 text-sm mb-3">
+                <div className="flex items-center text-primary text-sm mb-3">
                   {[...Array(5)].map((_, i) => (
                     <Star 
                       key={i} 
-                      className={`w-4 h-4 ${i < product.rating ? 'fill-current' : 'text-gray-300'}`} 
+                      className={`w-4 h-4 ${i < product.rating ? 'fill-current' : 'text-gray-200'}`} 
                     />
                   ))}
                   <span className="text-text-muted text-xs ml-2">({product.reviews})</span>
@@ -181,7 +191,7 @@ export const FeaturedProducts = () => {
                   </span>
                   
                   <button 
-                    className="bg-secondary hover:bg-primary text-white w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 transform hover:scale-105 hover:rotate-6 shadow-lg hover:shadow-primary/30"
+                    className="bg-secondary hover:bg-primary text-white w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-primary/30"
                     onClick={() => addToCart(product)}
                   >
                     <ShoppingCart className="w-5 h-5" />

@@ -52,7 +52,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         `}>
           <div className="p-5 border-b border-gray-800 flex items-center justify-center bg-[#1F2937]">
             <Link href="/">
-              <img src="/images/logo.jpg" alt="ibreoto" className="h-10 w-auto rounded" />
+              <img src="/images/logo.jpg" alt="ARI HAYAT" className="h-10 w-auto rounded" />
             </Link>
           </div>
           
@@ -70,7 +70,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   onClick={() => setIsSidebarOpen(false)}
                   className="flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-[#1F2937] hover:text-white transition-all duration-200 group"
                 >
-                  <Icon size={20} className="group-hover:text-red-500 transition-colors" />
+                  <Icon size={20} className="group-hover:text-primary transition-colors" />
                   <span className="font-medium">{item.label}</span>
                 </Link>
               );

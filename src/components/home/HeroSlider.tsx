@@ -32,10 +32,10 @@ export const HeroSlider = () => {
   }, [sliders]);
 
   const defaultBanner = {
-    title: "ARACINI YENİLE",
-    subtitle: "PREMIUM OTO AKSESUARLARI",
-    description: "Aracınızın tarzını ve konforunu bir üst seviyeye taşıyın. 500'den fazla lüks aksesuar ve hızlı teslimat avantajıyla ibreoto'da.",
-    image: "/images/products/hero_banner_new.png",
+    title: "%100 DOĞAL ARI ÜRÜNLERİ",
+    subtitle: "ARIDAN GELEN SAĞLIK",
+    description: "Doğanın kalbinden, ısıl işlem görmemiş %100 doğal ham bal, propolis ve taze arı sütü ile sağlığınızı koruyun. Üreticiden kapınıza taze teslimat.",
+    image: "https://images.unsplash.com/photo-1587049352860-12000d68c937?q=80&w=1920",
     buttonText: "Alışverişe Başla",
     buttonLink: "/urunler"
   };
@@ -64,11 +64,11 @@ export const HeroSlider = () => {
               src={currentSlider.image || defaultBanner.image}
               alt={currentSlider.title || "Slider"}
               fill
-              className="object-cover opacity-80"
+              className="object-cover opacity-60"
               priority
             />
             {/* Cinematic Dark Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/40 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-transparent to-primary/20" />
           </motion.div>
 
@@ -76,7 +76,7 @@ export const HeroSlider = () => {
           <div className="relative h-full container mx-auto px-4 flex flex-col justify-center">
             <div className="max-w-3xl text-white">
               <motion.span 
-                className="text-primary font-heading font-bold uppercase tracking-widest text-xs mb-4 block"
+                className="text-primary font-heading font-bold uppercase tracking-[0.3em] text-xs md:text-sm mb-4 block"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
@@ -85,18 +85,18 @@ export const HeroSlider = () => {
               </motion.span>
 
               <motion.h1 
-                className="text-6xl md:text-8xl font-heading font-bold mb-6 uppercase tracking-tight leading-none"
+                className="text-5xl md:text-8xl font-heading font-bold mb-6 uppercase tracking-tight leading-none"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                {currentSlider.title?.includes('YENİLE') ? (
-                  <>ARACINI<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-red-500 to-orange-400">YENİLE</span></>
+                {currentSlider.title?.includes('DOĞAL') ? (
+                  <>%100 DOĞAL<br /><span className="text-primary">ARI ÜRÜNLERİ</span></>
                 ) : currentSlider.title}
               </motion.h1>
               
               <motion.p 
-                className="text-base md:text-lg font-body mb-8 text-gray-300 max-w-xl font-light leading-relaxed"
+                className="text-base md:text-xl font-body mb-8 text-gray-200 max-w-xl font-light leading-relaxed"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
@@ -110,7 +110,7 @@ export const HeroSlider = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
               >
-                <Link href={currentSlider.buttonLink || "/urunler"} className="bg-primary hover:bg-primary-hover text-white font-heading font-bold uppercase tracking-wider py-4 px-10 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-primary/40 inline-block text-sm">
+                <Link href={currentSlider.buttonLink || "/urunler"} className="bg-primary hover:bg-primary-hover text-secondary font-heading font-bold uppercase tracking-wider py-4 px-10 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-primary/40 inline-block text-sm">
                   {currentSlider.buttonText || defaultBanner.buttonText}
                 </Link>
                 {sliders.length === 0 && (
@@ -126,7 +126,7 @@ export const HeroSlider = () => {
 
       {/* Pagination dots if multiple sliders */}
       {sliders.length > 1 && (
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
+        <div className="absolute bottom-24 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
           {sliders.map((_, i) => (
             <button 
               key={i}
@@ -139,27 +139,27 @@ export const HeroSlider = () => {
 
       {/* Bottom Bar Info */}
       <motion.div 
-        className="absolute bottom-0 left-0 right-0 bg-secondary/90 backdrop-blur-md border-t border-white/10 text-white py-4 hidden md:block z-10"
+        className="absolute bottom-0 left-0 right-0 bg-secondary/90 backdrop-blur-md border-t border-white/10 text-white py-6 hidden md:block z-10"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.8 }}
       >
-        <div className="container mx-auto px-4 flex justify-between items-center font-heading font-bold uppercase text-sm tracking-widest">
-          <div className="flex items-center space-x-2 group cursor-pointer">
-            <span className="text-primary text-xl group-hover:scale-125 transition-transform duration-300">✓</span>
-            <span className="group-hover:text-primary transition-colors duration-300">500+ Ürün</span>
+        <div className="container mx-auto px-4 flex justify-between items-center font-heading font-bold uppercase text-xs tracking-[0.2em]">
+          <div className="flex items-center space-x-3 group cursor-pointer">
+            <span className="text-primary text-2xl group-hover:scale-125 transition-transform duration-300">★</span>
+            <span className="group-hover:text-primary transition-colors duration-300">%100 Doğal Üretim</span>
           </div>
-          <div className="flex items-center space-x-2 group cursor-pointer">
-            <span className="text-primary text-xl group-hover:scale-125 transition-transform duration-300">✓</span>
-            <span className="group-hover:text-primary transition-colors duration-300">10.000+ Müşteri</span>
+          <div className="flex items-center space-x-3 group cursor-pointer">
+            <span className="text-primary text-2xl group-hover:scale-125 transition-transform duration-300">★</span>
+            <span className="group-hover:text-primary transition-colors duration-300">Isıl İşlem Görmemiş</span>
           </div>
-          <div className="flex items-center space-x-2 group cursor-pointer">
-            <span className="text-primary text-xl group-hover:scale-125 transition-transform duration-300">✓</span>
-            <span className="group-hover:text-primary transition-colors duration-300">299 TL+ Ücretsiz Kargo</span>
+          <div className="flex items-center space-x-3 group cursor-pointer">
+            <span className="text-primary text-2xl group-hover:scale-125 transition-transform duration-300">★</span>
+            <span className="group-hover:text-primary transition-colors duration-300">Üreticiden Kapınıza</span>
           </div>
-          <div className="flex items-center space-x-2 group cursor-pointer">
-            <span className="text-primary text-xl group-hover:scale-125 transition-transform duration-300">✓</span>
-            <span className="group-hover:text-primary transition-colors duration-300">7/24 Destek</span>
+          <div className="flex items-center space-x-3 group cursor-pointer">
+            <span className="text-primary text-2xl group-hover:scale-125 transition-transform duration-300">★</span>
+            <span className="group-hover:text-primary transition-colors duration-300">Analiz Sertifikalı</span>
           </div>
         </div>
       </motion.div>

@@ -1,21 +1,20 @@
-// Güncellendi
 "use client";
 
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Armchair, Car, Camera, Sparkles } from 'lucide-react';
+import { Flower, Droplets, Shield, Zap } from 'lucide-react';
 
 const categories = [
-  { id: 'ic-aksesuar', title: 'İç Aksesuar', desc: 'Koltuk Kılıfı, Paspas, Direksiyon...', icon: Armchair },
-  { id: 'dis-aksesuar', title: 'Dış Aksesuar', desc: 'Rüzgarlık, Jant Kapağı, Spoiler...', icon: Car },
-  { id: 'teknoloji', title: 'Teknoloji', desc: 'Kamera, Multimedya, Sensör...', icon: Camera },
-  { id: 'bakim', title: 'Bakım & Temizlik', desc: 'Seramik Kaplama, Cila, Bez...', icon: Sparkles },
+  { id: 'bal', title: 'Ham Bal', desc: 'Süzme Çiçek, Çam ve Kestane Ihlamur Balları...', icon: Flower },
+  { id: 'ari-sutu', title: 'Saf Arı Sütü', desc: 'Taze, Yerli Üretim ve Yüksek Değerli...', icon: Droplets },
+  { id: 'propolis', title: 'Propolis', desc: 'Su ve Zeytinyağı Bazlı Doğal Propolis...', icon: Shield },
+  { id: 'besli-karisim', title: 'Beşli Karışım', desc: 'Bal, Polen, Propolis, Arı Sütü ve Arı Ekmeği...', icon: Zap },
 ];
 
 export const CategoryShowcase = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-surface to-white overflow-hidden">
+    <section className="py-20 bg-gradient-to-b from-background to-white overflow-hidden">
       <div className="container mx-auto px-4">
         <motion.div
           className="text-center mb-16"
@@ -25,9 +24,9 @@ export const CategoryShowcase = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-3xl md:text-5xl font-heading font-bold text-secondary mb-4 uppercase tracking-tight">
-            Aradığın Kategoriye <span className="text-primary">Göz At</span>
+            Kategorilere <span className="text-primary">Göz Atın</span>
           </h2>
-          <div className="w-24 h-1.5 bg-gradient-to-r from-primary to-red-400 mx-auto rounded-full"></div>
+          <div className="w-24 h-1.5 bg-gradient-to-r from-primary to-amber-600 mx-auto rounded-full"></div>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -44,7 +43,7 @@ export const CategoryShowcase = () => {
               >
                 <Link href={`/urunler?category=${cat.id}`} className="block group h-full">
                   <div className="bg-white p-8 rounded-2xl shadow-lg shadow-gray-100 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 border border-gray-100 hover:border-primary/20 flex flex-col items-center text-center h-full transform hover:-translate-y-2">
-                    <div className="w-16 h-16 bg-surface group-hover:bg-primary/10 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-300">
+                    <div className="w-16 h-16 bg-background group-hover:bg-primary/10 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-300">
                       <Icon className="w-8 h-8 text-secondary group-hover:text-primary transition-colors duration-300" />
                     </div>
                     <h3 className="text-xl font-heading font-bold text-text-main mb-3 uppercase tracking-tight">

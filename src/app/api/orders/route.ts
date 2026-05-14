@@ -85,16 +85,16 @@ export async function POST(request: Request) {
       sendOrderConfirmationEmail(fullOrder).catch(console.error);
 
       // Telegram Notification
-      const telegramMessage = `🛍️ *YENİ SİPARİŞ ALINDI!* \n\n` +
-        `📦 *No:* #${fullOrder.id}\n` +
-        `👤 *Müşteri:* ${fullOrder.customerName}\n` +
-        `💰 *Tutar:* ₺${fullOrder.totalAmount.toLocaleString('tr-TR')}\n` +
-        `📍 *Şehir:* ${fullOrder.customerCity}\n\n` +
-        `*Ürünler:* \n` +
-        fullOrder.items.map(i => `- ${i.product.name} (x${i.quantity})`).join('\n') + 
-        `\n\n_Hayırlı işler bol kazançlar!_ 🚀`;
+      const telegramMessage = `🛍 <b>YENİ SİPARİŞ ALINDI!</b> \n\n` +
+        `📦 <b>No:</b> #${fullOrder.id}\n` +
+        `👤 <b>Müşteri:</b> ${fullOrder.customerName}\n` +
+        `💰 <b>Tutar:</b> ₺${fullOrder.totalAmount.toLocaleString('tr-TR')}\n` +
+        `📍 <b>Şehir:</b> ${fullOrder.customerCity}\n\n` +
+        `<b>Ürünler:</b> \n` +
+        fullOrder.items.map(i => `• ${i.product.name} (x${i.quantity})`).join('\n') + 
+        `\n\n<i>Hayırlı işler bol kazançlar!</i> 🚀`;
 
-      sendTelegramMessage(telegramMessage).catch(e => console.error('Telegram Notify Error:', e));
+      await sendTelegramMessage(telegramMessage).catch(e => console.error('Telegram Notify Error:', e));
     }
 
     return NextResponse.json(result);

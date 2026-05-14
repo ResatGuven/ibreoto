@@ -17,13 +17,13 @@ export async function POST(request: Request) {
     });
 
     // Telegram Notification
-    const telegramMessage = `✉️ *YENİ MESAJ ALINDI!* \n\n` +
-      `👤 *Ad:* ${name}\n` +
-      `📧 *E-Posta:* ${email}\n` +
-      `📌 *Konu:* ${subject || 'İletişim Mesajı'}\n\n` +
-      `📝 *Mesaj:* \n${message}`;
+    const telegramMessage = `✉️ <b>YENİ MESAJ ALINDI!</b> \n\n` +
+      `👤 <b>Ad:</b> ${name}\n` +
+      `📧 <b>E-Posta:</b> ${email}\n` +
+      `📌 <b>Konu:</b> ${subject || 'İletişim Mesajı'}\n\n` +
+      `📝 <b>Mesaj:</b> \n${message}`;
 
-    sendTelegramMessage(telegramMessage).catch(e => console.error('Telegram Notify Error:', e));
+    await sendTelegramMessage(telegramMessage).catch(e => console.error('Telegram Notify Error:', e));
 
     return NextResponse.json(newMessage);
   } catch (error) {

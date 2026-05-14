@@ -1,6 +1,5 @@
 "use client";
 
-
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -41,6 +40,7 @@ export default function IletisimPage() {
     <div className="pt-20 min-h-screen bg-white">
       {/* Hero Section */}
       <section className="bg-secondary text-white py-16 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?q=80&w=1920')] bg-cover bg-center opacity-10"></div>
         <div className="container mx-auto px-4 relative z-10 text-center">
           <motion.h1 
             className="text-3xl md:text-5xl font-heading font-bold mb-4 uppercase tracking-tight"
@@ -51,7 +51,7 @@ export default function IletisimPage() {
             İletişim
           </motion.h1>
           <p className="text-gray-300 font-body text-sm max-w-2xl mx-auto">
-            Sorularınız, önerileriniz veya destek talepleriniz için bizimle iletişime geçin.
+            Ürünlerimiz hakkında bilgi almak, toptan sipariş veya iş birliği talepleriniz için bize ulaşın.
           </p>
         </div>
       </section>
@@ -61,39 +61,39 @@ export default function IletisimPage() {
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             {/* Contact Info Cards */}
-            <div className="bg-surface p-6 rounded-xl border border-gray-100 text-center">
+            <div className="bg-background p-6 rounded-xl border border-gray-100 text-center">
               <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MapPin className="w-6 h-6 text-primary" />
               </div>
               <h3 className="font-heading font-bold text-lg text-secondary mb-2 uppercase">Adres</h3>
               <p className="text-text-muted font-body text-xs">
                 <a 
-                  href="https://maps.google.com/?q=Oto+Sanayi+Sitesi,+34.+Sokak,+Maslak,+İstanbul" 
+                  href="https://maps.google.com/?q=Güneştepe,+1.+Tuğlalı+Sk+No:3,+16165+Osmangazi/Bursa" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="hover:text-primary transition-colors"
                 >
-                  Oto Sanayi Sitesi, 34. Sokak, Maslak / İstanbul
+                  Güneştepe, 1. Tuğlalı Sk No:3, 16165 Osmangazi/Bursa
                 </a>
               </p>
             </div>
-            <div className="bg-surface p-6 rounded-xl border border-gray-100 text-center">
+            <div className="bg-background p-6 rounded-xl border border-gray-100 text-center">
               <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Phone className="w-6 h-6 text-primary" />
               </div>
               <h3 className="font-heading font-bold text-lg text-secondary mb-2 uppercase">Telefon</h3>
               <p className="text-text-muted font-body text-xs mb-1">
-                <a href="tel:+905061578963" className="hover:text-primary transition-colors font-bold">0506 157 89 63</a>
+                <a href="tel:+905363411984" className="hover:text-primary transition-colors font-bold">0536 341 19 84</a>
               </p>
-              <p className="text-text-muted font-body text-xs">Pzt - Cmt: 09:00 - 18:00</p>
+              <p className="text-text-muted font-body text-xs">Pzt - Cmt: 09:00 - 19:00</p>
             </div>
-            <div className="bg-surface p-6 rounded-xl border border-gray-100 text-center">
+            <div className="bg-background p-6 rounded-xl border border-gray-100 text-center">
               <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Mail className="w-6 h-6 text-primary" />
               </div>
               <h3 className="font-heading font-bold text-lg text-secondary mb-2 uppercase">E-Posta</h3>
               <p className="text-text-muted font-body text-xs mb-1">
-                <a href="mailto:destek@ibreoto.com" className="hover:text-primary transition-colors font-bold">destek@ibreoto.com</a>
+                <a href="mailto:arihayat.tr@gmail.com" className="hover:text-primary transition-colors font-bold">arihayat.tr@gmail.com</a>
               </p>
               <p className="text-text-muted font-body text-xs">7/24 Mail Gönderebilirsiniz</p>
             </div>
@@ -159,7 +159,7 @@ export default function IletisimPage() {
                   <button 
                     type="submit" 
                     disabled={!kvkkAccepted}
-                    className="w-full bg-primary hover:bg-primary-hover text-white px-4 py-3 rounded-xl font-heading font-bold uppercase tracking-wider transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-primary/20 disabled:opacity-50 disabled:transform-none"
+                    className="w-full bg-primary hover:bg-primary-hover text-secondary px-4 py-3 rounded-xl font-heading font-bold uppercase tracking-wider transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-primary/20 disabled:opacity-50 disabled:transform-none"
                   >
                     Mesajı Gönder
                   </button>
@@ -168,9 +168,9 @@ export default function IletisimPage() {
             </div>
 
             {/* Google Map */}
-            <div className="bg-surface rounded-2xl border border-gray-100 overflow-hidden h-[400px] md:h-auto">
+            <div className="bg-background rounded-2xl border border-gray-100 overflow-hidden h-[400px] md:h-auto">
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3005.5186259461144!2d29.0234!3d41.1114!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab5c00a000001%3A0x6a0a0a0a0a0a0a0a!2zTWFzbGFrIE90byBTYW5heWkgU2l0ZXNp!5e0!3m2!1str!2str!4v1715670000000!5m2!1str!2str" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3046.297426177531!2d29.02058377652758!3d40.22464196726213!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14ca3f707f59d64b%3A0xe679261c169df31c!2sG%C3%BCne%C5%9Ftepe%2C%201.%20Tu%C4%9Flal%C4%B1%20Sk%20No%3A3%2C%2016165%20Osmangazi%2FBursa!5e0!3m2!1str!2str!4v1715670000000!5m2!1str!2str" 
                 width="100%" 
                 height="100%" 
                 style={{ border: 0 }} 

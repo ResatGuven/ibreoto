@@ -30,7 +30,7 @@ export default function IadeKosullariPage() {
           
           <h2>1. İptal Koşulları</h2>
           <p>
-            Siparişinizi kargoya verilmeden önce iptal edebilirsiniz. İptal talebinizi WhatsApp hattımız üzerinden veya destek@ibreoto.com adresine e-posta göndererek müşteri hizmetlerimize iletebilirsiniz. Kargoya verilmiş siparişlerde iptal işlemi yapılamaz, bu durumda iade süreci başlatılmalıdır.
+            Siparişinizi kargoya verilmeden önce iptal edebilirsiniz. İptal talebinizi WhatsApp hattımız üzerinden veya arihayat.tr@gmail.com adresine e-posta göndererek müşteri hizmetlerimize iletebilirsiniz. Kargoya verilmiş siparişlerde iptal işlemi yapılamaz, bu durumda iade süreci başlatılmalıdır.
           </p>
 
           <h2>2. İade Hakkı (Cayma Hakkı)</h2>
@@ -40,7 +40,7 @@ export default function IadeKosullariPage() {
 
           <h2>3. İade Edilemeyecek Ürünler</h2>
           <p>
-            Kişiye özel hazırlanan ürünler, hijyen açısından uygun olmayan ürünler (paketi açılmış) ve yazılım ürünleri gibi tek kullanımlık ürünlerde cayma hakkı kullanılamamaktadır.
+            Mesafeli Sözleşmeler Yönetmeliği uyarınca; ambalajı açılmış, bozulma riski olan gıda maddeleri (Bal, Arı Sütü, Propolis vb.) ile hijyen açısından iadeye uygun olmayan ürünlerde cayma hakkı kullanılamamaktadır. Ürünün koruma mührü/bandı açılmış olması durumunda iade kabul edilmemektedir.
           </p>
 
           <h2>4. İade Süreci ve Geri Ödeme</h2>

@@ -253,14 +253,14 @@ export default function OdemePage() {
                     <CreditCard className="w-5 h-5 mr-2" />
                     <h2 className="text-lg font-heading font-bold uppercase">Kart Bilgileri</h2>
                   </div>
-                  <div className="flex items-center text-xs text-red-500 font-bold uppercase animate-pulse">
-                    <Lock className="w-3 h-3 mr-1" /> TEST MODU AKTİF
+                  <div className="flex items-center text-xs text-primary font-bold uppercase animate-pulse">
+                    <Lock className="w-3 h-3 mr-1" /> GÜVENLİ ÖDEME AKTİF
                   </div>
                 </div>
 
-                <div className="bg-red-50 p-4 rounded-xl border border-red-100 mb-6">
-                  <p className="text-[11px] text-red-700 font-body leading-relaxed">
-                    <strong>DİKKAT:</strong> Bu site şu an <strong>test/demo</strong> aşamasındadır. Lütfen <strong>gerçek kredi kartı bilgilerinizi girmeyiniz.</strong> Test amacıyla rastgele rakamlar kullanabilirsiniz.
+                <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 mb-6">
+                  <p className="text-[11px] text-amber-800 font-body leading-relaxed">
+                    <strong>BİLGİ:</strong> Ödemeleriniz 256-bit SSL sertifikası ile korunmaktadır. Kart bilgileriniz ARI HAYAT tarafından saklanmaz, doğrudan banka altyapısına iletilir.
                   </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -315,8 +315,9 @@ export default function OdemePage() {
               <button 
                 type="submit" 
                 disabled={isProcessing || cartItems.length === 0 || !agreements.kvkk || !agreements.mss} 
-                className="w-full bg-primary hover:bg-primary-hover text-white py-4 rounded-lg font-heading font-bold uppercase transition-colors flex items-center justify-center shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-primary hover:bg-primary-hover text-secondary py-4 rounded-lg font-heading font-bold uppercase transition-colors flex items-center justify-center shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
               >
+
                 {isProcessing ? (
                   <span className="flex items-center">
                     <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
