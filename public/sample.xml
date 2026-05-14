@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products>
+  <product>
+    <id>101</id>
+    <name>Batman Ayna Kapağı - Megane 4</name>
+    <price>150.00</price>
+    <stock>50</stock>
+    <category>dis-aksesuar</category>
+    <image>https://images.unsplash.com/photo-1611245839605-96db1574ede7?w=500</image>
+    <description>Megane 4 için uyumlu Batman ayna kapağı. Kolay montaj.</description>
+  </product>
+  <product>
+    <id>102</id>
+    <name>3D Havuzlu Paspas - Fiat Egea</name>
+    <price>450.00</price>
+    <stock>20</stock>
+    <category>ic-aksesuar</category>
+    <image>https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=500</image>
+    <description>Fiat Egea için özel kesim 3D havuzlu paspas. Su geçirmez.</description>
+  </product>
+  <product>
+    <id>103</id>
+    <name>Led Xenon Far Ampulü H7</name>
+    <price>250.00</price>
+    <stock>100</stock>
+    <category>teknoloji</category>
+    <image>https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=500</image>
+    <description>Yüksek ışık gücüne sahip Led Xenon far ampulü.</description>
+  </product>
+</products>
