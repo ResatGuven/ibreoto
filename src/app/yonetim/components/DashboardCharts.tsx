@@ -18,27 +18,32 @@ export default function DashboardCharts() {
   const maxSales = Math.max(...weeklySales.map(s => s.sales));
 
   return (
-    <div className="bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 p-6 h-full">
-      <h3 className="font-heading font-bold text-lg text-white mb-6 border-b border-gray-800 pb-2">Haftalık Satış Analizi</h3>
+    <div className="bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/5 p-10 h-full shadow-2xl relative overflow-hidden group">
+      <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] -mr-32 -mt-32 opacity-50 group-hover:bg-primary/10 transition-colors" />
       
-      <div className="flex items-end justify-between h-40 px-2 relative pt-6">
+      <div className="flex justify-between items-center mb-10 relative z-10">
+        <h3 className="font-heading font-black text-xl text-white uppercase tracking-tighter italic">Haftalık Performans</h3>
+        <span className="text-[10px] font-heading font-black text-gray-500 uppercase tracking-widest bg-white/5 px-4 py-2 rounded-full border border-white/5">Son 7 Gün Analizi</span>
+      </div>
+      
+      <div className="flex items-end justify-between h-56 px-2 relative pt-6 z-10">
         {weeklySales.map((item, i) => {
           const barHeight = (item.sales / maxSales) * 100;
           return (
-            <div key={i} className="flex flex-col items-center flex-1 mx-2 h-full justify-end">
-              <div className="w-full bg-[#1F2937]/50 rounded-t-lg relative h-full flex items-end overflow-hidden">
+            <div key={i} className="flex flex-col items-center flex-1 mx-3 h-full justify-end group/bar">
+              <div className="w-full bg-white/5 rounded-2xl relative h-full flex items-end overflow-hidden border border-white/5 hover:border-primary/30 transition-colors">
                 <motion.div
                   initial={{ height: 0 }}
                   animate={{ height: `${barHeight}%` }}
-                  transition={{ duration: 1, delay: i * 0.1, ease: 'easeOut' }}
-                  className="w-full bg-gradient-to-t from-blue-600 to-purple-600 rounded-t-lg absolute bottom-0 hover:from-blue-500 hover:to-purple-500 transition-all cursor-pointer group"
+                  transition={{ duration: 1.2, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  className="w-full bg-gradient-to-t from-primary to-primary-hover rounded-t-lg absolute bottom-0 shadow-[0_0_20px_rgba(233,69,96,0.3)]"
                 >
-                  <div className="absolute -top-7 left-1/2 transform -translate-x-1/2 text-xs font-bold text-white opacity-0 group-hover:opacity-100 transition-opacity bg-[#1F2937] px-2 py-1 rounded-md shadow-lg border border-gray-700">
-                    ₺{item.sales}
+                  <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 text-[10px] font-heading font-black text-white opacity-0 group-hover/bar:opacity-100 transition-all duration-300 bg-secondary px-3 py-1.5 rounded-lg shadow-2xl border border-white/10 whitespace-nowrap">
+                    ₺{item.sales.toLocaleString('tr-TR')}
                   </div>
                 </motion.div>
               </div>
-              <span className="text-xs font-medium text-gray-500 mt-2">{item.day}</span>
+              <span className="text-[10px] font-heading font-black text-gray-500 mt-4 uppercase tracking-widest">{item.day}</span>
             </div>
           );
         })}

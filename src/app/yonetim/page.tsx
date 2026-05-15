@@ -48,8 +48,19 @@ export default function AdminDashboardPage() {
   const maxSale = Math.max(...weeklySales.map(s => s.total), 1);
 
   return (
-    <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
-      <h1 className="text-3xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700 mb-8 uppercase">Dashboard</h1>
+    <div className="space-y-10">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div>
+          <h1 className="text-4xl font-heading font-black text-white uppercase tracking-tighter italic mb-2">
+            KOMUTA <span className="text-primary">MERKEZİ</span>
+          </h1>
+          <p className="text-gray-500 font-body text-[10px] uppercase tracking-[0.4em] font-bold ml-1">İbreOto Premium Performans Verileri</p>
+        </div>
+        <div className="flex items-center space-x-3 bg-white/5 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/5 shadow-xl">
+          <div className="w-2 h-2 bg-green-500 rounded-full animate-ping" />
+          <span className="text-[10px] font-heading font-black text-gray-300 uppercase tracking-widest">Sistem Aktif</span>
+        </div>
+      </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

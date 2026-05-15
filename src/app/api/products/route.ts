@@ -41,10 +41,10 @@ export async function GET(request: Request) {
         id: p.id,
         name: p.name,
         price: p.price.toString(),
-        category: {
+        category: p.category ? {
           slug: p.category.slug,
           name: p.category.name
-        },
+        } : { slug: 'genel', name: 'Genel' },
         categoryId: p.categoryId,
         image: imageUrl,
         description: p.description,

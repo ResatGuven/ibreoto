@@ -38,57 +38,73 @@ export default function GirisPage() {
   };
 
   return (
-    <div className="pt-24 min-h-screen bg-surface flex items-center justify-center">
+    <div className="min-h-screen bg-[#0B0F19] flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background Glows */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] animate-pulse" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-[120px] animate-pulse" />
+      
       <motion.div 
-        className="bg-white p-8 rounded-2xl shadow-xl shadow-gray-100/50 max-w-md w-full border border-gray-100"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        className="bg-[#111827]/80 backdrop-blur-2xl p-10 rounded-[2.5rem] shadow-2xl shadow-black/50 max-w-md w-full border border-white/5 relative z-10"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        <h1 className="text-3xl font-heading font-bold text-secondary mb-2 text-center uppercase">Giriş Yap</h1>
-        <p className="text-text-muted text-center text-sm mb-6 font-body">Hesabınıza güvenli erişim sağlayın.</p>
+        <div className="flex flex-col items-center mb-10">
+          <div className="w-20 h-20 bg-gradient-to-br from-primary to-primary-hover rounded-2xl flex items-center justify-center shadow-xl shadow-primary/20 mb-6 rotate-3">
+            <span className="text-white font-black text-4xl italic">İO</span>
+          </div>
+          <h1 className="text-4xl font-heading font-black text-white mb-2 uppercase tracking-tighter italic">
+            İBRE<span className="text-primary">OTO</span>
+          </h1>
+          <p className="text-gray-500 font-body text-xs uppercase tracking-[0.3em] font-bold">Yönetim Paneli</p>
+        </div>
         
         {error && (
-          <div className="bg-red-50 text-red-500 p-3 rounded-lg text-xs font-body mb-4 border border-red-100 text-center uppercase font-bold">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl text-[10px] font-heading font-black mb-6 text-center uppercase tracking-widest"
+          >
             {error}
-          </div>
+          </motion.div>
         )}
 
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <div>
-            <label className="block text-text-muted mb-1 text-sm font-body uppercase font-bold">E-Posta</label>
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-2">
+            <label className="block text-gray-400 text-[10px] font-heading font-black uppercase tracking-widest ml-1">E-Posta Adresi</label>
             <input 
               type="email" 
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@ibreoto.com" 
-              className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body text-sm" 
+              className="w-full p-4 bg-[#1F2937]/50 border border-white/5 rounded-2xl focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all font-body text-white text-sm placeholder:text-gray-600" 
             />
           </div>
-          <div>
-            <label className="block text-text-muted mb-1 text-sm font-body uppercase font-bold">Şifre</label>
+          <div className="space-y-2">
+            <label className="block text-gray-400 text-[10px] font-heading font-black uppercase tracking-widest ml-1">Güvenlik Şifresi</label>
             <input 
               type="password" 
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••" 
-              className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body text-sm" 
+              className="w-full p-4 bg-[#1F2937]/50 border border-white/5 rounded-2xl focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all font-body text-white text-sm placeholder:text-gray-600" 
             />
           </div>
           
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full bg-primary hover:bg-primary-hover text-white px-4 py-3 rounded-xl font-heading font-bold uppercase tracking-wider transition-all duration-300 transform hover:scale-[1.02] shadow-md hover:shadow-primary/20 disabled:opacity-50"
+            className="w-full bg-primary hover:bg-primary-hover text-white py-5 rounded-2xl font-heading font-black uppercase tracking-[0.2em] text-xs transition-all duration-500 transform hover:scale-[1.02] shadow-xl shadow-primary/20 disabled:opacity-50 group overflow-hidden relative"
           >
-            {loading ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
+            <span className="relative z-10">{loading ? 'Doğrulanıyor...' : 'Sisteme Giriş Yap'}</span>
+            <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
           </button>
         </form>
 
-        <div className="mt-6 text-center text-[10px] text-text-muted font-body uppercase tracking-widest">
-          ArıHayat Güvenli Yönetim Sistemi
+        <div className="mt-10 text-center text-[9px] text-gray-600 font-body uppercase tracking-[0.4em] font-bold">
+          İbreOto Premium Yönetim Sistemi v2.0
         </div>
       </motion.div>
     </div>
