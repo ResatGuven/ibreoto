@@ -30,7 +30,7 @@ export default function IadeKosullariPage() {
           
           <h2>1. İptal Koşulları</h2>
           <p>
-            Siparişinizi kargoya verilmeden önce iptal edebilirsiniz. İptal talebinizi WhatsApp hattımız üzerinden veya ibreoto.tr@gmail.com adresine e-posta göndererek müşteri hizmetlerimize iletebilirsiniz. Kargoya verilmiş siparişlerde iptal işlemi yapılamaz, bu durumda iade süreci başlatılmalıdır.
+            Siparişinizi kargoya verilmeden önce iptal edebilirsiniz. İptal talebinizi WhatsApp hattımız üzerinden veya destek@arihayat.com adresine e-posta göndererek müşteri hizmetlerimize iletebilirsiniz. Kargoya verilmiş siparişlerde iptal işlemi yapılamaz, bu durumda iade süreci başlatılmalıdır.
           </p>
 
           <h2>2. İade Hakkı (Cayma Hakkı)</h2>

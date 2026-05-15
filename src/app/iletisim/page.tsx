@@ -1,35 +1,24 @@
 "use client";
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { MapPin, Phone, Mail, Send, Clock } from 'lucide-react';
+import Link from 'next/link';
 
 export default function IletisimPage() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
   const [submitted, setSubmitted] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [kvkkAccepted, setKvkkAccepted] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          subject: 'İletişim Mesajı',
-          message: formData.message,
-        }),
-      });
-      if (res.ok) {
-        setSubmitted(true);
-        setFormData({ name: '', email: '', message: '' });
-      }
-    } catch (error) {
-      console.error('Failed to submit message:', error);
-    }
+    if (!kvkkAccepted) return;
+    setSubmitted(true);
+    // Form submission logic would go here
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -37,9 +26,9 @@ export default function IletisimPage() {
   };
 
   return (
-    <div className="pt-20 min-h-screen bg-white">
+    <div className="bg-white min-h-screen">
       {/* Hero Section */}
-      <section className="bg-secondary text-white py-16 relative overflow-hidden">
+      <section className="relative py-24 bg-secondary text-white overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?q=80&w=1920')] bg-cover bg-center opacity-10"></div>
         <div className="container mx-auto px-4 relative z-10 text-center">
           <motion.h1 
@@ -67,14 +56,7 @@ export default function IletisimPage() {
               </div>
               <h3 className="font-heading font-bold text-lg text-secondary mb-2 uppercase">Adres</h3>
               <p className="text-text-muted font-body text-xs">
-                <a 
-                  href="https://maps.google.com/?q=Güneştepe,+1.+Tuğlalı+Sk+No:3,+16165+Osmangazi/Bursa" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors"
-                >
-                  Güneştepe, 1. Tuğlalı Sk No:3, 16165 Osmangazi/Bursa
-                </a>
+                Bursa, Türkiye
               </p>
             </div>
             <div className="bg-background p-6 rounded-xl border border-gray-100 text-center">
@@ -83,7 +65,7 @@ export default function IletisimPage() {
               </div>
               <h3 className="font-heading font-bold text-lg text-secondary mb-2 uppercase">Telefon</h3>
               <p className="text-text-muted font-body text-xs mb-1">
-                <a href="tel:+905363411984" className="hover:text-primary transition-colors font-bold">0536 341 19 84</a>
+                <a href="tel:+905353377251" className="hover:text-primary transition-colors font-bold">0535 337 72 51</a>
               </p>
               <p className="text-text-muted font-body text-xs">Pzt - Cmt: 09:00 - 19:00</p>
             </div>
@@ -93,7 +75,7 @@ export default function IletisimPage() {
               </div>
               <h3 className="font-heading font-bold text-lg text-secondary mb-2 uppercase">E-Posta</h3>
               <p className="text-text-muted font-body text-xs mb-1">
-                <a href="mailto:ibreoto.tr@gmail.com" className="hover:text-primary transition-colors font-bold">ibreoto.tr@gmail.com</a>
+                <a href="mailto:destek@arihayat.com" className="hover:text-primary transition-colors font-bold">destek@arihayat.com</a>
               </p>
               <p className="text-text-muted font-body text-xs">7/24 Mail Gönderebilirsiniz</p>
             </div>

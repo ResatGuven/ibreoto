@@ -17,12 +17,12 @@ export default function UyelikSozlesmesiPage() {
           <div className="prose prose-amber max-w-none font-body text-text-muted leading-relaxed space-y-6">
             <h2 className="text-xl font-bold text-secondary uppercase mt-8">1. TARAFLAR</h2>
             <p>
-              İşbu sözleşme, ibreoto.com internet sitesi üzerinden üye olan kullanıcılar ile �breOto (Bundan sonra "Şirket" olarak anılacaktır) arasında akdedilmiştir.
+              İşbu sözleşme, arihayat.com internet sitesi üzerinden üye olan kullanıcılar ile Arı Hayat (Bundan sonra "Şirket" olarak anılacaktır) arasında akdedilmiştir.
             </p>
             
             <h2 className="text-xl font-bold text-secondary uppercase mt-8">2. KONU</h2>
             <p>
-              İşbu Sözleşme’nin konusu, internet sitesi üzerinden sunulan hizmetlerden üyelerin yararlanma şartlarının ve tarafların hak ve yükümlülüklerinin belirlenmesidir.
+              İşbu Sözleşme'nin konusu, internet sitesi üzerinden sunulan hizmetlerden üyelerin yararlanma şartlarının ve tarafların hak ve yükümlülüklerinin belirlenmesidir.
             </p>
 
             <h2 className="text-xl font-bold text-secondary uppercase mt-8">3. ÜYELİK ŞARTLARI</h2>

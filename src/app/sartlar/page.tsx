@@ -6,7 +6,7 @@ import { ArrowLeft, FileText } from 'lucide-react';
 
 export default function SartlarPage() {
   return (
-    <div className="pt-20 min-h-screen bg-white">
+    <div className="pt-20 min-h-screen bg-white font-body">
       {/* Header */}
       <div className="bg-secondary text-white py-16">
         <div className="container mx-auto px-4 text-center">
@@ -40,7 +40,7 @@ export default function SartlarPage() {
 
           <h2>3. Fikri Mülkiyet Hakları</h2>
           <p>
-            Bu web sitesinde yer alan tüm içerikler (metinler, grafikler, logolar, görseller vb.) İbreoto'ya ait olup, telif hakkı yasalarıyla korunmaktadır. İzinsiz olarak kopyalanamaz, çoğaltılamaz veya dağıtılamaz.
+            Bu web sitesinde yer alan tüm içerikler (metinler, grafikler, logolar, görseller vb.) Arı Hayat'a ait olup, telif hakkı yasalarıyla korunmaktadır. İzinsiz olarak kopyalanamaz, çoğaltılamaz veya dağıtılamaz.
           </p>
 
           <h2>4. Hizmet Değişiklikleri</h2>

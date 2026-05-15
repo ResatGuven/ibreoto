@@ -10,20 +10,20 @@ const faqs = [
     answer: "Hafta içi saat 16:00'a kadar verdiğiniz siparişler genellikle aynı gün kargoya teslim edilmektedir. Hafta sonu ve resmi tatillerde verilen siparişler ise takip eden ilk iş gününde işleme alınır."
   },
   {
-    question: "Hangi kargo firmaları ile çalışıyorsunuz?",
-    answer: "Yurtiçi Kargo, MNG Kargo ve Aras Kargo ile çalışmaktayız. Sipariş aşamasında size uygun olan kargo firmasını seçebilirsiniz."
+    question: "Arı sütü ve propolis nasıl saklanmalıdır?",
+    answer: "Arı sütü mutlaka buzdolabında saklanmalıdır. Propolis ürünleri ise oda sıcaklığında, doğrudan güneş ışığı görmeyen serin bir yerde muhafaza edilebilir."
   },
   {
     question: "İade süreci nasıl işler?",
-    answer: "Ürünü teslim aldığınız tarihten itibaren 14 gün içerisinde orijinal ambalajı bozulmamış ve kullanılmamış olarak iade edebilirsiniz. İade işlemini başlatmak için müşteri hizmetlerimizle iletişime geçmeniz yeterlidir."
+    answer: "Ürünü teslim aldığınız tarihten itibaren 14 gün içerisinde orijinal ambalajı bozulmamış ve kullanılmamış olarak iade edebilirsiniz. Gıda ürünlerinde ambalaj açıldıktan sonra hijyen kuralları gereği iade kabul edilememektedir."
   },
   {
     question: "Ödeme seçenekleriniz nelerdir?",
     answer: "Web sitemiz üzerinden kredi kartı, banka kartı ve havale/EFT yöntemleri ile güvenli ödeme yapabilirsiniz. Kredi kartlarına taksit imkanımız bulunmaktadır."
   },
   {
-    question: "Ürünleriniz orijinal mi?",
-    answer: "Evet, tüm İbreOto ürünleri %100 orijinal ve garantilidir. Aksesuarlarımız en yüksek kalite standartlarında üretilmekte ve titizlikle test edilmektedir."
+    question: "Ürünleriniz doğal mı?",
+    answer: "Evet, tüm Arı Hayat ürünleri %100 doğal ve katkısızdır. Arıcılık faaliyetlerimizde kimyasal ilaçlama yapılmamakta, ürünlerimiz en saf haliyle sunulmaktadır."
   }
 ];
 
@@ -31,7 +31,7 @@ export default function SSSPage() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="pt-20 min-h-screen bg-white">
+    <div className="pt-20 min-h-screen bg-white font-body">
       {/* Header */}
       <div className="bg-secondary text-white py-16">
         <div className="container mx-auto px-4 text-center">
