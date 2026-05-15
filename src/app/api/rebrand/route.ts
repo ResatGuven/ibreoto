@@ -1,12 +1,15 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 
 export async function GET() {
   try {
-    console.log('Starting ArıHayat DB sync...');
+    console.log('Starting Arı Hayat DB sync...');
 
-    // 1. Clear ALL existing data
+    // 1. Clear ALL existing data in order to avoid relation errors
+    await prisma.review.deleteMany({});
+    await prisma.orderItem.deleteMany({});
+    await prisma.order.deleteMany({});
     await prisma.slider.deleteMany({});
     await prisma.blogPost.deleteMany({});
     await prisma.product.deleteMany({});
@@ -20,7 +23,7 @@ export async function GET() {
       data: {
         email: 'admin@arihayat.com',
         password: hashedPassword,
-        name: 'ArıHayat Admin',
+        name: 'Arı Hayat Admin',
         role: 'ADMIN',
       },
     });
@@ -38,7 +41,7 @@ export async function GET() {
         facebookUrl: 'https://facebook.com/arihayat',
         instagramUrl: 'https://instagram.com/arihayat',
         logoUrl: '/images/logo.png',
-        announcementBar: 'DOĞAL ARI ÜRÜNLERİNDE SEZON İNDİRİMİ! 🐝',
+        announcementBar: 'DOĞAL ARI ÜRÜNLERİNDE SEZON İNDİRİMİ! 🐝🍯',
         isMaintenance: false,
       },
     });
@@ -66,7 +69,8 @@ export async function GET() {
         name: 'Arı Sütü Yerli Üretim 100 gr',
         description: 'Bursa yöresinden taze sağım, dondurulmuş saf yerli arı sütü.',
         price: 4000.00,
-        categoryId: ariSutuCat?.id,
+        categoryId: ariSutuCat!.id,
+        slug: 'ari-sutu-100gr',
         stock: 10,
         images: JSON.stringify(['/images/products/ari-sutu.jpg']),
       },
@@ -74,7 +78,8 @@ export async function GET() {
         name: 'Zeytinyağlı Propolis 50 ml',
         description: 'Alkol içermeyen, zeytinyağı bazlı doğal propolis ekstraktı.',
         price: 350.00,
-        categoryId: propolisCat?.id,
+        categoryId: propolisCat!.id,
+        slug: 'zeytinyagli-propolis-50ml',
         stock: 100,
         images: JSON.stringify(['/images/products/propolis.jpg']),
       },
@@ -82,7 +87,8 @@ export async function GET() {
         name: 'Kestane Ihlamur Balı 850 gr',
         description: 'Yüksek rakımlı ormanlardan toplanan, yoğun aromalı şifa kaynağı bal.',
         price: 1480.00,
-        categoryId: balCat?.id,
+        categoryId: balCat!.id,
+        slug: 'kestane-ihlamur-bali-850gr',
         stock: 50,
         images: JSON.stringify(['/images/products/bal.jpg']),
       }
@@ -123,7 +129,6 @@ export async function GET() {
       {
         title: 'DOĞANIN ŞİFASI',
         subtitle: 'ARILARIMIZDAN SOFRANIZA',
-        description: '%100 Doğal ve Katkısız Arı Ürünleri ile Sağlıklı Yaşam.',
         image: '/images/hero-1.webp',
         buttonText: 'Hemen Keşfet',
         buttonLink: '/urunler',
@@ -133,7 +138,6 @@ export async function GET() {
       {
         title: 'SAF PROPOLİS',
         subtitle: 'BAĞIŞIKLIĞINIZI GÜÇLENDİRİN',
-        description: 'Zeytinyağı bazlı, alkolsüz doğal propolis çözeltileri.',
         image: '/images/hero-2.webp',
         buttonText: 'Ürünleri Gör',
         buttonLink: '/kategori/propolis',
@@ -146,7 +150,7 @@ export async function GET() {
       await prisma.slider.create({ data: slider });
     }
 
-    return NextResponse.json({ success: true, message: 'ArıHayat DB synced successfully.' });
+    return NextResponse.json({ success: true, message: 'Arı Hayat DB synced successfully.' });
   } catch (error) {
     console.error('DB Sync Error:', error);
     return NextResponse.json({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
