@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Lock, CreditCard, ChevronRight, ArrowLeft } from 'lucide-react';
-import { useCartStore } from '@/store/useCartStore';
+import { useCartStore } from '@/store/cartStore';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { cartItems, clearCart, calculateTotal } = useCartStore();
+  const { items, clearCart, getTotalPrice } = useCartStore();
   const [isProcessing, setIsProcessing] = useState(false);
   const [couponCode, setCouponCode] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
@@ -31,14 +31,14 @@ export default function CheckoutPage() {
   });
 
   useEffect(() => {
-    if (cartItems.length === 0) {
+    if (items.length === 0) {
       // router.push('/sepet'); // Keep it on page for now to avoid redirect loop during dev
     }
-  }, [cartItems, router]);
+  }, [items, router]);
 
   const handleApplyCoupon = () => {
     if (couponCode === 'ARI2026') {
-      const discount = calculateTotal() * 0.1;
+      const discount = getTotalPrice() * 0.1;
       setDiscountAmount(discount);
       setCouponMessage('Kupon uygulandı: %10 indirim!');
     } else {
@@ -59,8 +59,8 @@ export default function CheckoutPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           customer: formData,
-          items: cartItems,
-          total: calculateTotal() - discountAmount,
+          items: items,
+          total: getTotalPrice() - discountAmount,
           coupon: couponCode
         })
       });
@@ -179,7 +179,7 @@ export default function CheckoutPage() {
 
               <button 
                 type="submit" 
-                disabled={isProcessing || cartItems.length === 0 || !agreements.kvkk || !agreements.mss} 
+                disabled={isProcessing || items.length === 0 || !agreements.kvkk || !agreements.mss} 
                 className="w-full bg-primary hover:bg-primary-hover text-secondary py-4 rounded-lg font-heading font-bold uppercase transition-colors flex items-center justify-center shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isProcessing ? (
@@ -192,7 +192,7 @@ export default function CheckoutPage() {
                   </span>
                 ) : (
                   <>
-                    <ShieldCheck className="w-5 h-5 mr-2" /> ₺{(calculateTotal() - discountAmount).toLocaleString('tr-TR')} ÖDE
+                    <ShieldCheck className="w-5 h-5 mr-2" /> ₺{(getTotalPrice() - discountAmount).toLocaleString('tr-TR')} ÖDE
                   </>
                 )}
               </button>
@@ -204,11 +204,11 @@ export default function CheckoutPage() {
             <div className="bg-surface p-6 rounded-xl sticky top-24 border border-gray-100">
               <h2 className="text-xl font-heading font-bold text-secondary mb-4 uppercase">Sipariş Özeti</h2>
               <div className="space-y-4 mb-4 max-h-60 overflow-y-auto">
-                {cartItems.map((item, index) => (
+                {items.map((item, index) => (
                   <div key={`${item.id}-${index}`} className="flex justify-between items-center text-sm">
                     <div className="flex items-center space-x-2">
                       <span className="font-medium text-secondary truncate max-w-[120px]">{item.name}</span>
-                      <span className="text-text-muted">x{item.qty}</span>
+                      <span className="text-text-muted">x{item.quantity}</span>
                     </div>
                     <span className="font-heading font-bold text-secondary">₺{item.price.toLocaleString('tr-TR')}</span>
                   </div>
@@ -217,7 +217,7 @@ export default function CheckoutPage() {
               <div className="border-t border-gray-200 pt-4 space-y-2 text-sm font-body">
                 <div className="flex justify-between text-text-muted">
                   <span>Ara Toplam</span>
-                  <span>₺{calculateTotal().toLocaleString('tr-TR')}</span>
+                  <span>₺{getTotalPrice().toLocaleString('tr-TR')}</span>
                 </div>
                 {/* Kupon Kodu */}
                 <div className="mt-2 mb-2 flex space-x-2">
@@ -253,7 +253,7 @@ export default function CheckoutPage() {
                 </div>
                 <div className="flex justify-between font-heading font-bold text-lg text-secondary pt-2">
                   <span>Toplam</span>
-                  <span>₺{(calculateTotal() - discountAmount).toLocaleString('tr-TR')}</span>
+                  <span>₺{(getTotalPrice() - discountAmount).toLocaleString('tr-TR')}</span>
                 </div>
               </div>
               
