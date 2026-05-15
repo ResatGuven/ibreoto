@@ -16,7 +16,7 @@ export default function CerezPolitikasiPage() {
           
           <div className="prose prose-amber max-w-none font-body text-text-muted leading-relaxed space-y-6">
             <p>
-              �breOto olarak, çevrimiçi mecralarımızı ziyaretleriniz sırasında deneyiminizi geliştirmek için çerezler, pikseller, gifler gibi bazı teknolojilerden (“çerezler”) faydalanmaktayız.
+              Arı Hayat olarak, çevrimiçi mecralarımızı ziyaretleriniz sırasında deneyiminizi geliştirmek için çerezler, pikseller, gifler gibi bazı teknolojilerden ("çerezler") faydalanmaktayız.
             </p>
             
             <h2 className="text-xl font-bold text-secondary uppercase mt-8">Çerez Nedir?</h2>

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Hakkımızda | �breOto",
-  description: "�breOto'ın hikayesi, vizyonu ve doğal arı ürünleri üretimindeki tecrübesi hakkında bilgi edinin.",
+  title: "Hakkımızda | Arı Hayat",
+  description: "Arı Hayat'ın hikayesi, vizyonu ve doğal arı ürünleri üretimindeki tecrübesi hakkında bilgi edinin.",
 };
 
 export default function AboutLayout({
