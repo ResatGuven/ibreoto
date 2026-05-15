@@ -164,13 +164,14 @@ export const FeaturedProducts = () => {
               <div className="relative w-full h-64 bg-surface/50 p-6 flex items-center justify-center overflow-hidden">
                 <Link href={`/urun/${product.slug || product.id}`} className="block w-full h-full flex items-center justify-center">
                   {product.image ? (
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      width={300}
-                      height={300}
-                      className="object-contain max-h-full transform group-hover:scale-110 transition-transform duration-700 ease-out"
-                    />
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        width={300}
+                        height={300}
+                        unoptimized
+                        className="object-contain max-h-full transform group-hover:scale-110 transition-transform duration-700 ease-out"
+                      />
                   ) : (
                     <div className="text-text-muted text-xs font-body uppercase">[ Görsel ]</div>
                   )}

@@ -295,6 +295,7 @@ function UrunlerContent() {
                           src={product.image} 
                           alt={product.name} 
                           fill
+                          unoptimized
                           className="object-contain transform group-hover:scale-110 transition-transform duration-700 ease-out p-4" 
                         />
                       ) : (

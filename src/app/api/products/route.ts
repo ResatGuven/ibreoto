@@ -3,7 +3,21 @@ import prisma from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const categoriesOnly = searchParams.get('categoriesOnly') === 'true';
+
+  if (categoriesOnly) {
+    try {
+      const categories = await prisma.category.findMany({
+        select: { id: true, name: true, slug: true }
+      });
+      return NextResponse.json(categories);
+    } catch (e) {
+      return NextResponse.json({ error: 'Failed' }, { status: 500 });
+    }
+  }
+
   try {
     const products = await prisma.product.findMany({
       include: {

@@ -64,6 +64,7 @@ export const HeroSlider = () => {
               src={currentSlider.image || defaultBanner.image}
               alt={currentSlider.title || "Slider"}
               fill
+              unoptimized
               className="object-cover opacity-60"
               priority
             />
