@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Calendar, User, Clock, ArrowRight, Search, ChevronRight } from 'lucide-react';
+import { Calendar, Clock, ChevronRight } from 'lucide-react';
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<any[]>([]);
@@ -12,9 +12,6 @@ export default function BlogPage() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch('/api/site-info');
-        const data = await res.json();
-        // Since we want all 6 posts, we might need a direct blog API if site-info only returns latest 3
         const blogRes = await fetch('/api/blog');
         const blogData = await blogRes.json();
         setPosts(Array.isArray(blogData) ? blogData : []);
@@ -31,12 +28,12 @@ export default function BlogPage() {
     <div className="pt-24 min-h-screen bg-gray-50">
       {/* Hero Header */}
       <div className="bg-secondary text-white py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1920')] bg-cover bg-center opacity-20"></div>
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1587334274328-64186a80aeee?q=80&w=1920')] bg-cover bg-center opacity-20"></div>
         <div className="container mx-auto px-4 relative z-10 text-center">
-          <p className="text-primary font-heading font-bold uppercase tracking-[0.4em] text-[10px] mb-4">Bilgi & İlham</p>
-          <h1 className="text-5xl md:text-7xl font-heading font-black uppercase tracking-tighter mb-6">İBREOTO <span className="text-primary italic">BLOG</span></h1>
+          <p className="text-primary font-heading font-bold uppercase tracking-[0.4em] text-[10px] mb-4">Sağlıklı Yaşam & Bilgi</p>
+          <h1 className="text-5xl md:text-7xl font-heading font-black uppercase tracking-tighter mb-6">ARI HAYAT <span className="text-primary italic">BLOG</span></h1>
           <p className="text-gray-400 max-w-2xl mx-auto text-lg font-body">
-            Aracınız için bakım ipuçları, en yeni aksesuar trendleri ve otomotiv dünyasından haberler.
+            Doğal balın faydaları, propolis rehberi ve sağlıklı yaşam ipuçları.
           </p>
         </div>
       </div>

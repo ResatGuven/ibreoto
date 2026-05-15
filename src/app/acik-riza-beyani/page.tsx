@@ -16,7 +16,7 @@ export default function AcikRizaBeyaniPage() {
           
           <div className="prose prose-amber max-w-none font-body text-text-muted leading-relaxed space-y-6">
             <p>
-              6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, Arı Hayat tarafından sunulan ürün ve hizmetlerden faydalanmam ve şirket ile olan ilişkim kapsamında;
+              6698 sayılı Kişisel Verilerin Korunması Kanunu (&quot;KVKK&quot;) uyarınca, Arı Hayat tarafından sunulan ürün ve hizmetlerden faydalanmam ve şirket ile olan ilişkim kapsamında;
             </p>
             
             <p>
@@ -24,7 +24,7 @@ export default function AcikRizaBeyaniPage() {
             </p>
 
             <p>
-              Bu amaçlarla şirket'in iş ortaklarına, tedarikçilerine ve kanunen yetkili kamu kurumlarına aktarılmasına; özgür irademle açık rıza verdiğimi kabul ve beyan ederim.
+              Bu amaçlarla şirket&apos;in iş ortaklarına, tedarikçilerine ve kanunen yetkili kamu kurumlarına aktarılmasına; özgür irademle açık rıza verdiğimi kabul ve beyan ederim.
             </p>
 
             <p>
