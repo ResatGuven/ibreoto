@@ -10,7 +10,7 @@ export const InstagramBanner = () => {
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center transition-transform duration-[2000ms] group-hover:scale-110"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=1920')" }}
+        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1558613275-aa34176f7a23?q=80&w=1920')" }}
       />
       {/* Overlay */}
       <div className="absolute inset-0 bg-secondary/80 backdrop-blur-[1px]" />
@@ -28,24 +28,24 @@ export const InstagramBanner = () => {
           </div>
           
           <h2 className="text-4xl md:text-6xl font-heading font-black text-white mb-6 uppercase tracking-tighter">
-            STİLİNİZİ <span className="text-primary italic">PAYLAŞIN</span>
+            SAĞLIĞINIZI <span className="text-primary italic">PAYLAŞIN</span>
           </h2>
           
           <p className="text-gray-300 font-body mb-10 max-w-xl mx-auto text-lg leading-relaxed">
-            Aracınızın yeni halini bizimle paylaşın, topluluğumuza ilham olun. En yeni projeler ve müşteri araçları için bizi takip edin.
+            Arı Hayat ürünleriyle hazırladığınız tarifleri bizimle paylaşın. Doğal yaşam yolculuğumuzu Instagram üzerinden takip edin.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4">
             <a 
-              href="https://www.instagram.com/ibreoto" 
+              href="https://www.instagram.com/arihayat" 
               target="_blank" 
               rel="noopener noreferrer"
               className="bg-primary hover:bg-white text-white hover:text-secondary font-heading font-black uppercase tracking-widest py-5 px-12 rounded-full transition-all duration-300 transform hover:scale-110 flex items-center justify-center shadow-xl shadow-primary/20"
             >
-              @ibreoto
+              @arihayat
             </a>
             <div className="flex items-center justify-center space-x-2 text-white/50 font-heading font-bold uppercase text-xs tracking-widest bg-white/5 backdrop-blur-md px-6 py-2 rounded-full border border-white/10">
-              <Camera size={14} /> <span>#ibreoto #carstyle</span>
+              <Camera size={14} /> <span>#arihayat #dogalyasam</span>
             </div>
           </div>
         </motion.div>

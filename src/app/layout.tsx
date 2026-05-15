@@ -22,9 +22,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "İbreOto | Premium Araç Aksesuarları & Modifiye Ürünleri",
-  description: "Aracınız için en kaliteli iç ve dış aksesuarlar, teknolojik çözümler ve bakım ürünleri. İbreOto ile aracınıza değer katın.",
-  keywords: ["oto aksesuar", "araba modifiye", "araç içi kamera", "ambiyans aydınlatma", "karbon fiber kılıf", "ibreoto"],
+  title: "Arı Hayat | %100 Doğal Arı Ürünleri, Bal, Propolis & Arı Sütü",
+  description: "Sofranız için en kaliteli ve doğal ballar, bağışıklık güçlendirici propolis, taze arı sütü ve polen ürünleri. Arı Hayat ile doğadan gelen şifayı keşfedin.",
+  keywords: ["doğal bal", "propolis", "arı sütü", "polen", "kestane balı", "arı ekmeği", "arı hayat", "organik bal"],
   manifest: "/manifest.json",
 };
 

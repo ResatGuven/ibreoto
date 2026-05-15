@@ -70,8 +70,8 @@ export default function AdminUrunlerPage() {
         const productId = formData.id || savedProduct.id;
 
         // SEO verilerini LocalStorage'a kaydet (Boşsa otomatik doldur)
-        const metaTitle = formData.metaTitle || `${formData.name} - En Uygun Fiyatlarla İbreOto'da!`;
-        const metaDescription = formData.metaDescription || `${formData.name} ürününü en uygun fiyat ve kalite avantajıyla İbreOto'dan satın alın. Hemen tıklayın!`;
+        const metaTitle = formData.metaTitle || `${formData.name} - En Uygun Fiyatlarla Arı Hayat'ta!`;
+        const metaDescription = formData.metaDescription || `${formData.name} ürününü en uygun fiyat ve doğal kalite avantajıyla Arı Hayat'tan satın alın. Hemen tıklayın!`;
 
         localStorage.setItem(`seo_product_${productId}`, JSON.stringify({
           metaTitle,
@@ -158,22 +158,22 @@ export default function AdminUrunlerPage() {
   return (
     <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-700 uppercase">Ürün Yönetimi</h1>
+        <h1 className="text-2xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-700 uppercase">Arı Ürünleri & Kovan Yönetimi</h1>
         <button 
           onClick={() => { setIsAdding(true); setFormData({ id: '', name: '', price: '', category: '', image: '', description: '', stock: '0', metaTitle: '', metaDescription: '' }); }}
           className="bg-gradient-to-r from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-secondary px-4 py-2 rounded-xl font-heading font-bold text-sm uppercase flex items-center transition-all duration-300 shadow-lg shadow-primary/20 transform hover:scale-105"
         >
-          <Plus className="w-4 h-4 mr-1" /> Yeni Ürün Ekle
+          <Plus className="w-4 h-4 mr-1" /> Yeni Ürün / Kovan Ekle
         </button>
       </div>
 
       {isAdding && (
         <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 mb-6 shadow-lg">
-          <h2 className="text-lg font-heading font-bold text-white mb-4 uppercase">{formData.id ? 'Ürünü Düzenle' : 'Yeni Ürün Ekle'}</h2>
+          <h2 className="text-lg font-heading font-bold text-white mb-4 uppercase">{formData.id ? 'Düzenle' : 'Yeni Ekle'}</h2>
           <form className="space-y-4" onSubmit={handleSave}>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-gray-400 mb-1 text-sm font-body">Ürün Adı</label>
+                <label className="block text-gray-400 mb-1 text-sm font-body">Adı (Bal, Kovan vb.)</label>
                 <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white" required />
               </div>
               <div>
@@ -181,7 +181,7 @@ export default function AdminUrunlerPage() {
                 <input type="text" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white" required />
               </div>
               <div>
-                <label className="block text-gray-400 mb-1 text-sm font-body">Stok Adedi</label>
+                <label className="block text-gray-400 mb-1 text-sm font-body">Stok (Adet/Kg)</label>
                 <input type="number" value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white" required />
               </div>
             </div>
@@ -190,10 +190,10 @@ export default function AdminUrunlerPage() {
                 <label className="block text-gray-400 mb-1 text-sm font-body">Kategori</label>
                 <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white" required>
                   <option value="">Seçiniz</option>
-                  <option value="ic-aksesuar">İç Aksesuar</option>
-                  <option value="dis-aksesuar">Dış Aksesuar</option>
-                  <option value="teknoloji">Teknoloji</option>
-                  <option value="bakim">Bakım & Temizlik</option>
+                  <option value="bal">Doğal Bal</option>
+                  <option value="propolis">Propolis</option>
+                  <option value="ari-sutu">Arı Sütü</option>
+                  <option value="polen-ari-ekmegi">Polen & Arı Ekmeği</option>
                 </select>
               </div>
               <div>

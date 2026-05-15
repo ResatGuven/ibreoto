@@ -5,11 +5,11 @@ import { motion } from 'framer-motion';
 import { ShieldCheck, Truck, RotateCcw, Lock, Zap, Award, Star, Settings } from 'lucide-react';
 
 const features = [
-  { title: 'Premium Kalite', desc: 'Her ürün, aracınız için en yüksek kalite standartlarında titizlikle seçilir.', icon: Award },
-  { title: 'Orijinal Ürün Garantisi', desc: 'Sattığımız tüm ürünler %100 orijinal ve marka garantilidir.', icon: ShieldCheck },
-  { title: 'Hızlı Teslimat', desc: 'Siparişleriniz 24 saat içinde kargoya verilir, 1-3 iş günü içinde elinize ulaşır.', icon: Truck },
-  { title: 'Kolay İade & Değişim', desc: 'Memnun kalmadığınız ürünlerde 14 gün içinde koşulsuz iade ve değişim imkanı.', icon: RotateCcw },
-  { title: 'Müşteri Desteği', desc: 'Teknik detaylar ve montaj sorularınız için uzman ekibimiz her zaman yanınızda.', icon: Settings },
+  { title: 'Saf & Doğal', desc: 'Tüm ürünlerimiz arıların doğal döngüsüne müdahale edilmeden, en saf haliyle üretilir.', icon: Award },
+  { title: '%100 Yerli Üretim', desc: 'Bursa ve çevre illerin yüksek rakımlı yaylalarından gelen %100 yerli üretim.', icon: ShieldCheck },
+  { title: 'Hızlı Teslimat', desc: 'Taze ürünleriniz 24 saat içinde kargoya verilir, kapınıza kadar güvenle ulaşır.', icon: Truck },
+  { title: 'Analiz Garantili', desc: 'Tüm ürünlerimiz laboratuvar analizlerinden geçirilmiş, güvenilir ürünlerdir.', icon: RotateCcw },
+  { title: 'Uzman Desteği', desc: 'Arı ürünleri kullanımı ve sağlığınıza etkileri hakkında uzman ekibimizden bilgi alabilirsiniz.', icon: Award },
   { title: 'Güvenli Alışveriş', desc: '256-bit SSL sertifikası ve güvenli ödeme altyapısı ile verileriniz koruma altında.', icon: Lock },
 ];
 
@@ -24,9 +24,9 @@ export const WhyIbreoto = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <p className="text-primary font-heading font-bold uppercase tracking-[0.4em] text-[10px] mb-4">Ayrıcalıklı Hizmet</p>
+          <p className="text-primary font-heading font-bold uppercase tracking-[0.4em] text-[10px] mb-4">Sağlıklı Bir Yaşam İçin</p>
           <h2 className="text-4xl md:text-6xl font-heading font-black text-secondary mb-6 uppercase tracking-tighter">
-            NEDEN <span className="text-primary italic">İBREOTO?</span>
+            NEDEN <span className="text-primary italic">ARI HAYAT?</span>
           </h2>
           <div className="w-32 h-1.5 bg-primary mx-auto rounded-full"></div>
         </motion.div>

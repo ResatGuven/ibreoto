@@ -128,32 +128,32 @@ export default function Navbar() {
               onMouseLeave={() => setCatDropdownOpen(false)}
             >
                 <Link 
-                  href={`/urunler?category=ic-aksesuar`}
+                  href={`/urunler?category=bal`}
                   className="block px-6 py-2.5 text-xs font-bold uppercase text-secondary hover:bg-primary/5 hover:text-primary transition-colors"
                   onClick={() => setCatDropdownOpen(false)}
                 >
-                  İç Aksesuar
+                  Doğal Ballar
                 </Link>
                 <Link 
-                  href={`/urunler?category=dis-aksesuar`}
+                  href={`/urunler?category=propolis`}
                   className="block px-6 py-2.5 text-xs font-bold uppercase text-secondary hover:bg-primary/5 hover:text-primary transition-colors"
                   onClick={() => setCatDropdownOpen(false)}
                 >
-                  Dış Aksesuar
+                  Propolis
                 </Link>
                 <Link 
-                  href={`/urunler?category=teknoloji`}
+                  href={`/urunler?category=ari-sutu`}
                   className="block px-6 py-2.5 text-xs font-bold uppercase text-secondary hover:bg-primary/5 hover:text-primary transition-colors"
                   onClick={() => setCatDropdownOpen(false)}
                 >
-                  Teknoloji
+                  Arı Sütü
                 </Link>
                 <Link 
-                  href={`/urunler?category=bakim`}
+                  href={`/urunler?category=polen-ari-ekmegi`}
                   className="block px-6 py-2.5 text-xs font-bold uppercase text-secondary hover:bg-primary/5 hover:text-primary transition-colors"
                   onClick={() => setCatDropdownOpen(false)}
                 >
-                  Bakım & Temizlik
+                  Polen & Arı Ekmeği
                 </Link>
             </div>
           </div>

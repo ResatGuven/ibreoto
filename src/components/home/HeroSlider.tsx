@@ -32,10 +32,10 @@ export const HeroSlider = () => {
   }, [sliders]);
 
   const defaultBanner = {
-    title: "PREMİUM ARAÇ AKSESUARLARI",
-    subtitle: "ARACINIZA DEĞER KATIN",
-    description: "En kaliteli iç ve dış aksesuarlar, teknolojik çözümler ve bakım ürünleri ile aracınızı kişiselleştirin. İbreOto ile farkı hissedin.",
-    image: "https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=1920",
+    title: "DOĞADAN GELEN ŞİFA",
+    subtitle: "SAĞLIKLI YAŞAM İÇİN ARI HAYAT",
+    description: "%100 Doğal ve katkısız ballar, arı sütü ve propolis ile bağışıklığınızı güçlendirin. Arı Hayat'ın eşsiz lezzetlerini keşfedin.",
+    image: "https://images.unsplash.com/photo-1587334274328-64186a80aeee?q=80&w=1920",
     buttonText: "Hemen Keşfet",
     buttonLink: "/urunler"
   };

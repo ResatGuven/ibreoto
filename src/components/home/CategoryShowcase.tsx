@@ -3,13 +3,13 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Car, Settings, Zap, Shield, ArrowRight, Smartphone, Brush } from 'lucide-react';
+import { Droplets, Zap, Heart, Flower2, ArrowRight } from 'lucide-react';
 
 const categories = [
-  { id: 'ic-aksesuar', title: 'İç Aksesuar', desc: 'Direksiyon kılıfı, paspas ve konfor ürünleri.', icon: Car },
-  { id: 'dis-aksesuar', title: 'Dış Aksesuar', desc: 'Branda, silecek ve estetik kaplamalar.', icon: Settings },
-  { id: 'teknoloji', title: 'Teknoloji', desc: 'Araç kamerası ve ambiyans aydınlatma.', icon: Smartphone },
-  { id: 'bakim', title: 'Bakım & Temizlik', desc: 'Cila, şampuan ve temizlik ürünleri.', icon: Brush },
+  { id: 'bal', title: 'Doğal Ballar', desc: 'Kestane, Çam, Meşe ve Çiçek balları.', icon: Droplets },
+  { id: 'propolis', title: 'Propolis', desc: 'Bağışıklık güçlendirici doğal propolis çözeltileri.', icon: Zap },
+  { id: 'ari-sutu', title: 'Arı Sütü', desc: 'Saf ve taze yerli arı sütü ürünleri.', icon: Heart },
+  { id: 'polen-ari-ekmegi', title: 'Polen & Arı Ekmeği', desc: 'Protein ve vitamin deposu polen ve perga.', icon: Flower2 },
 ];
 
 export const CategoryShowcase = () => {

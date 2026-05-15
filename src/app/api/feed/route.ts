@@ -9,14 +9,14 @@ export async function GET() {
       include: { category: true }
     });
 
-    const baseUrl = 'https://ibreoto.com';
+    const baseUrl = 'https://arihayat.com';
     
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
   <channel>
-    <title>İbreOto - Premium Araç Aksesuarları</title>
+    <title>Arı Hayat - %100 Doğal Arı Ürünleri</title>
     <link>${baseUrl}</link>
-    <description>Aracınız için en kaliteli iç ve dış aksesuarlar, teknolojik çözümler ve bakım ürünleri.</description>
+    <description>En kaliteli ve doğal ballar, bağışıklık güçlendirici propolis, taze arı sütü ve polen ürünleri.</description>
 `;
 
     products.forEach(product => {
@@ -29,8 +29,8 @@ export async function GET() {
       <g:condition>new</g:condition>
       <g:availability>${product.stock > 0 ? 'in_stock' : 'out_of_stock'}</g:availability>
       <g:price>${product.price} TRY</g:price>
-      <g:brand>İbreOto</g:brand>
-      <g:google_product_category>Otomotiv & Araç Aksesuarları</g:google_product_category>
+      <g:brand>Arı Hayat</g:brand>
+      <g:google_product_category>Gıda, İçecek ve Tütün &gt; Gıda Ürünleri &gt; Tatlandırıcılar ve Şekerlemeler &gt; Şuruplar ve Ballar</g:google_product_category>
     </item>
 `;
     });

@@ -11,10 +11,10 @@ export const FeaturedProducts = () => {
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const defaultProducts = [
-    { id: '1', name: 'Karbon Fiber Direksiyon Kılıfı', price: 350, category: 'ic-aksesuar', image: '/images/products/steering_wheel_cover.png', description: 'Yüksek kaliteli karbon fiber görünüm.', rating: 5, reviews: 42, isNew: true, isFreeShipping: true },
-    { id: '2', name: '4K Çift Kameralı Araç İçi Kamera', price: 2500, category: 'teknoloji', image: '/images/products/dash_cam.png', description: 'Ön ve arka kayıt.', rating: 5, reviews: 28, isNew: true, isFreeShipping: true },
-    { id: '3', name: 'RGB Uygulama Kontrollü Ambiyans Led', price: 650, category: 'teknoloji', image: '/images/products/interior_led.png', description: 'Telefon kontrollü renkler.', rating: 5, reviews: 56, isNew: false, isFreeShipping: true },
-    { id: '4', name: 'Dört Mevsim Branda', price: 1200, category: 'dis-aksesuar', image: '/images/products/araba_brandasi.png', description: 'Su geçirmez dayanıklı kumaş.', rating: 5, reviews: 15, isNew: false, isFreeShipping: false },
+    { id: '1', name: 'Arı Sütü Yerli Üretim 10 gr', price: 400, category: 'ari-sutu', image: 'https://images.unsplash.com/photo-1587334274328-64186a80aeee?q=80&w=300', description: 'Bursa yöresinden taze sağım, dondurulmuş saf yerli arı sütü.', rating: 5, reviews: 42, isNew: true, isFreeShipping: true },
+    { id: '2', name: 'Zeytinyağlı Propolis 50 ml', price: 350, category: 'propolis', image: 'https://images.unsplash.com/photo-1473973266408-ed4e27abdd47?q=80&w=300', description: 'Alkol içermeyen, zeytinyağı bazlı doğal propolis ekstraktı.', rating: 5, reviews: 28, isNew: true, isFreeShipping: true },
+    { id: '3', name: 'Kestane Ihlamur Balı 850 gr', price: 1480, category: 'bal', image: 'https://images.unsplash.com/photo-1558613275-aa34176f7a23?q=80&w=300', description: 'Yüksek rakımlı ormanlardan toplanan, yoğun aromalı şifa kaynağı bal.', rating: 5, reviews: 56, isNew: false, isFreeShipping: true },
+    { id: '4', name: 'Arı Ekmeği (Perga) 100 gr', price: 650, category: 'polen-ari-ekmegi', image: 'https://images.unsplash.com/photo-1587334274328-64186a80aeee?q=80&w=300', description: 'Protein ve vitamin deposu fermente polen.', rating: 5, reviews: 15, isNew: false, isFreeShipping: false },
   ];
 
   useEffect(() => {
@@ -102,7 +102,7 @@ export const FeaturedProducts = () => {
             <h2 className="text-3xl md:text-4xl font-heading font-black text-secondary uppercase tracking-tight">
               EN ÇOK <span className="text-primary italic">TERCİH EDİLENLER</span>
             </h2>
-            <p className="text-text-muted font-body text-xs mt-1 uppercase tracking-widest font-bold">Aracınıza değer katan premium aksesuarlar</p>
+            <p className="text-text-muted font-body text-xs mt-1 uppercase tracking-widest font-bold">Doğadan gelen en saf ve şifalı arı ürünleri</p>
           </motion.div>
           
           <motion.div

@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
   const product = await getProduct(resolvedParams.slug);
 
-  if (!product) return { title: 'Ürün Bulunamadı | İbreOto' };
+  if (!product) return { title: 'Ürün Bulunamadı | Arı Hayat' };
 
   let firstImage = '/images/logo.png';
   try {
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   } catch (e) {}
 
   return {
-    title: `${product.name} | İbreOto Premium Aksesuar`,
+    title: `${product.name} | Arı Hayat %100 Doğal Arı Ürünleri`,
     description: product.description.substring(0, 160),
     openGraph: {
       title: product.name,
@@ -79,10 +79,10 @@ export default async function ProductDetailPage({ params }: Props) {
     isNew: productData.isNew,
     rating: 5.0,
     features: [
-      'Premium Kalite Malzeme',
-      'Aracınıza Tam Uyum',
-      'Kolay Montaj Özelliği',
-      'Dayanıklı ve Uzun Ömürlü'
+      'Laboratuvar Analizli',
+      '%100 Doğal ve Katkısız',
+      'Arıların Doğal Döngüsüyle Üretim',
+      'Yüksek Besin Değeri Garantisi'
     ]
   };
 
@@ -93,14 +93,14 @@ export default async function ProductDetailPage({ params }: Props) {
     name: product.name,
     image: product.images[0],
     description: product.description.substring(0, 200),
-    sku: `IBRE-${product.id}`,
+    sku: `AH-${product.id}`,
     brand: {
       '@type': 'Brand',
-      name: 'İbreOto'
+      name: 'Arı Hayat'
     },
     offers: {
       '@type': 'Offer',
-      url: `https://ibreoto.com/urun/${resolvedParams.slug}`,
+      url: `https://arihayat.com/urun/${resolvedParams.slug}`,
       priceCurrency: 'TRY',
       price: product.price,
       availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',

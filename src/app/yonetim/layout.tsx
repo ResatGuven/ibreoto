@@ -8,17 +8,17 @@ import { signOut } from 'next-auth/react';
 import { AdminToastProvider } from '@/context/AdminToastContext';
 
 const menuItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', href: '/yonetim' },
-  { icon: ShoppingBag, label: 'Ürün Yönetimi', href: '/yonetim/urunler' },
-  { icon: Mail, label: 'Mesajlar', href: '/yonetim/mesajlar' },
-  { icon: Users, label: 'Müşteriler', href: '/yonetim/musteriler' },
+  { icon: LayoutDashboard, label: 'Genel Durum', href: '/yonetim' },
+  { icon: ShoppingBag, label: 'Kovan & Ürünler', href: '/yonetim/urunler' },
+  { icon: Mail, label: 'Gelen Mesajlar', href: '/yonetim/mesajlar' },
+  { icon: Users, label: 'Arıcılar (Müşteriler)', href: '/yonetim/musteriler' },
   { icon: Tag, label: 'Kategoriler', href: '/yonetim/kategoriler' },
-  { icon: FileText, label: 'Siparişler', href: '/yonetim/siparisler' },
-  { icon: MessageSquare, label: 'Yorumlar', href: '/yonetim/yorumlar' },
-  { icon: Ticket, label: 'Kuponlar', href: '/yonetim/kuponlar' },
-  { icon: ImageIcon, label: 'Slider Yönetimi', href: '/yonetim/slider' },
-  { icon: BookOpen, label: 'Blog', href: '/yonetim/blog' },
-  { icon: Settings, label: 'Ayarlar', href: '/yonetim/ayarlar' },
+  { icon: FileText, label: 'Hasat & Sipariş', href: '/yonetim/siparisler' },
+  { icon: MessageSquare, label: 'Müşteri Yorumları', href: '/yonetim/yorumlar' },
+  { icon: Ticket, label: 'İndirim Kuponları', href: '/yonetim/kuponlar' },
+  { icon: ImageIcon, label: 'Vitrin Yönetimi', href: '/yonetim/slider' },
+  { icon: BookOpen, label: 'Arı Günlüğü (Blog)', href: '/yonetim/blog' },
+  { icon: Settings, label: 'Sistem Ayarları', href: '/yonetim/ayarlar' },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -53,10 +53,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="p-8 mb-4">
             <Link href="/" className="flex flex-col items-center group">
               <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-hover rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 mb-4 transform group-hover:rotate-6 transition-transform">
-                <span className="text-white font-black text-2xl italic">İO</span>
+                <span className="text-white font-black text-2xl italic">AH</span>
               </div>
               <h1 className="text-2xl font-heading font-black text-white uppercase tracking-tighter italic">
-                İBRE<span className="text-primary">OTO</span>
+                ARI<span className="text-primary">HAYAT</span>
               </h1>
               <div className="h-0.5 w-12 bg-primary mt-2 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform" />
             </Link>
