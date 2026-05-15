@@ -49,7 +49,7 @@ export default function BayilikPage() {
             Bayilik & Toptan Satış
           </motion.h1>
           <p className="text-gray-300 font-body text-sm max-w-2xl mx-auto">
-            ArıHayat ailesine katılarak kazancınızı artırın. Geniş ürün yelpazemiz ve avantajlı fiyatlarımızla yanınızdayız.
+            İbreOto ailesine katılarak kazancınızı artırın. Geniş ürün yelpazemiz ve avantajlı fiyatlarımızla yanınızdayız.
           </p>
         </div>
       </section>

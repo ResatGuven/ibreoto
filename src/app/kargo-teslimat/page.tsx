@@ -30,7 +30,7 @@ export default function KargoTeslimatPage() {
           
           <h2>1. Kargo Firmaları</h2>
           <p>
-            ArıHayat olarak tüm Türkiye'ye Yurtiçi Kargo, MNG Kargo ve Aras Kargo aracılığıyla teslimat yapmaktayız. Siparişiniz sırasında size en uygun olan kargo firmasını seçebilirsiniz (belirli bölgelerde kısıtlı olabilir).
+            İbreOto olarak tüm Türkiye'ye Yurtiçi Kargo, MNG Kargo ve Aras Kargo aracılığıyla teslimat yapmaktayız. Siparişiniz sırasında size en uygun olan kargo firmasını seçebilirsiniz (belirli bölgelerde kısıtlı olabilir).
           </p>
 
           <h2>2. Gönderim Süresi</h2>

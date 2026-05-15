@@ -22,8 +22,8 @@ const faqs = [
     answer: "Web sitemiz üzerinden kredi kartı, banka kartı ve havale/EFT yöntemleri ile güvenli ödeme yapabilirsiniz. Kredi kartlarına taksit imkanımız bulunmaktadır."
   },
   {
-    question: "Ürünleriniz doğal mı?",
-    answer: "Evet, tüm ArıHayat ürünleri %100 doğaldır. Ham ballarımız ısıl işlem görmez, propolislerimiz ise en saf yöntemlerle elde edilir. Üreticiden doğrudan sofranıza ulaştırılır."
+    question: "Ürünleriniz orijinal mi?",
+    answer: "Evet, tüm İbreOto ürünleri %100 orijinal ve garantilidir. Aksesuarlarımız en yüksek kalite standartlarında üretilmekte ve titizlikle test edilmektedir."
   }
 ];
 
