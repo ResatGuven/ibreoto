@@ -62,7 +62,7 @@ export default function GirisPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@arihayat.com" 
+              placeholder="admin@ibreoto.com" 
               className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body text-sm" 
             />
           </div>

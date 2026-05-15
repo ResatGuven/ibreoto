@@ -43,14 +43,10 @@ function UrunlerContent() {
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const categoryNames: { [key: string]: string } = {
-    'ari-sutu': 'Arı Sütü',
-    'karisim': 'Karışım',
-    'besli-karisim': 'Beşli Karışım',
-    'propolis': 'Propolis',
-    'polen-ari-ekmegi': 'Polen & Arı Ekmeği',
-    'bal': 'Bal',
-    'bitkisel-yaglar': 'Bitkisel Yağlar',
-    'ozel-setler': 'Özel Setler'
+    'ic-aksesuar': 'İç Aksesuar',
+    'dis-aksesuar': 'Dış Aksesuar',
+    'teknoloji': 'Teknoloji',
+    'bakim': 'Bakım & Temizlik'
   };
 
   useEffect(() => {
@@ -269,18 +265,22 @@ function UrunlerContent() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
-                <div key={product.id} className="group bg-white border border-surface hover:border-primary/20 rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col transform hover:-translate-y-2">
-                  <div className="relative w-full h-56 bg-surface/30 p-4 flex items-center justify-center overflow-hidden">
+                <div key={product.id} className="group bg-white border border-gray-100 hover:border-primary/30 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col transform hover:-translate-y-3">
+                  <div className="relative w-full h-64 bg-gray-50 flex items-center justify-center overflow-hidden">
                     {/* Badges */}
-                    <div className="absolute top-3 left-3 z-10 flex flex-col space-y-1.5">
-                      {product.isNew && (
-                        <div className="bg-amber-500 text-secondary text-[8px] font-bold px-2 py-1 rounded font-heading uppercase tracking-wider">
-                          YENİ
+                    <div className="absolute top-4 left-4 z-10 flex flex-col space-y-2">
+                      {product.stock > 0 ? (
+                        <div className="bg-secondary text-white text-[9px] font-black px-3 py-1.5 rounded-full font-heading uppercase tracking-widest shadow-lg shadow-secondary/20">
+                          STOKTA VAR
+                        </div>
+                      ) : (
+                        <div className="bg-red-500 text-white text-[9px] font-black px-3 py-1.5 rounded-full font-heading uppercase tracking-widest shadow-lg shadow-red-500/20">
+                          TÜKENDİ
                         </div>
                       )}
-                      {product.isFreeShipping && (
-                        <div className="bg-green-500 text-white text-[8px] font-bold px-2 py-1 rounded font-heading uppercase tracking-wider flex items-center">
-                          <Truck className="w-2.5 h-2.5 mr-1" /> ÜCRETSİZ
+                      {product.isNew && (
+                        <div className="bg-primary text-white text-[9px] font-black px-3 py-1.5 rounded-full font-heading uppercase tracking-widest shadow-lg shadow-primary/20">
+                          YENİ
                         </div>
                       )}
                     </div>
@@ -292,44 +292,54 @@ function UrunlerContent() {
                           alt={product.name} 
                           fill
                           unoptimized
-                          className="object-contain transform group-hover:scale-110 transition-transform duration-700 ease-out p-4" 
+                          className="object-contain transform group-hover:scale-110 transition-transform duration-700 ease-out p-8" 
                         />
                       ) : (
-                        <div className="flex items-center justify-center h-full text-text-muted text-[10px] font-heading uppercase tracking-widest">[ Görsel ]</div>
+                        <div className="flex items-center justify-center h-full text-gray-300 text-xs font-heading uppercase tracking-widest">[ Görsel ]</div>
                       )}
                     </Link>
+                    
                     <button 
                       onClick={() => toggleFavorite(product)}
-                      className={`absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 z-10 ${favorites.includes(String(product.id)) ? 'bg-primary text-secondary' : 'bg-white text-secondary hover:text-primary'}`}
+                      className={`absolute top-4 right-4 w-11 h-11 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 z-10 ${favorites.includes(String(product.id)) ? 'bg-primary text-white' : 'bg-white text-secondary hover:text-primary'}`}
                     >
-                      <Heart className={`w-4 h-4 ${favorites.includes(String(product.id)) ? 'fill-current' : ''}`} />
+                      <Heart className={`w-5 h-5 ${favorites.includes(String(product.id)) ? 'fill-current' : ''}`} />
+                    </button>
+
+                    {/* Quick Add Button on Hover */}
+                    <button 
+                      onClick={() => addToCart(product)}
+                      className="absolute bottom-0 left-0 right-0 bg-primary text-white font-heading font-black py-4 uppercase text-xs tracking-widest translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-20 flex items-center justify-center space-x-2"
+                    >
+                      <ShoppingBag size={16} /> <span>Sepete Ekle</span>
                     </button>
                   </div>
                   
-                  <div className="p-5 flex flex-col flex-grow">
-                    <p className="text-[9px] text-primary mb-1.5 font-heading font-bold uppercase tracking-[0.2em]">
-                      {product.category?.name || 'Doğal Ürün'}
+                  <div className="p-6 flex flex-col flex-grow">
+                    <div className="flex items-center space-x-1 text-primary mb-2">
+                      {[...Array(5)].map((_, i) => <Star key={i} size={12} className="fill-primary" />)}
+                      <span className="text-[10px] text-gray-400 font-bold ml-2">5.0</span>
+                    </div>
+                    
+                    <p className="text-[10px] text-primary mb-2 font-heading font-black uppercase tracking-[0.2em]">
+                      {product.category?.name || 'Aksesuar'}
                     </p>
-                    <Link href={`/urun/${product.slug || product.id}`} className="font-heading font-bold text-secondary hover:text-primary mb-3 line-clamp-2 uppercase text-sm leading-tight transition-colors tracking-tight">
+                    <Link href={`/urun/${product.slug || product.id}`} className="font-heading font-black text-secondary hover:text-primary mb-4 line-clamp-2 uppercase text-base leading-tight transition-colors tracking-tight">
                       {product.name}
                     </Link>
                     
-                    <div className="mt-auto pt-4 flex items-end justify-between border-t border-surface/50">
+                    <div className="mt-auto pt-6 flex items-end justify-between border-t border-gray-50">
                       <div className="flex flex-col">
                         {product.oldPrice && (
-                          <span className="text-[10px] text-text-muted font-body line-through mb-0.5">₺{product.oldPrice.toLocaleString('tr-TR')}</span>
+                          <span className="text-xs text-gray-400 font-body line-through mb-1">₺{product.oldPrice.toLocaleString('tr-TR')}</span>
                         )}
-                        <span className="font-body font-bold text-xl text-primary leading-none">
+                        <span className="font-body font-black text-2xl text-secondary leading-none">
                           ₺{product.price.toLocaleString('tr-TR')}
                         </span>
                       </div>
-                      <button 
-                        className="bg-secondary hover:bg-primary text-white w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 transform hover:scale-105 shadow-md shadow-secondary/10"
-                        onClick={() => addToCart(product)}
-                        title="Sepete Ekle"
-                      >
-                        <ShoppingBag className="w-5 h-5" />
-                      </button>
+                      <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest bg-gray-50 px-3 py-1 rounded-full">
+                        {product.category?.name || 'Premium'}
+                      </div>
                     </div>
                   </div>
                 </div>

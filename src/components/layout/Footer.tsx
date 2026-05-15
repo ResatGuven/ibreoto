@@ -31,13 +31,13 @@ export default function Footer() {
           <div className="flex items-center">
             <img 
               src={siteSettings?.logoUrl || "/images/logo.jpg"} 
-              alt="ARI HAYAT" 
+              alt="ibreoto" 
               className="h-16 w-auto bg-white p-2 rounded-xl" 
             />
           </div>
           <p className="text-gray-400 font-body text-sm leading-relaxed">
-            "{siteSettings?.siteDescription || "Arıdan gelen sağlık"}"<br />
-            Doğanın en saf halini sofralarınıza taşıyoruz. Isıl işlem görmemiş ham bal, propolis ve taze arı sütü ile sağlıklı yaşamın yanındayız.
+            "{siteSettings?.siteDescription || "Aracınız için premium aksesuar çözümleri"}"<br />
+            Aracınıza değer katan, şıklığı ve konforu bir araya getiren en kaliteli oto aksesuarları ile hizmetinizdeyiz.
           </p>
           <div className="flex space-x-4">
             <a href={siteSettings?.instagramUrl || "#"} target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
@@ -46,7 +46,7 @@ export default function Footer() {
             <a href={siteSettings?.facebookUrl || "#"} target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
               <Facebook size={18} />
             </a>
-            <a href="https://www.youtube.com/@arihayat" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+            <a href="https://www.youtube.com/@ibreoto" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
               <Youtube size={18} />
             </a>
           </div>
@@ -83,11 +83,11 @@ export default function Footer() {
           <ul className="space-y-4 font-body text-gray-400 text-sm">
             <li className="flex items-start">
               <Phone className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
-              <a href={`tel:${siteSettings?.contactPhone?.replace(/\s/g, '') || "+905353377251"}`} className="hover:text-primary transition-colors">{siteSettings?.contactPhone || "0535 337 72 51"}</a>
+              <a href={`tel:${siteSettings?.contactPhone?.replace(/\s/g, '') || "05061578963"}`} className="hover:text-primary transition-colors">{siteSettings?.contactPhone || "0506 157 89 63"}</a>
             </li>
             <li className="flex items-start">
               <Mail className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
-              <a href={`mailto:${siteSettings?.contactEmail || "destek@arihayat.com"}`} className="hover:text-primary transition-colors">{siteSettings?.contactEmail || "destek@arihayat.com"}</a>
+              <a href={`mailto:${siteSettings?.contactEmail || "destek@ibreoto.com"}`} className="hover:text-primary transition-colors">{siteSettings?.contactEmail || "destek@ibreoto.com"}</a>
             </li>
             <li className="flex items-start">
               <MapPin className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
@@ -113,7 +113,7 @@ export default function Footer() {
       </div>
 
       <div className="container mx-auto px-4 pt-8 border-t border-gray-700 flex flex-col md:flex-row items-center justify-between font-body text-sm text-gray-500">
-        <p>Copyright &copy; {new Date().getFullYear()} {siteSettings?.siteName || "ARI HAYAT"}. Tüm hakları saklıdır.</p>
+        <p>Copyright &copy; 2026 {siteSettings?.siteName || "ibreoto"}. Tüm hakları saklıdır.</p>
         <div className="mt-4 md:mt-0">
           <p className="text-[10px] uppercase tracking-widest">Powered by Esnekpos</p>
         </div>

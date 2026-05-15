@@ -11,10 +11,10 @@ export const FeaturedProducts = () => {
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const defaultProducts = [
-    { id: '1', name: 'Yerli Üretim Arı Sütü 100 gr', price: 4000, oldPrice: 4500, category: 'ari-sutu', image: '/images/products/ari-sutu/ari-sutu-100gr-main.png', description: 'Saf taze yerli üretim arı sütü.', rating: 5, reviews: 24, isNew: true, isFreeShipping: true },
-    { id: '2', name: 'ARI EKMEKLİ Yetişkin Karışımı 850 gr', price: 2150, oldPrice: 2450, category: 'karisim', image: '/images/products/karisim/ari-ekmekli-yetiskin-850gr.png', description: 'Bal, polen, propolis ve arı sütü karışımı.', rating: 5, reviews: 12, isNew: false, isFreeShipping: true },
-    { id: '3', name: 'Çiçek Balı 850 gr', price: 600, category: 'bal', image: '/images/products/bal/cicek-bali-850gr.png', description: 'Doğal süzme çiçek balı.', rating: 5, reviews: 30, isNew: false, isFreeShipping: false },
-    { id: '4', name: 'Propolis 50 ml (Zeytin Yağında)', price: 350, oldPrice: 400, category: 'propolis', image: '/images/products/propolis/propolis-50ml.webp', description: 'Zeytinyağında çözülmüş doğal propolis.', rating: 5, reviews: 18, isNew: true, isFreeShipping: false },
+    { id: '1', name: 'Karbon Fiber Direksiyon Kılıfı', price: 350, category: 'ic-aksesuar', image: '/images/products/steering_wheel_cover.png', description: 'Yüksek kaliteli karbon fiber görünüm.', rating: 5, reviews: 42, isNew: true, isFreeShipping: true },
+    { id: '2', name: '4K Çift Kameralı Araç İçi Kamera', price: 2500, category: 'teknoloji', image: '/images/products/dash_cam.png', description: 'Ön ve arka kayıt.', rating: 5, reviews: 28, isNew: true, isFreeShipping: true },
+    { id: '3', name: 'RGB Uygulama Kontrollü Ambiyans Led', price: 650, category: 'teknoloji', image: '/images/products/interior_led.png', description: 'Telefon kontrollü renkler.', rating: 5, reviews: 56, isNew: false, isFreeShipping: true },
+    { id: '4', name: 'Dört Mevsim Branda', price: 1200, category: 'dis-aksesuar', image: '/images/products/araba_brandasi.png', description: 'Su geçirmez dayanıklı kumaş.', rating: 5, reviews: 15, isNew: false, isFreeShipping: false },
   ];
 
   useEffect(() => {
@@ -99,10 +99,10 @@ export const FeaturedProducts = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-secondary uppercase tracking-tight">
-              ÖNE ÇIKAN <span className="text-primary">ŞİFA KAYNAKLARI</span>
+            <h2 className="text-3xl md:text-4xl font-heading font-black text-secondary uppercase tracking-tight">
+              EN ÇOK <span className="text-primary italic">TERCİH EDİLENLER</span>
             </h2>
-            <p className="text-text-muted font-body text-sm mt-1 uppercase tracking-widest">En çok tercih edilen ARI HAYAT lezzetleri</p>
+            <p className="text-text-muted font-body text-xs mt-1 uppercase tracking-widest font-bold">Aracınıza değer katan premium aksesuarlar</p>
           </motion.div>
           
           <motion.div

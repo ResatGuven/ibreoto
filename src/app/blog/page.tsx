@@ -2,89 +2,99 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Calendar, User, ArrowRight } from 'lucide-react';
-import blogPosts from '@/data/blog-posts.json';
+import Image from 'next/image';
+import { Calendar, User, Clock, ArrowRight, Search, ChevronRight } from 'lucide-react';
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch('/api/blog');
+        const res = await fetch('/api/site-info');
         const data = await res.json();
-        if (Array.isArray(data)) setPosts(data);
-      } catch (e) {}
+        // Since we want all 6 posts, we might need a direct blog API if site-info only returns latest 3
+        const blogRes = await fetch('/api/blog');
+        const blogData = await blogRes.json();
+        setPosts(Array.isArray(blogData) ? blogData : []);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchPosts();
   }, []);
 
   return (
-    <div className="pt-20 min-h-screen bg-white">
-      {/* Header */}
-      <div className="bg-secondary text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl font-heading font-bold uppercase mb-2">ArıHayat Blog</h1>
-          <p className="text-gray-300 font-body text-sm max-w-2xl mx-auto">
-            Doğal arı ürünleri, sağlıklı yaşam ipuçları ve arıcılık dünyasından en taze bilgiler.
+    <div className="pt-24 min-h-screen bg-gray-50">
+      {/* Hero Header */}
+      <div className="bg-secondary text-white py-20 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1920')] bg-cover bg-center opacity-20"></div>
+        <div className="container mx-auto px-4 relative z-10 text-center">
+          <p className="text-primary font-heading font-bold uppercase tracking-[0.4em] text-[10px] mb-4">Bilgi & İlham</p>
+          <h1 className="text-5xl md:text-7xl font-heading font-black uppercase tracking-tighter mb-6">İBREOTO <span className="text-primary italic">BLOG</span></h1>
+          <p className="text-gray-400 max-w-2xl mx-auto text-lg font-body">
+            Aracınız için bakım ipuçları, en yeni aksesuar trendleri ve otomotiv dünyasından haberler.
           </p>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-3 gap-8">
-          {posts.map((post) => (
-            <div key={post.slug} className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 group hover:shadow-lg transition-all duration-300 flex flex-col">
-              <Link href={`/blog/${post.slug}`} className="block relative h-48 overflow-hidden bg-gray-100">
-                <img 
-                  src={post.image || '/images/logo.jpg'} 
-                  alt={post.title} 
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                  onError={(e: any) => {
-                    e.target.onerror = null;
-                    e.target.src = '/images/logo.jpg';
-                  }}
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="bg-primary text-white text-xs font-bold uppercase font-heading px-3 py-1 rounded-full">
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="bg-white rounded-[2.5rem] h-[500px] animate-pulse"></div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {posts.map((post, i) => (
+              <article key={post.id} className="group bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col transform hover:-translate-y-3 border border-gray-100 hover:border-primary/20">
+                {/* Image */}
+                <div className="relative h-64 overflow-hidden">
+                  <Image 
+                    src={post.image || 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=800'} 
+                    alt={post.title}
+                    fill
+                    className="object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
+                    unoptimized
+                  />
+                  <div className="absolute top-6 left-6 bg-primary text-white text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-widest shadow-lg">
                     {post.category || 'Genel'}
-                  </span>
-                </div>
-              </Link>
-              <div className="p-6 flex flex-col flex-grow">
-                <div className="flex items-center text-xs text-text-muted mb-3 space-x-4 font-body">
-                  <div className="flex items-center">
-                    <Calendar className="w-3 h-3 mr-1" />
-                    {new Date(post.createdAt).toLocaleDateString('tr-TR')}
-                  </div>
-                  <div className="flex items-center">
-                    <User className="w-3 h-3 mr-1" />
-                    {post.author || 'Editör'}
                   </div>
                 </div>
-                <h2 className="text-lg font-heading font-bold mb-2 text-secondary group-hover:text-primary transition-colors uppercase">
-                  <Link href={`/blog/${post.slug}`}>
-                    {post.title}
-                  </Link>
-                </h2>
-                <p className="text-text-muted text-sm mb-4 font-body line-clamp-3">
-                  {post.content ? post.content.replace(/<[^>]*>/g, '').substring(0, 100) + '...' : 'İçerik bulunamadı.'}
-                </p>
-                <div className="mt-auto pt-4 border-t border-gray-50">
-                  <Link 
-                    href={`/blog/${post.slug}`} 
-                    className="text-secondary font-heading font-bold hover:text-primary transition-colors text-sm uppercase flex items-center"
-                  >
-                    Devamını Oku <ArrowRight className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" />
-                  </Link>
+
+                {/* Content */}
+                <div className="p-8 flex flex-col flex-grow">
+                  <div className="flex items-center space-x-4 text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-4">
+                    <span className="flex items-center"><Calendar size={12} className="mr-1.5 text-primary" /> {new Date(post.createdAt).toLocaleDateString('tr-TR')}</span>
+                    <span className="flex items-center"><Clock size={12} className="mr-1.5 text-primary" /> 4 Dakika</span>
+                  </div>
+                  
+                  <h2 className="text-2xl font-heading font-black text-secondary group-hover:text-primary transition-colors uppercase leading-tight mb-4 line-clamp-2">
+                    <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                  </h2>
+                  
+                  <p className="text-gray-500 font-body text-sm leading-relaxed mb-8 line-clamp-3">
+                    {post.excerpt}
+                  </p>
+                  
+                  <div className="mt-auto pt-6 border-t border-gray-50">
+                    <Link href={`/blog/${post.slug}`} className="flex items-center font-heading font-black text-xs text-secondary uppercase tracking-widest group-hover:translate-x-2 transition-transform">
+                      Devamını Oku <ChevronRight size={16} className="ml-1 text-primary" />
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        {posts.length === 0 && (
-          <div className="text-center text-gray-500 font-body py-10">
-            Henüz blog yazısı eklenmemiş.
+              </article>
+            ))}
+          </div>
+        )}
+
+        {!loading && posts.length === 0 && (
+          <div className="text-center py-20">
+            <h3 className="text-2xl font-heading font-bold text-gray-400 uppercase">Henüz Yazı Eklenmemiş</h3>
           </div>
         )}
       </div>

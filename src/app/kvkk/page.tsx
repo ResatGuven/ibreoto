@@ -34,7 +34,7 @@ export default function KvkkPage() {
           </p>
           <p>
             <strong>Adres:</strong> Güneştepe, 1. Tuğlalı Sk No:3, 16165 Osmangazi/Bursa<br />
-            <strong>E-posta:</strong> arihayat.tr@gmail.com
+            <strong>E-posta:</strong> ibreoto.tr@gmail.com
           </p>
 
           <h2>2. Kişisel Verilerin Hangi Amaçla İşleneceği</h2>

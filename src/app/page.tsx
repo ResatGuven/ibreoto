@@ -2,7 +2,7 @@ import React from 'react';
 import { HeroSlider } from '@/components/home/HeroSlider';
 import { CategoryShowcase } from '@/components/home/CategoryShowcase';
 import { FeaturedProducts } from '@/components/home/FeaturedProducts';
-import { WhyAriHayat } from '@/components/home/WhyAriHayat';
+import { WhyIbreoto } from '@/components/home/WhyIbreoto';
 import { InstagramBanner } from '@/components/home/InstagramBanner';
 
 export default function Home() {
@@ -11,7 +11,7 @@ export default function Home() {
       <HeroSlider />
       <CategoryShowcase />
       <FeaturedProducts />
-      <WhyAriHayat />
+      <WhyIbreoto />
       <InstagramBanner />
     </div>
   );

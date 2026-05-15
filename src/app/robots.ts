@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/yonetim/', '/sepet/', '/odeme/', '/giris/'],
     },
-    sitemap: 'https://arihayat.com/sitemap.xml',
+    sitemap: 'https://ibreoto.com/sitemap.xml',
   }
 }

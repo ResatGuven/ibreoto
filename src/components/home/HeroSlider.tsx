@@ -32,11 +32,12 @@ export const HeroSlider = () => {
   }, [sliders]);
 
   const defaultBanner = {
-    title: "%100 DOĞAL ARI ÜRÜNLERİ",
-    subtitle: "ARIDAN GELEN SAĞLIK",
-    description: "Doğanın kalbinden, ısıl işlem görmemiş %100 doğal ham bal, propolis ve taze arı sütü ile sağlığınızı koruyun. Üreticiden kapınıza taze teslimat.",
-    image: "https://images.unsplash.com/photo-1587049352860-12000d68c937?q=80&w=1920",
-    buttonText: "Alışverişe Başla",
+    title: "PREMİUM ARAÇ AKSESUARLARI",
+    subtitle: "ARACINIZA DEĞER KATIN",
+    description: "En kaliteli iç ve dış aksesuarlar, teknolojik çözümler ve bakım ürünleri ile aracınızı kişiselleştirin. İbreOto ile farkı hissedin.",
+    image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1920",
+    videoUrl: "https://videos.pexels.com/video-files/3121459/3121459-uhd_2560_1440_24fps.mp4",
+    buttonText: "Hemen Keşfet",
     buttonLink: "/urunler"
   };
 
@@ -60,14 +61,25 @@ export const HeroSlider = () => {
             animate={{ scale: 1 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
           >
-            <Image
-              src={currentSlider.image || defaultBanner.image}
-              alt={currentSlider.title || "Slider"}
-              fill
-              unoptimized
-              className="object-cover opacity-60"
-              priority
-            />
+            {(currentSlider.videoUrl || (currentIndex === 0 && defaultBanner.videoUrl)) ? (
+              <video 
+                src={currentSlider.videoUrl || defaultBanner.videoUrl} 
+                autoPlay 
+                muted 
+                loop 
+                playsInline
+                className="w-full h-full object-cover opacity-60"
+              />
+            ) : (
+              <Image
+                src={currentSlider.image || defaultBanner.image}
+                alt={currentSlider.title || "Slider"}
+                fill
+                unoptimized
+                className="object-cover opacity-60"
+                priority
+              />
+            )}
             {/* Cinematic Dark Overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/40 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-transparent to-primary/20" />
@@ -148,19 +160,19 @@ export const HeroSlider = () => {
         <div className="container mx-auto px-4 flex justify-between items-center font-heading font-bold uppercase text-xs tracking-[0.2em]">
           <div className="flex items-center space-x-3 group cursor-pointer">
             <span className="text-primary text-2xl group-hover:scale-125 transition-transform duration-300">★</span>
-            <span className="group-hover:text-primary transition-colors duration-300">%100 Doğal Üretim</span>
+            <span className="group-hover:text-primary transition-colors duration-300">10K+ Müşteri</span>
           </div>
           <div className="flex items-center space-x-3 group cursor-pointer">
             <span className="text-primary text-2xl group-hover:scale-125 transition-transform duration-300">★</span>
-            <span className="group-hover:text-primary transition-colors duration-300">Isıl İşlem Görmemiş</span>
+            <span className="group-hover:text-primary transition-colors duration-300">500+ Ürün Çeşidi</span>
           </div>
           <div className="flex items-center space-x-3 group cursor-pointer">
             <span className="text-primary text-2xl group-hover:scale-125 transition-transform duration-300">★</span>
-            <span className="group-hover:text-primary transition-colors duration-300">Üreticiden Kapınıza</span>
+            <span className="group-hover:text-primary transition-colors duration-300">Hızlı & Güvenli Teslimat</span>
           </div>
           <div className="flex items-center space-x-3 group cursor-pointer">
             <span className="text-primary text-2xl group-hover:scale-125 transition-transform duration-300">★</span>
-            <span className="group-hover:text-primary transition-colors duration-300">Analiz Sertifikalı</span>
+            <span className="group-hover:text-primary transition-colors duration-300">%100 Orijinal Ürün</span>
           </div>
         </div>
       </motion.div>

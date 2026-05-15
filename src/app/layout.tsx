@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Oswald, Nunito_Sans } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import NavbarWrapper from "@/components/layout/NavbarWrapper";
 import FooterWrapper from "@/components/layout/FooterWrapper";
@@ -9,22 +9,22 @@ import { Providers } from "@/components/layout/Providers";
 import { CookieBanner } from "@/components/layout/CookieBanner";
 import Script from "next/script";
 
-const oswald = Oswald({
+const poppins = Poppins({
   variable: "--font-heading",
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const nunitoSans = Nunito_Sans({
+const inter = Inter({
   variable: "--font-body",
   subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
-  title: "ArıHayat | %100 Doğal Bal, Propolis ve Arı Ürünleri",
-  description: "Doğanın kalbinden, ısıl işlem görmemiş %100 doğal ham bal, propolis ve arı sütü. Üreticiden kapınıza taze ve sağlıklı arı ürünleri.",
-  keywords: ["doğal bal", "propolis", "arı sütü", "polen", "ham bal", "sağlıklı beslenme", "arı hayat"],
+  title: "İbreOto | Premium Araç Aksesuarları & Modifiye Ürünleri",
+  description: "Aracınız için en kaliteli iç ve dış aksesuarlar, teknolojik çözümler ve bakım ürünleri. İbreOto ile aracınıza değer katın.",
+  keywords: ["oto aksesuar", "araba modifiye", "araç içi kamera", "ambiyans aydınlatma", "karbon fiber kılıf", "ibreoto"],
   manifest: "/manifest.json",
 };
 
@@ -36,7 +36,7 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body
-        className={`${oswald.variable} ${nunitoSans.variable} antialiased bg-background text-text-main flex flex-col min-h-screen`}
+        className={`${poppins.variable} ${inter.variable} antialiased bg-background text-text-main flex flex-col min-h-screen`}
       >
         {/* GA4 */}
         <Script src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX" strategy="afterInteractive" />
@@ -60,12 +60,10 @@ export default function RootLayout({
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '1234567890');
+            fbq('init', '1234567890'); // Replace with real ID if available
             fbq('track', 'PageView');
           `}
         </Script>
-        <noscript>
-          <img height="1" width="1" style={{ display: 'none' }} src="https://www.facebook.com/tr?id=1234567890&ev=PageView&noscript=1" alt="fb-pixel" />
         </noscript>
 
         <Providers>

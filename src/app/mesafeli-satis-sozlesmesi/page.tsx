@@ -17,12 +17,12 @@ export default function MesafeliSatisPage() {
             <strong>Ünvan:</strong> ARI HAYAT Gıda Sanayi ve Ticaret Ltd. Şti.<br />
             <strong>Adres:</strong> Güneştepe, 1. Tuğlalı Sk No:3, 16165 Osmangazi/Bursa<br />
             <strong>Telefon:</strong> 0536 341 19 84<br />
-            <strong>E-posta:</strong> arihayat.tr@gmail.com</p>
+            <strong>E-posta:</strong> ibreoto.tr@gmail.com</p>
           </section>
 
           <section>
             <h2 className="text-xl font-heading font-bold text-secondary mb-3 uppercase">2. KONU</h2>
-            <p>İşbu Sözleşme’nin konusu, ALICI’nın SATICI’ya ait arihayat.com internet sitesi üzerinden elektronik ortamda siparişini verdiği aşağıda nitelikleri ve satış fiyatı belirtilen ürünün satışı ve teslimi ile ilgili olarak 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmelere Dair Yönetmelik hükümleri gereğince tarafların hak ve yükümlülüklerinin saptanmasıdır.</p>
+            <p>İşbu Sözleşme’nin konusu, ALICI’nın SATICI’ya ait ibreoto.com internet sitesi üzerinden elektronik ortamda siparişini verdiği aşağıda nitelikleri ve satış fiyatı belirtilen ürünün satışı ve teslimi ile ilgili olarak 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmelere Dair Yönetmelik hükümleri gereğince tarafların hak ve yükümlülüklerinin saptanmasıdır.</p>
           </section>
 
           <section>

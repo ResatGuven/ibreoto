@@ -69,8 +69,8 @@ export default function Navbar() {
       <div className="bg-secondary text-white py-2 text-[10px] md:text-xs font-body">
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center space-x-4">
-            <a href={`tel:${siteSettings?.contactPhone}`} className="flex items-center hover:text-primary transition-colors">
-              <Phone className="w-3 h-3 mr-1" /> {siteSettings?.contactPhone || '+90 536 341 19 84'}
+            <a href={`tel:${siteSettings?.contactPhone || '0506 157 89 63'}`} className="flex items-center hover:text-primary transition-colors">
+              <Phone className="w-3 h-3 mr-1" /> {siteSettings?.contactPhone || '0506 157 89 63'}
             </a>
             <a href={`https://wa.me/${siteSettings?.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-green-400 transition-colors">
               <MessageCircle className="w-3 h-3 mr-1" /> WhatsApp Destek
@@ -103,7 +103,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center">
           <img 
             src={siteSettings?.logoUrl || "/images/logo.jpg"} 
-            alt="ARI HAYAT" 
+            alt="ibreoto" 
             className="h-10 md:h-14 w-auto hover:opacity-90 transition-opacity" 
           />
         </Link>

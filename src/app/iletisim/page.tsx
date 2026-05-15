@@ -93,7 +93,7 @@ export default function IletisimPage() {
               </div>
               <h3 className="font-heading font-bold text-lg text-secondary mb-2 uppercase">E-Posta</h3>
               <p className="text-text-muted font-body text-xs mb-1">
-                <a href="mailto:arihayat.tr@gmail.com" className="hover:text-primary transition-colors font-bold">arihayat.tr@gmail.com</a>
+                <a href="mailto:ibreoto.tr@gmail.com" className="hover:text-primary transition-colors font-bold">ibreoto.tr@gmail.com</a>
               </p>
               <p className="text-text-muted font-body text-xs">7/24 Mail Gönderebilirsiniz</p>
             </div>
