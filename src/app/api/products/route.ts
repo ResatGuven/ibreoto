@@ -29,12 +29,12 @@ export async function GET(request: Request) {
     });
     
     const mappedProducts = products.map(p => {
-      let imageUrl = '';
+      let imageUrl = '/images/products/placeholder.png';
       try {
         const imgs = JSON.parse(p.images);
-        imageUrl = Array.isArray(imgs) ? (imgs[0] || '') : imgs;
+        imageUrl = Array.isArray(imgs) ? (imgs[0] || imageUrl) : (imgs || imageUrl);
       } catch (e) {
-        imageUrl = p.images || '';
+        imageUrl = p.images || imageUrl;
       }
       
       return {
