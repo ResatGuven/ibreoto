@@ -12,12 +12,12 @@ export async function sendOrderConfirmationEmail(order: any) {
     const { customerEmail, customerName, totalAmount, id, items } = order;
 
     const data = await resend.emails.send({
-      from: 'İbreOto <onboarding@resend.dev>', // Test için bu kullanılır, domain onaylıysa değiştirilebilir
+      from: 'ARI HAYAT <onboarding@resend.dev>', // Test için bu kullanılır, domain onaylıysa değiştirilebilir
       to: customerEmail,
       subject: `Siparişiniz Alındı! #${id}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-          <h1 style="color: #D41B1B; text-align: center;">Teşekkürler, ${customerName}!</h1>
+          <h1 style="color: #F59E0B; text-align: center;">Teşekkürler, ${customerName}!</h1>
           <p style="text-align: center; color: #666;">Siparişiniz başarıyla alındı ve hazırlık sürecine başlandı.</p>
           
           <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 20px 0;">

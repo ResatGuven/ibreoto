@@ -20,15 +20,25 @@ export async function GET() {
       },
     });
     
-    const mappedProducts = products.map(p => ({
-      id: p.id,
-      name: p.name,
-      price: p.price.toString(),
-      category: p.category.slug,
-      image: JSON.parse(p.images)[0] || '',
-      description: p.description,
-      stock: p.stock
-    }));
+    const mappedProducts = products.map(p => {
+      let imageUrl = '';
+      try {
+        const imgs = JSON.parse(p.images);
+        imageUrl = Array.isArray(imgs) ? (imgs[0] || '') : imgs;
+      } catch (e) {
+        imageUrl = p.images || '';
+      }
+      
+      return {
+        id: p.id,
+        name: p.name,
+        price: p.price.toString(),
+        category: p.category.slug,
+        image: imageUrl,
+        description: p.description,
+        stock: p.stock
+      };
+    });
     
     return NextResponse.json(mappedProducts);
   } catch (error) {
