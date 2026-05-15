@@ -31,13 +31,13 @@ export default function Footer() {
           <div className="flex items-center">
             <img 
               src={siteSettings?.logoUrl || "/images/logo.jpg"} 
-              alt="ibreoto" 
+              alt="Arı Hayat" 
               className="h-16 w-auto bg-white p-2 rounded-xl" 
             />
           </div>
           <p className="text-gray-400 font-body text-sm leading-relaxed">
-            "{siteSettings?.siteDescription || "Aracınız için premium aksesuar çözümleri"}"<br />
-            Aracınıza değer katan, şıklığı ve konforu bir araya getiren en kaliteli oto aksesuarları ile hizmetinizdeyiz.
+            "{siteSettings?.siteDescription || "%100 Doğal Bal, Propolis ve Arı Ürünleri"}"<br />
+            Doğanın en saf halini sofralarınıza taşıyoruz. Isıl işlem görmemiş ham bal ve arı ürünleri ile sağlıklı yaşamın adresi.
           </p>
           <div className="flex space-x-4">
             <a href={siteSettings?.instagramUrl || "#"} target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
@@ -46,7 +46,7 @@ export default function Footer() {
             <a href={siteSettings?.facebookUrl || "#"} target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
               <Facebook size={18} />
             </a>
-            <a href="https://www.youtube.com/@ibreoto" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+            <a href="https://www.youtube.com/@arihayat" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
               <Youtube size={18} />
             </a>
           </div>
@@ -113,7 +113,7 @@ export default function Footer() {
       </div>
 
       <div className="container mx-auto px-4 pt-8 border-t border-gray-700 flex flex-col md:flex-row items-center justify-between font-body text-sm text-gray-500">
-        <p>Copyright &copy; 2026 {siteSettings?.siteName || "ibreoto"}. Tüm hakları saklıdır.</p>
+        <p>Copyright &copy; 2026 {siteSettings?.siteName || "Arı Hayat"}. Tüm hakları saklıdır.</p>
         <div className="mt-4 md:mt-0">
           <p className="text-[10px] uppercase tracking-widest">Powered by Esnekpos</p>
         </div>

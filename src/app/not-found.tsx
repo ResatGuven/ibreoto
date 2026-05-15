@@ -29,10 +29,10 @@ export default function NotFound() {
           transition={{ delay: 0.2, duration: 0.5 }}
         >
           <h2 className="text-2xl md:text-3xl font-heading font-bold text-secondary uppercase mb-4 tracking-tight">
-            ARADIĞINIZ PARÇA BULUNAMADI
+            ARADIĞINIZ ŞİFA KAYNAĞI BULUNAMADI
           </h2>
           <p className="text-text-muted font-body text-sm md:text-base mb-10 leading-relaxed max-w-md mx-auto">
-            Üzgünüz, aradığınız sayfa garajımızda bulunmuyor. Belki de bir yanlışlık oldu ya da aradığınız ürünün ismi değişmiş veya yayından kaldırılmış olabilir.
+            Üzgünüz, aradığınız sayfa kovanımızda bulunmuyor. Belki de bir yanlışlık oldu ya da aradığınız ürünün ismi değişmiş veya yayından kaldırılmış olabilir.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

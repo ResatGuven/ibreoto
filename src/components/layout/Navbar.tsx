@@ -103,7 +103,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center">
           <img 
             src={siteSettings?.logoUrl || "/images/logo.png"} 
-            alt="ibreoto" 
+            alt="Arı Hayat" 
             className="h-10 md:h-14 w-auto hover:opacity-90 transition-opacity" 
           />
         </Link>

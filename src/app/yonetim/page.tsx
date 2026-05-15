@@ -52,9 +52,9 @@ export default function AdminDashboardPage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
           <h1 className="text-4xl font-heading font-black text-white uppercase tracking-tighter italic mb-2">
-            KOMUTA <span className="text-primary">MERKEZİ</span>
+            ARIHAYAT <span className="text-primary">YÖNETİM</span>
           </h1>
-          <p className="text-gray-500 font-body text-[10px] uppercase tracking-[0.4em] font-bold ml-1">İbreOto Premium Performans Verileri</p>
+          <p className="text-gray-500 font-body text-[10px] uppercase tracking-[0.4em] font-bold ml-1">Doğal Şifa Kaynağı Performans Verileri</p>
         </div>
         <div className="flex items-center space-x-3 bg-white/5 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/5 shadow-xl">
           <div className="w-2 h-2 bg-green-500 rounded-full animate-ping" />

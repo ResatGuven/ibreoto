@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    console.log('🧹 Cleaning database...');
+    console.log('🧹 Cleaning database for Arı Hayat...');
     
     await prisma.slider.deleteMany();
     await prisma.blogPost.deleteMany();
@@ -16,69 +16,64 @@ export async function GET() {
     
     // 1. Categories
     const categories = [
-      { name: 'İç Aksesuar', slug: 'ic-aksesuar' },
-      { name: 'Dış Aksesuar', slug: 'dis-aksesuar' },
-      { name: 'Teknoloji & Elektronik', slug: 'teknoloji' },
-      { name: 'Bakım & Temizlik', slug: 'bakim' },
+      { name: 'Arı Sütü', slug: 'ari-sutu' },
+      { name: 'Propolis', slug: 'propolis' },
+      { name: 'Bal Çeşitleri', slug: 'bal' },
+      { name: 'Arı Karışımları', slug: 'karisim' },
     ];
 
     for (const cat of categories) {
       await prisma.category.create({ data: cat });
     }
 
+    const ariSutuCat = await prisma.category.findUnique({ where: { slug: 'ari-sutu' } });
+    const balCat = await prisma.category.findUnique({ where: { slug: 'bal' } });
+
     // 2. Products
-    const automotiveProducts = [
-      { name: 'Karbon Fiber Direksiyon Kılıfı', price: 350, categorySlug: 'ic-aksesuar', image: 'https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=800', description: 'Yüksek kaliteli karbon fiber görünüm. Sportif dokunuş ve ergonomik tutuş sağlar.', stock: 15 },
-      { name: '3D Havuzlu Paspas Seti - VW Golf', price: 850, categorySlug: 'ic-aksesuar', image: 'https://images.pexels.com/photos/4489749/pexels-photo-4489749.jpeg?auto=compress&cs=tinysrgb&w=800', description: 'Tam uyumlu havuzlu paspas seti. Aracınızın tabanını kir ve sudan korur.', stock: 20 },
-      { name: '4K Çift Kameralı Araç İçi Kamera', price: 2500, categorySlug: 'teknoloji', image: 'https://images.pexels.com/photos/4488660/pexels-photo-4488660.jpeg?auto=compress&cs=tinysrgb&w=800', description: 'Ön ve arka eş zamanlı kayıt. Gece görüşü ve park modu özellikleri.', stock: 8 },
-      { name: 'Seramik Katkılı Hızlı Cila 500ml', price: 250, categorySlug: 'bakim', image: 'https://images.pexels.com/photos/5214411/pexels-photo-5214411.jpeg?auto=compress&cs=tinysrgb&w=800', description: 'Aracınıza derin bir parlaklık ve su iticilik kazandırır.', stock: 15 }
+    const products = [
+      { name: 'Arı Sütü Yerli Üretim 100 gr', price: 4000, categoryId: ariSutuCat?.id, image: '/images/products/ari-sutu.jpg', description: 'Saf ve taze yerli üretim arı sütü.', stock: 10 },
+      { name: 'Kestane Ihlamur Balı 850 gr', price: 1480, categoryId: balCat?.id, image: '/images/products/bal.jpg', description: 'Doğal ormanlardan gelen şifa kaynağı.', stock: 50 },
     ];
 
-    for (const prod of automotiveProducts) {
-      const category = await prisma.category.findUnique({
-        where: { slug: prod.categorySlug },
+    for (const prod of products) {
+      const slug = prod.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      await prisma.product.create({
+        data: {
+          name: prod.name,
+          slug: slug,
+          price: prod.price,
+          images: JSON.stringify([prod.image]),
+          description: prod.description,
+          stock: prod.stock,
+          categoryId: prod.categoryId!,
+        },
       });
-
-      if (category) {
-        const slug = prod.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-        await prisma.product.create({
-          data: {
-            name: prod.name,
-            slug: slug,
-            price: prod.price,
-            images: JSON.stringify([prod.image]),
-            description: prod.description,
-            stock: prod.stock,
-            categoryId: category.id,
-          },
-        });
-      }
     }
 
     // 3. Site Settings
     await prisma.siteSettings.create({
       data: {
         id: 'current',
-        siteName: 'İbreOto',
-        siteDescription: 'Premium Araç Aksesuarları & Modifiye Çözümleri',
-        contactEmail: 'destek@ibreoto.com',
-        contactPhone: '0506 157 89 63',
-        whatsappNumber: '905061578963',
-        address: 'Merkez Mahallesi, Otomotiv Plaza No:12, İstanbul',
-        logoUrl: '/images/logo.jpg',
-        announcementBar: 'YENİ SEZON ARAÇ AKSESUARLARINDA %20 İNDİRİM! 🚀',
-        instagramUrl: 'https://instagram.com/ibreoto',
-        facebookUrl: 'https://facebook.com/ibreoto',
+        siteName: 'Arı Hayat',
+        siteDescription: '%100 Doğal Bal, Propolis ve Arı Ürünleri',
+        contactEmail: 'destek@arihayat.com',
+        contactPhone: '0535 337 72 51',
+        whatsappNumber: '905353377251',
+        address: 'Bursa, Türkiye',
+        logoUrl: '/images/logo.png',
+        announcementBar: 'DOĞAL ARI ÜRÜNLERİNDE SEZON İNDİRİMİ! 🐝',
+        instagramUrl: 'https://instagram.com/arihayat',
+        facebookUrl: 'https://facebook.com/arihayat',
       },
     });
 
-    const adminPassword = await bcrypt.hash('ibreoto-admin-2026', 10);
+    const adminPassword = await bcrypt.hash('arihayat-admin-2026', 10);
     await prisma.user.upsert({
-      where: { email: 'admin@ibreoto.com' },
+      where: { email: 'admin@arihayat.com' },
       update: { password: adminPassword },
       create: {
-        email: 'admin@ibreoto.com',
-        name: 'İbreOto Admin',
+        email: 'admin@arihayat.com',
+        name: 'Arı Hayat Admin',
         password: adminPassword,
         role: 'ADMIN',
       },
@@ -86,9 +81,9 @@ export async function GET() {
 
     const sliders = [
       {
-        title: "Premium Araç Aksesuarları",
-        subtitle: "Aracınıza değer katan dokunuşlar",
-        image: "https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=1920",
+        title: "DOĞANIN ŞİFASI",
+        subtitle: "ARILARIMIZDAN SOFRANIZA",
+        image: "/images/hero-1.webp",
         buttonText: "Hemen İncele",
         buttonLink: "/urunler",
         order: 1
@@ -99,7 +94,7 @@ export async function GET() {
       await prisma.slider.create({ data: slider });
     }
 
-    return NextResponse.json({ message: '🚀 DB SETUP COMPLETED SUCCESSFULLY!' });
+    return NextResponse.json({ message: '🚀 ARI HAYAT DB SETUP COMPLETED SUCCESSFULLY!' });
   } catch (error: any) {
     console.error(error);
     return NextResponse.json({ error: error.message }, { status: 500 });
