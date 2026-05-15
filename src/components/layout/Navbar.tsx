@@ -64,15 +64,16 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white shadow-md z-50 transition-all duration-300">
-      {/* Top Bar */}
+    <header className="fixed top-0 left-0 right-0 bg-white shadow-md z-50 transition-all duration-300" style={{borderBottom: '3px solid #F5A623'}}>
+      {/* Top Bar - Amber Bee Theme */}
       <div className="bg-secondary text-white py-2 text-[10px] md:text-xs font-body">
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center space-x-4">
+            <span className="text-primary font-bold">🐝 Arı Hayat</span>
             <a href={`tel:${siteSettings?.contactPhone || '0506 157 89 63'}`} className="flex items-center hover:text-primary transition-colors">
               <Phone className="w-3 h-3 mr-1" /> {siteSettings?.contactPhone || '0506 157 89 63'}
             </a>
-            <a href={`https://wa.me/${siteSettings?.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-green-400 transition-colors">
+            <a href={`https://wa.me/${siteSettings?.whatsappNumber || '905353377251'}`} target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-green-400 transition-colors">
               <MessageCircle className="w-3 h-3 mr-1" /> WhatsApp Destek
             </a>
           </div>

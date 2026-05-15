@@ -2,20 +2,20 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ShieldCheck, Truck, RotateCcw, Lock, Zap, Award, Star, Settings } from 'lucide-react';
+import { ShieldCheck, Truck, Lock, Award, FlaskConical, Leaf } from 'lucide-react';
 
 const features = [
-  { title: 'Saf & Doğal', desc: 'Tüm ürünlerimiz arıların doğal döngüsüne müdahale edilmeden, en saf haliyle üretilir.', icon: Award },
-  { title: '%100 Yerli Üretim', desc: 'Bursa ve çevre illerin yüksek rakımlı yaylalarından gelen %100 yerli üretim.', icon: ShieldCheck },
-  { title: 'Hızlı Teslimat', desc: 'Taze ürünleriniz 24 saat içinde kargoya verilir, kapınıza kadar güvenle ulaşır.', icon: Truck },
-  { title: 'Analiz Garantili', desc: 'Tüm ürünlerimiz laboratuvar analizlerinden geçirilmiş, güvenilir ürünlerdir.', icon: RotateCcw },
-  { title: 'Uzman Desteği', desc: 'Arı ürünleri kullanımı ve sağlığınıza etkileri hakkında uzman ekibimizden bilgi alabilirsiniz.', icon: Award },
-  { title: 'Güvenli Alışveriş', desc: '256-bit SSL sertifikası ve güvenli ödeme altyapısı ile verileriniz koruma altında.', icon: Lock },
+  { title: 'Saf & Doğal', desc: 'Tüm ürünlerimiz arıların doğal döngüsüne müdahale edilmeden, en saf haliyle üretilir.', icon: Leaf, emoji: '🌿' },
+  { title: '%100 Yerli Üretim', desc: 'Bursa ve çevre illerin yüksek rakimlı yaylaşından gelen %100 yerli üretim garantisi.', icon: ShieldCheck, emoji: '📍' },
+  { title: 'Hızlı Teslimat', desc: 'Taze ürünleriniz 24 saat içinde kargoya verilir, kapınıza kadar güvenle ulaşır.', icon: Truck, emoji: '📦' },
+  { title: 'Lab Analizi Garantisi', desc: 'Tüm ürünlerimiz akredite laboratuvarlarda analiz edilerek sertifikalandırılır.', icon: FlaskConical, emoji: '🧪' },
+  { title: 'Uzman Desteği', desc: 'Arı ürünleri kullanımı ve sağlığınıza etkileri hakkında uzman ekibimizden bilgi alın.', icon: Award, emoji: '🐝' },
+  { title: 'Güvenli Alışveriş', desc: '256-bit SSL sertifikası ve güvenli ödeme altyapısı ile verileriniz koruma altında.', icon: Lock, emoji: '🔒' },
 ];
 
 export const WhyArihayat = () => {
   return (
-    <section className="py-24 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
+    <section className="py-24 honeycomb-bg overflow-hidden">
       <div className="container mx-auto px-4">
         <motion.div 
           className="text-center mb-20"

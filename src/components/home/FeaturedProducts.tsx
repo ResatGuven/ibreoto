@@ -11,10 +11,10 @@ export const FeaturedProducts = () => {
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const defaultProducts = [
-    { id: '1', name: 'Arı Sütü Yerli Üretim 10 gr', price: 400, category: 'ari-sutu', image: 'https://images.unsplash.com/photo-1587334274328-64186a80aeee?q=80&w=300', description: 'Bursa yöresinden taze sağım, dondurulmuş saf yerli arı sütü.', rating: 5, reviews: 42, isNew: true, isFreeShipping: true },
-    { id: '2', name: 'Zeytinyağlı Propolis 50 ml', price: 350, category: 'propolis', image: 'https://images.unsplash.com/photo-1473973266408-ed4e27abdd47?q=80&w=300', description: 'Alkol içermeyen, zeytinyağı bazlı doğal propolis ekstraktı.', rating: 5, reviews: 28, isNew: true, isFreeShipping: true },
-    { id: '3', name: 'Kestane Ihlamur Balı 850 gr', price: 1480, category: 'bal', image: 'https://images.unsplash.com/photo-1558613275-aa34176f7a23?q=80&w=300', description: 'Yüksek rakımlı ormanlardan toplanan, yoğun aromalı şifa kaynağı bal.', rating: 5, reviews: 56, isNew: false, isFreeShipping: true },
-    { id: '4', name: 'Arı Ekmeği (Perga) 100 gr', price: 650, category: 'polen-ari-ekmegi', image: 'https://images.unsplash.com/photo-1587334274328-64186a80aeee?q=80&w=300', description: 'Protein ve vitamin deposu fermente polen.', rating: 5, reviews: 15, isNew: false, isFreeShipping: false },
+    { id: '1', name: 'Arı Sütü Yerli Üretim 10 gr', price: 400, category: 'ari-sutu', image: '/images/products/ari-sutu.png', description: 'Bursa yöresinden taze sağım, dondurulmuş saf yerli arı sütü.', rating: 5, reviews: 42, isNew: true, isFreeShipping: true },
+    { id: '2', name: 'Zeytinyağlı Propolis 50 ml', price: 350, category: 'propolis', image: '/images/products/propolis.png', description: 'Alkol içermeyen, zeytinyağı bazlı doğal propolis ekstraktı.', rating: 5, reviews: 28, isNew: true, isFreeShipping: true },
+    { id: '3', name: 'Kestane Ihlamur Balı 850 gr', price: 1480, category: 'bal', image: '/images/products/bal.png', description: 'Yüksek rakimlı ormanlardan toplanan, yoğun aromali şifa kaynağı bal.', rating: 5, reviews: 56, isNew: false, isFreeShipping: true },
+    { id: '4', name: 'Arı Ekmeği (Perga) 100 gr', price: 650, category: 'polen-ari-ekmegi', image: '/images/products/polen.png', description: 'Protein ve vitamin deposu fermente polen.', rating: 5, reviews: 15, isNew: false, isFreeShipping: false },
   ];
 
   useEffect(() => {

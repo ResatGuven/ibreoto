@@ -1,26 +1,27 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #E94560; /* Sporty Red */
-  --color-primary-hover: #C62828;
-  --color-secondary: #1A1A2E; /* Premium Navy */
-  --color-accent: #E94560;
-  --color-background: #F5F5F5; /* Light Gray */
+  /* === ARI HAYAT BEE THEME === */
+  --color-primary: #F5A623;        /* Amber Honey */
+  --color-primary-hover: #E08D0A;  /* Deep Amber */
+  --color-secondary: #3D2B1F;      /* Dark Espresso Brown */
+  --color-accent: #FFC107;         /* Golden Yellow */
+  --color-background: #FFFBF0;     /* Warm Cream */
   --color-surface: #FFFFFF;
-  --color-text-main: #2D2D2D;
-  --color-text-muted: #666666;
-  
-  --color-gradient-start: #1A1A2E;
-  --color-gradient-end: #16213E;
-  
+  --color-text-main: #2C1A0E;      /* Deep Brown */
+  --color-text-muted: #7A5C3E;     /* Warm Muted Brown */
+
+  --color-gradient-start: #3D2B1F;
+  --color-gradient-end: #6B3E26;
+
   --font-heading: var(--font-heading), "Poppins", sans-serif;
   --font-body: var(--font-body), "Inter", sans-serif;
 }
 
 @layer base {
   :root {
-    --background: #FFFFFF;
-    --foreground: #1A1A1A;
+    --background: #FFFBF0;
+    --foreground: #2C1A0E;
   }
 
   body {
@@ -32,23 +33,97 @@
   }
 }
 
+/* === BEE THEMED DECORATIVE UTILITIES === */
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Glassmorphism */
   .glass {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 251, 240, 0.15);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(245, 166, 35, 0.2);
   }
   .glass-dark {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(61, 43, 31, 0.4);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(245, 166, 35, 0.15);
   }
+
+  /* Gradient text */
   .text-gradient {
-    background: linear-gradient(to right, var(--color-gradient-start), var(--color-gradient-end));
+    background: linear-gradient(135deg, #F5A623, #E08D0A);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Honeycomb background pattern */
+  .honeycomb-bg {
+    background-color: #FFFBF0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V18L28 2l28 16v32L28 66zm0-6l22-12.7V23.7L28 11 6 23.7v23.6L28 60z' fill='%23F5A623' fill-opacity='0.06'/%3E%3C/svg%3E");
+  }
+
+  /* Honey drip animation */
+  .honey-drip {
+    position: relative;
+    overflow: hidden;
+  }
+  .honey-drip::before {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 60px;
+    background: linear-gradient(to bottom, #F5A623, transparent);
+    animation: drip 3s ease-in-out infinite;
+    border-radius: 0 0 50% 50%;
+  }
+  @keyframes drip {
+    0% { top: -60px; opacity: 1; }
+    70% { top: 100%; opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+  }
+
+  /* Floating bee animation */
+  .bee-float {
+    animation: beeFloat 4s ease-in-out infinite;
+  }
+  @keyframes beeFloat {
+    0%, 100% { transform: translateY(0px) rotate(-3deg); }
+    50% { transform: translateY(-12px) rotate(3deg); }
+  }
+
+  /* Petal/wing pulse */
+  .wing-pulse {
+    animation: wingPulse 0.2s ease-in-out infinite alternate;
+  }
+  @keyframes wingPulse {
+    0% { transform: scaleX(1) scaleY(0.95); opacity: 0.8; }
+    100% { transform: scaleX(1.05) scaleY(1); opacity: 1; }
+  }
+
+  /* Honey glow effect */
+  .honey-glow {
+    box-shadow: 0 0 30px rgba(245, 166, 35, 0.3), 0 0 60px rgba(245, 166, 35, 0.1);
+  }
+  .honey-glow:hover {
+    box-shadow: 0 0 40px rgba(245, 166, 35, 0.5), 0 0 80px rgba(245, 166, 35, 0.2);
+  }
+
+  /* Hexagon shape utility */
+  .hexagon {
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+
+  /* Amber gradient backgrounds */
+  .bg-honey-gradient {
+    background: linear-gradient(135deg, #FFF8E7 0%, #FFE0A0 50%, #FFC107 100%);
+  }
+  .bg-dark-honey {
+    background: linear-gradient(135deg, #3D2B1F 0%, #6B3E26 100%);
   }
 }
