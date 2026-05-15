@@ -55,7 +55,7 @@ export default function DestekPage() {
             </div>
             <h3 className="font-heading font-bold text-secondary uppercase mb-2">E-Posta</h3>
             <p className="text-text-muted font-body text-sm mb-6">Sorularınızı e-posta yoluyla bize iletebilirsiniz.</p>
-            <a href="mailto:destek@ibreoto.com" className="inline-block bg-primary text-white font-heading font-bold py-2 px-6 rounded hover:bg-secondary transition-colors uppercase text-xs">
+            <a href="mailto:destek@arihayat.com" className="inline-block bg-primary text-white font-heading font-bold py-2 px-6 rounded hover:bg-secondary transition-colors uppercase text-xs">
               E-Posta Gönder
             </a>
           </div>

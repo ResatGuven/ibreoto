@@ -8,7 +8,7 @@ export default function AdminBlogPage() {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
-  const [formData, setFormData] = useState({ id: '', title: '', content: '', excerpt: '', image: '', author: 'İbreOto', category: 'Genel' });
+  const [formData, setFormData] = useState({ id: '', title: '', content: '', excerpt: '', image: '', author: 'Arı Hayat', category: 'Genel' });
   const { showToast } = useAdminToast();
   const deleteTimeouts = useRef<{ [key: string]: NodeJS.Timeout }>({});
 
@@ -87,7 +87,7 @@ export default function AdminBlogPage() {
       content: post.content,
       excerpt: post.excerpt || '',
       image: post.image || '',
-      author: post.author || 'İbreOto',
+      author: post.author || 'Arı Hayat',
       category: post.category || 'Genel'
     });
     setIsAdding(true);

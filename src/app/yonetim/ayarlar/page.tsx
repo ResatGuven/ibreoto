@@ -7,7 +7,7 @@ import { useAdminToast } from '@/context/AdminToastContext';
 export default function AdminSettingsPage() {
   const { showToast } = useAdminToast();
   const [settings, setSettings] = useState<any>({
-    siteName: 'İbreOto',
+    siteName: 'Arı Hayat',
     siteDescription: '',
     contactEmail: '',
     contactPhone: '',
@@ -181,7 +181,7 @@ export default function AdminSettingsPage() {
                 type="text" 
                 value={settings.announcementBar} 
                 onChange={e => setSettings({...settings, announcementBar: e.target.value})} 
-                placeholder="Örn: Tüm ürünlerde %15 indirim! Kod: IBRE15"
+                placeholder="Örn: Tüm ürünlerde %15 indirim! Kod: ARIHAYAT15"
                 className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" 
               />
             </div>

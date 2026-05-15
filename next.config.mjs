@@ -1,7 +1,6 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  // Build: 1.0.7 - Force Clear Cache
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  /* config options here */
   images: {
     remotePatterns: [
       {

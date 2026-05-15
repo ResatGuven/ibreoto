@@ -44,11 +44,12 @@ function UrunlerContent() {
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const categoryNames: { [key: string]: string } = {
-    'ic-aksesuar': 'İç Aksesuar',
-    'dis-aksesuar': 'Dış Aksesuar',
-    'teknoloji': 'Teknoloji',
-    'bakim': 'Bakım & Temizlik'
+    'bal': 'Doğal Ballar',
+    'propolis': 'Propolis',
+    'ari-sutu': 'Arı Sütü',
+    'polen-ari-ekmegi': 'Polen & Arı Ekmeği'
   };
+
 
   useEffect(() => {
     const savedFavs = localStorage.getItem('favorites');
@@ -324,7 +325,7 @@ function UrunlerContent() {
                     </div>
                     
                     <p className="text-[10px] text-primary mb-2 font-heading font-black uppercase tracking-[0.2em]">
-                      {product.category?.name || 'Aksesuar'}
+                      {product.category?.name || 'Doğal Ürün'}
                     </p>
                     <h2 className="font-heading font-black text-secondary group-hover:text-primary mb-4 line-clamp-2 uppercase text-base leading-tight transition-colors tracking-tight">
                       {product.name}
@@ -355,7 +356,7 @@ function UrunlerContent() {
                 <ShoppingBag className="w-10 h-10 text-text-muted" />
               </div>
               <h3 className="text-xl font-heading font-bold text-secondary uppercase mb-3 tracking-widest">Ürün Bulunamadı</h3>
-              <p className="text-text-muted font-body text-sm max-w-xs mx-auto mb-8 leading-relaxed">Aradığınız kriterlere uygun aksesuar bulamadık. Filtreleri sıfırlayıp tekrar deneyebilirsiniz.</p>
+              <p className="text-text-muted font-body text-sm max-w-xs mx-auto mb-8 leading-relaxed">Aradığınız kriterlere uygun ürün bulamadık. Filtreleri sıfırlayıp tekrar deneyebilirsiniz.</p>
               <button 
                 onClick={() => {setSelectedCategories([]); setAppliedMin(null); setAppliedMax(null);}}
                 className="bg-primary text-secondary px-8 py-3 rounded-xl font-heading font-bold uppercase text-[10px] tracking-widest hover:bg-primary-hover transition-colors shadow-lg shadow-primary/20"

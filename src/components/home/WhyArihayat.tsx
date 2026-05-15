@@ -13,7 +13,7 @@ const features = [
   { title: 'Güvenli Alışveriş', desc: '256-bit SSL sertifikası ve güvenli ödeme altyapısı ile verileriniz koruma altında.', icon: Lock },
 ];
 
-export const WhyIbreoto = () => {
+export const WhyArihayat = () => {
   return (
     <section className="py-24 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
       <div className="container mx-auto px-4">

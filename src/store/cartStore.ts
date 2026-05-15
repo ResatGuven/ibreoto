@@ -57,7 +57,7 @@ export const useCartStore = create<CartState>()(
       },
     }),
     {
-      name: 'ibreoto-cart', // local storage key
+      name: 'arihayat-cart', // local storage key
     }
   )
 );

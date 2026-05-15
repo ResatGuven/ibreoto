@@ -36,9 +36,11 @@ export const HeroSlider = () => {
     subtitle: "SAĞLIKLI YAŞAM İÇİN ARI HAYAT",
     description: "%100 Doğal ve katkısız ballar, arı sütü ve propolis ile bağışıklığınızı güçlendirin. Arı Hayat'ın eşsiz lezzetlerini keşfedin.",
     image: "https://images.unsplash.com/photo-1587334274328-64186a80aeee?q=80&w=1920",
+    videoUrl: "", // Added to fix TS error
     buttonText: "Hemen Keşfet",
     buttonLink: "/urunler"
   };
+
 
   const currentSlider = sliders.length > 0 ? sliders[currentIndex] : defaultBanner;
 

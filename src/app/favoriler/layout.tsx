@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Favorilerim | İbreOto",
+  title: "Favorilerim | Arı Hayat",
   description: "Beğendiğiniz ve daha sonra satın almak için kaydettiğiniz ürünler listesi.",
 };
 

@@ -51,10 +51,10 @@ export default function GirisPage() {
       >
         <div className="flex flex-col items-center mb-10">
           <div className="w-20 h-20 bg-gradient-to-br from-primary to-primary-hover rounded-2xl flex items-center justify-center shadow-xl shadow-primary/20 mb-6 rotate-3">
-            <span className="text-white font-black text-4xl italic">İO</span>
+            <span className="text-white font-black text-4xl">🐝</span>
           </div>
           <h1 className="text-4xl font-heading font-black text-white mb-2 uppercase tracking-tighter italic">
-            İBRE<span className="text-primary">OTO</span>
+            ARI<span className="text-primary">HAYAT</span>
           </h1>
           <p className="text-gray-500 font-body text-xs uppercase tracking-[0.3em] font-bold">Yönetim Paneli</p>
         </div>
@@ -77,7 +77,7 @@ export default function GirisPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@ibreoto.com" 
+              placeholder="admin@arihayat.com" 
               className="w-full p-4 bg-[#1F2937]/50 border border-white/5 rounded-2xl focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all font-body text-white text-sm placeholder:text-gray-600" 
             />
           </div>
@@ -104,7 +104,7 @@ export default function GirisPage() {
         </form>
 
         <div className="mt-10 text-center text-[9px] text-gray-600 font-body uppercase tracking-[0.4em] font-bold">
-          İbreOto Premium Yönetim Sistemi v2.0
+          Arı Hayat Premium Yönetim Sistemi v2.0
         </div>
       </motion.div>
     </div>
