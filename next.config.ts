@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Build: 1.0.5 - Force Clear Cache
+  // Build: 1.0.6 - Force Clear Cache
   images: {
     remotePatterns: [
       {
