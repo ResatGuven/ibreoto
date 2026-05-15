@@ -102,7 +102,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <img 
-            src={siteSettings?.logoUrl || "https://arihayat.com/storage/settings/October2023/v0i60uRz2Zz7zX9zXzXz.png"} 
+            src={siteSettings?.logoUrl || "/images/logo.jpg"} 
             alt="ARI HAYAT" 
             className="h-10 md:h-14 w-auto hover:opacity-90 transition-opacity" 
           />

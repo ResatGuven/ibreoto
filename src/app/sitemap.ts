@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import prisma from '@/lib/prisma'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://ibreoto.vercel.app'
+  const baseUrl = 'https://arihayat.com'
   
   // Fetch dynamic data
   const categories = await prisma.category.findMany({ select: { slug: true } })

@@ -30,7 +30,7 @@ export default function Footer() {
         <div className="space-y-6">
           <div className="flex items-center">
             <img 
-              src={siteSettings?.logoUrl || "https://arihayat.com/storage/settings/October2023/v0i60uRz2Zz7zX9zXzXz.png"} 
+              src={siteSettings?.logoUrl || "/images/logo.jpg"} 
               alt="ARI HAYAT" 
               className="h-16 w-auto bg-white p-2 rounded-xl" 
             />
@@ -71,7 +71,7 @@ export default function Footer() {
             <li><Link href="/mesafeli-satis-sozlesmesi" className="hover:text-primary transition-colors">Mesafeli Satış Sözleşmesi</Link></li>
             <li><Link href="/iade-kosullari" className="hover:text-primary transition-colors">İptal ve İade Koşulları</Link></li>
             <li><Link href="/kargo-teslimat" className="hover:text-primary transition-colors">Kargo ve Teslimat</Link></li>
-            <li><Link href="/gizlilik-politikasi" className="hover:text-primary transition-colors">Gizlilik Politikası</Link></li>
+            <li><Link href="/gizlilik" className="hover:text-primary transition-colors">Gizlilik Politikası</Link></li>
             <li><Link href="/kvkk" className="hover:text-primary transition-colors">KVKK Aydınlatma Metni</Link></li>
             <li><Link href="/cerez-politikasi" className="hover:text-primary transition-colors">Çerez (Cookie) Politikası</Link></li>
           </ul>
@@ -83,11 +83,11 @@ export default function Footer() {
           <ul className="space-y-4 font-body text-gray-400 text-sm">
             <li className="flex items-start">
               <Phone className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
-              <a href={`tel:${siteSettings?.contactPhone?.replace(/\s/g, '') || "+905363411984"}`} className="hover:text-primary transition-colors">{siteSettings?.contactPhone || "0536 341 19 84"}</a>
+              <a href={`tel:${siteSettings?.contactPhone?.replace(/\s/g, '') || "+905353377251"}`} className="hover:text-primary transition-colors">{siteSettings?.contactPhone || "0535 337 72 51"}</a>
             </li>
             <li className="flex items-start">
               <Mail className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
-              <a href={`mailto:${siteSettings?.contactEmail || "arihayat.tr@gmail.com"}`} className="hover:text-primary transition-colors">{siteSettings?.contactEmail || "arihayat.tr@gmail.com"}</a>
+              <a href={`mailto:${siteSettings?.contactEmail || "destek@arihayat.com"}`} className="hover:text-primary transition-colors">{siteSettings?.contactEmail || "destek@arihayat.com"}</a>
             </li>
             <li className="flex items-start">
               <MapPin className="w-5 h-5 mr-3 text-primary flex-shrink-0" />

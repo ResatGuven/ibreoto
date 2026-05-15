@@ -48,7 +48,7 @@ export default function AdminMesajlarPage() {
 
   return (
     <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
-      <h1 className="text-2xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700 uppercase mb-6">Gelen Mesajlar</h1>
+      <h1 className="text-2xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-700 uppercase mb-6">Gelen Mesajlar</h1>
       
       <div className="bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 overflow-hidden shadow-lg">
         <div className="overflow-x-auto">
@@ -78,7 +78,7 @@ export default function AdminMesajlarPage() {
                 <td className="p-4">
                   <span className={`px-2 py-1 rounded-md text-xs font-bold ${
                     message.subject === 'Bayilik Başvurusu' 
-                      ? 'bg-red-900/50 text-red-300 border border-red-700' 
+                      ? 'bg-primary/20 text-primary border border-primary/50' 
                       : 'bg-blue-900/50 text-blue-300 border border-blue-700'
                   }`}>
                     {message.subject || 'İletişim Mesajı'}
@@ -119,7 +119,7 @@ export default function AdminMesajlarPage() {
             </div>
             <div className="space-y-3 text-sm font-body">
               <p><span className="text-gray-500">Gönderen:</span> <span className="text-white font-medium">{selectedMessage.name}</span></p>
-              <p><span className="text-gray-500">E-Posta:</span> <span className="text-red-400">{selectedMessage.email}</span></p>
+              <p><span className="text-gray-500">E-Posta:</span> <span className="text-primary">{selectedMessage.email}</span></p>
               <p><span className="text-gray-500">Konu:</span> <span className="text-white font-medium">{selectedMessage.subject || 'İletişim Mesajı'}</span></p>
               <p><span className="text-gray-500">Tarih:</span> <span className="text-white">{selectedMessage.createdAt ? new Date(selectedMessage.createdAt).toLocaleString('tr-TR') : '---'}</span></p>
               

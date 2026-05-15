@@ -47,7 +47,7 @@ export default function AdminSiparislerPage() {
 
   return (
     <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
-      <h1 className="text-2xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700 uppercase mb-6">Sipariş Yönetimi</h1>
+      <h1 className="text-2xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-700 uppercase mb-6">Sipariş Yönetimi</h1>
       
       <div className="bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 overflow-hidden shadow-lg">
         <div className="overflow-x-auto">
@@ -69,7 +69,7 @@ export default function AdminSiparislerPage() {
                 <td className="p-4 font-medium text-white">#{order.id}</td>
                 <td className="p-4 text-gray-400">{order.date || '11.05.2026'}</td>
                 <td className="p-4 text-white font-medium">{order.customer}</td>
-                <td className="p-4 font-heading font-bold text-red-500">{order.total}</td>
+                <td className="p-4 font-heading font-bold text-primary">{order.total}</td>
                 <td className="p-4">
                   <select 
                     value={order.status} 
@@ -93,7 +93,7 @@ export default function AdminSiparislerPage() {
                     value={order.cargoNo || ''}
                     onChange={(e) => updateCargoNo(order.id, e.target.value)}
                     placeholder="Kargo No Girin"
-                    className="p-1 bg-[#1F2937] border border-gray-700 rounded text-white text-sm w-32 focus:border-red-500 outline-none transition-all"
+                    className="p-1 bg-[#1F2937] border border-gray-700 rounded text-white text-sm w-32 focus:border-primary outline-none transition-all"
                   />
                 </td>
                 <td className="p-4 text-right">
@@ -121,13 +121,13 @@ export default function AdminSiparislerPage() {
               <button onClick={() => setSelectedOrder(null)} className="text-gray-500 hover:text-white text-2xl">&times;</button>
             </div>
             <div className="space-y-3 text-sm font-body">
-              <p><span className="text-gray-500">Sipariş No:</span> <span className="text-red-400 font-medium font-heading">#{selectedOrder.id}</span></p>
+              <p><span className="text-gray-500">Sipariş No:</span> <span className="text-primary font-medium font-heading">#{selectedOrder.id}</span></p>
               <p><span className="text-gray-500">Tarih:</span> <span className="text-white">{selectedOrder.date || '11.05.2026'}</span></p>
               <p><span className="text-gray-500">Müşteri:</span> <span className="text-white font-medium">{selectedOrder.customer}</span></p>
               <p><span className="text-gray-500">E-Posta:</span> <span className="text-white">{selectedOrder.email || 'Belirtilmemiş'}</span></p>
               <p><span className="text-gray-500">Telefon:</span> <span className="text-white">{selectedOrder.phone || 'Belirtilmemiş'}</span></p>
               <p><span className="text-gray-500">Adres:</span> <span className="text-white">{selectedOrder.address || 'Belirtilmemiş'}</span></p>
-              <p><span className="text-gray-500">Toplam:</span> <span className="text-red-500 font-bold font-heading">{selectedOrder.total}</span></p>
+              <p><span className="text-gray-500">Toplam:</span> <span className="text-primary font-bold font-heading">{selectedOrder.total}</span></p>
               <p><span className="text-gray-500">Durum:</span> <span className="text-white">{selectedOrder.status}</span></p>
               <p><span className="text-gray-500">Kargo No:</span> <span className="text-white">{selectedOrder.cargoNo || 'Girilmemiş'}</span></p>
               
@@ -138,7 +138,7 @@ export default function AdminSiparislerPage() {
                     {selectedOrder.items.map((item: any, index: number) => (
                       <li key={index} className="text-white flex justify-between items-center bg-[#1F2937] p-2 rounded">
                         <span>{item.name} <span className="text-gray-500">x{item.qty}</span></span>
-                        <span className="text-red-400 font-heading font-bold">{item.price}</span>
+                        <span className="text-primary font-heading font-bold">{item.price}</span>
                       </li>
                     ))}
                   </ul>
