@@ -41,7 +41,11 @@ export async function GET(request: Request) {
         id: p.id,
         name: p.name,
         price: p.price.toString(),
-        category: p.category.slug,
+        category: {
+          slug: p.category.slug,
+          name: p.category.name
+        },
+        categoryId: p.categoryId,
         image: imageUrl,
         description: p.description,
         stock: p.stock,

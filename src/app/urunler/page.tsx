@@ -265,7 +265,8 @@ function UrunlerContent() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
-                <div key={product.id} className="group bg-white border border-gray-100 hover:border-primary/30 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col transform hover:-translate-y-3">
+                <div key={product.id} className="group bg-white border border-gray-100 hover:border-primary/30 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col transform hover:-translate-y-3 cursor-pointer relative">
+                  <Link href={`/urun/${product.slug || product.id}`} className="absolute inset-0 z-0"></Link>
                   <div className="relative w-full h-64 bg-gray-50 flex items-center justify-center overflow-hidden">
                     {/* Badges */}
                     <div className="absolute top-4 left-4 z-10 flex flex-col space-y-2">
@@ -285,37 +286,37 @@ function UrunlerContent() {
                       )}
                     </div>
 
-                    <Link href={`/urun/${product.slug || product.id}`} className="block w-full h-full relative">
+                    <div className="block w-full h-full relative p-8">
                       {product.image ? (
                         <Image 
                           src={product.image} 
                           alt={product.name} 
                           fill
                           unoptimized
-                          className="object-contain transform group-hover:scale-110 transition-transform duration-700 ease-out p-8" 
+                          className="object-contain transform group-hover:scale-110 transition-transform duration-700 ease-out" 
                         />
                       ) : (
                         <div className="flex items-center justify-center h-full text-gray-300 text-xs font-heading uppercase tracking-widest">[ Görsel ]</div>
                       )}
-                    </Link>
+                    </div>
                     
                     <button 
-                      onClick={() => toggleFavorite(product)}
-                      className={`absolute top-4 right-4 w-11 h-11 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 z-10 ${favorites.includes(String(product.id)) ? 'bg-primary text-white' : 'bg-white text-secondary hover:text-primary'}`}
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(product); }}
+                      className={`absolute top-4 right-4 w-11 h-11 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 z-20 ${favorites.includes(String(product.id)) ? 'bg-primary text-white' : 'bg-white text-secondary hover:text-primary'}`}
                     >
                       <Heart className={`w-5 h-5 ${favorites.includes(String(product.id)) ? 'fill-current' : ''}`} />
                     </button>
 
                     {/* Quick Add Button on Hover */}
                     <button 
-                      onClick={() => addToCart(product)}
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); addToCart(product); }}
                       className="absolute bottom-0 left-0 right-0 bg-primary text-white font-heading font-black py-4 uppercase text-xs tracking-widest translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-20 flex items-center justify-center space-x-2"
                     >
                       <ShoppingBag size={16} /> <span>Sepete Ekle</span>
                     </button>
                   </div>
                   
-                  <div className="p-6 flex flex-col flex-grow">
+                  <div className="p-6 flex flex-col flex-grow relative z-10 pointer-events-none">
                     <div className="flex items-center space-x-1 text-primary mb-2">
                       {[...Array(5)].map((_, i) => <Star key={i} size={12} className="fill-primary" />)}
                       <span className="text-[10px] text-gray-400 font-bold ml-2">5.0</span>
@@ -324,9 +325,9 @@ function UrunlerContent() {
                     <p className="text-[10px] text-primary mb-2 font-heading font-black uppercase tracking-[0.2em]">
                       {product.category?.name || 'Aksesuar'}
                     </p>
-                    <Link href={`/urun/${product.slug || product.id}`} className="font-heading font-black text-secondary hover:text-primary mb-4 line-clamp-2 uppercase text-base leading-tight transition-colors tracking-tight">
+                    <h2 className="font-heading font-black text-secondary group-hover:text-primary mb-4 line-clamp-2 uppercase text-base leading-tight transition-colors tracking-tight">
                       {product.name}
-                    </Link>
+                    </h2>
                     
                     <div className="mt-auto pt-6 flex items-end justify-between border-t border-gray-50">
                       <div className="flex flex-col">
@@ -334,7 +335,7 @@ function UrunlerContent() {
                           <span className="text-xs text-gray-400 font-body line-through mb-1">₺{product.oldPrice.toLocaleString('tr-TR')}</span>
                         )}
                         <span className="font-body font-black text-2xl text-secondary leading-none">
-                          ₺{product.price.toLocaleString('tr-TR')}
+                          ₺{parseFloat(product.price).toLocaleString('tr-TR')}
                         </span>
                       </div>
                       <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest bg-gray-50 px-3 py-1 rounded-full">
@@ -353,7 +354,7 @@ function UrunlerContent() {
                 <ShoppingBag className="w-10 h-10 text-text-muted" />
               </div>
               <h3 className="text-xl font-heading font-bold text-secondary uppercase mb-3 tracking-widest">Ürün Bulunamadı</h3>
-              <p className="text-text-muted font-body text-sm max-w-xs mx-auto mb-8 leading-relaxed">Aradığınız kriterlere uygun şifa kaynağı bulamadık. Filtreleri sıfırlayıp tekrar deneyebilirsiniz.</p>
+              <p className="text-text-muted font-body text-sm max-w-xs mx-auto mb-8 leading-relaxed">Aradığınız kriterlere uygun aksesuar bulamadık. Filtreleri sıfırlayıp tekrar deneyebilirsiniz.</p>
               <button 
                 onClick={() => {setSelectedCategories([]); setAppliedMin(null); setAppliedMax(null);}}
                 className="bg-primary text-secondary px-8 py-3 rounded-xl font-heading font-bold uppercase text-[10px] tracking-widest hover:bg-primary-hover transition-colors shadow-lg shadow-primary/20"
