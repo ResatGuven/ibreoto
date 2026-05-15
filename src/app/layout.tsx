@@ -64,7 +64,6 @@ export default function RootLayout({
             fbq('track', 'PageView');
           `}
         </Script>
-        </noscript>
 
         <Providers>
           <NavbarWrapper />
