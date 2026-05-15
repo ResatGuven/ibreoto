@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Build: 1.0.5 - Force Clear Cache
   images: {
     remotePatterns: [
       {
@@ -14,10 +15,6 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.pexels.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'arihayat.com',
       },
     ],
   },

@@ -103,9 +103,7 @@ export const HeroSlider = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                {currentSlider.title?.includes('DOĞAL') ? (
-                  <>%100 DOĞAL<br /><span className="text-primary">ARI ÜRÜNLERİ</span></>
-                ) : currentSlider.title}
+                {currentSlider.title}
               </motion.h1>
               
               <motion.p 

@@ -127,18 +127,34 @@ export default function Navbar() {
               className={`absolute top-full left-0 w-56 bg-white shadow-xl rounded-b-xl py-2 border-t-2 border-primary transition-all duration-300 ${catDropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}
               onMouseLeave={() => setCatDropdownOpen(false)}
             >
-              {categories.length > 0 ? categories.map((cat: any) => (
                 <Link 
-                  key={cat.id} 
-                  href={`/urunler?category=${cat.slug}`}
+                  href={`/urunler?category=ic-aksesuar`}
                   className="block px-6 py-2.5 text-xs font-bold uppercase text-secondary hover:bg-primary/5 hover:text-primary transition-colors"
                   onClick={() => setCatDropdownOpen(false)}
                 >
-                  {cat.name}
+                  İç Aksesuar
                 </Link>
-              )) : (
-                <p className="px-6 py-2.5 text-[10px] text-gray-400">Yükleniyor...</p>
-              )}
+                <Link 
+                  href={`/urunler?category=dis-aksesuar`}
+                  className="block px-6 py-2.5 text-xs font-bold uppercase text-secondary hover:bg-primary/5 hover:text-primary transition-colors"
+                  onClick={() => setCatDropdownOpen(false)}
+                >
+                  Dış Aksesuar
+                </Link>
+                <Link 
+                  href={`/urunler?category=teknoloji`}
+                  className="block px-6 py-2.5 text-xs font-bold uppercase text-secondary hover:bg-primary/5 hover:text-primary transition-colors"
+                  onClick={() => setCatDropdownOpen(false)}
+                >
+                  Teknoloji
+                </Link>
+                <Link 
+                  href={`/urunler?category=bakim`}
+                  className="block px-6 py-2.5 text-xs font-bold uppercase text-secondary hover:bg-primary/5 hover:text-primary transition-colors"
+                  onClick={() => setCatDropdownOpen(false)}
+                >
+                  Bakım & Temizlik
+                </Link>
             </div>
           </div>
 

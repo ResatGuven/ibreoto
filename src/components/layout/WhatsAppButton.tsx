@@ -11,7 +11,7 @@ export default function WhatsAppButton() {
 
   return (
     <a
-      href="https://wa.me/905353377251?text=Merhaba,%20ArıHayat%20sitenizden%20ulaşıyorum.%20Ürünler%20hakkında%20bilgi%20alabilir%20miyim?" // ArıHayat contact details
+      href="https://wa.me/905353377251?text=Merhaba,%20İbreOto%20sitenizden%20ulaşıyorum.%20Ürünler%20hakkında%20bilgi%20alabilir%20miyim?" // İbreOto contact details
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 bg-[#25D366] text-white p-4 rounded-full shadow-lg hover:bg-[#128C7E] transition-all duration-300 z-50 flex items-center justify-center transform hover:scale-110"
