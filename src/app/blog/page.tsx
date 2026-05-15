@@ -28,7 +28,7 @@ export default function BlogPage() {
     <div className="pt-24 min-h-screen bg-gray-50">
       {/* Hero Header */}
       <div className="bg-secondary text-white py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1587334274328-64186a80aeee?q=80&w=1920')] bg-cover bg-center opacity-20"></div>
+        <div className="absolute inset-0 bg-honey-gradient honeycomb-bg opacity-20"></div>
         <div className="container mx-auto px-4 relative z-10 text-center">
           <p className="text-primary font-heading font-bold uppercase tracking-[0.4em] text-[10px] mb-4">Sağlıklı Yaşam & Bilgi</p>
           <h1 className="text-5xl md:text-7xl font-heading font-black uppercase tracking-tighter mb-6">ARI HAYAT <span className="text-primary italic">BLOG</span></h1>
@@ -52,7 +52,7 @@ export default function BlogPage() {
                 {/* Image */}
                 <div className="relative h-64 overflow-hidden">
                   <Image 
-                    src={post.image || 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=800'} 
+                    src={post.image || '/images/products/karisim.png'} 
                     alt={post.title}
                     fill
                     className="object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"

@@ -73,7 +73,7 @@ export default function DestekPage() {
           </div>
           <div className="hidden md:block h-full">
             <img 
-              src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800" 
+              src="/images/products/polen.png" 
               alt="Destek" 
               className="w-full h-full object-cover"
             />

@@ -15,7 +15,7 @@ export default function HakkimizdaPage() {
     <div className="pt-20 min-h-screen bg-white">
       {/* Hero Section */}
       <div className="relative bg-[#FFFBEB] text-secondary py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1587049352846-4a222e784d38?q=80&w=2000')] bg-cover bg-center opacity-10"></div>
+        <div className="absolute inset-0 bg-honey-gradient honeycomb-bg opacity-30"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl">
             <span className="text-primary font-heading font-bold uppercase text-sm tracking-widest mb-4 block animate-in slide-in-from-left duration-700">Arı Hayat Dünyası</span>
@@ -60,7 +60,7 @@ export default function HakkimizdaPage() {
             <div className="absolute -inset-4 bg-primary/10 rounded-3xl rotate-2 transition-transform group-hover:rotate-1"></div>
             <div className="relative h-[500px] w-full overflow-hidden rounded-2xl shadow-2xl">
               <Image 
-                src="https://images.unsplash.com/photo-1473973266408-ed4e27abdd47?q=80&w=1000" 
+                src="/images/products/bal.png" 
                 alt="Arıcılık Hikayemiz" 
                 fill
                 className="object-cover"

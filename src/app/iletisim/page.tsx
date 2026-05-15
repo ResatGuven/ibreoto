@@ -29,7 +29,7 @@ export default function IletisimPage() {
     <div className="bg-white min-h-screen">
       {/* Hero Section */}
       <section className="relative py-24 bg-secondary text-white overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?q=80&w=1920')] bg-cover bg-center opacity-10"></div>
+        <div className="absolute inset-0 bg-honey-gradient honeycomb-bg opacity-10"></div>
         <div className="container mx-auto px-4 relative z-10 text-center">
           <motion.h1 
             className="text-3xl md:text-5xl font-heading font-bold mb-4 uppercase tracking-tight"
