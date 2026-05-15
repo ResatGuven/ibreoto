@@ -39,7 +39,7 @@ export async function GET() {
         whatsappNumber: '905061578963',
         facebookUrl: 'https://facebook.com/ibreoto',
         instagramUrl: 'https://instagram.com/ibreoto',
-        logoUrl: '/images/logo.jpg',
+        logoUrl: '/images/logo.png',
         announcementBar: 'YENİ SEZON ARAÇ AKSESUARLARINDA %20 İNDİRİM! 🚀',
         isMaintenance: false,
       },

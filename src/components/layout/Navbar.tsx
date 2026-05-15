@@ -102,7 +102,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <img 
-            src={siteSettings?.logoUrl || "/images/logo.jpg"} 
+            src={siteSettings?.logoUrl || "/images/logo.png"} 
             alt="ibreoto" 
             className="h-10 md:h-14 w-auto hover:opacity-90 transition-opacity" 
           />
