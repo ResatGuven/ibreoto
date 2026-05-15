@@ -35,8 +35,7 @@ export const HeroSlider = () => {
     title: "PREMİUM ARAÇ AKSESUARLARI",
     subtitle: "ARACINIZA DEĞER KATIN",
     description: "En kaliteli iç ve dış aksesuarlar, teknolojik çözümler ve bakım ürünleri ile aracınızı kişiselleştirin. İbreOto ile farkı hissedin.",
-    image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1920",
-    videoUrl: "https://videos.pexels.com/video-files/3121459/3121459-uhd_2560_1440_24fps.mp4",
+    image: "https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=1920",
     buttonText: "Hemen Keşfet",
     buttonLink: "/urunler"
   };
