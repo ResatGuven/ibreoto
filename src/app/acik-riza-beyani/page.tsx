@@ -16,7 +16,7 @@ export default function AcikRizaBeyaniPage() {
           
           <div className="prose prose-amber max-w-none font-body text-text-muted leading-relaxed space-y-6">
             <p>
-              6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, ARI HAYAT tarafından sunulan ürün ve hizmetlerden faydalanmam ve Şirket ile olan ilişkim kapsamında;
+              6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, �breOto tarafından sunulan ürün ve hizmetlerden faydalanmam ve Şirket ile olan ilişkim kapsamında;
             </p>
             
             <p>

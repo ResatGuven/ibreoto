@@ -260,7 +260,7 @@ export default function OdemePage() {
 
                 <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 mb-6">
                   <p className="text-[11px] text-amber-800 font-body leading-relaxed">
-                    <strong>BİLGİ:</strong> Ödemeleriniz 256-bit SSL sertifikası ile korunmaktadır. Kart bilgileriniz ARI HAYAT tarafından saklanmaz, doğrudan banka altyapısına iletilir.
+                    <strong>BİLGİ:</strong> Ödemeleriniz 256-bit SSL sertifikası ile korunmaktadır. Kart bilgileriniz �breOto tarafından saklanmaz, doğrudan banka altyapısına iletilir.
                   </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

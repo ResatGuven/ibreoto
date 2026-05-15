@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
   const product = await getProduct(resolvedParams.slug);
 
-  if (!product) return { title: 'Ürün Bulunamadı | ARI HAYAT' };
+  if (!product) return { title: 'Ürün Bulunamadı | İbreOto' };
 
   let firstImage = '/images/logo.png';
   try {
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   } catch (e) {}
 
   return {
-    title: `${product.name} | ARI HAYAT Natural Bee Products`,
+    title: `${product.name} | İbreOto Premium Aksesuar`,
     description: product.description.substring(0, 160),
     openGraph: {
       title: product.name,
@@ -77,12 +77,12 @@ export default async function ProductDetailPage({ params }: Props) {
     stock: productData.stock,
     isFreeShipping: productData.isFreeShipping,
     isNew: productData.isNew,
-    rating: 4.9,
+    rating: 5.0,
     features: [
-      '100% Doğal Üretim',
-      'Üreticiden Doğrudan Satış',
-      'Katkı Maddesi İçermez',
-      'Geleneksel Hasat Yöntemleri'
+      'Premium Kalite Malzeme',
+      'Aracınıza Tam Uyum',
+      'Kolay Montaj Özelliği',
+      'Dayanıklı ve Uzun Ömürlü'
     ]
   };
 
@@ -93,14 +93,14 @@ export default async function ProductDetailPage({ params }: Props) {
     name: product.name,
     image: product.images[0],
     description: product.description.substring(0, 200),
-    sku: `ARI-${product.id}`,
+    sku: `IBRE-${product.id}`,
     brand: {
       '@type': 'Brand',
-      name: 'ARI HAYAT'
+      name: 'İbreOto'
     },
     offers: {
       '@type': 'Offer',
-      url: `https://arihayat.com/urun/${resolvedParams.slug}`,
+      url: `https://ibreoto.com/urun/${resolvedParams.slug}`,
       priceCurrency: 'TRY',
       price: product.price,
       availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
@@ -108,8 +108,8 @@ export default async function ProductDetailPage({ params }: Props) {
     },
     aggregateRating: {
       '@type': 'AggregateRating',
-      ratingValue: '4.9',
-      reviewCount: '12',
+      ratingValue: '5.0',
+      reviewCount: '24',
     },
   };
 

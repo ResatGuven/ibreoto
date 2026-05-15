@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sipariş Takibi | ArıHayat",
+  title: "Sipariş Takibi | İbreOto",
   description: "Sipariş numaranız ile kargonuzun durumunu ve konumunu anlık olarak sorgulayın.",
 };
 

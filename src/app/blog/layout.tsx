@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blog | ArıHayat",
-  description: "Arı ürünlerinin faydaları, sağlıklı yaşam rehberleri ve doğal beslenme dünyasından en güncel bilgiler ve uzman görüşleri.",
+  title: "Blog | İbreOto",
+  description: "Araç aksesuarları, bakım rehberleri ve otomobil dünyasından en güncel bilgiler.",
 };
 
 export default function BlogLayout({
