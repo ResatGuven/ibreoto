@@ -73,14 +73,10 @@ function UrunlerContent() {
       const res = await fetch('/api/products');
       const data = await res.json();
       if (Array.isArray(data)) {
-        setProducts(data.map(p => {
-          let imageUrl = '/images/products/placeholder.png';
-          try {
-            const imgs = typeof p.images === 'string' ? JSON.parse(p.images) : p.images;
-            imageUrl = Array.isArray(imgs) ? imgs[0] : imgs;
-          } catch (e) {}
-          return { ...p, image: imageUrl };
-        }));
+        setProducts(data.map(p => ({
+          ...p,
+          image: p.image || '/images/products/placeholder.png'
+        })));
       }
     } catch (error) {
       console.error('Failed to fetch products:', error);

@@ -42,22 +42,11 @@ export const FeaturedProducts = () => {
       if (Array.isArray(data) && data.length > 0) {
         // Shuffle and take 4
         const shuffled = data.sort(() => 0.5 - Math.random());
-        setProducts(shuffled.slice(0, 4).map((p: any) => {
-          let imageUrl = '/images/products/placeholder.png';
-          try {
-            const imgs = typeof p.images === 'string' ? JSON.parse(p.images) : p.images;
-            imageUrl = Array.isArray(imgs) ? imgs[0] : imgs;
-          } catch (e) {
-            imageUrl = p.images || imageUrl;
-          }
-          
-          return {
-            ...p,
-            image: imageUrl,
-            rating: 5,
-            reviews: Math.floor(Math.random() * 50) + 10
-          };
-        }));
+        setProducts(shuffled.slice(0, 4).map((p: any) => ({
+          ...p,
+          rating: 5,
+          reviews: Math.floor(Math.random() * 50) + 10
+        })));
       } else {
         setProducts(defaultProducts);
       }
