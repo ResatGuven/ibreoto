@@ -121,7 +121,7 @@ export default function Navbar() {
               onMouseEnter={() => setCatDropdownOpen(true)}
               onClick={() => setCatDropdownOpen(!catDropdownOpen)}
             >
-              Ürün Kategorileri <ChevronDown className="w-4 h-4 ml-1" />
+              Ürünler <ChevronDown className="w-4 h-4 ml-1" />
             </button>
             <div 
               className={`absolute top-full left-0 w-56 bg-white shadow-xl rounded-b-xl py-2 border-t-2 border-primary transition-all duration-300 ${catDropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}
@@ -221,7 +221,7 @@ export default function Navbar() {
           </Link>
           
           <div className="py-3 border-b border-gray-50">
-            <p className="font-heading uppercase font-bold text-primary text-xs mb-3 tracking-widest">Kategoriler</p>
+            <p className="font-heading uppercase font-bold text-primary text-xs mb-3 tracking-widest">Ürünler</p>
             <div className="grid grid-cols-2 gap-2">
               {categories.map((cat: any) => (
                 <Link 

@@ -24,9 +24,9 @@ export default function BlogPage() {
       {/* Header */}
       <div className="bg-secondary text-white py-16">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl font-heading font-bold uppercase mb-2">İbreoto Blog</h1>
+          <h1 className="text-4xl font-heading font-bold uppercase mb-2">ArıHayat Blog</h1>
           <p className="text-gray-300 font-body text-sm max-w-2xl mx-auto">
-            Araba aksesuarları, bakım ipuçları ve en yeni trendler hakkında uzman yazılarımız.
+            Doğal arı ürünleri, sağlıklı yaşam ipuçları ve arıcılık dünyasından en taze bilgiler.
           </p>
         </div>
       </div>
