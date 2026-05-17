@@ -103,8 +103,8 @@ export default function AdminDashboardPage() {
                     ₺{data.total.toLocaleString('tr-TR')}
                   </div>
                   <div 
-                    style={{ height: `${Math.max(heightPercentage, 5)}%` }}
-                    className="w-full bg-gradient-to-t from-red-600 to-red-400 rounded-t-lg transition-all duration-700 hover:from-red-500 hover:to-red-300 shadow-lg shadow-red-600/20"
+                  style={{ height: `${Math.max(heightPercentage, 5)}%` }}
+                    className="w-full bg-gradient-to-t from-amber-600 to-amber-400 rounded-t-lg transition-all duration-700 hover:from-amber-500 hover:to-amber-300 shadow-lg shadow-amber-600/20"
                   ></div>
                   <span className="text-[10px] text-gray-500 mt-3 font-bold uppercase">{data.day}</span>
                 </div>
@@ -155,9 +155,9 @@ export default function AdminDashboardPage() {
             <tbody className="text-gray-300">
               {orders.slice(0, 5).map((order) => (
                 <tr key={order.id} className="border-b border-gray-800 hover:bg-[#1F2937]/50 transition-colors">
-                  <td className="py-3 font-medium text-red-400">#{order.id}</td>
+                  <td className="py-3 font-medium text-amber-400">#{order.id}</td>
                   <td className="py-3 text-white">{order.customer}</td>
-                  <td className="py-3 font-medium text-red-500">{order.total}</td>
+                  <td className="py-3 font-medium text-amber-500">{order.total}</td>
                   <td className="py-3">
                     <span className={`px-2 py-1 rounded text-xs font-bold ${
                       order.status === 'Teslim Edildi' ? 'bg-green-900/50 text-green-300 border border-green-700' :

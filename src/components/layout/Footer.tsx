@@ -17,11 +17,22 @@ export default function Footer() {
         
         const catRes = await fetch('/api/products?categoriesOnly=true');
         const catData = await catRes.json();
-        if (Array.isArray(catData)) setCategories(catData.slice(0, 4));
+        if (Array.isArray(catData)) setCategories(catData);
       } catch (e) {}
     };
     fetchInfo();
   }, []);
+
+  const defaultCategories = [
+    { slug: 'ari-sutu', name: 'Arı Sütü' },
+    { slug: 'bal', name: 'Doğal Ballar' },
+    { slug: 'propolis', name: 'Propolis' },
+    { slug: 'karisim', name: 'Karışım' },
+    { slug: 'besli-karisim', name: 'Beşli Karışım' },
+    { slug: 'polen-ari-ekmegi', name: 'Polen & Arı Ekmeği' },
+    { slug: 'bitkisel-yaglar', name: 'Bitkisel Yağlar' },
+  ];
+  const displayCategories = categories.length > 0 ? categories : defaultCategories;
 
   return (
     <footer className="bg-secondary text-white pt-16 pb-8 border-t-4 border-primary">
@@ -52,15 +63,16 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Kurumsal */}
         <div>
-          <h3 className="font-heading uppercase font-bold text-lg mb-6 border-b border-gray-700 pb-2 inline-block tracking-wider">KURUMSAL</h3>
+          <h3 className="font-heading uppercase font-bold text-lg mb-6 border-b border-gray-700 pb-2 inline-block tracking-wider">KATEGORİLER</h3>
           <ul className="space-y-3 font-body text-gray-400 text-sm">
-            <li><Link href="/hakkimizda" className="hover:text-primary transition-colors">Hakkımızda</Link></li>
-            <li><Link href="/iletisim" className="hover:text-primary transition-colors">İletişim</Link></li>
-            <li><Link href="/blog" className="hover:text-primary transition-colors">Blog</Link></li>
-            <li><Link href="/siparis-takip" className="hover:text-primary transition-colors">Siparişim Nerede?</Link></li>
-            <li><Link href="/sss" className="hover:text-primary transition-colors">Sıkça Sorulan Sorular</Link></li>
+            {displayCategories.map((cat: any) => (
+              <li key={cat.slug || cat.id}>
+                <Link href={`/urunler?category=${cat.slug}`} className="hover:text-primary transition-colors">
+                  {cat.name}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -83,7 +95,11 @@ export default function Footer() {
           <ul className="space-y-4 font-body text-gray-400 text-sm">
             <li className="flex items-start">
               <Phone className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
-              <a href={`tel:${siteSettings?.contactPhone?.replace(/\s/g, '') || "05061578963"}`} className="hover:text-primary transition-colors">{siteSettings?.contactPhone || "0506 157 89 63"}</a>
+              <a href="tel:+905363411984" className="hover:text-primary transition-colors">0536 341 19 84</a>
+            </li>
+            <li className="flex items-start">
+              <Phone className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
+              <a href="https://wa.me/905353377251" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">WhatsApp: (535) 337 72 51</a>
             </li>
             <li className="flex items-start">
               <Mail className="w-5 h-5 mr-3 text-primary flex-shrink-0" />

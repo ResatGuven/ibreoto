@@ -11,10 +11,14 @@ export const FeaturedProducts = () => {
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const defaultProducts = [
-    { id: '1', name: 'Arı Sütü Yerli Üretim 10 gr', price: 400, category: 'ari-sutu', image: '/images/products/ari-sutu.png', description: 'Bursa yöresinden taze sağım, dondurulmuş saf yerli arı sütü.', rating: 5, reviews: 42, isNew: true, isFreeShipping: true },
-    { id: '2', name: 'Zeytinyağlı Propolis 50 ml', price: 350, category: 'propolis', image: '/images/products/propolis.png', description: 'Alkol içermeyen, zeytinyağı bazlı doğal propolis ekstraktı.', rating: 5, reviews: 28, isNew: true, isFreeShipping: true },
-    { id: '3', name: 'Kestane Ihlamur Balı 850 gr', price: 1480, category: 'bal', image: '/images/products/bal.png', description: 'Yüksek rakimlı ormanlardan toplanan, yoğun aromali şifa kaynağı bal.', rating: 5, reviews: 56, isNew: false, isFreeShipping: true },
-    { id: '4', name: 'Arı Ekmeği (Perga) 100 gr', price: 650, category: 'polen-ari-ekmegi', image: '/images/products/polen.png', description: 'Protein ve vitamin deposu fermente polen.', rating: 5, reviews: 15, isNew: false, isFreeShipping: false },
+    { id: 'ari-02', name: 'Arı Sütü Yerli Üretim 50 gr', price: 2000, originalPrice: null, category: 'ari-sutu', image: '/images/products/ari-sutu.png', description: 'Kendi kovanlarımızdan taze sağım, dondurulmuş saf yerli arı sütü. 50 gr.', rating: 5, reviews: 42, isNew: false, isFreeShipping: true },
+    { id: 'pro-01', name: 'Zeytinyağlı Propolis 50 ml', price: 350, originalPrice: 400, category: 'propolis', image: '/images/products/propolis.png', description: 'Alkol içermeyen, soğuk sıkım zeytinyağında çözülmüş saf propolis ekstraktı. 50 ml.', rating: 5, reviews: 28, isNew: false, isFreeShipping: false },
+    { id: 'bal-07', name: 'Kestane Ihlamur Balı 850 gr', price: 1480, originalPrice: null, category: 'bal', image: '/images/products/bal.png', description: 'Kestane ve ihlamur çiçeklerinin eşsiz harmanı. Güçlü antioksidan içeriği. 850 gr.', rating: 5, reviews: 56, isNew: false, isFreeShipping: true },
+    { id: 'kar-01', name: 'Karışım Kids 225 gr', price: 420, originalPrice: null, category: 'karisim', image: '/images/products/karisim.png', description: 'Çocuklar için özel formül. Yerli arı sütü, ham bal, Polen ve propolis. 225 gr.', rating: 5, reviews: 31, isNew: false, isFreeShipping: false },
+    { id: 'pol-01', name: 'Arı Ekmeği 100 gr', price: 450, originalPrice: null, category: 'polen-ari-ekmegi', image: '/images/products/polen.png', description: 'İşçi arıların fermente ettiği protein ve vitamin deposu arı ekmeği (perga). 100 gr.', rating: 5, reviews: 15, isNew: false, isFreeShipping: false },
+    { id: 'bal-11', name: 'Arı Hayat Krem Bal 400 gr', price: 350, originalPrice: null, category: 'bal', image: '/images/products/bal.png', description: 'Pürüssüz kıvamı ve zengin aromasıyla doğalrıkın krem hali. 400 gr.', rating: 5, reviews: 9, isNew: true, isFreeShipping: false },
+    { id: 'kar-04', name: 'Yetişkin Karışım 225 gr', price: 710, originalPrice: null, category: 'karisim', image: '/images/products/karisim.png', description: 'Yetişkinler için özel formül. Yerli ham bal, arı sütü, Polen ve propolis. 225 gr.', rating: 5, reviews: 22, isNew: false, isFreeShipping: false },
+    { id: 'ari-04', name: 'Yerli Arı Sütü 20 gr', price: 800, originalPrice: 900, category: 'ari-sutu', image: '/images/products/ari-sutu.png', description: 'Başlangıç dozu için ideal. Kendi kovanlarımızdan elde edilen saf yerli arı sütü. 20 gr.', rating: 5, reviews: 18, isNew: false, isFreeShipping: false },
   ];
 
   useEffect(() => {

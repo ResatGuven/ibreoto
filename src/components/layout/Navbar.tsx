@@ -125,37 +125,36 @@ export default function Navbar() {
               Ürünler <ChevronDown className="w-4 h-4 ml-1" />
             </button>
             <div 
-              className={`absolute top-full left-0 w-56 bg-white shadow-xl rounded-b-xl py-2 border-t-2 border-primary transition-all duration-300 ${catDropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}
+              className={`absolute top-full left-0 w-64 bg-white shadow-xl rounded-b-xl py-2 border-t-2 border-primary transition-all duration-300 ${catDropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}
               onMouseLeave={() => setCatDropdownOpen(false)}
             >
-                <Link 
-                  href={`/urunler?category=bal`}
+              {[
+                { slug: 'ari-sutu', label: '🐝 Arı Sütü' },
+                { slug: 'bal', label: '🍯 Doğal Ballar' },
+                { slug: 'propolis', label: '🌿 Propolis' },
+                { slug: 'karisim', label: '✨ Karışım' },
+                { slug: 'besli-karisim', label: '🌟 Beşli Karışım' },
+                { slug: 'polen-ari-ekmegi', label: '🌼 Polen & Arı Ekmeği' },
+                { slug: 'bitkisel-yaglar', label: '🌾 Bitkisel Yağlar' },
+              ].map(cat => (
+                <Link
+                  key={cat.slug}
+                  href={`/urunler?category=${cat.slug}`}
                   className="block px-6 py-2.5 text-xs font-bold uppercase text-secondary hover:bg-primary/5 hover:text-primary transition-colors"
                   onClick={() => setCatDropdownOpen(false)}
                 >
-                  Doğal Ballar
+                  {cat.label}
                 </Link>
-                <Link 
-                  href={`/urunler?category=propolis`}
-                  className="block px-6 py-2.5 text-xs font-bold uppercase text-secondary hover:bg-primary/5 hover:text-primary transition-colors"
+              ))}
+              <div className="border-t border-gray-100 mt-2 pt-2">
+                <Link
+                  href="/urunler"
+                  className="block px-6 py-2.5 text-xs font-bold uppercase text-primary hover:bg-primary hover:text-white transition-colors"
                   onClick={() => setCatDropdownOpen(false)}
                 >
-                  Propolis
+                  📜 Tüm Ürünler
                 </Link>
-                <Link 
-                  href={`/urunler?category=ari-sutu`}
-                  className="block px-6 py-2.5 text-xs font-bold uppercase text-secondary hover:bg-primary/5 hover:text-primary transition-colors"
-                  onClick={() => setCatDropdownOpen(false)}
-                >
-                  Arı Sütü
-                </Link>
-                <Link 
-                  href={`/urunler?category=polen-ari-ekmegi`}
-                  className="block px-6 py-2.5 text-xs font-bold uppercase text-secondary hover:bg-primary/5 hover:text-primary transition-colors"
-                  onClick={() => setCatDropdownOpen(false)}
-                >
-                  Polen & Arı Ekmeği
-                </Link>
+              </div>
             </div>
           </div>
 

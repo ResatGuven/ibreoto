@@ -8,15 +8,15 @@ export default function AdminSettingsPage() {
   const { showToast } = useAdminToast();
   const [settings, setSettings] = useState<any>({
     siteName: 'Arı Hayat',
-    siteDescription: '',
-    contactEmail: '',
-    contactPhone: '',
-    address: '',
-    whatsappNumber: '',
+    siteDescription: '%100 Doğal Bal, Propolis ve Arı Ürünleri. Kendi arılıklarımızdan üreticiden taze teslimat.',
+    contactEmail: 'destek@arihayat.com',
+    contactPhone: '0536 341 19 84',
+    address: 'Bursa, Türkiye',
+    whatsappNumber: '905353377251',
     facebookUrl: '',
-    instagramUrl: '',
+    instagramUrl: 'https://www.instagram.com/arihayat',
     twitterUrl: '',
-    announcementBar: '',
+    announcementBar: '🐝 Ücretsiz Kargo: 1.500 TL ve Üzeri Alışverişlerde! Doğal ürünler, güvenilir teslimat.',
     isMaintenance: false
   });
   const [loading, setLoading] = useState(true);

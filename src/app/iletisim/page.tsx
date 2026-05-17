@@ -48,7 +48,7 @@ export default function IletisimPage() {
       {/* Content Section */}
       <section className="py-16">
         <div className="container mx-auto px-4 max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
             {/* Contact Info Cards */}
             <div className="bg-background p-6 rounded-xl border border-gray-100 text-center">
               <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -65,9 +65,19 @@ export default function IletisimPage() {
               </div>
               <h3 className="font-heading font-bold text-lg text-secondary mb-2 uppercase">Telefon</h3>
               <p className="text-text-muted font-body text-xs mb-1">
-                <a href="tel:+905353377251" className="hover:text-primary transition-colors font-bold">0535 337 72 51</a>
+                <a href="tel:+905363411984" className="hover:text-primary transition-colors font-bold">0536 341 19 84</a>
               </p>
               <p className="text-text-muted font-body text-xs">Pzt - Cmt: 09:00 - 19:00</p>
+            </div>
+            <div className="bg-green-50 p-6 rounded-xl border border-green-200 text-center">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">💬</span>
+              </div>
+              <h3 className="font-heading font-bold text-lg text-secondary mb-2 uppercase">WhatsApp</h3>
+              <p className="text-text-muted font-body text-xs mb-1">
+                <a href="https://wa.me/905353377251" target="_blank" rel="noopener noreferrer" className="hover:text-green-600 transition-colors font-bold text-green-700">0535 337 72 51</a>
+              </p>
+              <p className="text-text-muted font-body text-xs">7/24 Mesaj Gönderin</p>
             </div>
             <div className="bg-background p-6 rounded-xl border border-gray-100 text-center">
               <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -77,7 +87,7 @@ export default function IletisimPage() {
               <p className="text-text-muted font-body text-xs mb-1">
                 <a href="mailto:destek@arihayat.com" className="hover:text-primary transition-colors font-bold">destek@arihayat.com</a>
               </p>
-              <p className="text-text-muted font-body text-xs">7/24 Mail Gönderebilirsiniz</p>
+              <p className="text-text-muted font-body text-xs">7/24 Mail Gönderin</p>
             </div>
           </div>
 
