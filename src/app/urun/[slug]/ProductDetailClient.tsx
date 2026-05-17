@@ -3,9 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
-import { MessageSquare, Send, Heart, Share2, ShieldCheck, Truck, Clock, CheckCircle2 } from 'lucide-react';
+import { MessageSquare, Send, Heart, Share2, ShieldCheck, Truck, Clock, CheckCircle2, Ticket } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 export default function ProductDetailClient({ product, slug }: { product: any, slug: string }) {
+  const { data: session } = useSession();
   const [qty, setQty] = useState(1);
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState({ name: '', rating: 5, text: '' });
@@ -188,18 +190,41 @@ export default function ProductDetailClient({ product, slug }: { product: any, s
               {product.name}
             </h1>
 
-            <div className="bg-amber-50/50 rounded-xl p-4 mb-6 border border-amber-100/50">
-              <div className="flex items-baseline space-x-3 mb-2">
+            <div className="bg-amber-50/50 rounded-xl p-4 mb-6 border border-amber-100/50 space-y-3">
+              <div className="flex items-baseline space-x-3">
                 <span className="text-3xl md:text-4xl font-heading font-bold text-primary">
-                  {product.price.toLocaleString('tr-TR')} TL
+                  {session ? (product.price * 0.9).toLocaleString('tr-TR') : product.price.toLocaleString('tr-TR')} TL
                 </span>
-                {product.oldPrice && (
+                {(product.oldPrice || session) && (
                   <span className="text-lg font-heading text-text-muted line-through">
-                    {product.oldPrice.toLocaleString('tr-TR')} TL
+                    {session ? product.price.toLocaleString('tr-TR') : (product.oldPrice ? product.oldPrice.toLocaleString('tr-TR') : '')} TL
                   </span>
                 )}
               </div>
-              <div className="flex items-center text-xs text-amber-800 font-medium">
+
+              {session ? (
+                <div className="flex flex-col space-y-1.5 pt-1.5 border-t border-amber-200/30">
+                  <div className="flex items-center text-[10px] text-amber-800 font-black uppercase tracking-wider">
+                    <span className="w-2 h-2 rounded-full bg-green-500 mr-1.5 animate-pulse" />
+                    🐝 Üyemize Özel %10 Ek İndirim Uygulandı!
+                  </div>
+                  <div className="flex items-center text-[10px] text-gray-500 font-medium">
+                    <Ticket className="w-3.5 h-3.5 mr-1 text-primary" />
+                    Ödeme ekranında <span className="font-bold text-secondary mx-1">UYE10</span> kuponunu kullanabilirsiniz.
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col space-y-1.5 pt-1.5 border-t border-amber-200/30">
+                  <div className="flex items-center text-[10px] text-amber-800 font-black uppercase tracking-wider">
+                    🎁 Üyelerimize Özel Ekstra %10 İndirim!
+                  </div>
+                  <Link href="/giris" className="text-[10px] text-primary font-bold hover:underline flex items-center">
+                    Giriş yapın veya ücretsiz üye olun &gt;
+                  </Link>
+                </div>
+              )}
+
+              <div className="flex items-center text-[10px] text-gray-400 font-medium pt-1">
                 <Clock className="w-3 h-3 mr-1" /> Bu fiyat sınırlı bir süre için geçerlidir.
               </div>
             </div>
