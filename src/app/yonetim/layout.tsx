@@ -3,13 +3,14 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { LayoutDashboard, ShoppingBag, Settings, LogOut, FileText, Tag, MessageSquare, Mail, Ticket, BookOpen, Menu, X, Image as ImageIcon, Users, Star, HelpCircle } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Settings, LogOut, FileText, Tag, MessageSquare, Mail, Ticket, BookOpen, Menu, X, Image as ImageIcon, Users, Star, HelpCircle, Sparkles } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import { AdminToastProvider } from '@/context/AdminToastContext';
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Genel Durum', href: '/yonetim' },
   { icon: ShoppingBag, label: 'Kovan & Ürünler', href: '/yonetim/urunler' },
+  { icon: Sparkles, label: 'Sosyal Medya Asistanı', href: '/yonetim/sosyal-medya' },
   { icon: Mail, label: 'Gelen Mesajlar', href: '/yonetim/mesajlar' },
   { icon: Users, label: 'Arıcılar (Müşteriler)', href: '/yonetim/musteriler' },
   { icon: Tag, label: 'Kategoriler', href: '/yonetim/kategoriler' },
