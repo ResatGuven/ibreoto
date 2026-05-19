@@ -12,13 +12,49 @@ export async function POST(request: Request) {
 
     const session = await getServerSession(authOptions);
 
+    // Parse items to extract clean numeric price and qty
+    const parsedItems = items.map((item: any) => {
+      const qty = Number(item.qty || item.quantity || 1);
+      
+      let priceVal = 0;
+      if (typeof item.price === 'number') {
+        priceVal = item.price;
+      } else {
+        let priceStr = String(item.price || "0").trim();
+        priceStr = priceStr.replace(/[₺$€\s]|TL/gi, '');
+        if (priceStr.includes(',') && (!priceStr.includes('.') || priceStr.indexOf('.') < priceStr.indexOf(','))) {
+          priceStr = priceStr.replace(/\./g, '').replace(',', '.');
+        } else if (priceStr.includes('.') && priceStr.includes(',')) {
+          priceStr = priceStr.replace(/\./g, '').replace(',', '.');
+        } else if (!priceStr.includes(',') && priceStr.includes('.')) {
+          // Check if dot is thousand or decimal. In TR Balances, normally dot is thousand separator unless it's a decimal float.
+          // If dot is followed by exactly 3 digits and it's a large value, it's likely thousand separator.
+          const parts = priceStr.split('.');
+          if (parts.length === 2 && parts[1].length !== 3) {
+            // e.g. 15.5 or 123.45 (decimal dot)
+            // keep it as is
+          } else {
+            // e.g. 1.480 -> thousand separator
+            priceStr = priceStr.replace(/\./g, '');
+          }
+        }
+        priceVal = parseFloat(priceStr) || 0;
+      }
+
+      return {
+        id: item.id,
+        qty,
+        price: priceVal
+      };
+    });
+
     // 1. Validate and update stock
-    for (const item of items) {
+    for (const item of parsedItems) {
       const product = await prisma.product.findUnique({
         where: { id: item.id }
       });
 
-      if (!product || product.stock < item.quantity) {
+      if (!product || product.stock < item.qty) {
         return NextResponse.json({ 
           success: false, 
           error: `Yetersiz stok: ${product?.name || 'Bilinmeyen ürün'}` 
@@ -44,11 +80,11 @@ export async function POST(request: Request) {
       });
 
       // 2. Create order items
-      const orderItemsData = items.map((item: any) => ({
+      const orderItemsData = parsedItems.map((item: any) => ({
         orderId: newOrder.id,
         productId: item.id,
-        quantity: item.quantity,
-        price: Number(item.price),
+        quantity: item.qty,
+        price: item.price,
       }));
 
       await tx.orderItem.createMany({
@@ -56,12 +92,12 @@ export async function POST(request: Request) {
       });
 
       // 3. Deduct Stock
-      for (const item of items) {
+      for (const item of parsedItems) {
         await tx.product.update({
           where: { id: item.id },
           data: {
             stock: {
-              decrement: item.quantity
+              decrement: item.qty
             }
           }
         });

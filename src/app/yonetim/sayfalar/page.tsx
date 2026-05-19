@@ -4,6 +4,162 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit, Save, FileText } from 'lucide-react';
 import { useAdminToast } from '@/context/AdminToastContext';
 
+const RichTextEditor = ({ value, onChange }: { value: string; onChange: (val: string) => void }) => {
+  const editorRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (editorRef.current && editorRef.current.innerHTML !== value) {
+      editorRef.current.innerHTML = value || '<p><br></p>';
+    }
+  }, [value]);
+
+  const handleInput = () => {
+    if (editorRef.current) {
+      onChange(editorRef.current.innerHTML);
+    }
+  };
+
+  const execCmd = (command: string, arg: string = '') => {
+    document.execCommand(command, false, arg);
+    handleInput();
+  };
+
+  return (
+    <div className="border border-gray-700 rounded-lg overflow-hidden bg-[#1F2937]">
+      <style>{`
+        .editor-content h2 { font-size: 1.5rem; font-weight: 700; margin-top: 1rem; margin-bottom: 0.5rem; color: #fff; }
+        .editor-content h3 { font-size: 1.25rem; font-weight: 700; margin-top: 0.75rem; margin-bottom: 0.5rem; color: #fff; }
+        .editor-content p { margin-bottom: 1rem; color: #d1d5db; line-height: 1.6; }
+        .editor-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+        .editor-content ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1rem; }
+        .editor-content a { color: #F59E0B; text-decoration: underline; }
+      `}</style>
+      {/* Toolbar */}
+      <div className="flex flex-wrap items-center gap-1 p-2 bg-[#111827] border-b border-gray-700 select-none">
+        <button
+          type="button"
+          onClick={() => execCmd('bold')}
+          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs font-bold text-gray-300 hover:text-white transition-colors"
+          title="Kalın"
+        >
+          K
+        </button>
+        <button
+          type="button"
+          onClick={() => execCmd('italic')}
+          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs italic text-gray-300 hover:text-white transition-colors"
+          title="İtalik"
+        >
+          İ
+        </button>
+        <button
+          type="button"
+          onClick={() => execCmd('underline')}
+          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs underline text-gray-300 hover:text-white transition-colors"
+          title="Altı Çizili"
+        >
+          A
+        </button>
+        <div className="w-[1px] h-6 bg-gray-700 mx-1"></div>
+        <button
+          type="button"
+          onClick={() => execCmd('formatBlock', '<h2>')}
+          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs font-bold text-gray-300 hover:text-white transition-colors"
+          title="Büyük Başlık"
+        >
+          H2
+        </button>
+        <button
+          type="button"
+          onClick={() => execCmd('formatBlock', '<h3>')}
+          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs font-bold text-gray-300 hover:text-white transition-colors"
+          title="Küçük Başlık"
+        >
+          H3
+        </button>
+        <button
+          type="button"
+          onClick={() => execCmd('formatBlock', '<p>')}
+          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs text-gray-300 hover:text-white transition-colors"
+          title="Paragraf"
+        >
+          P
+        </button>
+        <div className="w-[1px] h-6 bg-gray-700 mx-1"></div>
+        <button
+          type="button"
+          onClick={() => execCmd('insertUnorderedList')}
+          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs text-gray-300 hover:text-white transition-colors"
+          title="Madde İşaretli Liste"
+        >
+          • Liste
+        </button>
+        <button
+          type="button"
+          onClick={() => execCmd('insertOrderedList')}
+          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs text-gray-300 hover:text-white transition-colors"
+          title="Numaralı Liste"
+        >
+          1. Liste
+        </button>
+        <div className="w-[1px] h-6 bg-gray-700 mx-1"></div>
+        <button
+          type="button"
+          onClick={() => execCmd('justifyLeft')}
+          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs text-gray-300 hover:text-white transition-colors"
+          title="Sola Hizala"
+        >
+          Sola
+        </button>
+        <button
+          type="button"
+          onClick={() => execCmd('justifyCenter')}
+          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs text-gray-300 hover:text-white transition-colors"
+          title="Ortala"
+        >
+          Orta
+        </button>
+        <button
+          type="button"
+          onClick={() => execCmd('justifyRight')}
+          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs text-gray-300 hover:text-white transition-colors"
+          title="Sağa Hizala"
+        >
+          Sağa
+        </button>
+        <div className="w-[1px] h-6 bg-gray-700 mx-1"></div>
+        <button
+          type="button"
+          onClick={() => {
+            const url = window.prompt('Bağlantı URL adresini girin:');
+            if (url) execCmd('createLink', url);
+          }}
+          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs text-amber-500 hover:text-amber-400 transition-colors font-bold"
+          title="Bağlantı Ekle"
+        >
+          Link Ekle
+        </button>
+        <button
+          type="button"
+          onClick={() => execCmd('removeFormat')}
+          className="px-3 py-1.5 hover:bg-red-900/20 hover:text-red-400 rounded text-xs text-gray-400 transition-colors"
+          title="Biçimlendirmeyi Temizle"
+        >
+          Temizle
+        </button>
+      </div>
+
+      {/* Editor Content Area */}
+      <div
+        ref={editorRef}
+        contentEditable={true}
+        onInput={handleInput}
+        className="w-full p-4 min-h-[300px] outline-none text-white overflow-y-auto text-sm editor-content"
+      />
+    </div>
+  );
+};
+
 export default function AdminPagesPage() {
   const [pages, setPages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -110,12 +266,10 @@ export default function AdminPagesPage() {
                 <input type="text" value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-gray-400 mb-1 text-xs font-body uppercase">İçerik (HTML destekler)</label>
-                <textarea 
+                <label className="block text-gray-400 mb-2 text-xs font-body uppercase">İçerik Editörü (Görsel Zengin Editör)</label>
+                <RichTextEditor 
                   value={formData.content} 
-                  onChange={e => setFormData({...formData, content: e.target.value})} 
-                  className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary min-h-[300px] font-mono text-sm" 
-                  placeholder="Sayfa içeriğini buraya yazın... <br>, <strong> gibi HTML etiketleri kullanabilirsiniz."
+                  onChange={val => setFormData({...formData, content: val})} 
                 />
               </div>
               <div>
