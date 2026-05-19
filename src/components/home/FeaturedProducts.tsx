@@ -48,8 +48,8 @@ export const FeaturedProducts = () => {
         const shuffled = data.sort(() => 0.5 - Math.random());
         setProducts(shuffled.slice(0, 4).map((p: any) => ({
           ...p,
-          rating: 5,
-          reviews: Math.floor(Math.random() * 50) + 10
+          rating: p.rating || 5,
+          reviews: p.reviewCount || Math.floor(Math.random() * 50) + 10
         })));
       } else {
         setProducts(defaultProducts);
@@ -177,7 +177,7 @@ export const FeaturedProducts = () => {
                   {[...Array(5)].map((_, i) => (
                     <Star 
                       key={i} 
-                      className={`w-3 h-3 ${i < product.rating ? 'fill-current' : 'text-gray-200'}`} 
+                      className={`w-3 h-3 ${i < Math.round(product.rating || 5) ? 'fill-current' : 'text-gray-200'}`} 
                     />
                   ))}
                   <span className="text-text-muted text-[10px] ml-2">({product.reviews} Değerlendirme)</span>

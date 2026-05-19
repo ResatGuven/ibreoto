@@ -58,8 +58,9 @@ export async function POST(request: Request) {
         data: {
           code: couponName,
           discount: 10,
-          type: "PERCENTAGE",
-          active: true,
+          type: "percentage",
+          isActive: true,
+          expiry: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
         }
       }).catch(e => console.error("Could not auto-create welcome coupon:", e));
     }

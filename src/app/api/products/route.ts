@@ -24,6 +24,9 @@ export async function GET(request: Request) {
         category: {
           select: { slug: true, name: true },
         },
+        reviews: {
+          select: { rating: true }
+        }
       },
       orderBy: { createdAt: 'desc' }
     });
@@ -36,11 +39,17 @@ export async function GET(request: Request) {
       } catch (e) {
         imageUrl = p.images || imageUrl;
       }
+
+      let rating = 5.0;
+      if (p.reviews && p.reviews.length > 0) {
+        rating = Number((p.reviews.reduce((acc, r) => acc + r.rating, 0) / p.reviews.length).toFixed(1));
+      }
       
       return {
         id: p.id,
         name: p.name,
         price: p.price.toString(),
+        oldPrice: p.oldPrice ? p.oldPrice.toString() : null,
         category: p.category ? {
           slug: p.category.slug,
           name: p.category.name
@@ -49,6 +58,8 @@ export async function GET(request: Request) {
         image: imageUrl,
         description: p.description,
         stock: p.stock,
+        isNew: p.isNew,
+        rating: rating,
         createdAt: p.createdAt
       };
     });

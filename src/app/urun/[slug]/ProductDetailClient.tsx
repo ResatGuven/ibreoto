@@ -6,36 +6,21 @@ import { Button } from '@/components/ui/Button';
 import { MessageSquare, Send, Heart, Share2, ShieldCheck, Truck, Clock, CheckCircle2, Ticket } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 
-export default function ProductDetailClient({ product, slug }: { product: any, slug: string }) {
+export default function ProductDetailClient({ product, slug, relatedProducts }: { product: any, slug: string, relatedProducts?: any[] }) {
   const { data: session } = useSession();
   const [qty, setQty] = useState(1);
-  const [comments, setComments] = useState<any[]>([]);
-  const [newComment, setNewComment] = useState({ name: '', rating: 5, text: '' });
+  const [comments, setComments] = useState<any[]>(product.reviews || []);
+  const [newComment, setNewComment] = useState({ rating: 5, text: '' });
   const [activeTab, setActiveTab] = useState('description');
   const [isFavorite, setIsFavorite] = useState(false);
   const [viewersCount, setViewersCount] = useState(0);
   const [cartCount, setCartCount] = useState(0);
-
-  const defaultComments = [
-    { id: 1, productId: slug, name: 'Ayşe T.', rating: 5, text: 'Arı sütü taptaze geldi, paketleme çok özenliydi. Teşekkürler Arı Hayat.', date: '12.05.2026' },
-    { id: 2, productId: slug, name: 'Murat G.', rating: 5, text: 'Karışım kids çocuklarımın vazgeçilmezi oldu. Tadı harika.', date: '10.05.2026' },
-    { id: 3, productId: slug, name: 'Selin B.', rating: 4, text: 'Balın aroması çok yoğun ve doğal. Kesinlikle tavsiye ederim.', date: '08.05.2026' },
-  ];
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     // Random social proof
     setViewersCount(Math.floor(Math.random() * 20) + 5);
     setCartCount(Math.floor(Math.random() * 10) + 3);
-
-    // Comments logic
-    const savedComments = localStorage.getItem('app_reviews');
-    if (savedComments) {
-      const parsed = JSON.parse(savedComments);
-      const filtered = parsed.filter((c: any) => c.productId === slug);
-      setComments(filtered.length > 0 ? filtered : defaultComments);
-    } else {
-      setComments(defaultComments);
-    }
 
     // Favorites logic
     const savedFavs = localStorage.getItem('favorites');
@@ -43,7 +28,7 @@ export default function ProductDetailClient({ product, slug }: { product: any, s
       const favs = JSON.parse(savedFavs);
       setIsFavorite(favs.some((p: any) => String(p.id) === String(product.id)));
     }
-  }, [slug, product.id]);
+  }, [product.id]);
 
   const addToCart = () => {
     const savedCart = localStorage.getItem('cart');
@@ -114,24 +99,44 @@ export default function ProductDetailClient({ product, slug }: { product: any, s
     }
   };
 
-  const handleCommentSubmit = (e: React.FormEvent) => {
+  const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const comment = {
-      id: Date.now(),
-      productId: slug,
-      name: newComment.name,
-      rating: newComment.rating,
-      text: newComment.text,
-      date: new Date().toLocaleDateString('tr-TR')
-    };
+    if (!session) {
+      alert("Yorum yapabilmek için giriş yapmalısınız.");
+      return;
+    }
 
-    const savedComments = localStorage.getItem('app_reviews');
-    const allComments = savedComments ? JSON.parse(savedComments) : [];
-    allComments.unshift(comment);
-    localStorage.setItem('app_reviews', JSON.stringify(allComments));
+    setIsSubmitting(true);
+    try {
+      const res = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          rating: newComment.rating,
+          comment: newComment.text,
+          productId: product.id
+        })
+      });
 
-    setComments([comment, ...comments]);
-    setNewComment({ name: '', rating: 5, text: '' });
+      const data = await res.json();
+      if (res.ok) {
+        setComments([{
+          id: data.review.id,
+          userName: data.review.user?.name || 'Anonim',
+          rating: data.review.rating,
+          comment: data.review.comment,
+          date: new Date(data.review.createdAt).toLocaleDateString('tr-TR')
+        }, ...comments]);
+        setNewComment({ rating: 5, text: '' });
+        alert("Yorumunuz başarıyla eklendi!");
+      } else {
+        alert(data.error || "Bir hata oluştu.");
+      }
+    } catch (e) {
+      alert("Bir hata oluştu.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getWhatsAppLink = () => {
@@ -361,50 +366,84 @@ export default function ProductDetailClient({ product, slug }: { product: any, s
             {/* Review Form & List remains largely the same but with ARI HAYAT theme */}
             <div className="bg-surface p-6 rounded-xl mb-8">
               <h3 className="font-heading font-bold text-secondary uppercase mb-4 text-sm">Deneyiminizi Paylaşın</h3>
-              <form onSubmit={handleCommentSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-text-muted mb-1 text-xs uppercase">Adınız</label>
-                    <input type="text" value={newComment.name} onChange={e => setNewComment({...newComment, name: e.target.value})} className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary outline-none transition-all text-sm" required />
+              {session ? (
+                <form onSubmit={handleCommentSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-text-muted mb-1 text-xs uppercase">Puan</label>
+                      <select value={newComment.rating} onChange={e => setNewComment({...newComment, rating: parseInt(e.target.value)})} className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary outline-none transition-all text-sm">
+                        <option value="5">5 Yıldız</option>
+                        <option value="4">4 Yıldız</option>
+                        <option value="3">3 Yıldız</option>
+                        <option value="2">2 Yıldız</option>
+                        <option value="1">1 Yıldız</option>
+                      </select>
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-text-muted mb-1 text-xs uppercase">Puan</label>
-                    <select value={newComment.rating} onChange={e => setNewComment({...newComment, rating: parseInt(e.target.value)})} className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary outline-none transition-all text-sm">
-                      <option value="5">5 Yıldız</option>
-                      <option value="4">4 Yıldız</option>
-                      <option value="3">3 Yıldız</option>
-                      <option value="2">2 Yıldız</option>
-                      <option value="1">1 Yıldız</option>
-                    </select>
+                    <label className="block text-text-muted mb-1 text-xs uppercase">Yorumunuz</label>
+                    <textarea value={newComment.text} onChange={e => setNewComment({...newComment, text: e.target.value})} rows={3} className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary outline-none transition-all text-sm" required></textarea>
                   </div>
+                  <button type="submit" disabled={isSubmitting} className="bg-secondary hover:bg-secondary-hover text-white px-6 py-3 rounded-lg font-heading font-bold text-xs uppercase transition-colors flex items-center disabled:opacity-50">
+                    <Send className="w-3 h-3 mr-2" /> {isSubmitting ? 'Gönderiliyor...' : 'Değerlendir'}
+                  </button>
+                </form>
+              ) : (
+                <div className="bg-white p-6 border border-gray-100 rounded-lg text-center">
+                  <p className="text-text-muted text-sm mb-4">Ürünlerimizi değerlendirmek ve diğer müşterilerimize deneyimlerinizi aktarmak için lütfen giriş yapın.</p>
+                  <Link href="/giris" className="inline-block bg-primary text-secondary font-heading font-bold text-xs uppercase px-6 py-3 rounded-lg hover:bg-primary-hover transition-colors">
+                    Giriş Yap / Üye Ol
+                  </Link>
                 </div>
-                <div>
-                  <label className="block text-text-muted mb-1 text-xs uppercase">Yorumunuz</label>
-                  <textarea value={newComment.text} onChange={e => setNewComment({...newComment, text: e.target.value})} rows={3} className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary outline-none transition-all text-sm" required></textarea>
-                </div>
-                <button type="submit" className="bg-secondary hover:bg-secondary-hover text-white px-6 py-3 rounded-lg font-heading font-bold text-xs uppercase transition-colors flex items-center">
-                  <Send className="w-3 h-3 mr-2" /> Değerlendir
-                </button>
-              </form>
+              )}
             </div>
 
             <div className="space-y-6">
               {comments.map((comment) => (
                 <div key={comment.id} className="border-b border-gray-100 pb-6 last:border-0">
                   <div className="flex justify-between items-center mb-2">
-                    <div className="font-bold text-secondary text-sm">{comment.name}</div>
+                    <div className="font-bold text-secondary text-sm">{comment.userName}</div>
                     <div className="text-xs text-text-muted">{comment.date}</div>
                   </div>
                   <div className="flex text-amber-500 text-[10px] mb-2">
                     {'★'.repeat(comment.rating)}{'☆'.repeat(5 - comment.rating)}
                   </div>
-                  <p className="text-text-muted text-sm leading-relaxed italic">"{comment.text}"</p>
+                  <p className="text-text-muted text-sm leading-relaxed italic">"{comment.comment}"</p>
                 </div>
               ))}
             </div>
           </div>
         )}
       </div>
+
+      {/* Cross-Sell Carousel */}
+      {relatedProducts && relatedProducts.length > 0 && (
+        <div className="mb-12">
+          <h2 className="text-2xl font-heading font-bold text-secondary mb-6 uppercase border-b border-gray-100 pb-3">
+            Bunu Alanlar Şunları Da İnceledi
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {relatedProducts.map(rp => (
+              <Link href={`/urun/${rp.slug}`} key={rp.id} className="bg-white rounded-xl shadow-sm border border-surface p-4 hover:border-primary transition-colors flex flex-col group h-full">
+                <div className="relative aspect-square bg-surface rounded-lg mb-4 flex items-center justify-center p-2 overflow-hidden">
+                  <img src={rp.images[0]} alt={rp.name} className="max-h-full object-contain transition-transform group-hover:scale-110 duration-500" />
+                </div>
+                <div className="flex flex-col flex-grow">
+                  <h3 className="font-bold text-secondary text-sm line-clamp-2 mb-2 group-hover:text-primary transition-colors">{rp.name}</h3>
+                  <div className="mt-auto">
+                    <div className="flex items-baseline space-x-2">
+                      <span className="text-lg font-heading font-bold text-primary">{rp.price.toLocaleString('tr-TR')} TL</span>
+                      {rp.oldPrice && (
+                        <span className="text-xs font-heading text-text-muted line-through">{rp.oldPrice.toLocaleString('tr-TR')} TL</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Sticky Mobile Buy Button */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 z-50 flex items-center space-x-3 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">

@@ -15,6 +15,21 @@ async function getProduct(slug: string) {
         { id: slug },
         { slug: slug }
       ]
+    },
+    include: {
+      reviews: {
+        include: {
+          user: {
+            select: {
+              name: true
+            }
+          }
+        },
+        orderBy: {
+          createdAt: 'desc'
+        }
+      },
+      category: true
     }
   });
 
@@ -65,6 +80,39 @@ export default async function ProductDetailPage({ params }: Props) {
     console.error('Failed to parse product images:', e);
   }
 
+  // Calculate average rating
+  let averageRating = 5.0;
+  if (productData.reviews && productData.reviews.length > 0) {
+    const total = productData.reviews.reduce((acc, review) => acc + review.rating, 0);
+    averageRating = Number((total / productData.reviews.length).toFixed(1));
+  }
+
+  // Fetch related products for Cross-Sell
+  const relatedProductsData = await prisma.product.findMany({
+    where: {
+      categoryId: productData.categoryId,
+      id: { not: productData.id },
+      stock: { gt: 0 }
+    },
+    take: 4,
+    orderBy: { createdAt: 'desc' }
+  });
+
+  const relatedProducts = relatedProductsData.map(p => {
+    let pImages = ['/images/logo.png'];
+    try { pImages = JSON.parse(p.images); } catch(e){}
+    return {
+      id: p.id,
+      name: p.name,
+      slug: p.slug,
+      price: Number(p.price),
+      oldPrice: p.oldPrice ? Number(p.oldPrice) : null,
+      images: pImages,
+      isNew: p.isNew,
+      isFreeShipping: p.isFreeShipping
+    };
+  });
+
   // Convert prisma model to plain object for client component
   const product = {
     id: productData.id,
@@ -73,11 +121,18 @@ export default async function ProductDetailPage({ params }: Props) {
     oldPrice: productData.oldPrice ? Number(productData.oldPrice) : null,
     description: productData.description,
     images: images,
-    category: '', 
+    category: productData.category?.name || '', 
     stock: productData.stock,
     isFreeShipping: productData.isFreeShipping,
     isNew: productData.isNew,
-    rating: 5.0,
+    rating: averageRating,
+    reviews: productData.reviews.map(r => ({
+      id: r.id,
+      rating: r.rating,
+      comment: r.comment,
+      userName: r.user?.name || 'Anonim',
+      date: new Date(r.createdAt).toLocaleDateString('tr-TR')
+    })),
     features: [
       'Laboratuvar Analizli',
       '%100 Doğal ve Katkısız',
@@ -106,11 +161,11 @@ export default async function ProductDetailPage({ params }: Props) {
       availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
       priceValidUntil: '2026-12-31'
     },
-    aggregateRating: {
+    aggregateRating: product.reviews.length > 0 ? {
       '@type': 'AggregateRating',
-      ratingValue: '5.0',
-      reviewCount: '24',
-    },
+      ratingValue: averageRating.toString(),
+      reviewCount: product.reviews.length.toString(),
+    } : undefined,
   };
 
   return (
@@ -119,7 +174,7 @@ export default async function ProductDetailPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <ProductDetailClient product={product} slug={resolvedParams.slug} />
+      <ProductDetailClient product={product} slug={resolvedParams.slug} relatedProducts={relatedProducts} />
     </>
   );
 }

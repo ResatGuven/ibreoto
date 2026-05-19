@@ -323,8 +323,8 @@ function UrunlerContent() {
                   
                   <div className="p-6 flex flex-col flex-grow relative z-10 pointer-events-none">
                     <div className="flex items-center space-x-1 text-primary mb-2">
-                      {[...Array(5)].map((_, i) => <Star key={i} size={12} className="fill-primary" />)}
-                      <span className="text-[10px] text-gray-400 font-bold ml-2">5.0</span>
+                      {[...Array(5)].map((_, i) => <Star key={i} size={12} className={i < Math.round(product.rating || 5) ? "fill-primary" : "text-gray-300"} />)}
+                      <span className="text-[10px] text-gray-400 font-bold ml-2">{(product.rating || 5.0).toFixed(1)}</span>
                     </div>
                     
                     <p className="text-[10px] text-primary mb-2 font-heading font-black uppercase tracking-[0.2em]">
@@ -337,7 +337,7 @@ function UrunlerContent() {
                     <div className="mt-auto pt-6 flex items-end justify-between border-t border-gray-50">
                       <div className="flex flex-col">
                         {product.oldPrice && (
-                          <span className="text-xs text-gray-400 font-body line-through mb-1">₺{product.oldPrice.toLocaleString('tr-TR')}</span>
+                          <span className="text-xs text-gray-400 font-body line-through mb-1">₺{parseFloat(product.oldPrice).toLocaleString('tr-TR')}</span>
                         )}
                         <span className="font-body font-black text-2xl text-secondary leading-none">
                           ₺{parseFloat(product.price).toLocaleString('tr-TR')}
