@@ -197,6 +197,48 @@ async function main() {
   });
   console.log('✅ Coupons seeded.');
 
+  // 7. Blog Posts
+  console.log('📝 Seeding blog posts...');
+  await prisma.blogPost.deleteMany({});
+  
+  const blogPosts = [
+    {
+      title: 'Doğal Balın Faydaları Nelerdir?',
+      slug: 'dogal-balin-faydalari',
+      content: '<p>Doğal bal, asırlardır şifa kaynağı olarak kullanılmaktadır. Antioksidan özelliği yüksek olan bal, bağışıklık sistemini destekler ve enerji verir. Özellikle sabahları ılık suyla tüketildiğinde güne zinde başlamanızı sağlar.</p><p>Arı Hayat olarak, kovanlarımızdan sofralarınıza en saf haliyle ulaştırdığımız doğal ballarımız, hiçbir ısıl işlem görmeden kavanozlanmaktadır. Gerçek doğal balın kristalize olabileceğini (donabileceğini) ve bunun balın saflığının bir göstergesi olduğunu unutmayın.</p>',
+      excerpt: 'Doğal balın sağlık üzerindeki mucizevi etkileri ve doğru tüketim yöntemleri hakkında bilmeniz gereken her şey.',
+      image: '/images/products/bal.png',
+      author: 'Arı Hayat',
+      category: 'Rehber',
+      published: true
+    },
+    {
+      title: 'Propolis Nedir ve Nasıl Kullanılır?',
+      slug: 'propolis-nedir',
+      content: '<p>Propolis, arıların bitki tomurcuklarından ve özsularından topladığı, kovanı dış etkenlerden ve mikroorganizmalardan korumak için ürettiği doğal bir arı ürünüdür. Arıların doğal antibiyotiği olarak da bilinir.</p><p>Suda veya yağda çözünen propolis damlalarımızı günlük sıvı tüketiminize damlatarak kullanabilirsiniz. Bağışıklık sistemini güçlendirme ve hastalıklara karşı direnç sağlama konusunda doğanın bize sunduğu en değerli hediyelerden biridir.</p>',
+      excerpt: 'Doğal antibiyotik propolisin elde edilişi, faydaları ve günlük rutininize nasıl entegre edebileceğiniz hakkında rehber.',
+      image: '/images/products/propolis.png',
+      author: 'Arı Hayat',
+      category: 'Sağlık',
+      published: true
+    },
+    {
+      title: 'Polen ve Arı Ekmeği (Perga) Farkı',
+      slug: 'polen-ve-ari-ekmegi-farki',
+      content: '<p>Polen, bitkilerin üreme hücresidir ve arıların temel protein kaynağıdır. Arı ekmeği (perga) ise arıların topladığı bu poleni kendi enzimleriyle mayalayarak petek gözlerinde depolamasıyla oluşur.</p><p>Arı ekmeği, polenin fermente olmuş hali olduğu için insan vücudu tarafından sindirimi çok daha kolaydır ve vitamin değerleri daha yüksektir. Günlük B vitamini ihtiyacınızı karşılamak için sabah kahvaltılarında yoğurt veya süt ile tüketebilirsiniz.</p>',
+      excerpt: 'Polen mi, arı ekmeği mi? Besin değerleri, farklılıkları ve en sağlıklı tüketim yöntemleri.',
+      image: '/images/products/polen.png',
+      author: 'Arı Hayat',
+      category: 'Beslenme',
+      published: true
+    }
+  ];
+
+  for (const post of blogPosts) {
+    await prisma.blogPost.create({ data: post });
+  }
+  console.log('✅ Blog posts seeded.');
+
   console.log('🚀 STANDALONE SEED COMPLETED SUCCESSFULLY!');
 }
 

@@ -138,7 +138,7 @@ export default function GirisPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background pt-32 pb-24 font-body relative overflow-hidden">
+    <div className="min-h-screen bg-surface honeycomb-bg pt-32 pb-24 font-body relative overflow-hidden">
       {/* Background Decorative Elements */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px]" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-amber-200/20 rounded-full blur-[120px]" />

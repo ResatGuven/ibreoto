@@ -45,7 +45,7 @@ export const HeroSlider = () => {
   const currentSlider = sliders.length > 0 ? sliders[currentIndex] : defaultBanner;
 
   return (
-    <div className="relative w-full h-[650px] bg-secondary overflow-hidden">
+    <div className="relative w-full h-[85vh] min-h-[700px] max-h-[900px] bg-secondary overflow-hidden">
       <AnimatePresence mode="wait">
         <motion.div 
           key={currentIndex}
@@ -87,7 +87,7 @@ export const HeroSlider = () => {
           </motion.div>
 
           {/* Content */}
-          <div className="relative h-full container mx-auto px-4 flex flex-col justify-center">
+          <div className="relative h-full container mx-auto px-4 flex flex-col justify-center pb-24 md:pb-32">
             <div className="max-w-3xl text-white">
               <motion.span 
                 className="text-primary font-heading font-bold uppercase tracking-[0.3em] text-xs md:text-sm mb-4 block"
