@@ -13,12 +13,41 @@ export default function IletisimPage() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [kvkkAccepted, setKvkkAccepted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!kvkkAccepted) return;
-    setSubmitted(true);
-    // Form submission logic would go here
+
+    setIsSubmitting(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          subject: 'İletişim Formu Mesajı'
+        })
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        const data = await response.json();
+        setError(data.error || 'Mesaj gönderilirken bir sorun oluştu. Lütfen tekrar deneyin.');
+      }
+    } catch (e) {
+      console.error('Contact submit error:', e);
+      setError('Bağlantı hatası. Lütfen daha sonra tekrar deneyin.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -148,12 +177,27 @@ export default function IletisimPage() {
                       <Link href="/kvkk" className="text-primary hover:underline font-bold">KVKK Aydınlatma Metni</Link>'ni okudum ve kişisel verilerimin işlenmesini kabul ediyorum.
                     </label>
                   </div>
+                  {error && (
+                    <div className="bg-red-50 p-4 rounded-xl border border-red-200 text-center text-red-700 font-body text-xs">
+                      {error}
+                    </div>
+                  )}
                   <button 
                     type="submit" 
-                    disabled={!kvkkAccepted}
-                    className="w-full bg-primary hover:bg-primary-hover text-secondary px-4 py-3 rounded-xl font-heading font-bold uppercase tracking-wider transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-primary/20 disabled:opacity-50 disabled:transform-none"
+                    disabled={isSubmitting || !kvkkAccepted}
+                    className="w-full bg-primary hover:bg-primary-hover text-secondary px-4 py-3 rounded-xl font-heading font-bold uppercase tracking-wider transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-primary/20 disabled:opacity-50 disabled:transform-none flex items-center justify-center"
                   >
-                    Mesajı Gönder
+                    {isSubmitting ? (
+                      <span className="flex items-center">
+                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-secondary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Gönderiliyor...
+                      </span>
+                    ) : (
+                      'Mesajı Gönder'
+                    )}
                   </button>
                 </form>
               )}

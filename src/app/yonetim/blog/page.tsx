@@ -44,7 +44,7 @@ export default function AdminBlogPage() {
         showToast(formData.id ? 'Yazı güncellendi' : 'Yazı yayınlandı', 'success');
         fetchPosts();
         setIsAdding(false);
-        setFormData({ id: '', title: '', content: '', excerpt: '', image: '', author: 'İbreOto', category: 'Genel' });
+        setFormData({ id: '', title: '', content: '', excerpt: '', image: '', author: 'Arı Hayat', category: 'Genel' });
       }
     } catch (error) {
       showToast('Bir hata oluştu', 'error');
@@ -111,7 +111,7 @@ export default function AdminBlogPage() {
         <h1 className="text-3xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700 uppercase tracking-tight">Blog Yönetimi</h1>
         <button 
           onClick={() => {
-            setFormData({ id: '', title: '', content: '', excerpt: '', image: '', author: 'İbreOto', category: 'Genel' });
+            setFormData({ id: '', title: '', content: '', excerpt: '', image: '', author: 'Arı Hayat', category: 'Genel' });
             setIsAdding(true);
           }}
           className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-4 py-2 rounded-xl font-heading font-bold text-sm uppercase flex items-center transition-all shadow-lg shadow-red-500/20"

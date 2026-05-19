@@ -146,10 +146,10 @@ model Message {
 
 model SiteSettings {
   id              String   @id @default("current")
-  siteName        String   @default("İbreOto")
-  siteDescription String?  @default("Aracını Tamamla, Yola Koy.")
-  contactEmail    String?  @default("iletisim@ibreoto.com")
-  contactPhone    String?  @default("+90 5XX XXX XX XX")
+  siteName        String   @default("Arı Hayat")
+  siteDescription String?  @default("Doğal Bal, Propolis ve Arı Ürünleri")
+  contactEmail    String?  @default("destek@arihayat.com")
+  contactPhone    String?  @default("0536 341 19 84")
   address         String?
   whatsappNumber  String?
   facebookUrl     String?
@@ -168,7 +168,7 @@ model BlogPost {
   content     String   @db.Text
   excerpt     String?
   image       String?
-  author      String   @default("İbreOto")
+  author      String   @default("Arı Hayat")
   category    String?  @default("Genel")
   published   Boolean  @default(true)
   createdAt   DateTime @default(now())

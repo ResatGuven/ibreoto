@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Lock, CreditCard, ChevronRight, ArrowLeft } from 'lucide-react';
-import { useCartStore } from '@/store/cartStore';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, clearCart, getTotalPrice } = useCartStore();
+  const [items, setItems] = useState<any[]>([]);
+  const [hasHydrated, setHasHydrated] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [couponCode, setCouponCode] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
@@ -31,18 +31,69 @@ export default function CheckoutPage() {
   });
 
   useEffect(() => {
-    if (items.length === 0) {
-      // router.push('/sepet'); // Keep it on page for now to avoid redirect loop during dev
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+      setItems(JSON.parse(savedCart));
     }
-  }, [items, router]);
+    
+    const savedDiscount = localStorage.getItem('applied_discount');
+    const savedCoupon = localStorage.getItem('applied_coupon');
+    if (savedDiscount) {
+      setDiscountAmount(parseFloat(savedDiscount));
+    }
+    if (savedCoupon) {
+      setCouponCode(savedCoupon);
+      setCouponMessage(`Kupon uygulandı: ${savedCoupon}`);
+    }
+    
+    setHasHydrated(true);
+  }, []);
 
-  const handleApplyCoupon = () => {
-    if (couponCode === 'ARI2026') {
-      const discount = getTotalPrice() * 0.1;
-      setDiscountAmount(discount);
-      setCouponMessage('Kupon uygulandı: %10 indirim!');
-    } else {
-      setCouponMessage('Hata: Geçersiz kupon kodu.');
+  useEffect(() => {
+    if (hasHydrated && items.length === 0) {
+      router.push('/sepet');
+    }
+  }, [items, hasHydrated, router]);
+
+  const getTotalPrice = () => {
+    return items.reduce((acc, item) => {
+      const priceStr = String(item.price).replace('₺', '').replace('.', '').replace(' TL', '').trim();
+      const price = parseFloat(priceStr);
+      return acc + (price * item.qty);
+    }, 0);
+  };
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) {
+      setCouponMessage('Hata: Lütfen bir kupon kodu girin.');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: couponCode,
+          totalAmount: getTotalPrice()
+        })
+      });
+
+      const data = await response.json();
+      if (response.ok && data.success) {
+        setDiscountAmount(data.discount);
+        localStorage.setItem('applied_discount', data.discount.toString());
+        localStorage.setItem('applied_coupon', couponCode);
+        setCouponMessage(`Kupon uygulandı: ${data.type === 'percentage' ? `%${data.value}` : `₺${data.value}`} indirim!`);
+      } else {
+        setCouponMessage(data.error || 'Hata: Geçersiz kupon kodu.');
+        setDiscountAmount(0);
+        localStorage.removeItem('applied_discount');
+        localStorage.removeItem('applied_coupon');
+      }
+    } catch (error) {
+      console.error('Coupon validation error:', error);
+      setCouponMessage('Hata: Kupon doğrulanamadı.');
       setDiscountAmount(0);
     }
   };
@@ -67,7 +118,10 @@ export default function CheckoutPage() {
 
       const data = await response.json();
       if (data.success) {
-        clearCart();
+        localStorage.removeItem('cart');
+        localStorage.removeItem('applied_discount');
+        localStorage.removeItem('applied_coupon');
+        window.dispatchEvent(new Event('cartUpdated'));
         router.push(`/siparis-basarili?id=${data.orderId}`);
       } else {
         alert('Ödeme sırasında bir hata oluştu. Lütfen tekrar deneyin.');
@@ -79,6 +133,14 @@ export default function CheckoutPage() {
       setIsProcessing(false);
     }
   };
+
+  if (!hasHydrated) {
+    return (
+      <div className="pt-32 pb-20 min-h-screen bg-background flex items-center justify-center">
+        <div className="text-secondary font-heading font-bold text-lg animate-pulse uppercase tracking-widest">Sepet Yükleniyor...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="pt-32 pb-20 min-h-screen bg-background">
@@ -208,9 +270,9 @@ export default function CheckoutPage() {
                   <div key={`${item.id}-${index}`} className="flex justify-between items-center text-sm">
                     <div className="flex items-center space-x-2">
                       <span className="font-medium text-secondary truncate max-w-[120px]">{item.name}</span>
-                      <span className="text-text-muted">x{item.quantity}</span>
+                      <span className="text-text-muted">x{item.qty}</span>
                     </div>
-                    <span className="font-heading font-bold text-secondary">₺{item.price.toLocaleString('tr-TR')}</span>
+                    <span className="font-heading font-bold text-secondary">{String(item.price).includes('₺') ? item.price : `₺${item.price}`}</span>
                   </div>
                 ))}
               </div>

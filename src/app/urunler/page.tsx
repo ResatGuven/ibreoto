@@ -47,7 +47,10 @@ function UrunlerContent() {
     'bal': 'Doğal Ballar',
     'propolis': 'Propolis',
     'ari-sutu': 'Arı Sütü',
-    'polen-ari-ekmegi': 'Polen & Arı Ekmeği'
+    'polen-ari-ekmegi': 'Polen & Arı Ekmeği',
+    'karisim': 'Karışımlar',
+    'besli-karisim': 'Beşli Karışımlar',
+    'bitkisel-yaglar': 'Bitkisel Yağlar'
   };
 
 

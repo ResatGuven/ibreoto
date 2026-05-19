@@ -183,6 +183,20 @@ async function main() {
   }
   console.log('✅ Sliders seeded.');
 
+  // 6. Coupons
+  console.log('🎫 Seeding coupons...');
+  await prisma.coupon.deleteMany({});
+  await prisma.coupon.create({
+    data: {
+      code: 'UYE10',
+      discount: 10,
+      type: 'percentage',
+      expiry: new Date('2030-12-31'),
+      isActive: true
+    }
+  });
+  console.log('✅ Coupons seeded.');
+
   console.log('🚀 STANDALONE SEED COMPLETED SUCCESSFULLY!');
 }
 
