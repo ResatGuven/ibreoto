@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Sparkles, Video, Play, Download, Copy, ExternalLink, 
-  Music, Check, Wand2, Image as ImageIcon, Volume2, Share2, Loader2, RefreshCw 
+  Music, Check, Wand2, Image as ImageIcon, Volume2, Share2, Loader2, RefreshCw,
+  Calendar, CheckCircle, Clock, AlertCircle, Edit2
 } from 'lucide-react';
 import { useAdminToast } from '@/context/AdminToastContext';
 
@@ -66,7 +67,7 @@ const generateTemplates = (product: string, style: string) => {
 
   // Default behind-the-scenes
   return {
-    scriptText: `Arılarımızın kovan içi hummalı çalışması. Doğal çiçek polenlerini toplarken sergiledikleri o muşteşem doğa mucizesi. Arı Hayat kovanlarında arıcılık geleneksel yöntemlerle ve arı sağlığı korunarak sürdürülür. Doğaya ve emeğe saygıyla üretilen ham arı ürünlerimizi keşfedin.`,
+    scriptText: `Arılarımızın kovan içi hummalı çalışması. Doğal çiçek polenlerini toplarken sergiledikleri o muhteşem doğa mucizesi. Arı Hayat kovanlarında arıcılık geleneksel yöntemlerle ve arı sağlığı korunarak sürdürülür. Doğaya ve emeğe saygıyla üretilen ham arı ürünlerimizi keşfedin.`,
     visuals: [
       { time: "00:00 - 00:10", scene: "Çiçeklerin üzerinde polen toplayan işçi arıların yakın makro çekimi." },
       { time: "00:10 - 00:25", scene: "Arıcının kovan çerçevesini dikkatle incelemesi, arıların hareketliliği." }
@@ -80,19 +81,65 @@ const generateTemplates = (product: string, style: string) => {
   };
 };
 
+interface DayPlan {
+  dayName: string;
+  dayKey: string;
+  product: string;
+  style: string;
+  status: 'draft' | 'ready' | 'posted';
+  audioUrl: string | null;
+  imageUrl: string | null;
+  customPrompt: string;
+}
+
+const defaultWeeklyPlan: DayPlan[] = [
+  { dayName: 'Pazartesi', dayKey: 'pazartesi', product: 'Kestane Balı', style: 'educational', status: 'draft', audioUrl: null, imageUrl: null, customPrompt: '' },
+  { dayName: 'Salı', dayKey: 'sali', product: 'Propolis Damla', style: 'trust', status: 'draft', audioUrl: null, imageUrl: null, customPrompt: '' },
+  { dayName: 'Çarşamba', dayKey: 'carsamba', product: 'Kral Arı Sütü', style: 'asmr', status: 'draft', audioUrl: null, imageUrl: null, customPrompt: '' },
+  { dayName: 'Perşembe', dayKey: 'persembe', product: 'Süzme Çiçek Balı', style: 'behind', status: 'draft', audioUrl: null, imageUrl: null, customPrompt: '' },
+  { dayName: 'Cuma', dayKey: 'cuma', product: 'Doğal Arı Poleni', style: 'educational', status: 'draft', audioUrl: null, imageUrl: null, customPrompt: '' },
+  { dayName: 'Cumartesi', dayKey: 'cumartesi', product: 'Propolis Damla', style: 'asmr', status: 'draft', audioUrl: null, imageUrl: null, customPrompt: '' },
+  { dayName: 'Pazar', dayKey: 'pazar', product: 'Kestane Balı', style: 'trust', status: 'draft', audioUrl: null, imageUrl: null, customPrompt: '' },
+];
+
 export default function SocialMediaAssistant() {
-  const [product, setProduct] = useState('Kestane Balı');
-  const [style, setStyle] = useState('educational');
+  const [weeklyPlan, setWeeklyPlan] = useState<DayPlan[]>(defaultWeeklyPlan);
+  const [selectedDayKey, setSelectedDayKey] = useState<string>('pazartesi');
   const [loading, setLoading] = useState(false);
   const [generatingImage, setGeneratingImage] = useState(false);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'script' | 'caption' | 'twitter'>('script');
   const [copiedText, setCopiedText] = useState<string | null>(null);
-  const [customImagePrompt, setCustomImagePrompt] = useState('');
-  const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
   const { showToast } = useAdminToast();
 
-  const data = generateTemplates(product, style);
+  // Load and save to LocalStorage to act as a database MVP
+  useEffect(() => {
+    const saved = localStorage.getItem('ari_hayat_weekly_plan');
+    if (saved) {
+      try {
+        setWeeklyPlan(JSON.parse(saved));
+      } catch (e) {
+        console.error("Plan okunamadı:", e);
+      }
+    }
+  }, []);
+
+  const savePlan = (updatedPlan: DayPlan[]) => {
+    setWeeklyPlan(updatedPlan);
+    localStorage.setItem('ari_hayat_weekly_plan', JSON.stringify(updatedPlan));
+  };
+
+  const currentDayPlan = weeklyPlan.find(d => d.dayKey === selectedDayKey) || weeklyPlan[0];
+  const data = generateTemplates(currentDayPlan.product, currentDayPlan.style);
+
+  const updateCurrentDay = (fields: Partial<DayPlan>) => {
+    const updated = weeklyPlan.map(d => {
+      if (d.dayKey === selectedDayKey) {
+        return { ...d, ...fields };
+      }
+      return d;
+    });
+    savePlan(updated);
+  };
 
   const handleCopy = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -103,14 +150,14 @@ export default function SocialMediaAssistant() {
 
   const handleGenerateVoice = async () => {
     setLoading(true);
-    setAudioUrl(null);
+    updateCurrentDay({ audioUrl: null });
     try {
       const res = await fetch(`/api/tts?text=${encodeURIComponent(data.scriptText)}`);
       if (res.ok) {
         const blob = await res.blob();
         const url = URL.createObjectURL(blob);
-        setAudioUrl(url);
-        showToast('Yapay zeka seslendirmesi üretildi!', 'success');
+        updateCurrentDay({ audioUrl: url });
+        showToast(`${currentDayPlan.dayName} günü için yapay zeka sesi üretildi!`, 'success');
       } else {
         showToast('Seslendirme üretilemedi. Lütfen tekrar deneyin.', 'error');
       }
@@ -123,20 +170,18 @@ export default function SocialMediaAssistant() {
 
   const handleGenerateImage = async () => {
     setGeneratingImage(true);
-    setGeneratedImageUrl(null);
+    updateCurrentDay({ imageUrl: null });
     try {
-      const prompt = customImagePrompt || data.imagePrompt;
+      const prompt = currentDayPlan.customPrompt || data.imagePrompt;
       const seed = Math.floor(Math.random() * 1000000);
-      // Pollinations AI endpoint for free, fast, keyless image generation
       const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1080&height=1920&nologo=true&seed=${seed}`;
       
-      // Pre-load the image in browser to guarantee it works before showing
       const img = new Image();
       img.src = url;
       img.onload = () => {
-        setGeneratedImageUrl(url);
+        updateCurrentDay({ imageUrl: url });
         setGeneratingImage(false);
-        showToast('Yapay zeka görseli başarıyla üretildi!', 'success');
+        showToast(`${currentDayPlan.dayName} günü için yapay zeka resmi çizildi!`, 'success');
       };
       img.onerror = () => {
         throw new Error('Image load failed');
@@ -150,28 +195,97 @@ export default function SocialMediaAssistant() {
   return (
     <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-white/5 pb-6">
         <div>
           <h1 className="text-3xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-700 uppercase tracking-tight flex items-center">
             <Sparkles className="w-8 h-8 mr-2 text-primary animate-pulse" /> Sosyal Medya Asistanı
           </h1>
-          <p className="text-sm text-gray-400 font-body mt-1">Görseller, seslendirmeler ve otomatik paylaşımlar üretin.</p>
+          <p className="text-sm text-gray-400 font-body mt-1">Haftalık içerik planlayın, ses & görsel üretip tek tıkla paylaşın.</p>
+        </div>
+        
+        {/* Reset Plan */}
+        <button 
+          onClick={() => {
+            if(confirm("Haftalık planı varsayılana sıfırlamak istiyor musunuz?")) {
+              savePlan(defaultWeeklyPlan);
+              showToast("Plan sıfırlandı", "success");
+            }
+          }}
+          className="px-4 py-2 bg-red-950/40 hover:bg-red-900/30 text-red-400 border border-red-900/50 rounded-xl text-xs font-bold transition-all"
+        >
+          Haftalık Planı Sıfırla
+        </button>
+      </div>
+
+      {/* 📅 Weekly Calendar Timeline */}
+      <div className="bg-[#111827]/40 backdrop-blur-xl p-4 rounded-2xl border border-gray-800/80 mb-8 overflow-x-auto shadow-inner">
+        <div className="flex items-center space-x-2 text-xs font-bold text-gray-400 uppercase mb-4 tracking-wider">
+          <Calendar className="w-4 h-4 text-primary" /> Haftalık İçerik Planlama Akışı
+        </div>
+        
+        <div className="flex min-w-[760px] gap-3">
+          {weeklyPlan.map((day) => {
+            const isActive = day.dayKey === selectedDayKey;
+            return (
+              <button
+                key={day.dayKey}
+                onClick={() => {
+                  setSelectedDayKey(day.dayKey);
+                  // Reset temporary tabs
+                  setActiveTab('script');
+                }}
+                className={`flex-1 p-4 rounded-xl border transition-all text-left relative overflow-hidden group ${
+                  isActive 
+                    ? 'bg-gradient-to-br from-primary/10 to-amber-600/5 border-primary shadow-lg shadow-primary/5' 
+                    : 'bg-[#151D30]/40 border-gray-800 hover:border-gray-700'
+                }`}
+              >
+                <div className={`absolute top-0 left-0 bottom-0 w-1 ${isActive ? 'bg-primary' : 'bg-transparent'}`} />
+                <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider block">{day.dayName}</span>
+                <span className="text-xs text-white font-bold block mt-1 truncate">{day.product}</span>
+                <span className="text-[9px] text-gray-400 italic block mt-0.5 capitalize">{day.style === 'trust' ? 'Güven/Analiz' : day.style === 'asmr' ? 'ASMR' : day.style === 'educational' ? 'Eğitici' : 'Kovan Hayatı'}</span>
+                
+                {/* Status Badges */}
+                <div className="mt-3 flex items-center justify-between">
+                  <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded-full border ${
+                    day.status === 'posted'
+                      ? 'bg-green-950/80 text-green-400 border-green-800/60'
+                      : day.status === 'ready'
+                      ? 'bg-blue-950/80 text-blue-400 border-blue-800/60'
+                      : 'bg-gray-800 text-gray-400 border-gray-700'
+                  }`}>
+                    {day.status === 'posted' ? 'Paylaşıldı' : day.status === 'ready' ? 'Hazır' : 'Taslak'}
+                  </span>
+
+                  {/* Visual Presence Indicators */}
+                  <div className="flex space-x-1">
+                    {day.audioUrl && <Volume2 className="w-3 h-3 text-primary" />}
+                    {day.imageUrl && <ImageIcon className="w-3 h-3 text-amber-500" />}
+                  </div>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
 
+      {/* Main Grid: Settings & Output */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* Left Control Panel */}
+        {/* Left: Selected Day Configuration */}
         <div className="lg:col-span-1 bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-6 h-fit">
-          <h2 className="text-md font-heading font-bold text-white uppercase flex items-center border-b border-gray-800 pb-3">
-            <Wand2 className="w-5 h-5 mr-2 text-primary" /> İçerik Yapılandırma
-          </h2>
+          <div className="border-b border-gray-800 pb-3">
+            <h2 className="text-md font-heading font-bold text-white uppercase flex items-center">
+              <Wand2 className="w-5 h-5 mr-2 text-primary" /> {currentDayPlan.dayName} Günü Ayarları
+            </h2>
+          </div>
 
+          {/* Product Select */}
           <div>
-            <label className="block text-gray-400 mb-2 text-xs font-body uppercase">Ürün veya Konu Seçin</label>
+            <label className="block text-gray-400 mb-2 text-xs font-body uppercase">Ürün</label>
             <select 
-              value={product} 
-              onChange={e => setProduct(e.target.value)} 
+              value={currentDayPlan.product} 
+              onChange={e => updateCurrentDay({ product: e.target.value })} 
               className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-xl text-white outline-none focus:border-primary font-bold text-sm"
             >
               <option value="Kestane Balı">Kestane Balı</option>
@@ -182,8 +296,9 @@ export default function SocialMediaAssistant() {
             </select>
           </div>
 
+          {/* Style Select */}
           <div>
-            <label className="block text-gray-400 mb-2 text-xs font-body uppercase">Video Tarzı / Konsepti</label>
+            <label className="block text-gray-400 mb-2 text-xs font-body uppercase">Konsept Tarzı</label>
             <div className="space-y-2">
               {[
                 { id: 'educational', label: 'Eğitici & Sağlık Faydaları' },
@@ -193,57 +308,79 @@ export default function SocialMediaAssistant() {
               ].map((styleOption) => (
                 <button
                   key={styleOption.id}
-                  onClick={() => {
-                    setStyle(styleOption.id);
-                    setAudioUrl(null);
-                  }}
+                  onClick={() => updateCurrentDay({ style: styleOption.id })}
                   className={`w-full text-left px-4 py-3 rounded-xl border text-sm font-bold transition-all flex justify-between items-center ${
-                    style === styleOption.id 
+                    currentDayPlan.style === styleOption.id 
                       ? 'bg-primary/10 border-primary text-primary' 
                       : 'bg-[#1F2937]/50 border-gray-800 text-gray-400 hover:border-gray-700'
                   }`}
                 >
                   {styleOption.label}
-                  {style === styleOption.id && <Check className="w-4 h-4" />}
+                  {currentDayPlan.style === styleOption.id && <Check className="w-4 h-4" />}
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="pt-4">
+          {/* Status Tracker */}
+          <div>
+            <label className="block text-gray-400 mb-2 text-xs font-body uppercase">Yayın Durumu</label>
+            <div className="flex gap-2">
+              {[
+                { id: 'draft', label: 'Taslak' },
+                { id: 'ready', label: 'Hazır' },
+                { id: 'posted', label: 'Paylaşıldı' }
+              ].map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => updateCurrentDay({ status: s.id as any })}
+                  className={`flex-1 py-2 rounded-lg border text-xs font-bold text-center transition-all ${
+                    currentDayPlan.status === s.id
+                      ? 'bg-primary text-secondary border-primary'
+                      : 'bg-[#1F2937]/30 border-gray-800 text-gray-400 hover:border-gray-700'
+                  }`}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Voice Generator Trigger */}
+          <div className="pt-4 border-t border-gray-800">
             <button
               onClick={handleGenerateVoice}
               disabled={loading}
               className="w-full bg-gradient-to-r from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-secondary p-3.5 rounded-xl font-heading font-black text-sm uppercase flex items-center justify-center transition-all shadow-lg disabled:opacity-50"
             >
               {loading ? (
-                <>Seslendirme Üretiliyor...</>
+                <>Seslendiriliyor...</>
               ) : (
                 <>
-                  <Music className="w-4 h-4 mr-2" /> Ücretsiz Seslendirme Üret
+                  <Music className="w-4 h-4 mr-2" /> Seslendirme Üret
                 </>
               )}
             </button>
           </div>
 
-          {audioUrl && (
+          {currentDayPlan.audioUrl && (
             <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
               <div className="flex items-center text-xs font-bold text-primary">
                 <Volume2 className="w-4 h-4 mr-2 animate-bounce" /> Seslendirme Dosyanız Hazır!
               </div>
-              <audio src={audioUrl} controls className="w-full accent-primary" />
+              <audio src={currentDayPlan.audioUrl} controls className="w-full accent-primary" />
               <a 
-                href={audioUrl} 
-                download={`ari-hayat-${product.toLowerCase().replace(/\s+/g, '-')}-${style}.mp3`}
+                href={currentDayPlan.audioUrl} 
+                download={`ari-hayat-${currentDayPlan.dayKey}-${currentDayPlan.product.toLowerCase().replace(/\s+/g, '-')}.mp3`}
                 className="w-full py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-xs font-bold text-center block text-white transition-colors flex items-center justify-center"
               >
-                <Download className="w-4 h-4 mr-2" /> MP3 Dosyasını İndir
+                <Download className="w-4 h-4 mr-2" /> MP3 İndir
               </a>
             </div>
           )}
         </div>
 
-        {/* Center/Right Outputs Panel */}
+        {/* Right Content Area */}
         <div className="lg:col-span-2 space-y-8">
           
           {/* Main AI Output Box */}
@@ -315,7 +452,7 @@ export default function SocialMediaAssistant() {
                   <textarea 
                     readOnly 
                     value={data.caption} 
-                    className="w-full p-4 bg-[#1F2937]/40 border border-gray-800 rounded-xl text-sm text-gray-200 outline-none min-h-[180px] font-body"
+                    className="w-full p-4 bg-[#1F2937]/40 border border-gray-800 rounded-xl text-sm text-gray-200 outline-none min-h-[180px] font-body animate-fade-in"
                   />
                 </div>
               )}
@@ -356,7 +493,7 @@ export default function SocialMediaAssistant() {
           <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-6">
             <div className="flex justify-between items-center border-b border-gray-800 pb-3">
               <h3 className="text-md font-heading font-bold text-white uppercase flex items-center">
-                <ImageIcon className="w-5 h-5 mr-2 text-primary" /> Canlı Yapay Zeka Görsel Oluşturucu
+                <ImageIcon className="w-5 h-5 mr-2 text-primary" /> Görsel Oluşturucu ({currentDayPlan.dayName})
               </h3>
               <span className="bg-green-950 text-green-400 border border-green-800 text-[10px] px-2 py-0.5 rounded-full font-bold">ÜCRETSİZ & SINIRSIZ</span>
             </div>
@@ -368,12 +505,12 @@ export default function SocialMediaAssistant() {
                 <div>
                   <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Görsel Oluşturma İstemi (Prompt)</label>
                   <textarea 
-                    value={customImagePrompt || data.imagePrompt}
-                    onChange={e => setCustomImagePrompt(e.target.value)}
+                    value={currentDayPlan.customPrompt || data.imagePrompt}
+                    onChange={e => updateCurrentDay({ customPrompt: e.target.value })}
                     className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-xl text-white outline-none focus:border-primary text-xs font-mono min-h-[120px]"
                     placeholder="İngilizce olarak oluşturmak istediğiniz resmi detaylıca tarif edin..."
                   />
-                  <span className="text-[10px] text-gray-500 mt-1 block">Tavsiye: Yapay zekadan en iyi sonucu almak için komutları İngilizce yazın.</span>
+                  <span className="text-[10px] text-gray-500 mt-1 block">En iyi sonuç için İngilizce komutlar tercih edin.</span>
                 </div>
 
                 <div className="flex space-x-2">
@@ -384,7 +521,7 @@ export default function SocialMediaAssistant() {
                   >
                     {generatingImage ? (
                       <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Görsel Üretiliyor...
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Görsel Çiziliyor...
                       </>
                     ) : (
                       <>
@@ -394,7 +531,7 @@ export default function SocialMediaAssistant() {
                   </button>
 
                   <button
-                    onClick={() => setCustomImagePrompt('')}
+                    onClick={() => updateCurrentDay({ customPrompt: '' })}
                     className="bg-gray-800 hover:bg-gray-700 text-white p-3.5 rounded-xl font-bold transition-colors"
                     title="Varsayılana Sıfırla"
                   >
@@ -417,17 +554,17 @@ export default function SocialMediaAssistant() {
                     <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto" />
                     <span className="text-xs text-gray-400 block font-bold uppercase tracking-wider">Arı Hayat AI çizim yapıyor...</span>
                   </div>
-                ) : generatedImageUrl ? (
+                ) : currentDayPlan.imageUrl ? (
                   <>
                     <img 
-                      src={generatedImageUrl} 
+                      src={currentDayPlan.imageUrl} 
                       alt="AI Generated" 
                       className="w-full h-[320px] object-cover"
                     />
                     <div className="absolute bottom-3 right-3">
                       <a 
-                        href={generatedImageUrl} 
-                        download={`ari-hayat-ai-${product.toLowerCase().replace(/\s+/g, '-')}.png`}
+                        href={currentDayPlan.imageUrl} 
+                        download={`ari-hayat-ai-${currentDayPlan.dayKey}.png`}
                         className="bg-black/80 hover:bg-black/95 text-white px-3 py-2 rounded-lg font-bold text-xs flex items-center backdrop-blur transition-all"
                       >
                         <Download className="w-3.5 h-3.5 mr-1" /> Resmi İndir
@@ -457,6 +594,7 @@ export default function SocialMediaAssistant() {
               <button
                 onClick={() => {
                   handleCopy(data.caption, 'Açıklama');
+                  updateCurrentDay({ status: 'posted' });
                   window.open('https://business.facebook.com/creatorstudio', '_blank');
                 }}
                 className="bg-[#E1306C]/10 border border-[#E1306C]/30 text-[#E1306C] p-3.5 rounded-xl font-heading font-black text-xs uppercase text-center hover:bg-[#E1306C]/20 transition-all flex items-center justify-center"
@@ -467,6 +605,7 @@ export default function SocialMediaAssistant() {
               <button
                 onClick={() => {
                   handleCopy(data.caption, 'Açıklama');
+                  updateCurrentDay({ status: 'posted' });
                   window.open('https://www.tiktok.com/upload', '_blank');
                 }}
                 className="bg-white/10 border border-white/20 text-white p-3.5 rounded-xl font-heading font-black text-xs uppercase text-center hover:bg-white/20 transition-all flex items-center justify-center"
@@ -478,6 +617,7 @@ export default function SocialMediaAssistant() {
                 onClick={() => {
                   const tweetContent = data.tweets[0];
                   handleCopy(data.tweets.slice(1).join('\n\n'), 'Kalan Tweetler');
+                  updateCurrentDay({ status: 'posted' });
                   window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetContent)}`, '_blank');
                 }}
                 className="bg-sky-500/10 border border-sky-500/30 text-sky-400 p-3.5 rounded-xl font-heading font-black text-xs uppercase text-center hover:bg-sky-500/20 transition-all flex items-center justify-center"
