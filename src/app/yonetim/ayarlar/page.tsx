@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Save, Globe, Phone, Mail, MapPin, MessageSquare, Facebook, Instagram, Twitter, ShieldAlert } from 'lucide-react';
+import { Save, Globe, Phone, Mail, MapPin, MessageSquare, Facebook, Instagram, Twitter, ShieldAlert, LineChart, Key } from 'lucide-react';
 import { useAdminToast } from '@/context/AdminToastContext';
 
 export default function AdminSettingsPage() {
@@ -17,7 +17,14 @@ export default function AdminSettingsPage() {
     instagramUrl: 'https://www.instagram.com/arihayat',
     twitterUrl: '',
     announcementBar: '🐝 Ücretsiz Kargo: 1.500 TL ve Üzeri Alışverişlerde! Doğal ürünler, güvenilir teslimat.',
-    isMaintenance: false
+    isMaintenance: false,
+    googleAnalyticsId: '',
+    facebookPixelId: '',
+    smtpHost: '',
+    smtpPort: 587,
+    smtpUser: '',
+    smtpPass: '',
+    smtpFrom: ''
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -165,6 +172,92 @@ export default function AdminSettingsPage() {
             <div className="relative">
               <Twitter className="absolute left-3 top-3.5 w-4 h-4 text-gray-500" />
               <input type="text" value={settings.twitterUrl} onChange={e => setSettings({...settings, twitterUrl: e.target.value})} placeholder="X (Twitter) Linki" className="w-full p-3 pl-10 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" />
+            </div>
+          </div>
+        </div>
+
+        {/* Pazarlama & Takip Kodları */}
+        <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-4">
+          <h2 className="text-lg font-heading font-bold text-white mb-4 flex items-center uppercase">
+            <LineChart className="w-5 h-5 mr-2 text-primary" /> Pazarlama & Takip Kodları
+          </h2>
+          <div>
+            <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Google Analytics (G-XXXXXXXXXX)</label>
+            <input 
+              type="text" 
+              value={settings.googleAnalyticsId || ''} 
+              onChange={e => setSettings({...settings, googleAnalyticsId: e.target.value})} 
+              placeholder="G-1234567890"
+              className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" 
+            />
+          </div>
+          <div>
+            <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Meta (Facebook) Pixel ID</label>
+            <input 
+              type="text" 
+              value={settings.facebookPixelId || ''} 
+              onChange={e => setSettings({...settings, facebookPixelId: e.target.value})} 
+              placeholder="123456789012345"
+              className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" 
+            />
+          </div>
+        </div>
+
+        {/* E-Posta (SMTP) Ayarları */}
+        <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-4 lg:col-span-2">
+          <h2 className="text-lg font-heading font-bold text-white mb-4 flex items-center uppercase">
+            <Key className="w-5 h-5 mr-2 text-primary" /> E-Posta (SMTP) Ayarları
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-gray-400 mb-1 text-xs font-body uppercase">SMTP Sunucu (Host)</label>
+              <input 
+                type="text" 
+                value={settings.smtpHost || ''} 
+                onChange={e => setSettings({...settings, smtpHost: e.target.value})} 
+                placeholder="smtp.example.com"
+                className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" 
+              />
+            </div>
+            <div>
+              <label className="block text-gray-400 mb-1 text-xs font-body uppercase">SMTP Port</label>
+              <input 
+                type="number" 
+                value={settings.smtpPort || ''} 
+                onChange={e => setSettings({...settings, smtpPort: parseInt(e.target.value) || 0})} 
+                placeholder="587"
+                className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" 
+              />
+            </div>
+            <div>
+              <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Gönderici E-Posta (From)</label>
+              <input 
+                type="text" 
+                value={settings.smtpFrom || ''} 
+                onChange={e => setSettings({...settings, smtpFrom: e.target.value})} 
+                placeholder="bilgi@arihayat.com"
+                className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" 
+              />
+            </div>
+            <div>
+              <label className="block text-gray-400 mb-1 text-xs font-body uppercase">SMTP Kullanıcı Adı (User)</label>
+              <input 
+                type="text" 
+                value={settings.smtpUser || ''} 
+                onChange={e => setSettings({...settings, smtpUser: e.target.value})} 
+                placeholder="kullanici@example.com"
+                className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" 
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-gray-400 mb-1 text-xs font-body uppercase">SMTP Şifre (Password)</label>
+              <input 
+                type="password" 
+                value={settings.smtpPass || ''} 
+                onChange={e => setSettings({...settings, smtpPass: e.target.value})} 
+                placeholder="••••••••••••"
+                className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" 
+              />
             </div>
           </div>
         </div>

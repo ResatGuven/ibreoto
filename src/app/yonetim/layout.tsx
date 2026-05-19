@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { LayoutDashboard, ShoppingBag, Settings, LogOut, FileText, Tag, MessageSquare, Mail, Ticket, BookOpen, Menu, X, Image as ImageIcon, Users } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Settings, LogOut, FileText, Tag, MessageSquare, Mail, Ticket, BookOpen, Menu, X, Image as ImageIcon, Users, Star, HelpCircle } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import { AdminToastProvider } from '@/context/AdminToastContext';
 
@@ -14,10 +14,13 @@ const menuItems = [
   { icon: Users, label: 'Arıcılar (Müşteriler)', href: '/yonetim/musteriler' },
   { icon: Tag, label: 'Kategoriler', href: '/yonetim/kategoriler' },
   { icon: FileText, label: 'Hasat & Sipariş', href: '/yonetim/siparisler' },
-  { icon: MessageSquare, label: 'Müşteri Yorumları', href: '/yonetim/yorumlar' },
+  { icon: MessageSquare, label: 'Ürün Yorumları', href: '/yonetim/yorumlar' },
+  { icon: Star, label: 'Müşteri Referansları', href: '/yonetim/referanslar' },
+  { icon: HelpCircle, label: 'Sıkça Sorulan Sorular', href: '/yonetim/sss' },
   { icon: Ticket, label: 'İndirim Kuponları', href: '/yonetim/kuponlar' },
   { icon: ImageIcon, label: 'Vitrin Yönetimi', href: '/yonetim/slider' },
   { icon: BookOpen, label: 'Arı Günlüğü (Blog)', href: '/yonetim/blog' },
+  { icon: FileText, label: 'Sayfa Yönetimi', href: '/yonetim/sayfalar' },
   { icon: Settings, label: 'Sistem Ayarları', href: '/yonetim/ayarlar' },
 ];
 

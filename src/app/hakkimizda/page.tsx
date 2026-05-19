@@ -5,12 +5,30 @@ import { Star } from 'lucide-react';
 import Image from 'next/image';
 
 export default function HakkimizdaPage() {
-  const testimonials = [
-    { name: "Fatma Y.", comment: "Arı Hayat'ın kestane balı gerçekten muazzam. Çocukluğumdaki o gerçek bal tadını alabildiğim tek adres.", role: "Sadık Müşteri" },
-    { name: "Ömer K.", comment: "Propolis ürünlerini bağışıklık için kullanıyoruz. Doğallığından hiç şüphemiz yok, çok memnunuz.", role: "Bursa Yerel Sakini" },
-    { name: "Zeynep A.", comment: "Hızlı kargo ve özenli paketleme için teşekkürler. Ürünlerin saflığı her halinden belli oluyor.", role: "Anne & Beslenme Uzmanı" },
-    { name: "Mehmet S.", comment: "Arı sütünü 3 aydır kullanıyorum, bağışıklığım çok güçlendi. Kalite ve fiyat dengesi harika.", role: "Düzenli Müşteri" },
-  ];
+  const [testimonials, setTestimonials] = React.useState<any[]>([
+    { name: "Fatma Y.", comment: "Arı Hayat'ın kestane balı gerçekten muazzam. Çocukluğumdaki o gerçek bal tadını alabildiğim tek adres.", role: "Sadık Müşteri", rating: 5 },
+    { name: "Ömer K.", comment: "Propolis ürünlerini bağışıklık için kullanıyoruz. Doğallığından hiç şüphemiz yok, çok memnunuz.", role: "Bursa Yerel Sakini", rating: 5 },
+    { name: "Zeynep A.", comment: "Hızlı kargo ve özenli paketleme için teşekkürler. Ürünlerin saflığı her halinden belli oluyor.", role: "Anne & Beslenme Uzmanı", rating: 5 },
+    { name: "Mehmet S.", comment: "Arı sütünü 3 aydır kullanıyorum, bağışıklığım çok güçlendi. Kalite ve fiyat dengesi harika.", role: "Düzenli Müşteri", rating: 5 },
+  ]);
+
+  React.useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const res = await fetch('/api/admin/testimonials');
+        if (res.ok) {
+          const data = await res.json();
+          const activeTestimonials = data.filter((t: any) => t.isActive);
+          if (activeTestimonials.length > 0) {
+            setTestimonials(activeTestimonials);
+          }
+        }
+      } catch (e) {
+        console.error("Failed to fetch testimonials", e);
+      }
+    };
+    fetchTestimonials();
+  }, []);
 
   const stats = [
     { value: '5000+', label: 'Mutlu Aile' },
@@ -147,7 +165,9 @@ export default function HakkimizdaPage() {
             {testimonials.map((t, i) => (
               <div key={i} className="bg-gray-50 border border-gray-100 rounded-2xl p-6 hover:shadow-md transition-shadow">
                 <div className="flex space-x-0.5 mb-4">
-                  {[...Array(5)].map((_, j) => <Star key={j} className="text-primary fill-primary w-3.5 h-3.5" />)}
+                  {[...Array(5)].map((_, j) => (
+                    <Star key={j} className={`w-3.5 h-3.5 ${j < (t.rating || 5) ? 'text-primary fill-primary' : 'text-gray-300'}`} />
+                  ))}
                 </div>
                 <p className="text-gray-600 font-body text-sm italic leading-relaxed mb-4">&quot;{t.comment}&quot;</p>
                 <div>
