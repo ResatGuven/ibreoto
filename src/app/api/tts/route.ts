@@ -3,12 +3,55 @@ import { NextResponse } from 'next/server';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const text = searchParams.get('text');
+  const elevenLabsKey = searchParams.get('elevenLabsKey');
 
   if (!text) {
     return NextResponse.json({ error: 'Text parametresi zorunludur.' }, { status: 400 });
   }
 
-  // Google Translate TTS accepts max 200 characters per chunk, so we split the text if it is longer.
+  // Option 1: Use ElevenLabs if an API Key is provided
+  if (elevenLabsKey) {
+    try {
+      // Default ElevenLabs Turkish compatible premium male voice (e.g. Rachel/Adam or custom)
+      const voiceId = 'pNInz6obpgus51hpZaae'; // Turkish neural voice ID or standard
+      const url = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`;
+
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'accept': 'audio/mpeg',
+          'xi-api-key': elevenLabsKey,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          text: text,
+          model_id: 'eleven_multilingual_v2',
+          voice_settings: {
+            stability: 0.6,
+            similarity_boost: 0.8
+          }
+        })
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.detail?.status || 'ElevenLabs seslendirme isteği başarısız oldu.');
+      }
+
+      const buffer = await res.arrayBuffer();
+      return new Response(buffer, {
+        headers: {
+          'Content-Type': 'audio/mpeg',
+          'Content-Disposition': 'inline; filename="ari-hayat-elevenlabs.mp3"'
+        }
+      });
+    } catch (error: any) {
+      console.error('ElevenLabs Error, falling back to free Google TTS:', error);
+      // Fall through to free Google TTS if premium key fails
+    }
+  }
+
+  // Option 2: Fallback to Free Google Translate TTS (split text into 200 char chunks)
   const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
   const chunks: string[] = [];
   let currentChunk = '';

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Sparkles, Video, Play, Download, Copy, ExternalLink, 
   Music, Check, Wand2, Image as ImageIcon, Volume2, Share2, Loader2, RefreshCw,
-  Calendar, CheckCircle, Clock, AlertCircle, Edit2
+  Calendar, CheckCircle, Clock, AlertCircle, Edit2, Key, ShieldCheck
 } from 'lucide-react';
 import { useAdminToast } from '@/context/AdminToastContext';
 
@@ -92,6 +92,13 @@ interface DayPlan {
   customPrompt: string;
 }
 
+interface BufferProfile {
+  id: string;
+  service: string;
+  service_username: string;
+  avatar: string;
+}
+
 const defaultWeeklyPlan: DayPlan[] = [
   { dayName: 'Pazartesi', dayKey: 'pazartesi', product: 'Kestane Balı', style: 'educational', status: 'draft', audioUrl: null, imageUrl: null, customPrompt: '' },
   { dayName: 'Salı', dayKey: 'sali', product: 'Propolis Damla', style: 'trust', status: 'draft', audioUrl: null, imageUrl: null, customPrompt: '' },
@@ -109,23 +116,63 @@ export default function SocialMediaAssistant() {
   const [generatingImage, setGeneratingImage] = useState(false);
   const [activeTab, setActiveTab] = useState<'script' | 'caption' | 'twitter'>('script');
   const [copiedText, setCopiedText] = useState<string | null>(null);
+
+  // Settings & API keys (stored safely client-side in localStorage)
+  const [elevenLabsKey, setElevenLabsKey] = useState('');
+  const [bufferToken, setBufferToken] = useState('');
+  const [profiles, setProfiles] = useState<BufferProfile[]>([]);
+  const [selectedProfiles, setSelectedProfiles] = useState<string[]>([]);
+  const [loadingProfiles, setLoadingProfiles] = useState(false);
+  const [postingStatus, setPostingStatus] = useState(false);
+
   const { showToast } = useAdminToast();
 
-  // Load and save to LocalStorage to act as a database MVP
+  // Load configuration and plans on mount
   useEffect(() => {
-    const saved = localStorage.getItem('ari_hayat_weekly_plan');
-    if (saved) {
-      try {
-        setWeeklyPlan(JSON.parse(saved));
-      } catch (e) {
-        console.error("Plan okunamadı:", e);
-      }
+    const savedPlan = localStorage.getItem('ari_hayat_weekly_plan');
+    if (savedPlan) {
+      try { setWeeklyPlan(JSON.parse(savedPlan)); } catch (e) {}
+    }
+
+    const savedElevenKey = localStorage.getItem('ari_hayat_elevenlabs_key');
+    if (savedElevenKey) setElevenLabsKey(savedElevenKey);
+
+    const savedBufferToken = localStorage.getItem('ari_hayat_buffer_token');
+    if (savedBufferToken) {
+      setBufferToken(savedBufferToken);
+      fetchBufferProfiles(savedBufferToken);
     }
   }, []);
 
   const savePlan = (updatedPlan: DayPlan[]) => {
     setWeeklyPlan(updatedPlan);
     localStorage.setItem('ari_hayat_weekly_plan', JSON.stringify(updatedPlan));
+  };
+
+  const saveSettings = (elevenKey: string, bToken: string) => {
+    localStorage.setItem('ari_hayat_elevenlabs_key', elevenKey);
+    localStorage.setItem('ari_hayat_buffer_token', bToken);
+    showToast('Bağlantı anahtarları başarıyla güncellendi!', 'success');
+    if (bToken) fetchBufferProfiles(bToken);
+  };
+
+  const fetchBufferProfiles = async (token: string) => {
+    setLoadingProfiles(true);
+    try {
+      const res = await fetch(`/api/admin/social-profiles?bufferToken=${encodeURIComponent(token)}`);
+      const data = await res.json();
+      if (data.success) {
+        setProfiles(data.profiles);
+        // Select all profiles by default
+        setSelectedProfiles(data.profiles.map((p: any) => p.id));
+      } else {
+        showToast('Buffer profilleri alınamadı. Tokenı kontrol edin.', 'error');
+      }
+    } catch (e) {
+      showToast('Profil çekme hatası.', 'error');
+    } finally {
+      setLoadingProfiles(false);
+    }
   };
 
   const currentDayPlan = weeklyPlan.find(d => d.dayKey === selectedDayKey) || weeklyPlan[0];
@@ -152,12 +199,13 @@ export default function SocialMediaAssistant() {
     setLoading(true);
     updateCurrentDay({ audioUrl: null });
     try {
-      const res = await fetch(`/api/tts?text=${encodeURIComponent(data.scriptText)}`);
+      // Passes ElevenLabs Key client-side securely via request headers or query params
+      const res = await fetch(`/api/tts?text=${encodeURIComponent(data.scriptText)}&elevenLabsKey=${encodeURIComponent(elevenLabsKey)}`);
       if (res.ok) {
         const blob = await res.blob();
         const url = URL.createObjectURL(blob);
         updateCurrentDay({ audioUrl: url });
-        showToast(`${currentDayPlan.dayName} günü için yapay zeka sesi üretildi!`, 'success');
+        showToast(`${currentDayPlan.dayName} için premium yapay zeka sesi üretildi!`, 'success');
       } else {
         showToast('Seslendirme üretilemedi. Lütfen tekrar deneyin.', 'error');
       }
@@ -192,29 +240,68 @@ export default function SocialMediaAssistant() {
     }
   };
 
+  const handleAutoShare = async () => {
+    if (!bufferToken) {
+      showToast('Lütfen önce Buffer Access Token girin.', 'error');
+      return;
+    }
+    if (selectedProfiles.length === 0) {
+      showToast('Lütfen en az bir paylaşılacak sosyal medya hesabı seçin.', 'error');
+      return;
+    }
+
+    setPostingStatus(true);
+    try {
+      const res = await fetch('/api/admin/social-share', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bufferToken,
+          profileIds: selectedProfiles,
+          text: data.caption,
+          mediaUrl: currentDayPlan.imageUrl || 'https://arihayat.com/images/logo.png',
+        })
+      });
+
+      const resData = await res.json();
+      if (resData.success) {
+        updateCurrentDay({ status: 'posted' });
+        showToast('Tüm seçili kanallara otomatik paylaşıldı (Buffer Sırasına Eklendi)!', 'success');
+      } else {
+        showToast(`Paylaşım başarısız: ${resData.error}`, 'error');
+      }
+    } catch (e) {
+      showToast('Otomatik paylaşım sırasında bir ağ hatası oluştu.', 'error');
+    } finally {
+      setPostingStatus(false);
+    }
+  };
+
   return (
     <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
+      
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-white/5 pb-6">
         <div>
           <h1 className="text-3xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-700 uppercase tracking-tight flex items-center">
             <Sparkles className="w-8 h-8 mr-2 text-primary animate-pulse" /> Sosyal Medya Asistanı
           </h1>
-          <p className="text-sm text-gray-400 font-body mt-1">Haftalık içerik planlayın, ses & görsel üretip tek tıkla paylaşın.</p>
+          <p className="text-sm text-gray-400 font-body mt-1">Haftalık içeriklerinizi yönetin, premium sesler oluşturun ve otomatik paylaşın.</p>
         </div>
         
-        {/* Reset Plan */}
-        <button 
-          onClick={() => {
-            if(confirm("Haftalık planı varsayılana sıfırlamak istiyor musunuz?")) {
-              savePlan(defaultWeeklyPlan);
-              showToast("Plan sıfırlandı", "success");
-            }
-          }}
-          className="px-4 py-2 bg-red-950/40 hover:bg-red-900/30 text-red-400 border border-red-900/50 rounded-xl text-xs font-bold transition-all"
-        >
-          Haftalık Planı Sıfırla
-        </button>
+        <div className="flex space-x-2">
+          <button 
+            onClick={() => {
+              if(confirm("Haftalık planı varsayılana sıfırlamak istiyor musunuz?")) {
+                savePlan(defaultWeeklyPlan);
+                showToast("Plan sıfırlandı", "success");
+              }
+            }}
+            className="px-4 py-2 bg-red-950/40 hover:bg-red-900/30 text-red-400 border border-red-900/50 rounded-xl text-xs font-bold transition-all"
+          >
+            Haftalık Planı Sıfırla
+          </button>
+        </div>
       </div>
 
       {/* 📅 Weekly Calendar Timeline */}
@@ -231,7 +318,6 @@ export default function SocialMediaAssistant() {
                 key={day.dayKey}
                 onClick={() => {
                   setSelectedDayKey(day.dayKey);
-                  // Reset temporary tabs
                   setActiveTab('script');
                 }}
                 className={`flex-1 p-4 rounded-xl border transition-all text-left relative overflow-hidden group ${
@@ -269,118 +355,159 @@ export default function SocialMediaAssistant() {
         </div>
       </div>
 
-      {/* Main Grid: Settings & Output */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* Left: Selected Day Configuration */}
-        <div className="lg:col-span-1 bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-6 h-fit">
-          <div className="border-b border-gray-800 pb-3">
-            <h2 className="text-md font-heading font-bold text-white uppercase flex items-center">
-              <Wand2 className="w-5 h-5 mr-2 text-primary" /> {currentDayPlan.dayName} Günü Ayarları
+        {/* Left: Configuration & Settings API Keys */}
+        <div className="lg:col-span-1 space-y-8">
+          
+          {/* Settings API Keys Panel */}
+          <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-4">
+            <h2 className="text-sm font-heading font-bold text-white uppercase flex items-center">
+              <Key className="w-4 h-4 mr-2 text-primary" /> Sosyal Medya & AI Bağlantıları
             </h2>
-          </div>
+            <p className="text-[11px] text-gray-400 leading-relaxed">Hesaplarınızı bağlayıp Premium sesleri etkinleştirmek için anahtarlarınızı buraya girin. Bilgiler sadece tarayıcınızda saklanır.</p>
 
-          {/* Product Select */}
-          <div>
-            <label className="block text-gray-400 mb-2 text-xs font-body uppercase">Ürün</label>
-            <select 
-              value={currentDayPlan.product} 
-              onChange={e => updateCurrentDay({ product: e.target.value })} 
-              className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-xl text-white outline-none focus:border-primary font-bold text-sm"
-            >
-              <option value="Kestane Balı">Kestane Balı</option>
-              <option value="Süzme Çiçek Balı">Süzme Çiçek Balı</option>
-              <option value="Propolis Damla">Propolis Damla</option>
-              <option value="Kral Arı Sütü">Kral Arı Sütü</option>
-              <option value="Doğal Arı Poleni">Doğal Arı Poleni</option>
-            </select>
-          </div>
-
-          {/* Style Select */}
-          <div>
-            <label className="block text-gray-400 mb-2 text-xs font-body uppercase">Konsept Tarzı</label>
-            <div className="space-y-2">
-              {[
-                { id: 'educational', label: 'Eğitici & Sağlık Faydaları' },
-                { id: 'asmr', label: 'ASMR & Rahatlatıcı Çekim' },
-                { id: 'trust', label: 'Güven & Şeffaf Analiz' },
-                { id: 'behind', label: 'Kovan Hayatı (Üretim)' }
-              ].map((styleOption) => (
-                <button
-                  key={styleOption.id}
-                  onClick={() => updateCurrentDay({ style: styleOption.id })}
-                  className={`w-full text-left px-4 py-3 rounded-xl border text-sm font-bold transition-all flex justify-between items-center ${
-                    currentDayPlan.style === styleOption.id 
-                      ? 'bg-primary/10 border-primary text-primary' 
-                      : 'bg-[#1F2937]/50 border-gray-800 text-gray-400 hover:border-gray-700'
-                  }`}
-                >
-                  {styleOption.label}
-                  {currentDayPlan.style === styleOption.id && <Check className="w-4 h-4" />}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Status Tracker */}
-          <div>
-            <label className="block text-gray-400 mb-2 text-xs font-body uppercase">Yayın Durumu</label>
-            <div className="flex gap-2">
-              {[
-                { id: 'draft', label: 'Taslak' },
-                { id: 'ready', label: 'Hazır' },
-                { id: 'posted', label: 'Paylaşıldı' }
-              ].map((s) => (
-                <button
-                  key={s.id}
-                  onClick={() => updateCurrentDay({ status: s.id as any })}
-                  className={`flex-1 py-2 rounded-lg border text-xs font-bold text-center transition-all ${
-                    currentDayPlan.status === s.id
-                      ? 'bg-primary text-secondary border-primary'
-                      : 'bg-[#1F2937]/30 border-gray-800 text-gray-400 hover:border-gray-700'
-                  }`}
-                >
-                  {s.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Voice Generator Trigger */}
-          <div className="pt-4 border-t border-gray-800">
-            <button
-              onClick={handleGenerateVoice}
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-secondary p-3.5 rounded-xl font-heading font-black text-sm uppercase flex items-center justify-center transition-all shadow-lg disabled:opacity-50"
-            >
-              {loading ? (
-                <>Seslendiriliyor...</>
-              ) : (
-                <>
-                  <Music className="w-4 h-4 mr-2" /> Seslendirme Üret
-                </>
-              )}
-            </button>
-          </div>
-
-          {currentDayPlan.audioUrl && (
-            <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
-              <div className="flex items-center text-xs font-bold text-primary">
-                <Volume2 className="w-4 h-4 mr-2 animate-bounce" /> Seslendirme Dosyanız Hazır!
+            <div className="space-y-3 pt-2">
+              <div>
+                <label className="block text-gray-400 mb-1 text-[10px] uppercase font-bold">ElevenLabs API Anahtarı (Gerçekçi Sesler)</label>
+                <input 
+                  type="password"
+                  placeholder="ElevenLabs API Key..."
+                  value={elevenLabsKey}
+                  onChange={e => setElevenLabsKey(e.target.value)}
+                  className="w-full p-2.5 bg-[#1F2937] border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                />
               </div>
-              <audio src={currentDayPlan.audioUrl} controls className="w-full accent-primary" />
-              <a 
-                href={currentDayPlan.audioUrl} 
-                download={`ari-hayat-${currentDayPlan.dayKey}-${currentDayPlan.product.toLowerCase().replace(/\s+/g, '-')}.mp3`}
-                className="w-full py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-xs font-bold text-center block text-white transition-colors flex items-center justify-center"
+
+              <div>
+                <label className="block text-gray-400 mb-1 text-[10px] uppercase font-bold">Buffer Access Token (Otomatik Paylaşım)</label>
+                <input 
+                  type="password"
+                  placeholder="Buffer Access Token..."
+                  value={bufferToken}
+                  onChange={e => setBufferToken(e.target.value)}
+                  className="w-full p-2.5 bg-[#1F2937] border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                />
+              </div>
+
+              <button
+                onClick={() => saveSettings(elevenLabsKey, bufferToken)}
+                className="w-full py-2 bg-primary hover:bg-primary-hover text-secondary font-bold text-xs uppercase rounded-lg transition-colors flex items-center justify-center"
               >
-                <Download className="w-4 h-4 mr-2" /> MP3 İndir
-              </a>
+                <ShieldCheck className="w-4 h-4 mr-1.5" /> Bağlantıları Kaydet
+              </button>
             </div>
-          )}
+          </div>
+
+          {/* Selected Day Setup */}
+          <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-6 h-fit">
+            <h2 className="text-xs font-heading font-bold text-gray-400 uppercase flex items-center border-b border-gray-800 pb-3">
+              <Wand2 className="w-4 h-4 mr-2 text-primary" /> {currentDayPlan.dayName} Günü Ayarları
+            </h2>
+
+            {/* Product Select */}
+            <div>
+              <label className="block text-gray-400 mb-2 text-xs font-body uppercase">Ürün</label>
+              <select 
+                value={currentDayPlan.product} 
+                onChange={e => updateCurrentDay({ product: e.target.value })} 
+                className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-xl text-white outline-none focus:border-primary font-bold text-sm"
+              >
+                <option value="Kestane Balı">Kestane Balı</option>
+                <option value="Süzme Çiçek Balı">Süzme Çiçek Balı</option>
+                <option value="Propolis Damla">Propolis Damla</option>
+                <option value="Kral Arı Sütü">Kral Arı Sütü</option>
+                <option value="Doğal Arı Poleni">Doğal Arı Poleni</option>
+              </select>
+            </div>
+
+            {/* Style Select */}
+            <div>
+              <label className="block text-gray-400 mb-2 text-xs font-body uppercase">Konsept Tarzı</label>
+              <div className="space-y-1.5">
+                {[
+                  { id: 'educational', label: 'Eğitici & Sağlık Faydaları' },
+                  { id: 'asmr', label: 'ASMR & Canlandırıcı Çekim' },
+                  { id: 'trust', label: 'Güven & Şeffaf Analiz' },
+                  { id: 'behind', label: 'Kovan Hayatı (Üretim)' }
+                ].map((styleOption) => (
+                  <button
+                    key={styleOption.id}
+                    onClick={() => updateCurrentDay({ style: styleOption.id })}
+                    className={`w-full text-left px-4 py-2.5 rounded-xl border text-xs font-bold transition-all flex justify-between items-center ${
+                      currentDayPlan.style === styleOption.id 
+                        ? 'bg-primary/10 border-primary text-primary' 
+                        : 'bg-[#1F2937]/50 border-gray-800 text-gray-400 hover:border-gray-700'
+                    }`}
+                  >
+                    {styleOption.label}
+                    {currentDayPlan.style === styleOption.id && <Check className="w-4 h-4" />}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Status Tracker */}
+            <div>
+              <label className="block text-gray-400 mb-2 text-xs font-body uppercase">Yayın Durumu</label>
+              <div className="flex gap-2">
+                {[
+                  { id: 'draft', label: 'Taslak' },
+                  { id: 'ready', label: 'Hazır' },
+                  { id: 'posted', label: 'Paylaşıldı' }
+                ].map((s) => (
+                  <button
+                    key={s.id}
+                    onClick={() => updateCurrentDay({ status: s.id as any })}
+                    className={`flex-1 py-2 rounded-lg border text-xs font-bold text-center transition-all ${
+                      currentDayPlan.status === s.id
+                        ? 'bg-primary text-secondary border-primary'
+                        : 'bg-[#1F2937]/30 border-gray-800 text-gray-400 hover:border-gray-700'
+                  }`}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Voice Generator Trigger */}
+            <div className="pt-4 border-t border-gray-800">
+              <button
+                onClick={handleGenerateVoice}
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-secondary p-3 rounded-xl font-heading font-black text-xs uppercase flex items-center justify-center transition-all shadow-lg disabled:opacity-50"
+              >
+                {loading ? (
+                  <>Seslendiriliyor...</>
+                ) : (
+                  <>
+                    <Music className="w-4 h-4 mr-2" /> {elevenLabsKey ? 'Premium Yapay Zeka Sesi Üret' : 'Ücretsiz Seslendirme Üret'}
+                  </>
+                )}
+              </button>
+            </div>
+
+            {currentDayPlan.audioUrl && (
+              <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
+                <div className="flex items-center text-xs font-bold text-primary">
+                  <Volume2 className="w-4 h-4 mr-2 animate-bounce" /> Seslendirme Dosyanız Hazır!
+                </div>
+                <audio src={currentDayPlan.audioUrl} controls className="w-full accent-primary" />
+                <a 
+                  href={currentDayPlan.audioUrl} 
+                  download={`ari-hayat-${currentDayPlan.dayKey}-${currentDayPlan.product.toLowerCase().replace(/\s+/g, '-')}.mp3`}
+                  className="w-full py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-xs font-bold text-center block text-white transition-colors flex items-center justify-center"
+                >
+                  <Download className="w-4 h-4 mr-2" /> MP3 İndir
+                </a>
+              </div>
+            )}
+          </div>
+
         </div>
 
-        {/* Right Content Area */}
+        {/* Center/Right Outputs Panel */}
         <div className="lg:col-span-2 space-y-8">
           
           {/* Main AI Output Box */}
@@ -411,7 +538,6 @@ export default function SocialMediaAssistant() {
             <div className="p-6">
               {activeTab === 'script' && (
                 <div className="space-y-6">
-                  {/* Script Narration Text */}
                   <div className="bg-[#1F2937]/40 p-4 rounded-xl border border-gray-800">
                     <div className="flex justify-between items-center mb-3">
                       <span className="text-xs font-bold text-gray-400 uppercase">Dış Ses (Seslendirilecek Metin)</span>
@@ -425,7 +551,6 @@ export default function SocialMediaAssistant() {
                     <p className="text-sm leading-relaxed text-gray-200">{data.scriptText}</p>
                   </div>
 
-                  {/* Visual Instructions */}
                   <div className="space-y-3">
                     <span className="text-xs font-bold text-gray-400 uppercase block">Kamera & Görsel Akış Talimatları</span>
                     {data.visuals.map((vis, idx) => (
@@ -452,7 +577,7 @@ export default function SocialMediaAssistant() {
                   <textarea 
                     readOnly 
                     value={data.caption} 
-                    className="w-full p-4 bg-[#1F2937]/40 border border-gray-800 rounded-xl text-sm text-gray-200 outline-none min-h-[180px] font-body animate-fade-in"
+                    className="w-full p-4 bg-[#1F2937]/40 border border-gray-800 rounded-xl text-sm text-gray-200 outline-none min-h-[180px] font-body"
                   />
                 </div>
               )}
@@ -583,48 +708,78 @@ export default function SocialMediaAssistant() {
             </div>
           </div>
 
-          {/* Quick Sharing Platforms */}
+          {/* Buffer Automated Social Publisher */}
           <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-4">
-            <h3 className="text-sm font-heading font-bold text-white uppercase flex items-center">
-              <Share2 className="w-4 h-4 mr-2 text-primary" /> Tek Tıkla Kolay Paylaşım
-            </h3>
-            <p className="text-xs text-gray-400 leading-relaxed">Aşağıdaki butonlara bastığınızda açıklama yazınız otomatik olarak panonuza kopyalanır ve platformun yükleme ekranı açılır.</p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
-              <button
-                onClick={() => {
-                  handleCopy(data.caption, 'Açıklama');
-                  updateCurrentDay({ status: 'posted' });
-                  window.open('https://business.facebook.com/creatorstudio', '_blank');
-                }}
-                className="bg-[#E1306C]/10 border border-[#E1306C]/30 text-[#E1306C] p-3.5 rounded-xl font-heading font-black text-xs uppercase text-center hover:bg-[#E1306C]/20 transition-all flex items-center justify-center"
-              >
-                Instagram Reels <ExternalLink className="w-3.5 h-3.5 ml-1.5" />
-              </button>
-
-              <button
-                onClick={() => {
-                  handleCopy(data.caption, 'Açıklama');
-                  updateCurrentDay({ status: 'posted' });
-                  window.open('https://www.tiktok.com/upload', '_blank');
-                }}
-                className="bg-white/10 border border-white/20 text-white p-3.5 rounded-xl font-heading font-black text-xs uppercase text-center hover:bg-white/20 transition-all flex items-center justify-center"
-              >
-                TikTok Yükle <ExternalLink className="w-3.5 h-3.5 ml-1.5" />
-              </button>
-
-              <button
-                onClick={() => {
-                  const tweetContent = data.tweets[0];
-                  handleCopy(data.tweets.slice(1).join('\n\n'), 'Kalan Tweetler');
-                  updateCurrentDay({ status: 'posted' });
-                  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetContent)}`, '_blank');
-                }}
-                className="bg-sky-500/10 border border-sky-500/30 text-sky-400 p-3.5 rounded-xl font-heading font-black text-xs uppercase text-center hover:bg-sky-500/20 transition-all flex items-center justify-center"
-              >
-                X / Twitter'da Paylaş <ExternalLink className="w-3.5 h-3.5 ml-1.5" />
-              </button>
+            <div className="flex justify-between items-center border-b border-gray-800 pb-3">
+              <h3 className="text-sm font-heading font-bold text-white uppercase flex items-center">
+                <Share2 className="w-4 h-4 mr-2 text-primary" /> Sosyal Medya Otomatik Paylaşım (Buffer)
+              </h3>
             </div>
+            
+            {bufferToken ? (
+              <div className="space-y-4">
+                {loadingProfiles ? (
+                  <div className="flex items-center space-x-2 text-xs text-gray-400">
+                    <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                    <span>Bağlı hesaplar çekiliyor...</span>
+                  </div>
+                ) : profiles.length > 0 ? (
+                  <div className="space-y-3">
+                    <label className="block text-gray-400 text-xs font-bold uppercase">Paylaşılacak Hesapları Seçin</label>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                      {profiles.map((profile) => {
+                        const isSelected = selectedProfiles.includes(profile.id);
+                        return (
+                          <button
+                            key={profile.id}
+                            onClick={() => {
+                              if (isSelected) {
+                                setSelectedProfiles(selectedProfiles.filter(id => id !== profile.id));
+                              } else {
+                                setSelectedProfiles([...selectedProfiles, profile.id]);
+                              }
+                            }}
+                            className={`flex items-center space-x-2 p-2 rounded-lg border text-left transition-all ${
+                              isSelected 
+                                ? 'bg-primary/10 border-primary text-white' 
+                                : 'bg-[#1F2937]/30 border-gray-800 text-gray-400 hover:border-gray-700'
+                            }`}
+                          >
+                            <img src={profile.avatar} alt={profile.service} className="w-6 h-6 rounded-full border border-gray-800" />
+                            <div className="overflow-hidden">
+                              <span className="text-[10px] font-bold block uppercase text-primary">{profile.service}</span>
+                              <span className="text-[9px] text-gray-300 block truncate">@{profile.service_username}</span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <button
+                      onClick={handleAutoShare}
+                      disabled={postingStatus || selectedProfiles.length === 0}
+                      className="w-full bg-gradient-to-r from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-secondary p-3.5 rounded-xl font-heading font-black text-xs uppercase flex items-center justify-center transition-all disabled:opacity-50"
+                    >
+                      {postingStatus ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Paylaşım Yapılıyor (Buffer)...
+                        </>
+                      ) : (
+                        <>
+                          <Share2 className="w-4 h-4 mr-2" /> Seçili Hesaplarda Otomatik Paylaş
+                        </>
+                      )}
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-xs text-gray-500">Bağlı sosyal medya hesabı bulunamadı. Lütfen Buffer profilinize gidip sosyal ağlarınızı bağlayın.</p>
+                )}
+              </div>
+            ) : (
+              <div className="p-4 bg-yellow-950/20 border border-yellow-900/50 rounded-xl text-xs text-yellow-300 leading-relaxed">
+                📢 Otomatik paylaşımı aktif etmek için sol paneldeki <strong>Buffer Access Token</strong> alanını doldurun ve kaydedin. Hesaplarınız otomatik olarak buraya gelecektir.
+              </div>
+            )}
           </div>
 
         </div>
