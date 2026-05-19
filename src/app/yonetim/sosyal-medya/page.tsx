@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Sparkles, Video, Play, Download, Copy, ExternalLink, 
   Music, Check, Wand2, Image as ImageIcon, Volume2, Share2, Loader2, RefreshCw,
-  Calendar, CheckCircle, Clock, AlertCircle, Edit2, Key, ShieldCheck
+  Calendar, CheckCircle, Clock, AlertCircle, Edit2, Key, ShieldCheck, Layers
 } from 'lucide-react';
 import { useAdminToast } from '@/context/AdminToastContext';
 
@@ -384,6 +384,12 @@ export default function SocialMediaAssistant() {
         </div>
         
         <div className="flex space-x-2">
+          <a
+            href="/yonetim/sosyal-medya/rapor"
+            className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 rounded-xl text-xs font-bold transition-all flex items-center"
+          >
+            <Layers className="w-4 h-4 mr-1.5 animate-pulse" /> SaaS Entegrasyon Raporu
+          </a>
           <button 
             onClick={() => {
               if(confirm("Haftalık planı varsayılana sıfırlamak istiyor musunuz?")) {
