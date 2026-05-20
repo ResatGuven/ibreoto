@@ -1,8 +1,16 @@
 import { NextResponse } from 'next/server';
 import WebSocket from 'ws';
+import crypto from 'crypto';
 
 function generateRequestId() {
   return Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+}
+
+function getSecMsGecToken() {
+  const ticks = BigInt(Math.floor(Date.now() / 1000) + 11644473600) * 10000000n;
+  const truncatedTicks = ticks - (ticks % 3000000000n);
+  const str = truncatedTicks.toString() + "6A5AA1D4EAFF4E9FB37E23D68491D6F4";
+  return crypto.createHash('sha256').update(str).digest('hex').toUpperCase();
 }
 
 export async function GET(request: Request) {
@@ -51,15 +59,18 @@ export async function GET(request: Request) {
     // 2. Primary: Free Edge Neural TTS (AhmetNeural) via server-side WebSocket client
     try {
       const requestId = generateRequestId();
-      const socketUrl = `wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?trustedclienttoken=6A5AA1D4EAFF4E9B87E7D8561B96A24E`;
+      const token = getSecMsGecToken();
+      const socketUrl = `wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?trustedclienttoken=6A5AA1D4EAFF4E9FB37E23D68491D6F4&ConnectionId=${requestId}&Sec-MS-GEC=${token}&Sec-MS-GEC-Version=1-133.0.3065.59`;
 
       const audioChunks = await new Promise<Buffer[]>((resolve, reject) => {
         const ws = new WebSocket(socketUrl, {
           headers: {
             'Pragma': 'no-cache',
             'Cache-Control': 'no-cache',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.68',
-            'Origin': 'chrome-extension://jdiccldimpdaibdpecjgjcoojgoiboih'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0',
+            'Origin': 'chrome-extension://jdiccldimpdaibdpecjgjcoojgoiboih',
+            'Sec-MS-GEC': token,
+            'Sec-MS-GEC-Version': '1-133.0.3065.59'
           }
         });
 
@@ -77,23 +88,20 @@ export async function GET(request: Request) {
             `Path:speech.config\r\n\r\n` +
             JSON.stringify({
               context: {
-                system: {
-                  name: "Edge",
-                  version: "112.0.1722.68",
-                  build: "1722.68",
-                  platform: "Windows"
+                synthesis: {
+                  audio: {
+                    metadataoptions: {
+                      sentenceBoundaryEnabled: "false",
+                      wordBoundaryEnabled: "true"
+                    },
+                    outputFormat: "audio-24khz-48kbitrate-mono-mp3"
+                  }
                 }
-              },
-              audio: {
-                format: "audio-24khz-48kbitrate-mono-mp3",
-                volume: 0,
-                pitch: 0,
-                rate: 0
               }
             });
           ws.send(configMsg);
 
-          const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='tr-TR'><voice name='tr-TR-AhmetNeural'>${text}</voice></speak>`;
+          const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='tr-TR'><voice name='Microsoft Server Speech Text to Speech Voice (tr-TR, AhmetNeural)'>${text}</voice></speak>`;
           const ssmlMsg = 
             `X-RequestId:${requestId}\r\n` +
             `Content-Type:application/ssml+xml\r\n` +

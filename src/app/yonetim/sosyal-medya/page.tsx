@@ -417,7 +417,6 @@ export default function SocialMediaAssistant() {
       const dest = audioCtx.createMediaStreamDestination();
       bufferSource.connect(analyser);
       bufferSource.connect(dest);
-      bufferSource.connect(audioCtx.destination);
 
       const canvasStream = canvas.captureStream(30);
       const combinedStream = new MediaStream();
@@ -444,6 +443,17 @@ export default function SocialMediaAssistant() {
         }
       };
 
+      // Prepare Subtitle Data
+      const sentences = data.scriptText.split(/(?<=[.!?])\s+/);
+      const totalChars = data.scriptText.length;
+      let charSum = 0;
+      const subtitleData = sentences.map(s => {
+        const start = (charSum / totalChars) * duration;
+        charSum += s.length;
+        const end = (charSum / totalChars) * duration;
+        return { text: s, start, end };
+      });
+
       let animationFrameId: number;
       const startTime = Date.now();
 
@@ -452,49 +462,155 @@ export default function SocialMediaAssistant() {
         if (elapsed >= duration) return;
 
         const progress = elapsed / duration;
-        const scale = 1.0 + (progress * 0.15);
-        const panX = Math.sin(progress * Math.PI) * (w * 0.03);
-        const panY = Math.cos(progress * Math.PI) * (h * 0.03);
 
+        // 1. Draw Blurred Background Image (Cover style)
         ctx.save();
-        ctx.translate(w / 2 + panX, h / 2 + panY);
-        ctx.scale(scale, scale);
-        ctx.drawImage(img, -w / 2, -h / 2, w, h);
+        ctx.filter = 'blur(25px) brightness(0.4)';
+        const bgScale = Math.max(w / img.width, h / img.height);
+        const bgW = img.width * bgScale;
+        const bgH = img.height * bgScale;
+        ctx.drawImage(img, (w - bgW) / 2, (h - bgH) / 2, bgW, bgH);
         ctx.restore();
 
-        const gradient = ctx.createLinearGradient(0, h * 0.7, 0, h);
-        gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-        gradient.addColorStop(0.5, 'rgba(0, 0, 0, 0.4)');
-        gradient.addColorStop(1, 'rgba(0, 0, 0, 0.85)');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, h * 0.7, w, h * 0.3);
+        // 2. Draw Foreground Card with Rounded Corners, White Border & Subtle Zoom
+        ctx.save();
+        const cardW = w * 0.82;
+        const cardH = cardW * (img.height / img.width);
+        let finalCardW = cardW;
+        let finalCardH = cardH;
+        // Limit card height to avoid overlapping elements
+        if (finalCardH > h * 0.52) {
+          finalCardH = h * 0.52;
+          finalCardW = finalCardH * (img.width / img.height);
+        }
+        const cardY = (h - finalCardH) / 2 - (h * 0.05); // shift up slightly for wave & subtitles
+        const zoomScale = 1.0 + (progress * 0.06);
 
-        analyser.getByteFrequencyData(dataArray);
-        const barWidth = (w / bufferLength) * 1.5;
-        let barHeight;
-        let x = 0;
+        ctx.translate(w / 2, cardY + finalCardH / 2);
+        ctx.scale(zoomScale, zoomScale);
 
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = 'rgba(168, 85, 247, 0.6)';
-        ctx.fillStyle = 'rgba(168, 85, 247, 0.8)';
+        // Clip rounded rectangle
+        const radius = 24;
+        ctx.beginPath();
+        if (ctx.roundRect) {
+          ctx.roundRect(-finalCardW / 2, -finalCardH / 2, finalCardW, finalCardH, radius);
+        } else {
+          ctx.rect(-finalCardW / 2, -finalCardH / 2, finalCardW, finalCardH);
+        }
+        ctx.closePath();
+        ctx.clip();
+        ctx.drawImage(img, -finalCardW / 2, -finalCardH / 2, finalCardW, finalCardH);
+        ctx.restore();
 
-        for (let i = 0; i < bufferLength; i++) {
-          barHeight = (dataArray[i] / 255) * (h * 0.12);
-          const yPos = h * 0.85;
-          ctx.fillRect(w / 2 + x, yPos - barHeight / 2, barWidth - 2, barHeight);
-          ctx.fillRect(w / 2 - x - barWidth, yPos - barHeight / 2, barWidth - 2, barHeight);
-          x += barWidth;
+        // Draw card border
+        ctx.save();
+        ctx.translate(w / 2, cardY + finalCardH / 2);
+        ctx.scale(zoomScale, zoomScale);
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+        ctx.beginPath();
+        if (ctx.roundRect) {
+          ctx.roundRect(-finalCardW / 2, -finalCardH / 2, finalCardW, finalCardH, radius);
+        } else {
+          ctx.rect(-finalCardW / 2, -finalCardH / 2, finalCardW, finalCardH);
+        }
+        ctx.closePath();
+        ctx.stroke();
+        ctx.restore();
+
+        // 3. Draw Watermark Title at Top
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+        ctx.font = 'bold 16px Outfit, Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('ARI HAYAT AI', w / 2, 45);
+
+        // 4. Draw Animated Subtitles
+        const currentSub = subtitleData.find(s => elapsed >= s.start && elapsed <= s.end);
+        if (currentSub) {
+          ctx.save();
+          ctx.font = 'bold 22px Outfit, Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+
+          // Wrap text lines to fit screen width
+          const maxTextWidth = w * 0.78;
+          const words = currentSub.text.split(' ');
+          let line = '';
+          const lines = [];
+          for (let n = 0; n < words.length; n++) {
+            const testLine = line + words[n] + ' ';
+            const metrics = ctx.measureText(testLine);
+            if (metrics.width > maxTextWidth && n > 0) {
+              lines.push(line.trim());
+              line = words[n] + ' ';
+            } else {
+              line = testLine;
+            }
+          }
+          lines.push(line.trim());
+
+          const lineHeight = 30;
+          const paddingY = 14;
+          const paddingX = 20;
+          const rectH = lines.length * lineHeight + paddingY * 2;
+          const rectW = Math.min(w * 0.85, maxTextWidth + paddingX * 2);
+          const rectX = (w - rectW) / 2;
+          const rectY = h * 0.73 - rectH / 2;
+
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
+          ctx.beginPath();
+          if (ctx.roundRect) {
+            ctx.roundRect(rectX, rectY, rectW, rectH, 16);
+          } else {
+            ctx.rect(rectX, rectY, rectW, rectH);
+          }
+          ctx.fill();
+
+          ctx.fillStyle = '#FFFFFF';
+          lines.forEach((l, idx) => {
+            const textY = rectY + paddingY + lineHeight / 2 + idx * lineHeight;
+            ctx.fillText(l, w / 2, textY);
+          });
+          ctx.restore();
         }
 
-        ctx.shadowBlur = 0;
+        // 5. Draw Glowing Neon Audio Wave Line
+        analyser.getByteFrequencyData(dataArray);
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = 'rgba(168, 85, 247, 0.9)'; // Neon purple
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = 'rgba(168, 85, 247, 0.7)';
 
+        const sliceWidth = w / bufferLength;
+        let waveX = 0;
+        const waveBaseY = h * 0.86;
+
+        for (let i = 0; i < bufferLength; i++) {
+          const v = dataArray[i] / 255.0;
+          const yShift = (v * (h * 0.08)) * Math.sin((i / bufferLength) * Math.PI); // smooth edges
+          const waveY = waveBaseY + (i % 2 === 0 ? yShift : -yShift);
+
+          if (i === 0) {
+            ctx.moveTo(waveX, waveY);
+          } else {
+            ctx.lineTo(waveX, waveY);
+          }
+          waveX += sliceWidth;
+        }
+        ctx.lineTo(w, waveBaseY);
+        ctx.stroke();
+        ctx.restore();
+
+        // 6. Progress Bar and Remaining Time
         ctx.fillStyle = '#a855f7';
         ctx.fillRect(0, h - 8, w * progress, 8);
 
         ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.font = 'bold 24px Outfit, Inter, sans-serif';
+        ctx.font = 'bold 22px Outfit, Inter, sans-serif';
         const remaining = Math.max(0, Math.ceil(duration - elapsed));
-        ctx.fillText(`00:${remaining.toString().padStart(2, '0')}`, w - 100, 50);
+        ctx.fillText(`00:${remaining.toString().padStart(2, '0')}`, w - 100, 45);
 
         setVideoPollingStatus(`Video oluşturuluyor: %${Math.min(100, Math.floor(progress * 100))}`);
         animationFrameId = requestAnimationFrame(drawFrame);
@@ -503,11 +619,11 @@ export default function SocialMediaAssistant() {
       recorder.onstop = () => {
         cancelAnimationFrame(animationFrameId);
         audioCtx.close();
-        
+
         const videoBlob = new Blob(chunks, { type: chunks[0].type || 'video/webm' });
         const videoUrl = URL.createObjectURL(videoBlob);
         updateCurrentDay({ videoUrl });
-        
+
         showToast('Animasyonlu pazarlama videosu 100% ücretsiz olarak üretildi!', 'success');
         setGeneratingVideo(false);
         setVideoPollingStatus(null);
@@ -1048,12 +1164,12 @@ export default function SocialMediaAssistant() {
                 <div>
                   <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Görsel Oluşturma İstemi (Prompt)</label>
                   <textarea 
-                    value={currentDayPlan.customPrompt || data.imagePrompt}
+                    value={currentDayPlan.customPrompt}
                     onChange={e => updateCurrentDay({ customPrompt: e.target.value })}
                     className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-xl text-white outline-none focus:border-primary text-xs font-mono min-h-[120px]"
-                    placeholder="İngilizce olarak oluşturmak istediğiniz resmi detaylıca tarif edin..."
+                    placeholder={data.imagePrompt}
                   />
-                  <span className="text-[10px] text-gray-500 mt-1 block">En iyi sonuç için İngilizce komutlar tercih edin.</span>
+                  <span className="text-[10px] text-gray-500 mt-1 block">Boş bırakırsanız varsayılan şablon komutu kullanılacaktır. En iyi sonuç için İngilizce yazın.</span>
                 </div>
 
                 <div className="flex space-x-2">
@@ -1074,11 +1190,12 @@ export default function SocialMediaAssistant() {
                   </button>
 
                   <button
-                    onClick={() => updateCurrentDay({ customPrompt: '' })}
-                    className="bg-gray-800 hover:bg-gray-700 text-white p-3.5 rounded-xl font-bold transition-colors"
-                    title="Varsayılana Sıfırla"
+                    onClick={() => updateCurrentDay({ customPrompt: data.imagePrompt })}
+                    className="bg-gray-800 hover:bg-gray-700 text-white p-3 px-4 rounded-xl font-bold transition-colors flex items-center gap-1.5"
+                    title="Şablon İstemi Yükle"
                   >
                     <RefreshCw className="w-4 h-4" />
+                    <span className="text-xs">Şablonu Yükle</span>
                   </button>
                 </div>
               </div>
