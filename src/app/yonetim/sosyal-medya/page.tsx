@@ -89,6 +89,8 @@ interface DayPlan {
   status: 'draft' | 'ready' | 'posted';
   audioUrl: string | null;
   imageUrl: string | null;
+  videoUrl?: string | null;
+  aspectRatio?: '9:16' | '1:1' | '16:9';
   customPrompt: string;
 }
 
@@ -100,13 +102,13 @@ interface BufferProfile {
 }
 
 const defaultWeeklyPlan: DayPlan[] = [
-  { dayName: 'Pazartesi', dayKey: 'pazartesi', product: 'Kestane Balı', style: 'educational', status: 'draft', audioUrl: null, imageUrl: null, customPrompt: '' },
-  { dayName: 'Salı', dayKey: 'sali', product: 'Propolis Damla', style: 'trust', status: 'draft', audioUrl: null, imageUrl: null, customPrompt: '' },
-  { dayName: 'Çarşamba', dayKey: 'carsamba', product: 'Kral Arı Sütü', style: 'asmr', status: 'draft', audioUrl: null, imageUrl: null, customPrompt: '' },
-  { dayName: 'Perşembe', dayKey: 'persembe', product: 'Süzme Çiçek Balı', style: 'behind', status: 'draft', audioUrl: null, imageUrl: null, customPrompt: '' },
-  { dayName: 'Cuma', dayKey: 'cuma', product: 'Doğal Arı Poleni', style: 'educational', status: 'draft', audioUrl: null, imageUrl: null, customPrompt: '' },
-  { dayName: 'Cumartesi', dayKey: 'cumartesi', product: 'Propolis Damla', style: 'asmr', status: 'draft', audioUrl: null, imageUrl: null, customPrompt: '' },
-  { dayName: 'Pazar', dayKey: 'pazar', product: 'Kestane Balı', style: 'trust', status: 'draft', audioUrl: null, imageUrl: null, customPrompt: '' },
+  { dayName: 'Pazartesi', dayKey: 'pazartesi', product: 'Kestane Balı', style: 'educational', status: 'draft', audioUrl: null, imageUrl: null, videoUrl: null, aspectRatio: '9:16', customPrompt: '' },
+  { dayName: 'Salı', dayKey: 'sali', product: 'Propolis Damla', style: 'trust', status: 'draft', audioUrl: null, imageUrl: null, videoUrl: null, aspectRatio: '9:16', customPrompt: '' },
+  { dayName: 'Çarşamba', dayKey: 'carsamba', product: 'Kral Arı Sütü', style: 'asmr', status: 'draft', audioUrl: null, imageUrl: null, videoUrl: null, aspectRatio: '9:16', customPrompt: '' },
+  { dayName: 'Perşembe', dayKey: 'persembe', product: 'Süzme Çiçek Balı', style: 'behind', status: 'draft', audioUrl: null, imageUrl: null, videoUrl: null, aspectRatio: '9:16', customPrompt: '' },
+  { dayName: 'Cuma', dayKey: 'cuma', product: 'Doğal Arı Poleni', style: 'educational', status: 'draft', audioUrl: null, imageUrl: null, videoUrl: null, aspectRatio: '9:16', customPrompt: '' },
+  { dayName: 'Cumartesi', dayKey: 'cumartesi', product: 'Propolis Damla', style: 'asmr', status: 'draft', audioUrl: null, imageUrl: null, videoUrl: null, aspectRatio: '9:16', customPrompt: '' },
+  { dayName: 'Pazar', dayKey: 'pazar', product: 'Kestane Balı', style: 'trust', status: 'draft', audioUrl: null, imageUrl: null, videoUrl: null, aspectRatio: '9:16', customPrompt: '' },
 ];
 
 export default function SocialMediaAssistant() {
@@ -114,12 +116,15 @@ export default function SocialMediaAssistant() {
   const [selectedDayKey, setSelectedDayKey] = useState<string>('pazartesi');
   const [loading, setLoading] = useState(false);
   const [generatingImage, setGeneratingImage] = useState(false);
+  const [generatingVideo, setGeneratingVideo] = useState(false);
+  const [videoPollingStatus, setVideoPollingStatus] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'script' | 'caption' | 'twitter'>('script');
   const [copiedText, setCopiedText] = useState<string | null>(null);
 
   // Settings & API keys (stored safely client-side in localStorage)
   const [elevenLabsKey, setElevenLabsKey] = useState('');
   const [bufferToken, setBufferToken] = useState('');
+  const [replicateToken, setReplicateToken] = useState('');
   const [profiles, setProfiles] = useState<BufferProfile[]>([]);
   const [selectedProfiles, setSelectedProfiles] = useState<string[]>([]);
   const [loadingProfiles, setLoadingProfiles] = useState(false);
@@ -131,11 +136,23 @@ export default function SocialMediaAssistant() {
   useEffect(() => {
     const savedPlan = localStorage.getItem('ari_hayat_weekly_plan');
     if (savedPlan) {
-      try { setWeeklyPlan(JSON.parse(savedPlan)); } catch (e) {}
+      try { 
+        const parsed = JSON.parse(savedPlan);
+        // Migrating old storage keys to include default aspectRatio & videoUrl
+        const migrated = parsed.map((p: any) => ({
+          ...p,
+          aspectRatio: p.aspectRatio || '9:16',
+          videoUrl: p.videoUrl || null
+        }));
+        setWeeklyPlan(migrated); 
+      } catch (e) {}
     }
 
     const savedElevenKey = localStorage.getItem('ari_hayat_elevenlabs_key');
     if (savedElevenKey) setElevenLabsKey(savedElevenKey);
+
+    const savedReplicateKey = localStorage.getItem('ari_hayat_replicate_key');
+    if (savedReplicateKey) setReplicateToken(savedReplicateKey);
 
     const savedBufferToken = localStorage.getItem('ari_hayat_buffer_token');
     if (savedBufferToken) {
@@ -149,9 +166,10 @@ export default function SocialMediaAssistant() {
     localStorage.setItem('ari_hayat_weekly_plan', JSON.stringify(updatedPlan));
   };
 
-  const saveSettings = (elevenKey: string, bToken: string) => {
+  const saveSettings = (elevenKey: string, bToken: string, repKey: string) => {
     localStorage.setItem('ari_hayat_elevenlabs_key', elevenKey);
     localStorage.setItem('ari_hayat_buffer_token', bToken);
+    localStorage.setItem('ari_hayat_replicate_key', repKey);
     showToast('Bağlantı anahtarları başarıyla güncellendi!', 'success');
     if (bToken) fetchBufferProfiles(bToken);
   };
@@ -283,7 +301,6 @@ export default function SocialMediaAssistant() {
     updateCurrentDay({ audioUrl: null });
     
     try {
-      // 1. Try Browser-side Edge Neural TTS WebSocket (tr-TR, AhmetNeural)
       const blob = await synthesizeSpeechInBrowser(data.scriptText);
       const url = URL.createObjectURL(blob);
       updateCurrentDay({ audioUrl: url });
@@ -291,7 +308,6 @@ export default function SocialMediaAssistant() {
     } catch (browserError) {
       console.warn("Browser-side Edge TTS failed, falling back to server endpoint:", browserError);
       
-      // 2. Fallback to server endpoint (Google Translate TTS or ElevenLabs if key available)
       try {
         const res = await fetch(`/api/tts?text=${encodeURIComponent(data.scriptText)}&elevenLabsKey=${encodeURIComponent(elevenLabsKey)}`);
         if (res.ok) {
@@ -312,18 +328,31 @@ export default function SocialMediaAssistant() {
 
   const handleGenerateImage = async () => {
     setGeneratingImage(true);
-    updateCurrentDay({ imageUrl: null });
+    updateCurrentDay({ imageUrl: null, videoUrl: null }); // Clear previous image and video
     try {
       const prompt = currentDayPlan.customPrompt || data.imagePrompt;
       const seed = Math.floor(Math.random() * 1000000);
-      const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1080&height=1920&nologo=true&seed=${seed}`;
+      
+      // Select dimensions based on aspect ratio
+      const ratio = currentDayPlan.aspectRatio || '9:16';
+      let w = 1080;
+      let h = 1920;
+      if (ratio === '1:1') {
+        w = 1080;
+        h = 1080;
+      } else if (ratio === '16:9') {
+        w = 1280;
+        h = 720;
+      }
+
+      const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=${w}&height=${h}&nologo=true&seed=${seed}`;
       
       const img = new Image();
       img.src = url;
       img.onload = () => {
         updateCurrentDay({ imageUrl: url });
         setGeneratingImage(false);
-        showToast(`${currentDayPlan.dayName} günü için yapay zeka resmi çizildi!`, 'success');
+        showToast(`${currentDayPlan.dayName} günü için ${ratio} formatında AI resmi çizildi!`, 'success');
       };
       img.onerror = () => {
         throw new Error('Image load failed');
@@ -331,6 +360,90 @@ export default function SocialMediaAssistant() {
     } catch (error) {
       showToast('Görsel üretilirken bir hata oluştu.', 'error');
       setGeneratingImage(false);
+    }
+  };
+
+  // Replicate AI Video Generation Handler
+  const handleGenerateVideo = async () => {
+    if (!replicateToken) {
+      showToast('Lütfen önce Replicate API Anahtarı girin.', 'error');
+      return;
+    }
+    if (!currentDayPlan.imageUrl) {
+      showToast('Canlandırmak için öncelikle bir AI görseli oluşturmalısınız.', 'error');
+      return;
+    }
+
+    setGeneratingVideo(true);
+    setVideoPollingStatus('Canlandırma işlemi başlatılıyor...');
+    updateCurrentDay({ videoUrl: null });
+
+    try {
+      const res = await fetch('/api/admin/generate-video', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          imageUrl: currentDayPlan.imageUrl,
+          replicateToken
+        })
+      });
+
+      const startData = await res.json();
+      if (!startData.success) {
+        showToast(`Video üretimi başlatılamadı: ${startData.error}`, 'error');
+        setGeneratingVideo(false);
+        setVideoPollingStatus(null);
+        return;
+      }
+
+      const predictionId = startData.predictionId;
+      setVideoPollingStatus('Video çiziliyor (Replicate SVD GPU)...');
+
+      // Poll every 4 seconds for completion
+      const pollInterval = setInterval(async () => {
+        try {
+          const pollRes = await fetch(`/api/admin/generate-video?id=${predictionId}&replicateToken=${encodeURIComponent(replicateToken)}`);
+          const pollData = await pollRes.json();
+          
+          if (!pollData.success) {
+            clearInterval(pollInterval);
+            showToast(`Durum alınamadı: ${pollData.error}`, 'error');
+            setGeneratingVideo(false);
+            setVideoPollingStatus(null);
+            return;
+          }
+
+          if (pollData.status === 'succeeded') {
+            clearInterval(pollInterval);
+            const videoUrl = pollData.output && pollData.output[0];
+            if (videoUrl) {
+              updateCurrentDay({ videoUrl });
+              showToast('Yapay zeka videosu başarıyla canlandırıldı!', 'success');
+            } else {
+              showToast('Video üretildi fakat çıktı adresi alınamadı.', 'error');
+            }
+            setGeneratingVideo(false);
+            setVideoPollingStatus(null);
+          } else if (pollData.status === 'failed') {
+            clearInterval(pollInterval);
+            showToast(`Video çizimi başarısız oldu: ${pollData.error}`, 'error');
+            setGeneratingVideo(false);
+            setVideoPollingStatus(null);
+          } else if (pollData.status === 'processing' || pollData.status === 'starting') {
+            setVideoPollingStatus(`Video sentezleniyor (Durum: ${pollData.status === 'processing' ? 'Kareler İşleniyor' : 'GPU Başlatılıyor'})...`);
+          }
+        } catch (e) {
+          clearInterval(pollInterval);
+          showToast('Sorgulama hatası.', 'error');
+          setGeneratingVideo(false);
+          setVideoPollingStatus(null);
+        }
+      }, 4000);
+
+    } catch (err) {
+      showToast('Video API bağlantı hatası.', 'error');
+      setGeneratingVideo(false);
+      setVideoPollingStatus(null);
     }
   };
 
@@ -353,7 +466,8 @@ export default function SocialMediaAssistant() {
           bufferToken,
           profileIds: selectedProfiles,
           text: data.caption,
-          mediaUrl: currentDayPlan.imageUrl || 'https://arihayat.com/images/logo.png',
+          // Share video if exists, fallback to image, fallback to logo
+          mediaUrl: currentDayPlan.videoUrl || currentDayPlan.imageUrl || 'https://arihayat.com/images/logo.png',
         })
       });
 
@@ -372,7 +486,7 @@ export default function SocialMediaAssistant() {
   };
 
   return (
-    <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
+    <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100 font-body">
       
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-white/5 pb-6">
@@ -447,6 +561,7 @@ export default function SocialMediaAssistant() {
                   <div className="flex space-x-1">
                     {day.audioUrl && <Volume2 className="w-3 h-3 text-primary" />}
                     {day.imageUrl && <ImageIcon className="w-3 h-3 text-amber-500" />}
+                    {day.videoUrl && <Video className="w-3 h-3 text-red-400" />}
                   </div>
                 </div>
               </button>
@@ -465,7 +580,7 @@ export default function SocialMediaAssistant() {
             <h2 className="text-sm font-heading font-bold text-white uppercase flex items-center">
               <Key className="w-4 h-4 mr-2 text-primary" /> Sosyal Medya & AI Bağlantıları
             </h2>
-            <p className="text-[11px] text-gray-400 leading-relaxed">Hesaplarınızı bağlayıp Premium sesleri etkinleştirmek için anahtarlarınızı buraya girin. Bilgiler sadece tarayıcınızda saklanır.</p>
+            <p className="text-[11px] text-gray-400 leading-relaxed">Hesaplarınızı bağlayıp Premium AI araçlarını etkinleştirmek için anahtarlarınızı buraya girin.</p>
 
             <div className="space-y-3 pt-2">
               <div>
@@ -475,6 +590,17 @@ export default function SocialMediaAssistant() {
                   placeholder="ElevenLabs API Key..."
                   value={elevenLabsKey}
                   onChange={e => setElevenLabsKey(e.target.value)}
+                  className="w-full p-2.5 bg-[#1F2937] border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-400 mb-1 text-[10px] uppercase font-bold">Replicate API Anahtarı (Video Canlandırma)</label>
+                <input 
+                  type="password"
+                  placeholder="Replicate API Key..."
+                  value={replicateToken}
+                  onChange={e => setReplicateToken(e.target.value)}
                   className="w-full p-2.5 bg-[#1F2937] border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
                 />
               </div>
@@ -491,7 +617,7 @@ export default function SocialMediaAssistant() {
               </div>
 
               <button
-                onClick={() => saveSettings(elevenLabsKey, bufferToken)}
+                onClick={() => saveSettings(elevenLabsKey, bufferToken, replicateToken)}
                 className="w-full py-2 bg-primary hover:bg-primary-hover text-secondary font-bold text-xs uppercase rounded-lg transition-colors flex items-center justify-center"
               >
                 <ShieldCheck className="w-4 h-4 mr-1.5" /> Bağlantıları Kaydet
@@ -563,7 +689,7 @@ export default function SocialMediaAssistant() {
                       currentDayPlan.status === s.id
                         ? 'bg-primary text-secondary border-primary'
                         : 'bg-[#1F2937]/30 border-gray-800 text-gray-400 hover:border-gray-700'
-                  }`}
+                    }`}
                   >
                     {s.label}
                   </button>
@@ -723,6 +849,30 @@ export default function SocialMediaAssistant() {
               <span className="bg-green-950 text-green-400 border border-green-800 text-[10px] px-2 py-0.5 rounded-full font-bold">ÜCRETSİZ & SINIRSIZ</span>
             </div>
 
+            {/* Sizing & Aspect Ratio Selector */}
+            <div className="p-4 bg-gray-900/30 rounded-xl border border-gray-800 space-y-3">
+              <span className="text-xs font-bold text-white uppercase block">Boyutlandırma / Sosyal Medya Formatı</span>
+              <div className="flex gap-2">
+                {[
+                  { id: '9:16', label: '9:16 (Reels/TikTok/Story)' },
+                  { id: '1:1', label: '1:1 (Instagram Post)' },
+                  { id: '16:9', label: '16:9 (Yatay/X/Twitter)' }
+                ].map((ratio) => (
+                  <button
+                    key={ratio.id}
+                    onClick={() => updateCurrentDay({ aspectRatio: ratio.id as any, imageUrl: null, videoUrl: null })}
+                    className={`flex-1 py-2.5 rounded-xl border text-[11px] font-bold text-center transition-all ${
+                      (currentDayPlan.aspectRatio || '9:16') === ratio.id
+                        ? 'bg-primary border-primary text-secondary'
+                        : 'bg-[#1F2937]/50 border-gray-800 text-gray-400 hover:border-gray-700'
+                    }`}
+                  >
+                    {ratio.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               {/* Prompt Controls */}
@@ -763,13 +913,6 @@ export default function SocialMediaAssistant() {
                     <RefreshCw className="w-4 h-4" />
                   </button>
                 </div>
-
-                <div className="p-3 bg-gray-900/40 rounded-xl border border-gray-800/80">
-                  <span className="text-xs font-bold text-amber-500 uppercase block mb-1">💡 Videoya Canlandırma Tüyosu</span>
-                  <p className="text-[11px] text-gray-400 leading-relaxed">
-                    Oluşturulan resmi indirip <a href="https://lumalabs.ai/dream-machine" target="_blank" className="text-primary underline">Luma Labs</a> veya <a href="https://runwayml.com" target="_blank" className="text-primary underline">Runway ML</a> sitesine yükleyerek ücretsiz canlandırabilirsiniz.
-                  </p>
-                </div>
               </div>
 
               {/* Generated Image Result */}
@@ -780,11 +923,17 @@ export default function SocialMediaAssistant() {
                     <span className="text-xs text-gray-400 block font-bold uppercase tracking-wider">Arı Hayat AI çizim yapıyor...</span>
                   </div>
                 ) : currentDayPlan.imageUrl ? (
-                  <>
+                  <div className="w-full flex items-center justify-center p-4">
                     <img 
                       src={currentDayPlan.imageUrl} 
                       alt="AI Generated" 
-                      className="w-full h-[320px] object-cover"
+                      className={`object-cover border border-gray-800 rounded-lg shadow-xl ${
+                        (currentDayPlan.aspectRatio || '9:16') === '9:16'
+                          ? 'h-[280px] aspect-[9/16]'
+                          : (currentDayPlan.aspectRatio || '9:16') === '1:1'
+                          ? 'w-[240px] h-[240px] aspect-square'
+                          : 'w-full aspect-[16/9]'
+                      }`}
                     />
                     <div className="absolute bottom-3 right-3">
                       <a 
@@ -795,12 +944,102 @@ export default function SocialMediaAssistant() {
                         <Download className="w-3.5 h-3.5 mr-1" /> Resmi İndir
                       </a>
                     </div>
-                  </>
+                  </div>
                 ) : (
                   <div className="text-center p-6 text-gray-600">
                     <ImageIcon className="w-12 h-12 mx-auto mb-2 text-gray-700" />
                     <span className="text-xs font-bold uppercase block tracking-wider">Henüz Görsel Üretilmedi</span>
-                    <p className="text-[11px] text-gray-500 max-w-[200px] mx-auto mt-1">Sol taraftaki komutu kullanarak yeni bir görsel oluşturun.</p>
+                    <p className="text-[11px] text-gray-500 max-w-[200px] mx-auto mt-1 font-body">Yukarıdaki butonu kullanarak seçili formatta yeni bir görsel oluşturun.</p>
+                  </div>
+                )}
+              </div>
+
+            </div>
+          </div>
+
+          {/* AI Video Generation Card */}
+          <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-6">
+            <div className="flex justify-between items-center border-b border-gray-800 pb-3">
+              <h3 className="text-md font-heading font-bold text-white uppercase flex items-center">
+                <Video className="w-5 h-5 mr-2 text-primary animate-pulse" /> Yapay Zeka Video Oluşturucu
+              </h3>
+              <span className="bg-primary/10 text-primary border border-primary/20 text-[10px] px-2 py-0.5 rounded-full font-bold">REPLICATE SVD</span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              <div className="space-y-4 flex flex-col justify-between">
+                <div className="space-y-3">
+                  <p className="text-xs text-gray-400 leading-relaxed font-body">
+                    Oluşturduğunuz görseli **Stable Video Diffusion** modelini kullanarak hareketli bir video klibine dönüştürebilirsiniz.
+                  </p>
+                  <div className="p-3.5 bg-gray-900/40 rounded-xl border border-gray-800/80 text-[11px] text-gray-400 space-y-1.5">
+                    <span className="font-bold text-white block">💡 Video Format/Boyut Ayarı:</span>
+                    Görsel hangi boyutta üretildiyse (9:16 dikey, 1:1 kare, veya 16:9 yatay), üretilen video da otomatik olarak o en boy oranında canlandırılır.
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <button
+                    onClick={handleGenerateVideo}
+                    disabled={generatingVideo || !currentDayPlan.imageUrl}
+                    className="w-full bg-gradient-to-r from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-secondary p-3.5 rounded-xl font-heading font-black text-xs uppercase flex items-center justify-center transition-all disabled:opacity-50"
+                  >
+                    {generatingVideo ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" /> {videoPollingStatus}
+                      </>
+                    ) : (
+                      <>
+                        <Video className="w-4 h-4 mr-2" /> Görseli Canlandır (Video Üret)
+                      </>
+                    )}
+                  </button>
+                  {!currentDayPlan.imageUrl && (
+                    <span className="text-[10px] text-red-400 block text-center">Öncelikle yukarıdan bir görsel üretmelisiniz.</span>
+                  )}
+                </div>
+              </div>
+
+              {/* Video Result Preview */}
+              <div className="border border-gray-800 rounded-xl overflow-hidden bg-gray-950 flex flex-col justify-center items-center min-h-[300px] relative">
+                {generatingVideo ? (
+                  <div className="text-center p-6 space-y-3">
+                    <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto" />
+                    <span className="text-xs text-gray-400 block font-bold uppercase tracking-wider">{videoPollingStatus}</span>
+                  </div>
+                ) : currentDayPlan.videoUrl ? (
+                  <div className="w-full flex justify-center items-center p-4">
+                    <video 
+                      src={currentDayPlan.videoUrl} 
+                      controls 
+                      loop 
+                      autoPlay 
+                      className={`rounded-lg object-cover shadow-xl border border-gray-800 ${
+                        (currentDayPlan.aspectRatio || '9:16') === '9:16'
+                          ? 'h-[280px] aspect-[9/16]'
+                          : (currentDayPlan.aspectRatio || '9:16') === '1:1'
+                          ? 'w-[240px] h-[240px] aspect-square'
+                          : 'w-full aspect-[16/9]'
+                      }`}
+                    />
+                    <div className="absolute bottom-3 right-3">
+                      <a 
+                        href={currentDayPlan.videoUrl} 
+                        download={`ari-hayat-video-${currentDayPlan.dayKey}.mp4`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-black/80 hover:bg-black/95 text-white px-3 py-2 rounded-lg font-bold text-xs flex items-center backdrop-blur transition-all"
+                      >
+                        <Download className="w-3.5 h-3.5 mr-1" /> Videoyu İndir
+                      </a>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center p-6 text-gray-600">
+                    <Video className="w-12 h-12 mx-auto mb-2 text-gray-700" />
+                    <span className="text-xs font-bold uppercase block tracking-wider font-heading">Henüz Video Üretilmedi</span>
+                    <p className="text-[11px] text-gray-500 max-w-[200px] mx-auto mt-1 font-body">Görselinizi canlandırarak video klip üretmek için soldaki butona basın.</p>
                   </div>
                 )}
               </div>
