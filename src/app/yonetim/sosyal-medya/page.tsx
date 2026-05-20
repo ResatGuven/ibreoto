@@ -229,7 +229,6 @@ export default function SocialMediaAssistant() {
 
       ws.onopen = () => {
         const configMsg = 
-          `X-Timestamp:${Date.now()}\r\n` +
           `Content-Type:application/json; charset=utf-8\r\n` +
           `Path:speech.config\r\n\r\n` +
           JSON.stringify({
@@ -250,11 +249,10 @@ export default function SocialMediaAssistant() {
           });
         ws.send(configMsg);
 
-        const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='tr-TR'><voice name='Microsoft Server Speech Text to Speech Voice (tr-TR, AhmetNeural)'>${text}</voice></speak>`;
+        const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='tr-TR'><voice name='tr-TR-AhmetNeural'>${text}</voice></speak>`;
         const ssmlMsg = 
           `X-RequestId:${requestId}\r\n` +
           `Content-Type:application/ssml+xml\r\n` +
-          `X-Timestamp:${Date.now()}\r\n` +
           `Path:ssml\r\n\r\n` +
           ssml;
         ws.send(ssmlMsg);
@@ -270,11 +268,15 @@ export default function SocialMediaAssistant() {
             resolve(blob);
           }
         } else if (msgData instanceof ArrayBuffer) {
-          const view = new DataView(msgData);
-          const headerLength = view.getUint16(0);
-          const audioChunk = msgData.slice(2 + headerLength);
-          if (audioChunk.byteLength > 0) {
-            chunks.push(audioChunk);
+          try {
+            const view = new DataView(msgData);
+            const headerLength = view.getUint16(0);
+            const audioChunk = msgData.slice(2 + headerLength);
+            if (audioChunk.byteLength > 0) {
+              chunks.push(audioChunk);
+            }
+          } catch (e) {
+            console.error("Binary audio chunk parse error:", e);
           }
         }
       };

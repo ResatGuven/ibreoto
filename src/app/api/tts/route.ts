@@ -1,139 +1,96 @@
 import { NextResponse } from 'next/server';
 
-function generateRequestId() {
-  return Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
-}
-
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const text = searchParams.get('text');
-
-  if (!text) {
-    return NextResponse.json({ error: 'Text parametresi zorunludur.' }, { status: 400 });
-  }
-
-  const requestId = generateRequestId();
-  const socketUrl = `wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?trustedclienttoken=6A5AA1D4EAFF4E9B87E7D8561B96A24E`;
-
   try {
-    const audioDataPromise = new Promise<Uint8Array[]>((resolve, reject) => {
-      const ws = new WebSocket(socketUrl);
-      const chunks: Uint8Array[] = [];
-      let opened = false;
+    const { searchParams } = new URL(request.url);
+    const text = searchParams.get('text');
+    const elevenLabsKey = searchParams.get('elevenLabsKey');
 
-      // Safety timeout
-      const timeout = setTimeout(() => {
-        if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
-          ws.close();
-        }
-        reject(new Error('Ses sentezleme isteği zaman aşımına uğradı.'));
-      }, 15000);
-
-      ws.onopen = () => {
-        opened = true;
-        // 1. Send Configuration Message
-        const configMsg = 
-          `X-Timestamp:${Date.now()}\r\n` +
-          `Content-Type:application/json; charset=utf-8\r\n` +
-          `Path:speech.config\r\n\r\n` +
-          JSON.stringify({
-            context: {
-              system: {
-                name: "Edge",
-                version: "112.0.1722.68",
-                build: "1722.68",
-                platform: "Windows"
-              }
-            },
-            audio: {
-              format: "audio-24khz-48kbitrate-mono-mp3",
-              volume: 0,
-              pitch: 0,
-              rate: 0
-            }
-          });
-        ws.send(configMsg);
-
-        // 2. Send SSML Speech Synthesis Message (Using the famous AhmetNeural voice - deep, realistic Turkish male narrator)
-        const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='tr-TR'><voice name='Microsoft Server Speech Text to Speech Voice (tr-TR, AhmetNeural)'>${text}</voice></speak>`;
-        const ssmlMsg = 
-          `X-RequestId:${requestId}\r\n` +
-          `Content-Type:application/ssml+xml\r\n` +
-          `X-Timestamp:${Date.now()}\r\n` +
-          `Path:ssml\r\n\r\n` +
-          ssml;
-        ws.send(ssmlMsg);
-      };
-
-      ws.onmessage = async (event) => {
-        const data = event.data;
-        
-        if (typeof data === 'string') {
-          if (data.includes('Path:turn.end')) {
-            clearTimeout(timeout);
-            ws.close();
-            resolve(chunks);
-          }
-        } else {
-          // Binary message: Slice off the header to get pure audio bytes
-          try {
-            let arrayBuffer: ArrayBuffer;
-            if (data instanceof Blob) {
-              arrayBuffer = await data.arrayBuffer();
-            } else {
-              arrayBuffer = data;
-            }
-
-            const view = new DataView(arrayBuffer);
-            // First 2 bytes contain the header length
-            const headerLength = view.getUint16(0);
-            // Slicing the header (2 bytes length + actual header string) gives the audio stream
-            const audioChunk = new Uint8Array(arrayBuffer.slice(2 + headerLength));
-            
-            if (audioChunk.length > 0) {
-              chunks.push(audioChunk);
-            }
-          } catch (err) {
-            console.error("Binary chunk parsing error:", err);
-          }
-        }
-      };
-
-      ws.onclose = () => {
-        clearTimeout(timeout);
-        if (chunks.length > 0) {
-          resolve(chunks);
-        } else {
-          reject(new Error('Bağlantı ses üretilemeden kapandı.'));
-        }
-      };
-
-      ws.onerror = (err) => {
-        clearTimeout(timeout);
-        reject(err);
-      };
-    });
-
-    const audioChunks = await audioDataPromise;
-    
-    // Concatenate all chunks into a single response
-    const totalLength = audioChunks.reduce((acc, val) => acc + val.byteLength, 0);
-    const combinedBuffer = new Uint8Array(totalLength);
-    let offset = 0;
-    for (const chunk of audioChunks) {
-      combinedBuffer.set(chunk, offset);
-      offset += chunk.byteLength;
+    if (!text) {
+      return NextResponse.json({ error: 'Text parametresi zorunludur.' }, { status: 400 });
     }
 
-    return new Response(combinedBuffer.buffer, {
-      headers: {
-        'Content-Type': 'audio/mpeg',
-        'Content-Disposition': 'inline; filename="ari-hayat-ahmet-neural.mp3"'
+    // 1. If ElevenLabs Key is provided, use ElevenLabs
+    if (elevenLabsKey && elevenLabsKey.trim() !== '' && elevenLabsKey !== 'undefined') {
+      try {
+        const voiceId = 'pNInz6obpgDQ51ujn50C'; // Rachel or custom voice
+        const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+          method: 'POST',
+          headers: {
+            'xi-api-key': elevenLabsKey,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            text: text,
+            model_id: 'eleven_multilingual_v2',
+            voice_settings: {
+              stability: 0.5,
+              similarity_boost: 0.75,
+            }
+          })
+        });
+
+        if (res.ok) {
+          const audioBuffer = await res.arrayBuffer();
+          return new Response(audioBuffer, {
+            headers: {
+              'Content-Type': 'audio/mpeg',
+            }
+          });
+        }
+      } catch (elevenError) {
+        console.error("ElevenLabs synthesis failed, falling back to Google:", elevenError);
       }
-    });
+    }
+
+    // 2. Fallback: Google Translate TTS (100% free, keyless, reliable HTTP endpoint)
+    // Splitting text into chunks of 200 characters because Google TTS has a 200-char limit per request
+    const chunks: string[] = [];
+    const words = text.split(/\s+/);
+    let currentChunk = "";
+    
+    for (const word of words) {
+      if ((currentChunk + " " + word).trim().length > 180) {
+        chunks.push(currentChunk.trim());
+        currentChunk = word;
+      } else {
+        currentChunk = (currentChunk + " " + word).trim();
+      }
+    }
+    if (currentChunk) {
+      chunks.push(currentChunk.trim());
+    }
+
+    const audioBuffers: Buffer[] = [];
+    for (const chunk of chunks) {
+      const googleTtsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(chunk)}&tl=tr&total=1&idx=0&textlen=${chunk.length}&client=tw-ob&ttsspeed=1`;
+      
+      const res = await fetch(googleTtsUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.0.0 Safari/537.36'
+        }
+      });
+      
+      if (res.ok) {
+        const arrayBuffer = await res.arrayBuffer();
+        audioBuffers.push(Buffer.from(arrayBuffer));
+      }
+    }
+
+    if (audioBuffers.length > 0) {
+      const combinedBuffer = Buffer.concat(audioBuffers);
+      return new Response(combinedBuffer, {
+        headers: {
+          'Content-Type': 'audio/mpeg',
+          'Content-Disposition': 'inline; filename="ari-hayat-google-tts.mp3"'
+        }
+      });
+    }
+
+    throw new Error('Google TTS audio chunks could not be fetched.');
 
   } catch (error: any) {
-    console.error('Edge Neural TTS Error:', error);
-    return NextResponse.json({ error: 'Gerçekçi ses sentezleme başarısız oldu: ' + error.message }, { status: 500 });
+    console.error('TTS Endpoint Error:', error);
+    return NextResponse.json({ error: 'Ses sentezleme başarısız oldu: ' + error.message }, { status: 500 });
   }
 }
