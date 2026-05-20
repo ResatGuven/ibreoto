@@ -127,6 +127,7 @@ export default function SocialMediaAssistant() {
 
   // AI Trend State
   const [geminiKey, setGeminiKey] = useState('');
+  const [geminiVoice, setGeminiVoice] = useState('Aoede');
   const [trendKeywords, setTrendKeywords] = useState('');
   const [analyzingTrends, setAnalyzingTrends] = useState(false);
 
@@ -158,6 +159,9 @@ export default function SocialMediaAssistant() {
     const savedGeminiKey = localStorage.getItem('ari_hayat_gemini_key');
     if (savedGeminiKey) setGeminiKey(savedGeminiKey);
 
+    const savedGeminiVoice = localStorage.getItem('ari_hayat_gemini_voice');
+    if (savedGeminiVoice) setGeminiVoice(savedGeminiVoice);
+
     const savedBufferToken = localStorage.getItem('ari_hayat_buffer_token');
     if (savedBufferToken) {
       setBufferToken(savedBufferToken);
@@ -170,10 +174,11 @@ export default function SocialMediaAssistant() {
     localStorage.setItem('ari_hayat_weekly_plan', JSON.stringify(updatedPlan));
   };
 
-  const saveSettings = (bToken: string, gKey: string) => {
+  const saveSettings = (bToken: string, gKey: string, gVoice: string) => {
     localStorage.setItem('ari_hayat_buffer_token', bToken);
     localStorage.setItem('ari_hayat_gemini_key', gKey);
-    showToast('Bağlantı anahtarları başarıyla güncellendi!', 'success');
+    localStorage.setItem('ari_hayat_gemini_voice', gVoice);
+    showToast('Bağlantı anahtarları ve ses ayarları başarıyla güncellendi!', 'success');
     if (bToken) fetchBufferProfiles(bToken);
   };
 
@@ -449,19 +454,85 @@ export default function SocialMediaAssistant() {
     });
   };
 
+  const synthesizeSpeechWithGemini = async (text: string, apiKey: string, voice: string): Promise<Blob> => {
+    // We use gemini-2.0-flash as the standard native audio model
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+    const prompt = `Lütfen aşağıdaki metni çok doğal, profesyonel ve etkileyici bir Türkçe seslendirme tonuyla oku. Duraklamalara ve vurgulara dikkat et. Sadece metni seslendir, başka hiçbir şey söyleme:\n\n${text}`;
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [
+              { text: prompt }
+            ]
+          }
+        ],
+        generationConfig: {
+          responseModalities: ["AUDIO"],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: {
+                voiceName: voice 
+              }
+            }
+          }
+        }
+      })
+    });
+
+    if (!response.ok) {
+      const errData = await response.json();
+      throw new Error(errData.error?.message || 'Gemini ses üretim hatası');
+    }
+
+    const data = await response.json();
+    const part = data.candidates?.[0]?.content?.parts?.[0];
+    
+    if (!part || !part.inlineData) {
+      throw new Error('Gemini API ses verisi döndürmedi. Lütfen API anahtarınızı veya model desteğini kontrol edin.');
+    }
+
+    const base64Data = part.inlineData.data;
+    const mimeType = part.inlineData.mimeType || 'audio/mp3';
+    
+    const byteCharacters = atob(base64Data);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: mimeType });
+  };
+
   const handleGenerateVoice = async () => {
     setLoading(true);
     updateCurrentDay({ audioUrl: null });
     
     try {
-      // 1. Try browser client-side Edge TTS (no server IP bans)
+      // 1. Try Gemini API TTS first if Gemini key is present
+      if (geminiKey) {
+        console.log("Attempting Gemini API TTS with voice:", geminiVoice);
+        const blob = await synthesizeSpeechWithGemini(data.scriptText || '', geminiKey, geminiVoice);
+        const url = URL.createObjectURL(blob);
+        updateCurrentDay({ audioUrl: url });
+        showToast(`${currentDayPlan.dayName} günü için Gemini yapay zeka sesi üretildi!`, 'success');
+        setLoading(false);
+        return;
+      }
+      
+      // If no Gemini key, fall back to browser client-side Edge TTS
       console.log("Attempting client-side Edge TTS...");
       const blob = await synthesizeSpeechInBrowser(data.scriptText || '');
       const url = URL.createObjectURL(blob);
       updateCurrentDay({ audioUrl: url });
       showToast(`${currentDayPlan.dayName} günü için ücretsiz yapay zeka sesi üretildi!`, 'success');
     } catch (clientErr: any) {
-      console.warn("Client-side Edge TTS failed, trying server-side proxy:", clientErr);
+      console.warn("Primary TTS failed, trying server-side proxy:", clientErr);
       
       // 2. Fallback: Try server-side API route (which has clock sync and Google Translate backup)
       try {
@@ -934,7 +1005,7 @@ export default function SocialMediaAssistant() {
 
             <div className="space-y-3 pt-2">
               <div>
-                <label className="block text-gray-400 mb-1 text-[10px] uppercase font-bold">Google Gemini API Anahtarı (Gündem Analizi)</label>
+                <label className="block text-gray-400 mb-1 text-[10px] uppercase font-bold">Google Gemini API Anahtarı (Gündem & Ses)</label>
                 <input 
                   type="password"
                   placeholder="Gemini API Key (Ücretsiz)..."
@@ -942,6 +1013,21 @@ export default function SocialMediaAssistant() {
                   onChange={e => setGeminiKey(e.target.value)}
                   className="w-full p-2.5 bg-[#1F2937] border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
                 />
+              </div>
+
+              <div>
+                <label className="block text-gray-400 mb-1 text-[10px] uppercase font-bold">Gemini Ses Tonu (Yapay Zeka Sesi)</label>
+                <select
+                  value={geminiVoice}
+                  onChange={e => setGeminiVoice(e.target.value)}
+                  className="w-full p-2.5 bg-[#1F2937] border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                >
+                  <option value="Aoede">Aoede (Kadın - Akıcı ve Doğal)</option>
+                  <option value="Puck">Puck (Erkek - Canlı ve Güçlü)</option>
+                  <option value="Kore">Kore (Kadın - Dengeli ve Ciddi)</option>
+                  <option value="Fenrir">Fenrir (Erkek - Tok ve Derin)</option>
+                  <option value="Zephyr">Zephyr (Kadın - Sıcak ve Samimi)</option>
+                </select>
               </div>
 
               <div>
@@ -956,7 +1042,7 @@ export default function SocialMediaAssistant() {
               </div>
 
               <button
-                onClick={() => saveSettings(bufferToken, geminiKey)}
+                onClick={() => saveSettings(bufferToken, geminiKey, geminiVoice)}
                 className="w-full py-2 bg-primary hover:bg-primary-hover text-secondary font-bold text-xs uppercase rounded-lg transition-colors flex items-center justify-center"
               >
                 <ShieldCheck className="w-4 h-4 mr-1.5" /> Bağlantıları Kaydet
