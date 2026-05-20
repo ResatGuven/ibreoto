@@ -92,6 +92,10 @@ interface DayPlan {
   videoUrl?: string | null;
   aspectRatio?: '9:16' | '1:1' | '16:9';
   customPrompt: string;
+  scriptText?: string;
+  caption?: string;
+  tweets?: string[];
+  customVisuals?: any[];
 }
 
 interface BufferProfile {
@@ -121,10 +125,13 @@ export default function SocialMediaAssistant() {
   const [activeTab, setActiveTab] = useState<'script' | 'caption' | 'twitter'>('script');
   const [copiedText, setCopiedText] = useState<string | null>(null);
 
+  // AI Trend State
+  const [geminiKey, setGeminiKey] = useState('');
+  const [trendKeywords, setTrendKeywords] = useState('');
+  const [analyzingTrends, setAnalyzingTrends] = useState(false);
+
   // Settings & API keys (stored safely client-side in localStorage)
-  const [elevenLabsKey, setElevenLabsKey] = useState('');
   const [bufferToken, setBufferToken] = useState('');
-  const [replicateToken, setReplicateToken] = useState('');
   const [profiles, setProfiles] = useState<BufferProfile[]>([]);
   const [selectedProfiles, setSelectedProfiles] = useState<string[]>([]);
   const [loadingProfiles, setLoadingProfiles] = useState(false);
@@ -148,11 +155,8 @@ export default function SocialMediaAssistant() {
       } catch (e) {}
     }
 
-    const savedElevenKey = localStorage.getItem('ari_hayat_elevenlabs_key');
-    if (savedElevenKey) setElevenLabsKey(savedElevenKey);
-
-    const savedReplicateKey = localStorage.getItem('ari_hayat_replicate_key');
-    if (savedReplicateKey) setReplicateToken(savedReplicateKey);
+    const savedGeminiKey = localStorage.getItem('ari_hayat_gemini_key');
+    if (savedGeminiKey) setGeminiKey(savedGeminiKey);
 
     const savedBufferToken = localStorage.getItem('ari_hayat_buffer_token');
     if (savedBufferToken) {
@@ -166,10 +170,9 @@ export default function SocialMediaAssistant() {
     localStorage.setItem('ari_hayat_weekly_plan', JSON.stringify(updatedPlan));
   };
 
-  const saveSettings = (elevenKey: string, bToken: string, repKey: string) => {
-    localStorage.setItem('ari_hayat_elevenlabs_key', elevenKey);
+  const saveSettings = (bToken: string, gKey: string) => {
     localStorage.setItem('ari_hayat_buffer_token', bToken);
-    localStorage.setItem('ari_hayat_replicate_key', repKey);
+    localStorage.setItem('ari_hayat_gemini_key', gKey);
     showToast('Bağlantı anahtarları başarıyla güncellendi!', 'success');
     if (bToken) fetchBufferProfiles(bToken);
   };
@@ -193,7 +196,15 @@ export default function SocialMediaAssistant() {
   };
 
   const currentDayPlan = weeklyPlan.find(d => d.dayKey === selectedDayKey) || weeklyPlan[0];
-  const data = generateTemplates(currentDayPlan.product, currentDayPlan.style);
+  const templateData = generateTemplates(currentDayPlan.product, currentDayPlan.style);
+  
+  const data = {
+    scriptText: currentDayPlan.scriptText || templateData.scriptText,
+    caption: currentDayPlan.caption || templateData.caption,
+    tweets: currentDayPlan.tweets || templateData.tweets,
+    imagePrompt: currentDayPlan.customPrompt || templateData.imagePrompt,
+    visuals: currentDayPlan.customVisuals || templateData.visuals
+  };
 
   const updateCurrentDay = (fields: Partial<DayPlan>) => {
     const updated = weeklyPlan.map(d => {
@@ -203,6 +214,48 @@ export default function SocialMediaAssistant() {
       return d;
     });
     savePlan(updated);
+  };
+
+  const handleTrendAnalysis = async () => {
+    if (!geminiKey) {
+      showToast('Lütfen önce ayarlardan Gemini API Anahtarı girin.', 'error');
+      return;
+    }
+    if (!trendKeywords) {
+      showToast('Lütfen rakip hesapları veya analiz edilecek konuyu girin.', 'error');
+      return;
+    }
+
+    setAnalyzingTrends(true);
+    try {
+      const res = await fetch('/api/admin/trend-analysis', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          geminiKey,
+          keywords: trendKeywords,
+          product: currentDayPlan.product
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        updateCurrentDay({
+          scriptText: data.data.scriptText,
+          caption: data.data.caption,
+          tweets: data.data.tweets,
+          customPrompt: data.data.imagePrompt,
+          customVisuals: data.data.visuals
+        });
+        showToast('Yapay Zeka trend analizi tamamlandı ve içerik oluşturuldu!', 'success');
+      } else {
+        showToast(`Analiz hatası: ${data.error}`, 'error');
+      }
+    } catch (e) {
+      showToast('Ağ hatası. Trend analizi yapılamadı.', 'error');
+    } finally {
+      setAnalyzingTrends(false);
+    }
   };
 
   const handleCopy = (text: string, label: string) => {
@@ -303,17 +356,13 @@ export default function SocialMediaAssistant() {
     updateCurrentDay({ audioUrl: null });
     
     try {
-      const res = await fetch(`/api/tts?text=${encodeURIComponent(data.scriptText)}&elevenLabsKey=${encodeURIComponent(elevenLabsKey)}`);
-      if (res.ok) {
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        updateCurrentDay({ audioUrl: url });
-        showToast(`${currentDayPlan.dayName} günü için premium Ahmet (Tok Erkek) sesi üretildi!`, 'success');
-      } else {
-        showToast('Seslendirme üretilemedi. Lütfen tekrar deneyin.', 'error');
-      }
+      const blob = await synthesizeSpeechInBrowser(data.scriptText);
+      const url = URL.createObjectURL(blob);
+      updateCurrentDay({ audioUrl: url });
+      showToast(`${currentDayPlan.dayName} günü için ücretsiz yapay zeka sesi üretildi!`, 'success');
     } catch (err) {
-      showToast('Ses motoru başlatılamadı.', 'error');
+      console.error(err);
+      showToast('Ses motoru başlatılamadı. Lütfen tekrar deneyin.', 'error');
     } finally {
       setLoading(false);
     }
@@ -625,91 +674,7 @@ export default function SocialMediaAssistant() {
     }
   };
 
-  // Replicate AI Video Generation Handler
-  const handleGenerateVideo = async () => {
-    if (!replicateToken) {
-      showToast('Lütfen önce Replicate API Anahtarı girin.', 'error');
-      return;
-    }
-    if (!currentDayPlan.imageUrl) {
-      showToast('Canlandırmak için öncelikle bir AI görseli oluşturmalısınız.', 'error');
-      return;
-    }
 
-    setGeneratingVideo(true);
-    setVideoPollingStatus('Canlandırma işlemi başlatılıyor...');
-    updateCurrentDay({ videoUrl: null });
-
-    try {
-      const res = await fetch('/api/admin/generate-video', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          imageUrl: currentDayPlan.imageUrl,
-          replicateToken
-        })
-      });
-
-      const startData = await res.json();
-      if (!startData.success) {
-        showToast(`Video üretimi başlatılamadı: ${startData.error}`, 'error');
-        setGeneratingVideo(false);
-        setVideoPollingStatus(null);
-        return;
-      }
-
-      const predictionId = startData.predictionId;
-      setVideoPollingStatus('Video çiziliyor (Replicate SVD GPU)...');
-
-      let elapsedSeconds = 0;
-      // Poll every 4 seconds for completion
-      const pollInterval = setInterval(async () => {
-        elapsedSeconds += 4;
-        try {
-          const pollRes = await fetch(`/api/admin/generate-video?id=${predictionId}&replicateToken=${encodeURIComponent(replicateToken)}`);
-          const pollData = await pollRes.json();
-          
-          if (!pollData.success) {
-            clearInterval(pollInterval);
-            showToast(`Durum alınamadı: ${pollData.error}`, 'error');
-            setGeneratingVideo(false);
-            setVideoPollingStatus(null);
-            return;
-          }
-
-          if (pollData.status === 'succeeded') {
-            clearInterval(pollInterval);
-            const videoUrl = pollData.output && pollData.output[0];
-            if (videoUrl) {
-              updateCurrentDay({ videoUrl });
-              showToast('Yapay zeka videosu başarıyla canlandırıldı!', 'success');
-            } else {
-              showToast('Video üretildi fakat çıktı adresi alınamadı.', 'error');
-            }
-            setGeneratingVideo(false);
-            setVideoPollingStatus(null);
-          } else if (pollData.status === 'failed') {
-            clearInterval(pollInterval);
-            showToast(`Video çizimi başarısız oldu: ${pollData.error}`, 'error');
-            setGeneratingVideo(false);
-            setVideoPollingStatus(null);
-          } else if (pollData.status === 'processing' || pollData.status === 'starting') {
-            setVideoPollingStatus(`Video sentezleniyor (Durum: ${pollData.status === 'processing' ? 'Kareler İşleniyor' : 'GPU Başlatılıyor'} - ${elapsedSeconds}sn)...`);
-          }
-        } catch (e) {
-          clearInterval(pollInterval);
-          showToast('Sorgulama hatası.', 'error');
-          setGeneratingVideo(false);
-          setVideoPollingStatus(null);
-        }
-      }, 4000);
-
-    } catch (err) {
-      showToast('Video API bağlantı hatası.', 'error');
-      setGeneratingVideo(false);
-      setVideoPollingStatus(null);
-    }
-  };
 
   const handleAutoShare = async () => {
     if (!bufferToken) {
@@ -848,23 +813,12 @@ export default function SocialMediaAssistant() {
 
             <div className="space-y-3 pt-2">
               <div>
-                <label className="block text-gray-400 mb-1 text-[10px] uppercase font-bold">ElevenLabs API Anahtarı (Gerçekçi Sesler)</label>
+                <label className="block text-gray-400 mb-1 text-[10px] uppercase font-bold">Google Gemini API Anahtarı (Gündem Analizi)</label>
                 <input 
                   type="password"
-                  placeholder="ElevenLabs API Key..."
-                  value={elevenLabsKey}
-                  onChange={e => setElevenLabsKey(e.target.value)}
-                  className="w-full p-2.5 bg-[#1F2937] border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-400 mb-1 text-[10px] uppercase font-bold">Replicate API Anahtarı (Video Canlandırma)</label>
-                <input 
-                  type="password"
-                  placeholder="Replicate API Key..."
-                  value={replicateToken}
-                  onChange={e => setReplicateToken(e.target.value)}
+                  placeholder="Gemini API Key (Ücretsiz)..."
+                  value={geminiKey}
+                  onChange={e => setGeminiKey(e.target.value)}
                   className="w-full p-2.5 bg-[#1F2937] border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
                 />
               </div>
@@ -881,10 +835,41 @@ export default function SocialMediaAssistant() {
               </div>
 
               <button
-                onClick={() => saveSettings(elevenLabsKey, bufferToken, replicateToken)}
+                onClick={() => saveSettings(bufferToken, geminiKey)}
                 className="w-full py-2 bg-primary hover:bg-primary-hover text-secondary font-bold text-xs uppercase rounded-lg transition-colors flex items-center justify-center"
               >
                 <ShieldCheck className="w-4 h-4 mr-1.5" /> Bağlantıları Kaydet
+              </button>
+            </div>
+          </div>
+
+          {/* AI Trend & Competitor Analysis Panel */}
+          <div className="bg-gradient-to-br from-[#111827]/80 to-purple-900/20 backdrop-blur-xl p-6 rounded-2xl border border-purple-900/40 shadow-[0_0_20px_rgba(168,85,247,0.1)] space-y-4">
+            <h2 className="text-sm font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400 uppercase flex items-center">
+              <Sparkles className="w-4 h-4 mr-2 text-purple-400 animate-pulse" /> Yapay Zeka Gündem & Trend Analizi
+            </h2>
+            <p className="text-[11px] text-gray-400 leading-relaxed">Gündemdeki konuları, rakip hesapları veya sektörünüzle ilgili anahtar kelimeleri girin. Yapay zeka bunu analiz edip sizin için viral olmaya aday yepyeni bir video konsepti, senaryo ve görsel komutu üretsin.</p>
+            
+            <div className="space-y-3">
+              <div>
+                <label className="block text-purple-300/70 mb-1 text-[10px] uppercase font-bold">Rakip veya Trend Anahtar Kelimeleri</label>
+                <textarea 
+                  placeholder="Örn: Tiktok bal asmr trendi, @rakiphesap son videosu, organik beslenme, şifa kaynağı..."
+                  value={trendKeywords}
+                  onChange={e => setTrendKeywords(e.target.value)}
+                  className="w-full p-3 bg-[#1F2937]/50 border border-purple-900/50 rounded-xl text-xs text-white outline-none focus:border-purple-500 min-h-[80px]"
+                />
+              </div>
+              <button
+                onClick={handleTrendAnalysis}
+                disabled={analyzingTrends}
+                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white p-3 rounded-xl font-heading font-black text-[11px] uppercase flex items-center justify-center transition-all shadow-lg disabled:opacity-50"
+              >
+                {analyzingTrends ? (
+                  <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Analiz Ediliyor...</>
+                ) : (
+                  <><Wand2 className="w-4 h-4 mr-2" /> Trendi İncele & Viral İçerik Üret</>
+                )}
               </button>
             </div>
           </div>
@@ -900,7 +885,17 @@ export default function SocialMediaAssistant() {
               <label className="block text-gray-400 mb-2 text-xs font-body uppercase">Ürün</label>
               <select 
                 value={currentDayPlan.product} 
-                onChange={e => updateCurrentDay({ product: e.target.value })} 
+                onChange={e => {
+                  const newProduct = e.target.value;
+                  const newTemplate = generateTemplates(newProduct, currentDayPlan.style);
+                  updateCurrentDay({ 
+                    product: newProduct,
+                    scriptText: newTemplate.scriptText,
+                    caption: newTemplate.caption,
+                    tweets: newTemplate.tweets,
+                    customPrompt: ''
+                  });
+                }} 
                 className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-xl text-white outline-none focus:border-primary font-bold text-sm"
               >
                 <option value="Kestane Balı">Kestane Balı</option>
@@ -923,7 +918,16 @@ export default function SocialMediaAssistant() {
                 ].map((styleOption) => (
                   <button
                     key={styleOption.id}
-                    onClick={() => updateCurrentDay({ style: styleOption.id })}
+                    onClick={() => {
+                      const newTemplate = generateTemplates(currentDayPlan.product, styleOption.id);
+                      updateCurrentDay({ 
+                        style: styleOption.id,
+                        scriptText: newTemplate.scriptText,
+                        caption: newTemplate.caption,
+                        tweets: newTemplate.tweets,
+                        customPrompt: ''
+                      });
+                    }}
                     className={`w-full text-left px-4 py-2.5 rounded-xl border text-xs font-bold transition-all flex justify-between items-center ${
                       currentDayPlan.style === styleOption.id 
                         ? 'bg-primary/10 border-primary text-primary' 
@@ -1028,7 +1032,7 @@ export default function SocialMediaAssistant() {
             <div className="p-6">
               {activeTab === 'script' && (
                 <div className="space-y-6">
-                  <div className="bg-[#1F2937]/40 p-4 rounded-xl border border-gray-800">
+                  <div className="bg-[#1F2937]/40 p-4 rounded-xl border border-gray-800 flex flex-col">
                     <div className="flex justify-between items-center mb-3">
                       <span className="text-xs font-bold text-gray-400 uppercase">Dış Ses (Seslendirilecek Metin)</span>
                       <button 
@@ -1038,7 +1042,11 @@ export default function SocialMediaAssistant() {
                         <Copy className="w-3.5 h-3.5 mr-1" /> Kopyala
                       </button>
                     </div>
-                    <p className="text-sm leading-relaxed text-gray-200">{data.scriptText}</p>
+                    <textarea 
+                      value={data.scriptText} 
+                      onChange={e => updateCurrentDay({ scriptText: e.target.value })}
+                      className="w-full p-4 bg-[#1F2937]/80 border border-gray-700 rounded-xl text-sm text-gray-200 outline-none focus:border-primary min-h-[150px] font-body resize-y"
+                    />
                   </div>
 
                   <div className="space-y-3">
@@ -1054,9 +1062,9 @@ export default function SocialMediaAssistant() {
               )}
 
               {activeTab === 'caption' && (
-                <div className="space-y-4">
+                <div className="space-y-4 flex flex-col">
                   <div className="flex justify-between items-center">
-                    <span className="text-xs font-bold text-gray-400 uppercase">Kopyalanabilir Açıklama</span>
+                    <span className="text-xs font-bold text-gray-400 uppercase">Açıklama & Etiketler</span>
                     <button 
                       onClick={() => handleCopy(data.caption, 'Açıklama')}
                       className="text-primary hover:text-primary-hover text-xs font-bold flex items-center transition-colors"
@@ -1065,9 +1073,9 @@ export default function SocialMediaAssistant() {
                     </button>
                   </div>
                   <textarea 
-                    readOnly 
                     value={data.caption} 
-                    className="w-full p-4 bg-[#1F2937]/40 border border-gray-800 rounded-xl text-sm text-gray-200 outline-none min-h-[180px] font-body"
+                    onChange={e => updateCurrentDay({ caption: e.target.value })}
+                    className="w-full p-4 bg-[#1F2937]/80 border border-gray-700 rounded-xl text-sm text-gray-200 outline-none focus:border-primary min-h-[180px] font-body resize-y"
                   />
                 </div>
               )}
@@ -1075,7 +1083,7 @@ export default function SocialMediaAssistant() {
               {activeTab === 'twitter' && (
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-xs font-bold text-gray-400 uppercase">Kopyalanabilir Tweetler</span>
+                    <span className="text-xs font-bold text-gray-400 uppercase">X (Twitter) Flood</span>
                     <button 
                       onClick={() => handleCopy(data.tweets.join('\n\n'), 'Tweet Zinciri')}
                       className="text-primary hover:text-primary-hover text-xs font-bold flex items-center transition-colors"
@@ -1085,8 +1093,8 @@ export default function SocialMediaAssistant() {
                   </div>
                   <div className="space-y-3">
                     {data.tweets.map((tweet, idx) => (
-                      <div key={idx} className="p-4 bg-[#1F2937]/30 border border-gray-800 rounded-xl relative group">
-                        <div className="absolute right-3 top-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div key={idx} className="p-4 bg-[#1F2937]/30 border border-gray-800 rounded-xl relative group flex flex-col">
+                        <div className="absolute right-3 top-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button 
                             onClick={() => handleCopy(tweet, `Tweet ${idx + 1}`)}
                             className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 p-1.5 rounded"
@@ -1094,8 +1102,16 @@ export default function SocialMediaAssistant() {
                             Kopyala
                           </button>
                         </div>
-                        <span className="text-[10px] font-bold text-gray-500 uppercase block mb-1">Tweet {idx + 1}</span>
-                        <p className="text-sm text-gray-300">{tweet}</p>
+                        <span className="text-[10px] font-bold text-gray-500 uppercase block mb-2">Tweet {idx + 1}</span>
+                        <textarea
+                          value={tweet}
+                          onChange={(e) => {
+                            const newTweets = [...data.tweets];
+                            newTweets[idx] = e.target.value;
+                            updateCurrentDay({ tweets: newTweets });
+                          }}
+                          className="w-full bg-[#1F2937]/80 border border-gray-700 rounded-lg text-sm text-gray-300 p-3 outline-none focus:border-primary resize-y min-h-[80px]"
+                        />
                       </div>
                     ))}
                   </div>
@@ -1182,6 +1198,15 @@ export default function SocialMediaAssistant() {
 
               {/* Generated Image Result */}
               <div className="border border-gray-800 rounded-xl overflow-hidden bg-gray-950 flex flex-col justify-center items-center min-h-[300px] relative">
+                <div className="absolute top-2 w-full px-2 z-10">
+                  <input 
+                    type="text" 
+                    placeholder="Manuel Görsel URL'si Girebilirsiniz..."
+                    value={currentDayPlan.imageUrl || ''}
+                    onChange={e => updateCurrentDay({ imageUrl: e.target.value })}
+                    className="w-full bg-black/60 border border-gray-700 text-xs text-white p-2 rounded-lg backdrop-blur-sm outline-none focus:border-primary placeholder:text-gray-500"
+                  />
+                </div>
                 {generatingImage ? (
                   <div className="text-center p-6 space-y-3">
                     <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto" />
@@ -1245,7 +1270,6 @@ export default function SocialMediaAssistant() {
                 </div>
 
                 <div className="space-y-2">
-                  {/* Option 1: 100% Free Client-side Animator */}
                   <button
                     onClick={handleGenerateVideoFree}
                     disabled={generatingVideo || !currentDayPlan.imageUrl || !currentDayPlan.audioUrl}
@@ -1262,23 +1286,6 @@ export default function SocialMediaAssistant() {
                     )}
                   </button>
 
-                  {/* Option 2: Replicate SVD */}
-                  <button
-                    onClick={handleGenerateVideo}
-                    disabled={generatingVideo || !currentDayPlan.imageUrl}
-                    className="w-full bg-transparent hover:bg-gray-800 text-gray-300 border border-gray-700 hover:border-gray-600 p-3 rounded-xl font-heading font-bold text-xs uppercase flex items-center justify-center transition-all disabled:opacity-50"
-                  >
-                    {generatingVideo && !videoPollingStatus?.includes('Sentezleniyor') ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" /> {videoPollingStatus}
-                      </>
-                    ) : (
-                      <>
-                        <Video className="w-4 h-4 mr-2 text-primary" /> Replicate AI ile Canlandır (Ücretli)
-                      </>
-                    )}
-                  </button>
-
                   {!currentDayPlan.imageUrl && (
                     <span className="text-[10px] text-red-400 block text-center">Öncelikle yukarıdan bir görsel üretmelisiniz.</span>
                   )}
@@ -1290,6 +1297,15 @@ export default function SocialMediaAssistant() {
 
               {/* Video Result Preview */}
               <div className="border border-gray-800 rounded-xl overflow-hidden bg-gray-950 flex flex-col justify-center items-center min-h-[300px] relative">
+                <div className="absolute top-2 w-full px-2 z-10">
+                  <input 
+                    type="text" 
+                    placeholder="Manuel Video URL'si Girebilirsiniz..."
+                    value={currentDayPlan.videoUrl || ''}
+                    onChange={e => updateCurrentDay({ videoUrl: e.target.value })}
+                    className="w-full bg-black/60 border border-gray-700 text-xs text-white p-2 rounded-lg backdrop-blur-sm outline-none focus:border-primary placeholder:text-gray-500"
+                  />
+                </div>
                 {generatingVideo ? (
                   <div className="text-center p-6 space-y-3">
                     <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto" />
