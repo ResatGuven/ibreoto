@@ -265,16 +265,110 @@ export default function SocialMediaAssistant() {
     setTimeout(() => setCopiedText(null), 2000);
   };
 
+  const sha256 = async (message: string): Promise<string> => {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await window.crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex.toUpperCase();
+  };
+
+  const getSecMsGecToken = async (): Promise<string> => {
+    const ticks = BigInt(Math.floor(Date.now() / 1000) + 11644473600) * 10000000n;
+    const truncatedTicks = ticks - (ticks % 3000000000n);
+    const str = truncatedTicks.toString() + "6A5AA1D4EAFF4E9FB37E23D68491D6F4";
+    return await sha256(str);
+  };
+
+  const synthesizeSpeechInBrowser = async (text: string): Promise<Blob> => {
+    const token = await getSecMsGecToken();
+    const requestId = Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+    const socketUrl = `wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?trustedclienttoken=6A5AA1D4EAFF4E9FB37E23D68491D6F4&ConnectionId=${requestId}&Sec-MS-GEC=${token}&Sec-MS-GEC-Version=1-133.0.3065.59`;
+
+    return new Promise((resolve, reject) => {
+      const ws = new WebSocket(socketUrl);
+      ws.binaryType = 'arraybuffer';
+      const chunks: ArrayBuffer[] = [];
+      
+      const timeout = setTimeout(() => {
+        ws.close();
+        reject(new Error('Ses sentezleme zaman aşımına uğradı.'));
+      }, 15000);
+
+      ws.onopen = () => {
+        const configMsg = 
+          `Content-Type:application/json; charset=utf-8\r\n` +
+          `Path:speech.config\r\n\r\n` +
+          JSON.stringify({
+            context: {
+              synthesis: {
+                audio: {
+                  metadataoptions: {
+                    sentenceBoundaryEnabled: "false",
+                    wordBoundaryEnabled: "true"
+                  },
+                  outputFormat: "audio-24khz-48kbitrate-mono-mp3"
+                }
+              }
+            }
+          });
+        ws.send(configMsg);
+
+        const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='tr-TR'><voice name='Microsoft Server Speech Text to Speech Voice (tr-TR, AhmetNeural)'>${text}</voice></speak>`;
+        const ssmlMsg = 
+          `X-RequestId:${requestId}\r\n` +
+          `Content-Type:application/ssml+xml\r\n` +
+          `Path:ssml\r\n\r\n` +
+          ssml;
+        ws.send(ssmlMsg);
+      };
+
+      ws.onmessage = (event) => {
+        const msgData = event.data;
+        if (typeof msgData === 'string') {
+          if (msgData.includes('Path:turn.end')) {
+            clearTimeout(timeout);
+            ws.close();
+            const blob = new Blob(chunks, { type: 'audio/mpeg' });
+            resolve(blob);
+          }
+        } else if (msgData instanceof ArrayBuffer) {
+          try {
+            const view = new DataView(msgData);
+            const headerLength = view.getUint16(0);
+            const audioChunk = msgData.slice(2 + headerLength);
+            if (audioChunk.byteLength > 0) {
+              chunks.push(audioChunk);
+            }
+          } catch (e) {
+            console.error("Binary audio chunk parse error:", e);
+          }
+        }
+      };
+
+      ws.onclose = () => {
+        clearTimeout(timeout);
+        if (chunks.length > 0) {
+          const blob = new Blob(chunks, { type: 'audio/mpeg' });
+          resolve(blob);
+        } else {
+          reject(new Error('Bağlantı ses üretilemeden kapandı.'));
+        }
+      };
+
+      ws.onerror = (err) => {
+        clearTimeout(timeout);
+        reject(err);
+      };
+    });
+  };
+
   const handleGenerateVoice = async () => {
     setLoading(true);
     updateCurrentDay({ audioUrl: null });
     
     try {
-      const res = await fetch(`/api/tts?text=${encodeURIComponent(data.scriptText || '')}`);
-      if (!res.ok) {
-        throw new Error('Ses sentezleme API hatası');
-      }
-      const blob = await res.blob();
+      const blob = await synthesizeSpeechInBrowser(data.scriptText || '');
       const url = URL.createObjectURL(blob);
       updateCurrentDay({ audioUrl: url });
       showToast(`${currentDayPlan.dayName} günü için ücretsiz yapay zeka sesi üretildi!`, 'success');
