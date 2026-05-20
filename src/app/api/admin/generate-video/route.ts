@@ -11,43 +11,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: 'Canlandırılacak görsel URL adresi gereklidir.' }, { status: 400 });
     }
 
-    // Step 1: Fetch the latest model details to get the current active version ID dynamically
-    const modelRes = await fetch('https://api.replicate.com/v1/models/stability-ai/stable-video-diffusion', {
-      headers: {
-        'Authorization': `Token ${replicateToken}`,
-      }
-    });
-
-    if (!modelRes.ok) {
-      const modelErrData = await modelRes.json().catch(() => ({}));
-      return NextResponse.json({ 
-        success: false, 
-        error: modelErrData.detail || 'Replicate model bilgileri alınamadı. Lütfen API anahtarınızı kontrol edin.' 
-      }, { status: modelRes.status });
-    }
-
-    const modelData = await modelRes.json();
-    const latestVersionId = modelData.latest_version?.id;
-
-    if (!latestVersionId) {
-      return NextResponse.json({ success: false, error: 'Replicate üzerinde aktif SVD model versiyonu bulunamadı.' }, { status: 500 });
-    }
-
-    // Step 2: Start prediction using the dynamically fetched version ID
-    const res = await fetch('https://api.replicate.com/v1/predictions', {
+    // Start prediction using the latest premium minimax/video-01 model
+    const res = await fetch('https://api.replicate.com/v1/models/minimax/video-01/predictions', {
       method: 'POST',
       headers: {
         'Authorization': `Token ${replicateToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        version: latestVersionId,
         input: {
-          input_image: imageUrl,
-          video_length: "14_frames_with_svd",
-          frames_per_second: 6,
-          motion_bucket_id: 127,
-          cond_aug: 0.02
+          first_frame_image: imageUrl,
+          prompt: "cinematic panning shot, natural movement, gentle breeze, organic flow, slow motion, high quality",
+          prompt_optimizer: true
         }
       })
     });
