@@ -11,18 +11,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: 'Canlandırılacak görsel URL adresi gereklidir.' }, { status: 400 });
     }
 
-    // Start prediction using stability-ai/stable-video-diffusion
-    const res = await fetch('https://api.replicate.com/v1/predictions', {
+    // Call Replicate model-based prediction endpoint (automatically resolves to the latest version of stable-video-diffusion)
+    const res = await fetch('https://api.replicate.com/v1/models/stability-ai/stable-video-diffusion/predictions', {
       method: 'POST',
       headers: {
         'Authorization': `Token ${replicateToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        // stable-video-diffusion model version
-        version: "3f0c32d655344d4f4835b7e974e856b69be77a1d23bc127584145478c9d2f56b",
         input: {
-          image: imageUrl,
+          input_image: imageUrl,
           video_length: "14_frames_with_svd",
           frames_per_second: 6,
           motion_bucket_id: 127,
