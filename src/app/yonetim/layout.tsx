@@ -1,10 +1,14 @@
 "use client";
 
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { LayoutDashboard, ShoppingBag, Settings, LogOut, FileText, Tag, MessageSquare, Mail, Ticket, BookOpen, Menu, X, Image as ImageIcon, Users, Star, HelpCircle, Sparkles } from 'lucide-react';
-import { signOut } from 'next-auth/react';
+import { 
+  LayoutDashboard, ShoppingBag, Settings, LogOut, FileText, Tag, MessageSquare, 
+  Mail, Ticket, BookOpen, Menu, X, Image as ImageIcon, Users, Star, HelpCircle, 
+  Sparkles, ShieldAlert, Loader2 
+} from 'lucide-react';
+import { signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { AdminToastProvider } from '@/context/AdminToastContext';
 
 const menuItems = [
@@ -26,8 +30,56 @@ const menuItems = [
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/giris');
+    }
+  }, [status, router]);
+
+  // 1. Loading state
+  if (status === 'loading') {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#0B0F19] text-white">
+        <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
+        <p className="text-sm font-bold uppercase tracking-widest text-gray-400">Giriş Bilgileri Doğrulanıyor...</p>
+      </div>
+    );
+  }
+
+  // 2. Unauthorized state (must have role === "ADMIN")
+  if (!session || (session.user as any).role !== 'ADMIN') {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#0B0F19] text-white px-4">
+        <div className="p-8 bg-[#111827]/60 border border-red-950/40 rounded-3xl text-center max-w-md shadow-2xl backdrop-blur-xl">
+          <ShieldAlert className="w-16 h-16 text-red-500 mx-auto mb-4 animate-bounce" />
+          <h2 className="text-xl font-heading font-black uppercase text-red-400 tracking-tight">Yetkisiz Erişim Engellendi</h2>
+          <p className="text-xs text-gray-400 mt-2 leading-relaxed">
+            Bu yönetim paneline erişim yetkiniz bulunmamaktadır. Lütfen yetkili bir yönetici hesabı ile giriş yapın.
+          </p>
+          <div className="mt-6 flex space-x-3">
+            <Link 
+              href="/giris" 
+              className="flex-1 py-2.5 bg-primary hover:bg-primary-hover text-secondary font-bold text-xs uppercase rounded-xl transition-all block text-center"
+            >
+              Yönetici Girişi
+            </Link>
+            <Link 
+              href="/" 
+              className="flex-1 py-2.5 bg-gray-800 hover:bg-gray-700 text-white font-bold text-xs uppercase rounded-xl transition-all block text-center"
+            >
+              Ana Sayfa
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 3. Authenticated Admin View
   return (
     <AdminToastProvider>
       <div className="flex h-screen bg-[#0B0F19] text-gray-100 font-body overflow-hidden relative">
@@ -110,7 +162,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </main>
       </div>
-      {/* Provider closing tag is above inside AdminToastProvider */}
     </AdminToastProvider>
   );
 }
