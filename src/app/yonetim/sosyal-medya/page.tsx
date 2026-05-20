@@ -463,25 +463,23 @@ export default function SocialMediaAssistant() {
 
         const progress = elapsed / duration;
 
-        // 1. Draw Blurred Background Image (Cover style)
-        ctx.save();
-        ctx.filter = 'blur(25px) brightness(0.4)';
-        const bgScale = Math.max(w / img.width, h / img.height);
-        const bgW = img.width * bgScale;
-        const bgH = img.height * bgScale;
-        ctx.drawImage(img, (w - bgW) / 2, (h - bgH) / 2, bgW, bgH);
-        ctx.restore();
+        // 1. Draw a beautiful dark gradient background
+        const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+        bgGrad.addColorStop(0, '#1e1b4b'); // Deep indigo
+        bgGrad.addColorStop(1, '#020617'); // Black
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, w, h);
 
-        // 2. Draw Foreground Card with Rounded Corners, White Border & Subtle Zoom
+        // 2. Draw Foreground Card with White Border & Subtle Zoom (CORS-safe & high-performance)
         ctx.save();
         const cardW = w * 0.82;
-        const cardH = cardW * (img.height / img.width);
+        const imgRatio = (img.height && img.width) ? (img.height / img.width) : (16 / 9);
         let finalCardW = cardW;
-        let finalCardH = cardH;
+        let finalCardH = cardW * imgRatio;
         // Limit card height to avoid overlapping elements
         if (finalCardH > h * 0.52) {
           finalCardH = h * 0.52;
-          finalCardW = finalCardH * (img.width / img.height);
+          finalCardW = finalCardH / imgRatio;
         }
         const cardY = (h - finalCardH) / 2 - (h * 0.05); // shift up slightly for wave & subtitles
         const zoomScale = 1.0 + (progress * 0.06);
@@ -489,33 +487,13 @@ export default function SocialMediaAssistant() {
         ctx.translate(w / 2, cardY + finalCardH / 2);
         ctx.scale(zoomScale, zoomScale);
 
-        // Clip rounded rectangle
-        const radius = 24;
-        ctx.beginPath();
-        if (ctx.roundRect) {
-          ctx.roundRect(-finalCardW / 2, -finalCardH / 2, finalCardW, finalCardH, radius);
-        } else {
-          ctx.rect(-finalCardW / 2, -finalCardH / 2, finalCardW, finalCardH);
-        }
-        ctx.closePath();
-        ctx.clip();
+        // Draw image
         ctx.drawImage(img, -finalCardW / 2, -finalCardH / 2, finalCardW, finalCardH);
-        ctx.restore();
 
         // Draw card border
-        ctx.save();
-        ctx.translate(w / 2, cardY + finalCardH / 2);
-        ctx.scale(zoomScale, zoomScale);
         ctx.lineWidth = 4;
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
-        ctx.beginPath();
-        if (ctx.roundRect) {
-          ctx.roundRect(-finalCardW / 2, -finalCardH / 2, finalCardW, finalCardH, radius);
-        } else {
-          ctx.rect(-finalCardW / 2, -finalCardH / 2, finalCardW, finalCardH);
-        }
-        ctx.closePath();
-        ctx.stroke();
+        ctx.strokeRect(-finalCardW / 2, -finalCardH / 2, finalCardW, finalCardH);
         ctx.restore();
 
         // 3. Draw Watermark Title at Top
@@ -683,8 +661,10 @@ export default function SocialMediaAssistant() {
       const predictionId = startData.predictionId;
       setVideoPollingStatus('Video çiziliyor (Replicate SVD GPU)...');
 
+      let elapsedSeconds = 0;
       // Poll every 4 seconds for completion
       const pollInterval = setInterval(async () => {
+        elapsedSeconds += 4;
         try {
           const pollRes = await fetch(`/api/admin/generate-video?id=${predictionId}&replicateToken=${encodeURIComponent(replicateToken)}`);
           const pollData = await pollRes.json();
@@ -714,7 +694,7 @@ export default function SocialMediaAssistant() {
             setGeneratingVideo(false);
             setVideoPollingStatus(null);
           } else if (pollData.status === 'processing' || pollData.status === 'starting') {
-            setVideoPollingStatus(`Video sentezleniyor (Durum: ${pollData.status === 'processing' ? 'Kareler İşleniyor' : 'GPU Başlatılıyor'})...`);
+            setVideoPollingStatus(`Video sentezleniyor (Durum: ${pollData.status === 'processing' ? 'Kareler İşleniyor' : 'GPU Başlatılıyor'} - ${elapsedSeconds}sn)...`);
           }
         } catch (e) {
           clearInterval(pollInterval);
