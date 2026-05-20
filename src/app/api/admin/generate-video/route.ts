@@ -11,14 +11,37 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: 'Canlandırılacak görsel URL adresi gereklidir.' }, { status: 400 });
     }
 
-    // Call Replicate model-based prediction endpoint (automatically resolves to the latest version of stable-video-diffusion)
-    const res = await fetch('https://api.replicate.com/v1/models/stability-ai/stable-video-diffusion/predictions', {
+    // Step 1: Fetch the latest model details to get the current active version ID dynamically
+    const modelRes = await fetch('https://api.replicate.com/v1/models/stability-ai/stable-video-diffusion', {
+      headers: {
+        'Authorization': `Token ${replicateToken}`,
+      }
+    });
+
+    if (!modelRes.ok) {
+      const modelErrData = await modelRes.json().catch(() => ({}));
+      return NextResponse.json({ 
+        success: false, 
+        error: modelErrData.detail || 'Replicate model bilgileri alınamadı. Lütfen API anahtarınızı kontrol edin.' 
+      }, { status: modelRes.status });
+    }
+
+    const modelData = await modelRes.json();
+    const latestVersionId = modelData.latest_version?.id;
+
+    if (!latestVersionId) {
+      return NextResponse.json({ success: false, error: 'Replicate üzerinde aktif SVD model versiyonu bulunamadı.' }, { status: 500 });
+    }
+
+    // Step 2: Start prediction using the dynamically fetched version ID
+    const res = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
         'Authorization': `Token ${replicateToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        version: latestVersionId,
         input: {
           input_image: imageUrl,
           video_length: "14_frames_with_svd",
@@ -31,7 +54,7 @@ export async function POST(request: Request) {
 
     const data = await res.json();
     if (!res.ok) {
-      return NextResponse.json({ success: false, error: data.detail || 'Replicate API bağlantı hatası.' }, { status: res.status });
+      return NextResponse.json({ success: false, error: data.detail || 'Video üretimi başlatılamadı.' }, { status: res.status });
     }
 
     return NextResponse.json({ success: true, predictionId: data.id, status: data.status });
