@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Sparkles, Video, Play, Download, Copy, ExternalLink, 
   Music, Check, Wand2, Image as ImageIcon, Volume2, Share2, Loader2, RefreshCw,
-  Calendar, CheckCircle, Clock, AlertCircle, Edit2, Key, ShieldCheck, Layers
+  Calendar, CheckCircle, Clock, AlertCircle, Edit2, Key, ShieldCheck, Layers, Zap
 } from 'lucide-react';
 import { useAdminToast } from '@/context/AdminToastContext';
 
@@ -303,26 +303,17 @@ export default function SocialMediaAssistant() {
     updateCurrentDay({ audioUrl: null });
     
     try {
-      const blob = await synthesizeSpeechInBrowser(data.scriptText);
-      const url = URL.createObjectURL(blob);
-      updateCurrentDay({ audioUrl: url });
-      showToast(`${currentDayPlan.dayName} günü için premium Ahmet (Tok Erkek) sesi üretildi!`, 'success');
-    } catch (browserError) {
-      console.warn("Browser-side Edge TTS failed, falling back to server endpoint:", browserError);
-      
-      try {
-        const res = await fetch(`/api/tts?text=${encodeURIComponent(data.scriptText)}&elevenLabsKey=${encodeURIComponent(elevenLabsKey)}`);
-        if (res.ok) {
-          const blob = await res.blob();
-          const url = URL.createObjectURL(blob);
-          updateCurrentDay({ audioUrl: url });
-          showToast(`${currentDayPlan.dayName} için yedek seslendirme dosyası oluşturuldu.`, 'success');
-        } else {
-          showToast('Seslendirme üretilemedi. Lütfen tekrar deneyin.', 'error');
-        }
-      } catch (err) {
-        showToast('Ses motoru başlatılamadı.', 'error');
+      const res = await fetch(`/api/tts?text=${encodeURIComponent(data.scriptText)}&elevenLabsKey=${encodeURIComponent(elevenLabsKey)}`);
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        updateCurrentDay({ audioUrl: url });
+        showToast(`${currentDayPlan.dayName} günü için premium Ahmet (Tok Erkek) sesi üretildi!`, 'success');
+      } else {
+        showToast('Seslendirme üretilemedi. Lütfen tekrar deneyin.', 'error');
       }
+    } catch (err) {
+      showToast('Ses motoru başlatılamadı.', 'error');
     } finally {
       setLoading(false);
     }
@@ -362,6 +353,181 @@ export default function SocialMediaAssistant() {
     } catch (error) {
       showToast('Görsel üretilirken bir hata oluştu.', 'error');
       setGeneratingImage(false);
+    }
+  };
+
+  // Free Client-Side Animated Video Generator with Audio Spectrum Visualizer
+  const handleGenerateVideoFree = async () => {
+    if (!currentDayPlan.imageUrl) {
+      showToast('Animasyon oluşturmak için öncelikle bir AI görseli üretmelisiniz.', 'error');
+      return;
+    }
+    if (!currentDayPlan.audioUrl) {
+      showToast('Lütfen önce "Premium Ahmet Sesiyle Üret" butonuna basarak ses dosyasını oluşturun.', 'error');
+      return;
+    }
+
+    setGeneratingVideo(true);
+    setVideoPollingStatus('Ücretsiz Video Sentezleniyor (Ses ve Görsel Birleştiriliyor)...');
+    updateCurrentDay({ videoUrl: null });
+
+    try {
+      const audioUrl = currentDayPlan.audioUrl;
+      const audioResponse = await fetch(audioUrl);
+      const audioBlob = await audioResponse.blob();
+      const audioArrayBuffer = await audioBlob.arrayBuffer();
+
+      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const audioBuffer = await audioCtx.decodeAudioData(audioArrayBuffer);
+      const duration = audioBuffer.duration;
+
+      const ratio = currentDayPlan.aspectRatio || '9:16';
+      let w = 720;
+      let h = 1280;
+      if (ratio === '1:1') {
+        w = 720;
+        h = 720;
+      } else if (ratio === '16:9') {
+        w = 1280;
+        h = 720;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Canvas 2D context could not be created');
+
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.src = currentDayPlan.imageUrl;
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+
+      const bufferSource = audioCtx.createBufferSource();
+      bufferSource.buffer = audioBuffer;
+
+      const analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 256;
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      const dest = audioCtx.createMediaStreamDestination();
+      bufferSource.connect(analyser);
+      bufferSource.connect(dest);
+      bufferSource.connect(audioCtx.destination);
+
+      const canvasStream = canvas.captureStream(30);
+      const combinedStream = new MediaStream();
+      canvasStream.getVideoTracks().forEach(track => combinedStream.addTrack(track));
+      dest.stream.getAudioTracks().forEach(track => combinedStream.addTrack(track));
+
+      let options = { mimeType: 'video/webm;codecs=vp9,opus' };
+      if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+        options = { mimeType: 'video/webm;codecs=vp8,opus' };
+      }
+      if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+        options = { mimeType: 'video/webm' };
+      }
+      if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+        options = { mimeType: '' };
+      }
+
+      const recorder = new MediaRecorder(combinedStream, options);
+      const chunks: Blob[] = [];
+
+      recorder.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) {
+          chunks.push(e.data);
+        }
+      };
+
+      let animationFrameId: number;
+      const startTime = Date.now();
+
+      const drawFrame = () => {
+        const elapsed = (Date.now() - startTime) / 1000;
+        if (elapsed >= duration) return;
+
+        const progress = elapsed / duration;
+        const scale = 1.0 + (progress * 0.15);
+        const panX = Math.sin(progress * Math.PI) * (w * 0.03);
+        const panY = Math.cos(progress * Math.PI) * (h * 0.03);
+
+        ctx.save();
+        ctx.translate(w / 2 + panX, h / 2 + panY);
+        ctx.scale(scale, scale);
+        ctx.drawImage(img, -w / 2, -h / 2, w, h);
+        ctx.restore();
+
+        const gradient = ctx.createLinearGradient(0, h * 0.7, 0, h);
+        gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+        gradient.addColorStop(0.5, 'rgba(0, 0, 0, 0.4)');
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0.85)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, h * 0.7, w, h * 0.3);
+
+        analyser.getByteFrequencyData(dataArray);
+        const barWidth = (w / bufferLength) * 1.5;
+        let barHeight;
+        let x = 0;
+
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = 'rgba(168, 85, 247, 0.6)';
+        ctx.fillStyle = 'rgba(168, 85, 247, 0.8)';
+
+        for (let i = 0; i < bufferLength; i++) {
+          barHeight = (dataArray[i] / 255) * (h * 0.12);
+          const yPos = h * 0.85;
+          ctx.fillRect(w / 2 + x, yPos - barHeight / 2, barWidth - 2, barHeight);
+          ctx.fillRect(w / 2 - x - barWidth, yPos - barHeight / 2, barWidth - 2, barHeight);
+          x += barWidth;
+        }
+
+        ctx.shadowBlur = 0;
+
+        ctx.fillStyle = '#a855f7';
+        ctx.fillRect(0, h - 8, w * progress, 8);
+
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.font = 'bold 24px Outfit, Inter, sans-serif';
+        const remaining = Math.max(0, Math.ceil(duration - elapsed));
+        ctx.fillText(`00:${remaining.toString().padStart(2, '0')}`, w - 100, 50);
+
+        setVideoPollingStatus(`Video oluşturuluyor: %${Math.min(100, Math.floor(progress * 100))}`);
+        animationFrameId = requestAnimationFrame(drawFrame);
+      };
+
+      recorder.onstop = () => {
+        cancelAnimationFrame(animationFrameId);
+        audioCtx.close();
+        
+        const videoBlob = new Blob(chunks, { type: chunks[0].type || 'video/webm' });
+        const videoUrl = URL.createObjectURL(videoBlob);
+        updateCurrentDay({ videoUrl });
+        
+        showToast('Animasyonlu pazarlama videosu 100% ücretsiz olarak üretildi!', 'success');
+        setGeneratingVideo(false);
+        setVideoPollingStatus(null);
+      };
+
+      recorder.start();
+      bufferSource.start();
+      drawFrame();
+
+      bufferSource.onended = () => {
+        if (recorder.state === 'recording') {
+          recorder.stop();
+        }
+      };
+
+    } catch (err: any) {
+      console.error("Free video rendering failed:", err);
+      showToast(`Ücretsiz video üretimi başarısız oldu: ${err.message}`, 'error');
+      setGeneratingVideo(false);
+      setVideoPollingStatus(null);
     }
   };
 
@@ -965,7 +1131,7 @@ export default function SocialMediaAssistant() {
               <h3 className="text-md font-heading font-bold text-white uppercase flex items-center">
                 <Video className="w-5 h-5 mr-2 text-primary animate-pulse" /> Yapay Zeka Video Oluşturucu
               </h3>
-              <span className="bg-primary/10 text-primary border border-primary/20 text-[10px] px-2 py-0.5 rounded-full font-bold">REPLICATE SVD</span>
+              <span className="bg-primary/10 text-primary border border-primary/20 text-[10px] px-2 py-0.5 rounded-full font-bold">100% ÜCRETSİZ & PREMİUM</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -973,32 +1139,54 @@ export default function SocialMediaAssistant() {
               <div className="space-y-4 flex flex-col justify-between">
                 <div className="space-y-3">
                   <p className="text-xs text-gray-400 leading-relaxed font-body">
-                    Oluşturduğunuz görseli **Stable Video Diffusion** modelini kullanarak hareketli bir video klibine dönüştürebilirsiniz.
+                    Oluşturduğunuz görsel ve seslendirmeyi birleştirerek **100% ücretsiz** ve hareketli/spektrumlu bir video üretebilir veya Replicate API'niz üzerinden canlandırabilirsiniz.
                   </p>
                   <div className="p-3.5 bg-gray-900/40 rounded-xl border border-gray-800/80 text-[11px] text-gray-400 space-y-1.5">
                     <span className="font-bold text-white block">💡 Video Format/Boyut Ayarı:</span>
-                    Görsel hangi boyutta üretildiyse (9:16 dikey, 1:1 kare, veya 16:9 yatay), üretilen video da otomatik olarak o en boy oranında canlandırılır.
+                    Görsel hangi boyutta üretildiyse (9:16 dikey, 1:1 kare, veya 16:9 yatay), video da otomatik olarak o en boy oranında animasyonlu spektrumla hazırlanır.
                   </div>
                 </div>
 
                 <div className="space-y-2">
+                  {/* Option 1: 100% Free Client-side Animator */}
                   <button
-                    onClick={handleGenerateVideo}
-                    disabled={generatingVideo || !currentDayPlan.imageUrl}
-                    className="w-full bg-gradient-to-r from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-secondary p-3.5 rounded-xl font-heading font-black text-xs uppercase flex items-center justify-center transition-all disabled:opacity-50"
+                    onClick={handleGenerateVideoFree}
+                    disabled={generatingVideo || !currentDayPlan.imageUrl || !currentDayPlan.audioUrl}
+                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white p-3.5 rounded-xl font-heading font-black text-xs uppercase flex items-center justify-center transition-all disabled:opacity-50"
                   >
-                    {generatingVideo ? (
+                    {generatingVideo && videoPollingStatus?.includes('Sentezleniyor') ? (
                       <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" /> {videoPollingStatus}
                       </>
                     ) : (
                       <>
-                        <Video className="w-4 h-4 mr-2" /> Görseli Canlandır (Video Üret)
+                        <Zap className="w-4 h-4 mr-2 text-yellow-300 fill-yellow-300" /> Ücretsiz Video Sentezle (Hızlı)
                       </>
                     )}
                   </button>
+
+                  {/* Option 2: Replicate SVD */}
+                  <button
+                    onClick={handleGenerateVideo}
+                    disabled={generatingVideo || !currentDayPlan.imageUrl}
+                    className="w-full bg-transparent hover:bg-gray-800 text-gray-300 border border-gray-700 hover:border-gray-600 p-3 rounded-xl font-heading font-bold text-xs uppercase flex items-center justify-center transition-all disabled:opacity-50"
+                  >
+                    {generatingVideo && !videoPollingStatus?.includes('Sentezleniyor') ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" /> {videoPollingStatus}
+                      </>
+                    ) : (
+                      <>
+                        <Video className="w-4 h-4 mr-2 text-primary" /> Replicate AI ile Canlandır (Ücretli)
+                      </>
+                    )}
+                  </button>
+
                   {!currentDayPlan.imageUrl && (
                     <span className="text-[10px] text-red-400 block text-center">Öncelikle yukarıdan bir görsel üretmelisiniz.</span>
+                  )}
+                  {currentDayPlan.imageUrl && !currentDayPlan.audioUrl && (
+                    <span className="text-[10px] text-amber-400 block text-center">Ücretsiz video için önce premium ses dosyasını üretin.</span>
                   )}
                 </div>
               </div>

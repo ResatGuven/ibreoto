@@ -1,4 +1,9 @@
 import { NextResponse } from 'next/server';
+import WebSocket from 'ws';
+
+function generateRequestId() {
+  return Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+}
 
 export async function GET(request: Request) {
   try {
@@ -13,7 +18,7 @@ export async function GET(request: Request) {
     // 1. If ElevenLabs Key is provided, use ElevenLabs
     if (elevenLabsKey && elevenLabsKey.trim() !== '' && elevenLabsKey !== 'undefined') {
       try {
-        const voiceId = 'pNInz6obpgDQ51ujn50C'; // Rachel or custom voice
+        const voiceId = 'pNInz6obpgDQ51ujn50C'; // Rachel or a male voice
         const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
           method: 'POST',
           headers: {
@@ -39,12 +44,115 @@ export async function GET(request: Request) {
           });
         }
       } catch (elevenError) {
-        console.error("ElevenLabs synthesis failed, falling back to Google:", elevenError);
+        console.error("ElevenLabs synthesis failed, falling back to Edge TTS:", elevenError);
       }
     }
 
-    // 2. Fallback: Google Translate TTS (100% free, keyless, reliable HTTP endpoint)
-    // Splitting text into chunks of 200 characters because Google TTS has a 200-char limit per request
+    // 2. Primary: Free Edge Neural TTS (AhmetNeural) via server-side WebSocket client
+    try {
+      const requestId = generateRequestId();
+      const socketUrl = `wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?trustedclienttoken=6A5AA1D4EAFF4E9B87E7D8561B96A24E`;
+
+      const audioChunks = await new Promise<Buffer[]>((resolve, reject) => {
+        const ws = new WebSocket(socketUrl, {
+          headers: {
+            'Pragma': 'no-cache',
+            'Cache-Control': 'no-cache',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.68',
+            'Origin': 'chrome-extension://jdiccldimpdaibdpecjgjcoojgoiboih'
+          }
+        });
+
+        const chunks: Buffer[] = [];
+        const timeout = setTimeout(() => {
+          if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
+            ws.close();
+          }
+          reject(new Error('Ses sentezleme isteği zaman aşımına uğradı.'));
+        }, 12000);
+
+        ws.on('open', () => {
+          const configMsg = 
+            `Content-Type:application/json; charset=utf-8\r\n` +
+            `Path:speech.config\r\n\r\n` +
+            JSON.stringify({
+              context: {
+                system: {
+                  name: "Edge",
+                  version: "112.0.1722.68",
+                  build: "1722.68",
+                  platform: "Windows"
+                }
+              },
+              audio: {
+                format: "audio-24khz-48kbitrate-mono-mp3",
+                volume: 0,
+                pitch: 0,
+                rate: 0
+              }
+            });
+          ws.send(configMsg);
+
+          const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='tr-TR'><voice name='tr-TR-AhmetNeural'>${text}</voice></speak>`;
+          const ssmlMsg = 
+            `X-RequestId:${requestId}\r\n` +
+            `Content-Type:application/ssml+xml\r\n` +
+            `Path:ssml\r\n\r\n` +
+            ssml;
+          ws.send(ssmlMsg);
+        });
+
+        ws.on('message', (data: any, isBinary: boolean) => {
+          if (!isBinary) {
+            const msgStr = data.toString();
+            if (msgStr.includes('Path:turn.end')) {
+              clearTimeout(timeout);
+              ws.close();
+              resolve(chunks);
+            }
+          } else {
+            try {
+              const buffer = Buffer.isBuffer(data) ? data : Buffer.from(data);
+              const headerLength = buffer.readUInt16BE(0);
+              const audioChunk = buffer.subarray(2 + headerLength);
+              if (audioChunk.length > 0) {
+                chunks.push(audioChunk);
+              }
+            } catch (err) {
+              console.error("Binary chunk parsing error:", err);
+            }
+          }
+        });
+
+        ws.on('close', () => {
+          clearTimeout(timeout);
+          if (chunks.length > 0) {
+            resolve(chunks);
+          } else {
+            reject(new Error('Bağlantı ses üretilemeden kapandı.'));
+          }
+        });
+
+        ws.on('error', (err) => {
+          clearTimeout(timeout);
+          reject(err);
+        });
+      });
+
+      if (audioChunks && audioChunks.length > 0) {
+        const combinedBuffer = Buffer.concat(audioChunks);
+        return new Response(combinedBuffer, {
+          headers: {
+            'Content-Type': 'audio/mpeg',
+            'Content-Disposition': 'inline; filename="ari-hayat-ahmet-neural.mp3"'
+          }
+        });
+      }
+    } catch (edgeTtsError) {
+      console.warn("Server-side Edge TTS failed, trying Google TTS fallback:", edgeTtsError);
+    }
+
+    // 3. Fallback: Google Translate TTS (100% free, keyless, reliable HTTP endpoint)
     const chunks: string[] = [];
     const words = text.split(/\s+/);
     let currentChunk = "";
@@ -87,7 +195,7 @@ export async function GET(request: Request) {
       });
     }
 
-    throw new Error('Google TTS audio chunks could not be fetched.');
+    throw new Error('Ses sentezleme başarısız oldu.');
 
   } catch (error: any) {
     console.error('TTS Endpoint Error:', error);
