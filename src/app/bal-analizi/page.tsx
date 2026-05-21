@@ -4,7 +4,8 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { 
   Search, ShieldCheck, HelpCircle, FileText, ChevronRight, 
-  Award, FlaskConical, Calendar, ArrowRight, Loader2
+  Award, FlaskConical, Calendar, ArrowRight, Loader2,
+  CheckCircle2, AlertTriangle, Info, Check
 } from 'lucide-react';
 
 export default function BalAnaliziPage() {
@@ -61,21 +62,76 @@ function BalAnaliziContent() {
     fetchAnalysis(batchNo);
   };
 
-  // Helper component to render SVG Radial Gauge
+  // Helper component to render SVG Radial Gauge with consumer translations
   const RadialGauge = ({ value, max, label, unit, idealRange, description, colorClass = "text-primary" }: any) => {
     const radius = 50;
     const circumference = 2 * Math.PI * radius;
     const strokeDashoffset = circumference - (Math.min(value, max) / max) * circumference;
 
+    // Calculate rating and comparison info dynamically
+    let badgeText = "Standart";
+    let badgeStyle = "bg-gray-800 text-gray-400 border border-gray-700";
+    let explanationText = "";
+
+    if (label.includes("Prolin")) {
+      const ratio = (value / 180).toFixed(1);
+      if (value >= 500) {
+        badgeText = "Süper Premium Sınıf (Apiterapik Değer)";
+        badgeStyle = "bg-amber-500/10 text-amber-400 border border-amber-500/20";
+        explanationText = `Market ballarında yasal limit 180 mg/kg iken, bu bal tam ${value} mg/kg prolin içerir. Standardın ${ratio} katı gücüyle yüksek antioksidan ve tıbbi değere sahiptir.`;
+      } else if (value >= 300) {
+        badgeText = "Yüksek Kaliteli Yayla Balı";
+        badgeStyle = "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20";
+        explanationText = `Doğal yayla florasından toplanan bu bal, ${value} mg/kg prolin değeriyle arının doğallığını ve besleyici gücünü kanıtlamaktadır.`;
+      } else {
+        badgeText = "Standart Çiçek Balı";
+        badgeStyle = "bg-gray-850 text-gray-400 border border-gray-800";
+        explanationText = "Normal sofralık çiçek balı limitlerindedir, günlük tüketime uygundur.";
+      }
+    } else if (label.includes("Nem")) {
+      if (value < 18) {
+        badgeText = "Kusursuz Olgunluk (Ultra Yoğun Kıvam)";
+        badgeStyle = "bg-blue-500/10 text-blue-400 border border-blue-500/20";
+        explanationText = `Nem oranı %${value}'dir. Balın suyunun düşük olması arıların peteği tamamen sırlayıp olgunlaştırdığını kanıtlar. Balınız ekşimeden yıllarca saklanabilir.`;
+      } else if (value <= 20) {
+        badgeText = "Normal Kıvam ve Nem";
+        badgeStyle = "bg-green-500/10 text-green-400 border border-green-500/20";
+        explanationText = `Nem oranı %${value}'dir. Yasal ve doğal standartlar içindedir. Normal akışkanlıkta taze çiçek balı kıvamına sahiptir.`;
+      } else {
+        badgeText = "Yüksek Nem (Ekşime Riski)";
+        badgeStyle = "bg-red-500/10 text-red-400 border border-red-500/20";
+        explanationText = "Su oranı yüksek olduğu için fermantasyon (ekşime) riski taşır, kısa sürede tüketilmelidir.";
+      }
+    } else if (label.includes("Diastaz")) {
+      if (value >= 12) {
+        badgeText = "Canlı Enzim - Sıfır Isıl İşlem (Çiğ Bal)";
+        badgeStyle = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+        explanationText = `Diastaz sayısı ${value}'dir. Bal ısıtılmadığı (çiğ/raw) için arının salgıladığı canlı ve faydalı sindirim/bağışıklık enzimleri tamamen korunmuştur.`;
+      } else if (value >= 8) {
+        badgeText = "Doğal Taze Bal (Enzimler Aktif)";
+        badgeStyle = "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20";
+        explanationText = `Diastaz sayısı ${value}'dir. Doğal ve tazedir. Enzim aktivitesi standart limitlerin üzerindedir.`;
+      } else {
+        badgeText = "Enzim Kaybı (Isıtılmış / Eski Bal)";
+        badgeStyle = "bg-red-500/10 text-red-400 border border-red-500/20";
+        explanationText = "Isıtılmış veya uzun süre beklemiş bal olduğunu gösterir. Biyoaktif yararlı enzimleri büyük oranda yok olmuştur.";
+      }
+    }
+
     return (
       <div className="bg-[#111827]/40 border border-gray-800 p-6 rounded-3xl text-center flex flex-col items-center justify-between h-full group hover:border-gray-700/50 transition-all duration-300">
         <div className="w-full">
           <h4 className="text-xs uppercase tracking-wider font-bold text-gray-400 font-heading mb-1">{label}</h4>
-          <p className="text-[10px] text-gray-500 font-body mb-4">{idealRange}</p>
+          <p className="text-[10px] text-gray-500 font-body mb-3">{idealRange}</p>
+          <div className="inline-block">
+            <span className={`text-[8.5px] uppercase font-black px-2 py-0.5 rounded-full tracking-wider ${badgeStyle}`}>
+              {badgeText}
+            </span>
+          </div>
         </div>
         
         {/* SVG Circular Progress */}
-        <div className="relative w-32 h-32 mb-4">
+        <div className="relative w-32 h-32 my-4">
           <svg className="w-full h-full transform -rotate-90">
             {/* Background Track */}
             <circle cx="64" cy="64" r={radius} className="stroke-[#1F2937]" strokeWidth="8" fill="transparent" />
@@ -98,7 +154,14 @@ function BalAnaliziContent() {
           </div>
         </div>
 
-        <p className="text-xs text-gray-400 leading-relaxed font-body pt-2 border-t border-gray-800/80 w-full">{description}</p>
+        <div className="w-full space-y-2 pt-3 border-t border-gray-800/80">
+          <p className="text-[10.5px] text-gray-400 leading-relaxed font-body">{description}</p>
+          {explanationText && (
+            <p className="text-[10.5px] text-primary bg-primary/5 p-2 rounded-xl border border-primary/10 font-bold leading-relaxed">
+              🔍 {explanationText}
+            </p>
+          )}
+        </div>
       </div>
     );
   };

@@ -5,19 +5,18 @@ import Link from 'next/link';
 import { 
   ShieldCheck, AlertTriangle, HelpCircle, ArrowRight, 
   FlaskConical, CheckCircle2, XCircle, Search, Sparkles,
-  Info, Coins, Heart, Baby, Zap, Moon, Activity, ShieldAlert
+  Info, Heart, Baby, Zap, Moon, Activity, Eye, Award
 } from 'lucide-react';
 
 export default function GercekBalRehberiPage() {
   const [batchNo, setBatchNo] = useState('');
 
-  // Adulteration Analyzer States
-  const [proline, setProline] = useState<number>(350);
-  const [diastase, setDiastase] = useState<number>(10);
-  const [moisture, setMoisture] = useState<number>(17.5);
-  const [price, setPrice] = useState<number>(380);
-  const [brandName, setBrandName] = useState<string>('');
-  const [showAnalysisResult, setShowAnalysisResult] = useState<boolean>(false);
+  // Sensory Test States
+  const [qCrystallization, setQCrystallization] = useState<string>('');
+  const [qFlow, setQFlow] = useState<string>('');
+  const [qSmell, setQSmell] = useState<string>('');
+  const [qWaterTest, setQWaterTest] = useState<string>('');
+  const [showSensoryResult, setShowSensoryResult] = useState<boolean>(false);
 
   // Remedy Wizard States
   const [activeRemedy, setActiveRemedy] = useState<string>('bogaz');
@@ -118,92 +117,68 @@ export default function GercekBalRehberiPage() {
     }
   };
 
-  const handleCalculateAdulteration = () => {
-    let score = 100;
-    const reports = [];
+  // Sensory Test Logic Calculator
+  const handleCalculateSensoryResult = () => {
+    if (!qCrystallization || !qFlow || !qSmell || !qWaterTest) {
+      return null;
+    }
 
-    // Proline checks (Türk Gıda Kodeksi min 180)
-    if (proline < 180) {
-      score -= 50;
-      reports.push({
-        type: "error",
-        message: `KRİTİK HATA: Prolin değeri ${proline} mg/kg. Türk Gıda Kodeksi'ne göre balda prolin en az 180 olmalıdır. Bu değer sahte veya glikoz şurubu katılmış balları gösterir.`
-      });
-    } else if (proline < 320) {
-      score -= 20;
-      reports.push({
-        type: "warning",
-        message: `ŞÜPHELİ/DÜŞÜK: Prolin değeri ${proline} mg/kg. Bal yasal sınırın üstünde olsa da kalitesi düşüktür. Arıya aşırı şeker şerbeti verilmiş veya erken hasat yapılmış olabilir.`
-      });
+    let suspectScore = 0;
+    const findings: string[] = [];
+
+    // 1. Crystallization
+    if (qCrystallization === 'butter') {
+      findings.push("Tereyağı gibi homojen donma/kristalleşme: Balınızın ısıl işlem görmemiş doğal ham bal olduğuna işaret eden en güçlü ve olumlu özelliktir.");
+    } else if (qCrystallization === 'sugar') {
+      suspectScore += 30;
+      findings.push("Dibe şeker çökelmesi: Arıya aşırı şeker şerbeti yedirildiğini veya balın içerisine glikoz şurubu karıştırıldığını gösteren şüpheli bir durumdur.");
     } else {
-      reports.push({
-        type: "success",
-        message: `MÜKEMMEL: Prolin değeri ${proline} mg/kg. Arıların doğal floradan zengin nektar topladığının ve balın üstün kalitede olduğunun laboratuvar kanıtıdır.`
-      });
+      findings.push("Sürekli berrak sıvı kalması: Eğer çam balı değilse, balın yüksek sıcaklıkta kaynatılarak pastörize edildiğini ve tüm besin değerini/polenlerini yitirdiğini gösterir.");
     }
 
-    // Diastase checks (Türk Gıda Kodeksi min 8)
-    if (diastase < 8) {
-      score -= 30;
-      reports.push({
-        type: "error",
-        message: `KRİTİK HATA: Diastaz sayısı ${diastase}. Yasal sınır olan 8'in altındadır. Bu bal yüksek sıcaklıkta ısıtılmış (pastörize edilmiş) ve tüm yararlı canlı enzimleri yok edilmiştir.`
-      });
-    } else if (diastase >= 12) {
-      reports.push({
-        type: "success",
-        message: `MÜKEMMEL: Diastaz enzimi sayısı ${diastase}. Balın ısıl işleme maruz bırakılmadığını, ham halinin ve vitaminlerinin tamamen korunduğunu doğrular.`
-      });
+    // 2. Flow
+    if (qFlow === 'stretch') {
+      findings.push("Kesintisiz süzülme: Balın su oranının (nem) düşük ve kıvamının ideal olduğunu gösterir. Ancak bazı şeker şurupları da uzayabilir.");
     } else {
-      reports.push({
-        type: "success",
-        message: `İYİ: Diastaz sayısı ${diastase} ideal yasal sınırlar içerisindedir.`
-      });
+      suspectScore += 20;
+      findings.push("Hemen damlayıp kopması: Nem oranının yasal sınır olan %20'den fazla olduğuna veya bala sonradan su katıldığına işaret eder. Bal kısa sürede ekşiyebilir.");
     }
 
-    // Moisture checks (Türk Gıda Kodeksi max 20)
-    if (moisture > 20) {
-      score -= 20;
-      reports.push({
-        type: "error",
-        message: `KRİTİK HATA: Nem oranı %${moisture}. Yasal üst sınır %20'dir. Nem yüksekliği balın vaktinden önce hasat edildiğini veya suyla seyreltildiğini gösterir, bal kısa sürede ekşir.`
-      });
-    } else if (moisture < 15) {
-      reports.push({
-        type: "warning",
-        message: `BİLGİ: Nem oranı %${moisture} oldukça düşük. Bal aşırı yoğun kıvamlıdır ve kristalleşmeye (donmaya) çok daha eğilimlidir.`
-      });
+    // 3. Smell
+    if (qSmell === 'sharp') {
+      findings.push("Genzi yakan doğal yayla/çiçek kokusu: Arıların çiçeklerden aldığı hakiki aromatik polenlerin varlığını kanıtlar. Çok olumlu bir bulgudur.");
+    } else if (qSmell === 'perfume') {
+      suspectScore += 40;
+      findings.push("Aşırı parfümlü yapay koku: Yapay aroma verici esanslar kullanılarak şeker şurubuna bal süsü verilmiş olma ihtimali son derece yüksektir.");
     } else {
-      reports.push({
-        type: "success",
-        message: `MÜKEMMEL: Nem oranı %${moisture} idealdir. Arıların petek gözlerini tamamen olgunlaştırıp sırladığını gösterir.`
-      });
+      suspectScore += 15;
+      findings.push("Neredeyse sıfır koku: Balın aşırı filtre edildiğini veya arının çiçek yüzü görmeden sadece şeker şerbetiyle beslendiğini gösterir.");
     }
 
-    // Price Checks
-    if (price < 250) {
-      score -= 25;
-      reports.push({
-        type: "warning",
-        message: `EKONOMİK ŞÜPHE: 1 kg balın ${price} TL olması hakiki arıcılık maliyetlerinin (akaryakıt, kovan bakımı, laboratuvar tahlili, işçilik) altındadır. Glikoz şurubu veya şeker balı olma ihtimali çok yüksektir.`
-      });
+    // 4. Water Test
+    if (qWaterTest === 'solid') {
+      findings.push("Ilık suda hemen erimeden dibe çökme: Balın içindeki su oranının düşük ve moleküler yapısının yoğun olduğunu gösteren harika bir ev testidir.");
+    } else {
+      suspectScore += 35;
+      findings.push("Ilık suda anında dağılma: İçeriğindeki yüksek glikoz şurubu veya yapay tatlandırıcılar nedeniyle balın su ile anında bağ kurduğunu ve yapay olduğunu gösterir.");
     }
 
-    const finalScore = Math.max(0, score);
-    let verdict = "GÜVENLİ & DOĞAL BAL ✓";
+    let verdict = "DOĞAL BAL OLUMLU İPUÇLARI ✓";
     let verdictColor = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
-    if (finalScore < 50) {
-      verdict = "SAHTE VEYA TAĞŞİŞ RİSKİ YÜKSEK (Tüketilmesi Önerilmez) ⚠";
+    let score = Math.max(0, 100 - suspectScore);
+
+    if (score < 50) {
+      verdict = "SAHTE / TAĞŞİŞLİ BAL ŞÜPHESİ YÜKSEK ⚠";
       verdictColor = "bg-rose-500/10 text-rose-400 border-rose-500/30 font-black";
-    } else if (finalScore < 85) {
-      verdict = "ŞÜPHELİ VEYA KALİTESİZ BAL ⚠";
+    } else if (score < 80) {
+      verdict = "DÜŞÜK KALİTELİ / ISIL İŞLEMLİ BAL ŞÜPHESİ ⚠";
       verdictColor = "bg-amber-500/10 text-amber-400 border-amber-500/30";
     }
 
-    return { finalScore, reports, verdict, verdictColor };
+    return { score, verdict, verdictColor, findings };
   };
 
-  const analysisInfo = handleCalculateAdulteration();
+  const sensoryResult = handleCalculateSensoryResult();
 
   return (
     <div className="pt-24 min-h-screen bg-[#0B0F19] text-gray-100 font-body">
@@ -268,225 +243,206 @@ export default function GercekBalRehberiPage() {
           </div>
         </div>
 
-        {/* INTERACTIVE MODULE 1: Food Safety & Adulteration Analyzer */}
+        {/* INTERACTIVE MODULE 1: Sensory Honey Analysis Wizard (Duyusal Analiz) */}
         <div className="bg-[#111827]/40 border border-gray-800/80 rounded-[2.5rem] p-6 md:p-10 space-y-8 relative overflow-hidden backdrop-blur-xl">
           <div className="absolute top-0 left-0 w-80 h-80 bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
           
           <div className="text-center space-y-2">
-            <span className="text-[9px] bg-red-500/10 border border-red-500/30 text-red-400 px-3 py-1 rounded-full font-black tracking-widest uppercase">
-              BİLİMSEL GIDA ANALİZ ARACI
+            <span className="text-[9px] bg-amber-500/10 border border-amber-500/30 text-primary px-3 py-1 rounded-full font-black tracking-widest uppercase">
+              EVDE UYGULANABİLİR DOĞALLIK DEDEKTİFİ
             </span>
             <h2 className="text-2xl md:text-3xl font-heading font-black text-white uppercase tracking-tight">
-              GIDA DEDEKTİFİ: BAL TAĞŞİŞ KAMPANYASI
+              DUYUSAL BAL TESTİ & EVDE TESPİT SİHİRBAZI
             </h2>
             <p className="text-xs text-gray-400 max-w-xl mx-auto leading-relaxed">
-              Elinizdeki balın veya satın almayı düşündüğünüz başka bir markanın laboratuvar analiz değerlerini girerek saflığını ve bakanlık standartlarına uygunluğunu analiz edin.
+              Elinizdeki balın laboratuvar tahlil raporu yoksa üzülmeyin. Herkesin evde kendi duyularıyla veya basit malzemelerle yapabileceği 4 soruluk testimizi tamamlayarak balın doğallık ipuçlarını öğrenin.
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            {/* Input fields */}
-            <div className="lg:col-span-5 space-y-5 bg-black/20 p-6 rounded-3xl border border-gray-850">
-              <h3 className="text-xs font-heading font-black text-gray-400 uppercase tracking-widest pb-3 border-b border-gray-800 flex items-center gap-1.5">
-                <ShieldAlert className="w-4 h-4 text-primary" /> Test Edilecek Değerler
-              </h3>
-
-              <div className="space-y-4">
-                {/* Proline Slider */}
-                <div className="space-y-1.5">
-                  <div className="flex justify-between text-xs font-heading">
-                    <span className="text-gray-400 font-bold uppercase">Prolin Miktarı</span>
-                    <span className="text-primary font-black">{proline} mg/kg</span>
-                  </div>
-                  <input 
-                    type="range" 
-                    min="50" 
-                    max="800" 
-                    step="10"
-                    value={proline}
-                    onChange={(e) => {
-                      setProline(Number(e.target.value));
-                      setShowAnalysisResult(true);
-                    }}
-                    className="w-full h-1.5 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-primary"
-                  />
-                  <div className="flex justify-between text-[8px] text-gray-500">
-                    <span>50 (Sahte Bal Riski)</span>
-                    <span>180 (Kodeks Sınırı)</span>
-                    <span>800 (Premium)</span>
-                  </div>
-                </div>
-
-                {/* Diastase Slider */}
-                <div className="space-y-1.5">
-                  <div className="flex justify-between text-xs font-heading">
-                    <span className="text-gray-400 font-bold uppercase">Diastaz Sayısı</span>
-                    <span className="text-primary font-black">{diastase}</span>
-                  </div>
-                  <input 
-                    type="range" 
-                    min="2" 
-                    max="25" 
-                    step="0.5"
-                    value={diastase}
-                    onChange={(e) => {
-                      setDiastase(Number(e.target.value));
-                      setShowAnalysisResult(true);
-                    }}
-                    className="w-full h-1.5 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-primary"
-                  />
-                  <div className="flex justify-between text-[8px] text-gray-500">
-                    <span>2 (Aşırı Isıl İşlem/Ölü Bal)</span>
-                    <span>8 (Kodeks Sınırı)</span>
-                    <span>25 (Çok Taze)</span>
-                  </div>
-                </div>
-
-                {/* Moisture Slider */}
-                <div className="space-y-1.5">
-                  <div className="flex justify-between text-xs font-heading">
-                    <span className="text-gray-400 font-bold uppercase">Nem Oranı (Su/Kıvam)</span>
-                    <span className="text-primary font-black">%{moisture}</span>
-                  </div>
-                  <input 
-                    type="range" 
-                    min="12" 
-                    max="25" 
-                    step="0.5"
-                    value={moisture}
-                    onChange={(e) => {
-                      setMoisture(Number(e.target.value));
-                      setShowAnalysisResult(true);
-                    }}
-                    className="w-full h-1.5 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-primary"
-                  />
-                  <div className="flex justify-between text-[8px] text-gray-500">
-                    <span>%12 (Aşırı Kuru)</span>
-                    <span>%20 (Maks Kodeks Sınırı)</span>
-                    <span>%25 (Ekşimiş Bal)</span>
-                  </div>
-                </div>
-
-                {/* Price Slider */}
-                <div className="space-y-1.5">
-                  <div className="flex justify-between text-xs font-heading">
-                    <span className="text-gray-400 font-bold uppercase">Kilogram Fiyatı</span>
-                    <span className="text-primary font-black">{price} TL</span>
-                  </div>
-                  <input 
-                    type="range" 
-                    min="100" 
-                    max="1500" 
-                    step="50"
-                    value={price}
-                    onChange={(e) => {
-                      setPrice(Number(e.target.value));
-                      setShowAnalysisResult(true);
-                    }}
-                    className="w-full h-1.5 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-primary"
-                  />
-                  <div className="flex justify-between text-[8px] text-gray-500">
-                    <span>100 TL (Mısır Şurubu Riski)</span>
-                    <span>250 TL (Maliyet Sınırı)</span>
-                    <span>1500 TL (Butik Hasat)</span>
-                  </div>
-                </div>
-
-                <div className="pt-2">
-                  <button 
-                    onClick={() => setShowAnalysisResult(true)}
-                    className="w-full py-3 bg-primary hover:bg-amber-500 text-secondary font-heading font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-primary/10"
+            {/* Input Questions Form */}
+            <div className="lg:col-span-6 space-y-5 bg-black/20 p-5 rounded-3xl border border-gray-850">
+              
+              {/* Question 1 */}
+              <div className="space-y-2">
+                <label className="block text-xs font-heading font-black text-gray-300 uppercase tracking-wide">
+                  1. Balın Donma / Kristalleşme Durumu Nedir?
+                </label>
+                <div className="grid grid-cols-1 gap-2">
+                  <button
+                    onClick={() => { setQCrystallization('butter'); setShowSensoryResult(true); }}
+                    className={`p-3 text-left text-xs rounded-xl border font-body transition-all ${
+                      qCrystallization === 'butter' ? 'bg-primary/10 border-primary text-primary font-bold' : 'bg-[#111827] border-gray-800 text-gray-400'
+                    }`}
                   >
-                    Gıda Güvenlik Raporu Oluştur
+                    🍯 Tereyağı kıvamında krem gibi dondu / pütürleşti
+                  </button>
+                  <button
+                    onClick={() => { setQCrystallization('sugar'); setShowSensoryResult(true); }}
+                    className={`p-3 text-left text-xs rounded-xl border font-body transition-all ${
+                      qCrystallization === 'sugar' ? 'bg-primary/10 border-primary text-primary font-bold' : 'bg-[#111827] border-gray-800 text-gray-400'
+                    }`}
+                  >
+                    ❄️ Kavanozun dibinde toz şeker gibi çökelme yaptı
+                  </button>
+                  <button
+                    onClick={() => { setQCrystallization('liquid'); setShowSensoryResult(true); }}
+                    className={`p-3 text-left text-xs rounded-xl border font-body transition-all ${
+                      qCrystallization === 'liquid' ? 'bg-primary/10 border-primary text-primary font-bold' : 'bg-[#111827] border-gray-800 text-gray-400'
+                    }`}
+                  >
+                    💧 Aylardır cam gibi dümdüz, akışkan ve berrak kaldı
                   </button>
                 </div>
               </div>
+
+              {/* Question 2 */}
+              <div className="space-y-2">
+                <label className="block text-xs font-heading font-black text-gray-300 uppercase tracking-wide">
+                  2. Kaşıktan Akışkanlık / Süzülme Yapısı Nasıl?
+                </label>
+                <div className="grid grid-cols-1 gap-2">
+                  <button
+                    onClick={() => { setQFlow('stretch'); setShowSensoryResult(true); }}
+                    className={`p-3 text-left text-xs rounded-xl border font-body transition-all ${
+                      qFlow === 'stretch' ? 'bg-primary/10 border-primary text-primary font-bold' : 'bg-[#111827] border-gray-800 text-gray-400'
+                    }`}
+                  >
+                    📏 Kesintisiz, ince bir ip gibi uzayarak süzülüyor
+                  </button>
+                  <button
+                    onClick={() => { setQFlow('drop'); setShowSensoryResult(true); }}
+                    className={`p-3 text-left text-xs rounded-xl border font-body transition-all ${
+                      qFlow === 'drop' ? 'bg-primary/10 border-primary text-primary font-bold' : 'bg-[#111827] border-gray-800 text-gray-400'
+                    }`}
+                  >
+                    💧 Hemen kesilip damla damla koparak düşüyor
+                  </button>
+                </div>
+              </div>
+
+              {/* Question 3 */}
+              <div className="space-y-2">
+                <label className="block text-xs font-heading font-black text-gray-300 uppercase tracking-wide">
+                  3. Balın Koku ve Yayla Çiçek Aroması Nasıl?
+                </label>
+                <div className="grid grid-cols-1 gap-2">
+                  <button
+                    onClick={() => { setQSmell('sharp'); setShowSensoryResult(true); }}
+                    className={`p-3 text-left text-xs rounded-xl border font-body transition-all ${
+                      qSmell === 'sharp' ? 'bg-primary/10 border-primary text-primary font-bold' : 'bg-[#111827] border-gray-800 text-gray-400'
+                    }`}
+                  >
+                    🌸 Genzi hafif yakan, buram buram doğal bitki kokusu var
+                  </button>
+                  <button
+                    onClick={() => { setQSmell('perfume'); setShowSensoryResult(true); }}
+                    className={`p-3 text-left text-xs rounded-xl border font-body transition-all ${
+                      qSmell === 'perfume' ? 'bg-primary/10 border-primary text-primary font-bold' : 'bg-[#111827] border-gray-800 text-gray-400'
+                    }`}
+                  >
+                    🍭 Aşırı parfümlü, karamelize veya yapay bir meyve şekeri kokusu var
+                  </button>
+                  <button
+                    onClick={() => { setQSmell('none'); setShowSensoryResult(true); }}
+                    className={`p-3 text-left text-xs rounded-xl border font-body transition-all ${
+                      qSmell === 'none' ? 'bg-primary/10 border-primary text-primary font-bold' : 'bg-[#111827] border-gray-800 text-gray-400'
+                    }`}
+                  >
+                    💨 Neredeyse hiçbir kokusu veya aroması yok, nötr tat
+                  </button>
+                </div>
+              </div>
+
+              {/* Question 4 */}
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <label className="block text-xs font-heading font-black text-gray-300 uppercase tracking-wide">
+                    4. Ilık Su Testi Sonucu Nedir?
+                  </label>
+                  <span className="text-[9px] bg-primary/20 text-primary border border-primary/20 px-2 py-0.5 rounded-full font-bold">Evde Yapın</span>
+                </div>
+                <p className="text-[10px] text-gray-500 font-body leading-relaxed mb-2">
+                  (Bir bardak ılık suya 1 tatlı kaşığı bal bırakın ve izleyin)
+                </p>
+                <div className="grid grid-cols-1 gap-2">
+                  <button
+                    onClick={() => { setQWaterTest('solid'); setShowSensoryResult(true); }}
+                    className={`p-3 text-left text-xs rounded-xl border font-body transition-all ${
+                      qWaterTest === 'solid' ? 'bg-primary/10 border-primary text-primary font-bold' : 'bg-[#111827] border-gray-800 text-gray-400'
+                    }`}
+                  >
+                    👇 Suya düşer düşmez erimedi, bardağın dibinde bütün halinde yığıldı
+                  </button>
+                  <button
+                    onClick={() => { setQWaterTest('dissolve'); setShowSensoryResult(true); }}
+                    className={`p-3 text-left text-xs rounded-xl border font-body transition-all ${
+                      qWaterTest === 'dissolve' ? 'bg-primary/10 border-primary text-primary font-bold' : 'bg-[#111827] border-gray-800 text-gray-400'
+                    }`}
+                  >
+                    🫧 Suya düşer düşmez hemen çözündü ve suya karışarak dağıldı
+                  </button>
+                </div>
+              </div>
+
             </div>
 
-            {/* Analysis Result Card */}
-            <div className="lg:col-span-7 space-y-6">
-              {showAnalysisResult ? (
+            {/* Output Findings panel */}
+            <div className="lg:col-span-6 space-y-6">
+              {showSensoryResult && sensoryResult ? (
                 <div className="bg-slate-900/60 border border-gray-850 p-6 rounded-3xl space-y-6 relative overflow-hidden">
                   
                   {/* Verdict Badge */}
-                  <div className={`p-4 rounded-2xl border text-center font-heading text-xs tracking-wider uppercase ${analysisInfo.verdictColor}`}>
-                    {analysisInfo.verdict}
+                  <div className={`p-4 rounded-2xl border text-center font-heading text-xs tracking-wider uppercase ${sensoryResult.verdictColor}`}>
+                    {sensoryResult.verdict}
                   </div>
 
-                  {/* Trust Score bar */}
+                  {/* Guess trust probability */}
                   <div className="space-y-2">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-gray-400 font-bold uppercase tracking-wider">Doğallık & Saflık Skoru</span>
+                      <span className="text-gray-400 font-bold uppercase tracking-wider">Doğallık Olasılık İndeksi</span>
                       <span className={`font-black text-sm ${
-                        analysisInfo.finalScore >= 85 ? 'text-emerald-400' : analysisInfo.finalScore >= 50 ? 'text-amber-400' : 'text-rose-500'
-                      }`}>{analysisInfo.finalScore} / 100</span>
+                        sensoryResult.score >= 80 ? 'text-emerald-400' : sensoryResult.score >= 50 ? 'text-amber-400' : 'text-rose-500'
+                      }`}>{sensoryResult.score}%</span>
                     </div>
-                    <div className="w-full h-3 bg-gray-850 rounded-full overflow-hidden">
+                    <div className="w-full h-2.5 bg-gray-850 rounded-full overflow-hidden">
                       <div 
                         className={`h-full transition-all duration-500 ${
-                          analysisInfo.finalScore >= 85 ? 'bg-emerald-500' : analysisInfo.finalScore >= 50 ? 'bg-amber-500' : 'bg-rose-500'
+                          sensoryResult.score >= 80 ? 'bg-emerald-500' : sensoryResult.score >= 50 ? 'bg-amber-500' : 'bg-rose-500'
                         }`}
-                        style={{ width: `${analysisInfo.finalScore}%` }}
+                        style={{ width: `${sensoryResult.score}%` }}
                       ></div>
                     </div>
                   </div>
 
-                  {/* Bullet analysis logs */}
+                  {/* Findings breakdown */}
                   <div className="space-y-3">
-                    <h4 className="text-[10px] font-heading font-black text-gray-500 uppercase tracking-widest">
-                      Laboratuvar Bulguları:
+                    <h4 className="text-[10px] font-heading font-black text-gray-500 uppercase tracking-widest flex items-center gap-1">
+                      <Eye className="w-4 h-4 text-primary" /> Duyusal Bulgularınız:
                     </h4>
-                    <div className="space-y-2 max-h-48 overflow-y-auto pr-2">
-                      {analysisInfo.reports.map((r, idx) => (
+                    
+                    <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
+                      {sensoryResult.findings.map((f, idx) => (
                         <div 
                           key={idx} 
-                          className={`flex items-start gap-2.5 p-3 rounded-xl text-xs font-body leading-relaxed ${
-                            r.type === 'error' ? 'bg-rose-500/5 text-rose-300 border border-rose-500/10' :
-                            r.type === 'warning' ? 'bg-amber-500/5 text-amber-300 border border-amber-500/10' :
-                            'bg-emerald-500/5 text-emerald-300 border border-emerald-500/10'
-                          }`}
+                          className="flex items-start gap-2.5 p-3 bg-black/30 border border-gray-800 rounded-xl text-xs text-gray-300 font-body leading-relaxed"
                         >
-                          {r.type === 'error' ? (
-                            <XCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                          ) : r.type === 'warning' ? (
-                            <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-                          ) : (
-                            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                          )}
-                          <span>{r.message}</span>
+                          <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0 mt-2"></span>
+                          <span>{f}</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  {/* Arı Hayat Guarantee values table side-by-side */}
-                  <div className="border-t border-gray-800/80 pt-4 space-y-3">
-                    <h4 className="text-[10px] font-heading font-black text-primary uppercase tracking-widest">
-                      ARI HAYAT GARANTİLİ DEĞERLER KIYAS TABLOSU
-                    </h4>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      <div className="bg-[#111827] border border-gray-850 p-3 rounded-xl text-center">
-                        <div className="text-[9px] text-gray-500 font-bold uppercase">PROLİN</div>
-                        <div className="text-xs text-white font-black">550+ mg/kg</div>
-                        <div className="text-[8px] text-emerald-400 mt-0.5">Kodeksin 3 Katı</div>
-                      </div>
-                      <div className="bg-[#111827] border border-gray-850 p-3 rounded-xl text-center">
-                        <div className="text-[9px] text-gray-500 font-bold uppercase">DİASTAZ</div>
-                        <div className="text-xs text-white font-black">12+ Sayısı</div>
-                        <div className="text-[8px] text-emerald-400 mt-0.5">Enzimler Canlı</div>
-                      </div>
-                      <div className="bg-[#111827] border border-gray-850 p-3 rounded-xl text-center">
-                        <div className="text-[9px] text-gray-500 font-bold uppercase">NEM ORANI</div>
-                        <div className="text-xs text-white font-black">%17.2</div>
-                        <div className="text-[8px] text-emerald-400 mt-0.5">Fermente Olmaz</div>
-                      </div>
-                      <div className="bg-[#111827] border border-gray-850 p-3 rounded-xl text-center">
-                        <div className="text-[9px] text-gray-500 font-bold uppercase">GLİKOZ / C4</div>
-                        <div className="text-xs text-white font-black">%0 (YOK)</div>
-                        <div className="text-[8px] text-emerald-400 mt-0.5">%100 Şekersiz</div>
-                      </div>
+                  {/* Scientific disclaimer */}
+                  <div className="p-4 bg-primary/5 border border-primary/20 rounded-2xl space-y-1.5">
+                    <div className="text-[9px] font-heading font-black text-primary uppercase tracking-wider flex items-center gap-1">
+                      <Info className="w-3.5 h-3.5" /> BİLİMSEL UYARI
                     </div>
+                    <p className="text-[10px] text-gray-400 font-body leading-relaxed">
+                      Duyusal testler bal hakkında ön bilgi verse de sahtecilik yöntemleri çok geliştiği için nihai kanıt **sadece laboratuvar analizi** ile mümkündür. Satın alacağınız balın mutlaka barkodlu akredite tahlil raporunu talep edin.
+                    </p>
                   </div>
 
                 </div>
@@ -494,15 +450,85 @@ export default function GercekBalRehberiPage() {
                 <div className="h-full bg-slate-900/20 border border-dashed border-gray-800 rounded-3xl p-12 flex flex-col items-center justify-center text-center space-y-4">
                   <FlaskConical className="w-10 h-10 text-gray-600 animate-pulse" />
                   <div className="space-y-1">
-                    <h4 className="text-sm font-heading font-black text-gray-400 uppercase">Detektör Hazır</h4>
-                    <p className="text-xs text-gray-550 font-body max-w-sm">
-                      Sol paneldeki analiz değerlerini değiştirerek veya &ldquo;Gıda Güvenlik Raporu Oluştur&rdquo; butonuna basarak raporu inceleyebilirsiniz.
+                    <h4 className="text-sm font-heading font-black text-gray-400 uppercase">Test Hazır</h4>
+                    <p className="text-xs text-gray-550 font-body max-w-xs">
+                      Sol paneldeki 4 soruyu cevaplayarak evdeki balınızın doğallık şüphesini test edebilirsiniz.
                     </p>
                   </div>
                 </div>
               )}
             </div>
 
+          </div>
+        </div>
+
+        {/* HEALTH PORTAL: Apiterapi & GETAT Guidance Panel */}
+        <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-[#111827] border border-amber-500/20 rounded-[2.5rem] p-8 md:p-12 space-y-8 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
+          
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-6 border-b border-gray-800">
+            <div className="space-y-2">
+              <span className="text-[9px] bg-red-500/10 border border-red-550/30 text-rose-400 px-3 py-1 rounded-full font-black tracking-widest uppercase">
+                T.C. SAĞLIK BAKANLIĞI MEVZUATI
+              </span>
+              <h2 className="text-2xl md:text-3xl font-heading font-black text-white uppercase tracking-tight flex items-center gap-2">
+                <Award className="w-8 h-8 text-primary" /> APİTERAPİ & GETAT REHBERİ
+              </h2>
+            </div>
+            <p className="text-xs text-gray-400 font-body max-w-sm leading-relaxed">
+              Arı ürünlerinin doktor gözetiminde tamamlayıcı tedavi amaçlı kullanımı, ülkemizde resmi GETAT (Geleneksel ve Tamamlayıcı Tıp) yönetmelikleri ile korunmaktadır.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <div className="bg-black/20 border border-gray-850 p-6 rounded-3xl space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-primary flex items-center justify-center">
+                <FlaskConical className="w-5 h-5" />
+              </div>
+              <h4 className="text-xs font-heading font-black text-white uppercase tracking-wide">Ham Bal Şifası</h4>
+              <p className="text-[11px] text-gray-450 leading-relaxed font-body">
+                Pastörize edilmeyen ham bal; zengin enzim ve antioksidanlar sayesinde yara iyileşmesi, boğaz tahrişi ve üst solunum yolları yatıştırılmasında GETAT hekimlerince tercih edilir.
+              </p>
+            </div>
+
+            <div className="bg-black/20 border border-gray-850 p-6 rounded-3xl space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <h4 className="text-xs font-heading font-black text-white uppercase tracking-wide">Propolis Antibiyotiği</h4>
+              <p className="text-[11px] text-gray-450 leading-relaxed font-body">
+                Arıların kovanı mikroplardan korumak için ürettiği propolis, en güçlü doğal antiviral ve antibakteriyel ajandır. Bağışıklık modülasyonu tedavisinde başroldedir.
+              </p>
+            </div>
+
+            <div className="bg-black/20 border border-gray-850 p-6 rounded-3xl space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-pink-500/10 text-pink-400 flex items-center justify-center">
+                <Baby className="w-5 h-5" />
+              </div>
+              <h4 className="text-xs font-heading font-black text-white uppercase tracking-wide">Arı Sütü Yenileyici</h4>
+              <p className="text-[11px] text-gray-450 leading-relaxed font-body">
+                Sadece kraliçe arının beslendiği arı sütü; protein, aminoasit ve HDA bileşenleriyle hücresel büyüme, zihinsel gelişim ve enerji seviyelerinin desteklenmesinde etkilidir.
+              </p>
+            </div>
+
+            <div className="bg-black/20 border border-gray-850 p-6 rounded-3xl space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
+                <Activity className="w-5 h-5" />
+              </div>
+              <h4 className="text-xs font-heading font-black text-white uppercase tracking-wide">Arı Ekmeği (Perga)</h4>
+              <p className="text-[11px] text-gray-450 leading-relaxed font-body">
+                Polenin arı tarafından mayalanmış halidir. Dış zarı kırıldığı için sindirimi son derece kolaydır. Sindirim sistemi mikrobiyotasını koruyan probiyotik bombasıdır.
+              </p>
+            </div>
+
+          </div>
+
+          <div className="p-5 bg-rose-500/5 border border-rose-500/20 rounded-3xl flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 text-rose-450 shrink-0 animate-pulse" />
+            <span className="text-[11px] text-rose-300 leading-relaxed font-body">
+              <strong>ÖNEMLİ UYARI:</strong> Apiterapi uygulamaları doktor teşhisi ve yönlendirmesiyle yapılmalıdır. Ayrıca 1 yaşından küçük çocukların sindirim sistemi gelişmediği için botulizm riski nedeniyle bal ve arı ürünleri kesinlikle tükettirilmemelidir.
+            </span>
           </div>
         </div>
 

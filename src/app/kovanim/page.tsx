@@ -4,7 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   Search, Thermometer, Droplets, Tv, Award, Navigation, 
   Loader2, Lock, ShieldCheck, Heart, Sparkles, MapPin, Compass,
-  CheckCircle2, AlertTriangle, ArrowRight
+  CheckCircle2, AlertTriangle, ArrowRight, Download, Share2, Calendar, Sprout, Users,
+  Bell, Camera
 } from 'lucide-react';
 import { HiveAnatomyExplorer } from '@/components/kovan/HiveAnatomyExplorer';
 
@@ -14,12 +15,26 @@ export default function KovanPortalPage() {
   const [error, setError] = useState('');
   const [adoption, setAdoption] = useState<any>(null);
   
-  // Co-Adopt Calculator States (Logged out)
-  const [familyCount, setFamilyCount] = useState(4);
+  // Support Level States (Logged out)
+  // 4: Çevre Dostu (%25), 2: Doğa Ortağı (%50), 1: Baş Hami (%100)
+  const [supportLevel, setSupportLevel] = useState(4); 
   const [honeyNeed, setHoneyNeed] = useState(12);
 
   // Simulation views
   const [viewMode, setViewMode] = useState<'simulation' | 'video'>('simulation');
+  
+  // Certificate states (Logged in)
+  const [certName, setCertName] = useState('');
+  const [certMessage, setCertMessage] = useState('');
+
+  // SMS Notification states
+  const [smsPhone, setSmsPhone] = useState('');
+  const [smsRegistered, setSmsRegistered] = useState(false);
+  const [smsTopics, setSmsTopics] = useState({
+    weather: true,
+    activity: false,
+    harvest: true
+  });
   
   // Simulated statistics
   const [flowersVisited, setFlowersVisited] = useState(0);
@@ -30,20 +45,18 @@ export default function KovanPortalPage() {
   const flightCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const hiveCamCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // 1. Handle Verification Login
-  const handleVerify = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!code.trim()) return;
-
+  // 1. Verify helper
+  const verifyCode = async (verifyCodeStr: string) => {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch(`/api/adoptions/verify?code=${encodeURIComponent(code.trim())}`);
+      const res = await fetch(`/api/adoptions/verify?code=${encodeURIComponent(verifyCodeStr.trim().toUpperCase())}`);
       const data = await res.json();
       if (res.ok && data.success) {
         setAdoption(data.data);
+        setCertName(data.data.ownerName || 'Doğa Sever');
         // Save to local storage for quick access next time
-        localStorage.setItem('ari_hayat_adoption_code', code.trim().toUpperCase());
+        localStorage.setItem('ari_hayat_adoption_code', verifyCodeStr.trim().toUpperCase());
       } else {
         setError(data.error || 'Geçersiz kod.');
       }
@@ -54,11 +67,18 @@ export default function KovanPortalPage() {
     }
   };
 
-  // Auto-fill from localStorage on load
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!code.trim()) return;
+    await verifyCode(code);
+  };
+
+  // Auto-fill and login from localStorage on load
   useEffect(() => {
     const savedCode = localStorage.getItem('ari_hayat_adoption_code');
     if (savedCode) {
       setCode(savedCode);
+      verifyCode(savedCode);
     }
   }, []);
 
@@ -75,8 +95,10 @@ export default function KovanPortalPage() {
 
     // Resize handler
     const handleResize = () => {
-      width = canvas.width = canvas.parentElement?.clientWidth || 800;
-      height = canvas.height = 300;
+      if (canvas && canvas.parentElement) {
+        width = canvas.width = canvas.parentElement.clientWidth || 800;
+      }
+      height = 300;
     };
     window.addEventListener('resize', handleResize);
 
@@ -381,6 +403,13 @@ export default function KovanPortalPage() {
     };
   }, [adoption, viewMode]);
 
+  // Handle mock certificate sharing
+  const handleShareCert = (e: React.FormEvent) => {
+    e.preventDefault();
+    setCertMessage("Sertifikanız hazırlandı! Ekran görüntüsünü alıp hemen Instagram / WhatsApp durumunuzda paylaşabilirsiniz.");
+    setTimeout(() => setCertMessage(""), 6000);
+  };
+
   return (
     <div className="min-h-screen bg-[#0B0F19] text-gray-100 py-12 px-4 md:px-8">
       {/* 1. Login Gate & Cooperative Calculator */}
@@ -395,13 +424,13 @@ export default function KovanPortalPage() {
               </div>
               <h1 className="text-2xl font-heading font-black text-white uppercase tracking-tight">Kovan Portalı Girişi</h1>
               <p className="text-xs text-gray-400 mt-1 leading-relaxed">
-                Kovanınızın anlık durumunu, uçuş simülasyonunu ve laboratuvar değerlerini canlı izlemek için evlat edinme kodunuzu girin.
+                Hamilik yaptığınız kovanın anlık durumunu, uçuş simülasyonunu ve laboratuvar değerlerini canlı izlemek için doğa koruma kodunuzu girin.
               </p>
             </div>
 
             <form onSubmit={handleVerify} className="space-y-4">
               <div>
-                <label className="block text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1.5 font-heading">Kovan Evlat Edinme Kodu</label>
+                <label className="block text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1.5 font-heading">Kovan Koruma / Hamilik Kodu</label>
                 <div className="relative">
                   <input 
                     type="text" 
@@ -427,89 +456,85 @@ export default function KovanPortalPage() {
             </form>
           </div>
 
-          {/* Right Column: Birlikte Kovanım Info & Savings Calculator */}
+          {/* Right Column: İmece Kovanı Info & Ecological Calculator */}
           <div className="lg:col-span-7 p-8 bg-[#111827]/40 border border-amber-500/10 rounded-3xl shadow-2xl backdrop-blur-xl space-y-6">
             <span className="text-[9px] bg-amber-500/10 border border-amber-500/30 text-primary px-3 py-1 rounded-full font-black tracking-widest uppercase">
-              ENFLASYON GÜVENCESİ & ORTAK KOVAN MODELİ
+              ANADOLU İMECE KÜLTÜRÜ & KOLEKTİF DOĞA HAREKETİ
             </span>
             <div className="space-y-2">
               <h2 className="text-xl md:text-2xl font-heading font-black text-white uppercase tracking-tight">
-                BİRLİKTE KOVANIM İLE ENFLASYONA MEYDAN OKUYUN
+                İMECE KOVANI İLE DOĞAYA SAHİP ÇIKIN
               </h2>
               <p className="text-xs text-gray-400 font-body leading-relaxed">
-                Türkiye'deki gıda enflasyonu döneminde saf bala makul fiyatla ulaşmanın en yenilikçi yolu. Tek bir kovanın yıllık masrafını 2, 3 veya 4 aile olarak paylaşın. Hasat sonunda elde edilen saf süzme balları doğrudan kovanınızdan aracı maliyeti olmadan eşit olarak bölüşün!
+                Anadolu'nun kadim imece kültürünü sürdürülebilir arıcılıkla buluşturuyoruz. Tek bir kovanın korunması ve yayla florasında hayat bulması için doğa koruyucuları olarak bir araya gelin. Sezon sonunda arılarınızın ürettiği saf ve sınırlı hasadı hamilik kademenize göre sevgiyle alın!
               </p>
             </div>
 
-            {/* Savings Calculator Widget */}
+            {/* Ecological Calculator Widget */}
             <div className="bg-black/20 p-5 rounded-2xl border border-gray-850 space-y-5">
               <h3 className="text-xs font-heading font-black text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-primary animate-pulse" /> Tasarruf ve Masraf Paylaşım Hesaplayıcısı
+                <Sprout className="w-4 h-4 text-primary animate-pulse" /> İmece Kovanı Katkı ve Ekolojik Etki Simülatörü
               </h3>
 
               <div className="space-y-4">
-                {/* Family Split selector */}
+                {/* Support Level selector */}
                 <div className="space-y-2">
                   <label className="block text-[10px] text-gray-500 font-bold uppercase tracking-wider font-heading">
-                    Paylaşacak Aile Sayısı
+                    Kovan Hamilik ve Katkı Derecesi
                   </label>
                   <div className="grid grid-cols-3 gap-2">
-                    {[2, 3, 4].map(num => (
+                    {[
+                      { label: 'Flora Hamisi', value: 4 },
+                      { label: 'Biyoçeşitlilik Hamisi', value: 2 },
+                      { label: 'Kovan Baş Hamisi', value: 1 }
+                    ].map(item => (
                       <button
-                        key={num}
+                        key={item.value}
                         type="button"
-                        onClick={() => setFamilyCount(num)}
+                        onClick={() => setSupportLevel(item.value)}
                         className={`py-2 px-3 text-xs font-heading font-black uppercase rounded-lg border transition-all ${
-                          familyCount === num 
+                          supportLevel === item.value 
                             ? 'bg-primary/20 border-primary text-primary' 
                             : 'bg-gray-900 border-gray-800 text-gray-400 hover:border-gray-700'
                         }`}
                       >
-                        {num} Aile
+                        {item.label}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                {/* Honey need range slider */}
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs font-heading">
-                    <span className="text-gray-450 font-bold uppercase">Yıllık Aile Bal İhtiyacınız</span>
-                    <span className="text-primary font-black">{honeyNeed} kg</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="4"
-                    max="24"
-                    step="2"
-                    value={honeyNeed}
-                    onChange={(e) => setHoneyNeed(Number(e.target.value))}
-                    className="w-full h-1.5 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-primary"
-                  />
-                  <div className="flex justify-between text-[8px] text-gray-500">
-                    <span>4 kg (Temel Tüketim)</span>
-                    <span>12 kg (Standart Çekirdek Aile)</span>
-                    <span>24 kg (Geniş Aile / Kışlık)</span>
-                  </div>
+                {/* Tier Description */}
+                <div className="text-center text-[10px] text-gray-400 italic bg-gray-900/30 p-2.5 rounded-xl border border-gray-800/40">
+                  {supportLevel === 4 && "🌸 Flora Hamisi olarak yayladaki endemik kır çiçeklerinin tozlaşmasını ve Kafkas arılarının üremesini desteklersiniz."}
+                  {supportLevel === 2 && "🐝 Biyoçeşitlilik Hamisi olarak arıcılık ekosisteminin korunmasını güçlendirir ve habitat zenginliğine büyük katkı sunarsınız."}
+                  {supportLevel === 1 && "👑 Kovan Baş Hamisi olarak kovanın tüm bakım, arıcılık ve koruma sorumluluğunu üstlenerek doğada devasa bir iz bırakırsınız."}
                 </div>
 
-                {/* Savings output display */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-gray-800/80">
-                  <div className="bg-[#111827] p-3 rounded-xl border border-gray-850">
-                    <div className="text-[8px] text-gray-500 font-bold uppercase">Market Fiyatı (1 Kg)</div>
-                    <div className="text-xs text-white font-bold mt-0.5">480 TL</div>
-                    <div className="text-[8px] text-gray-500 font-body">Analizli Doğal Bal</div>
+                {/* Ecological outputs display */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-gray-800/80">
+                  <div className="bg-[#111827] p-3 rounded-xl border border-gray-850 text-center">
+                    <div className="text-[8px] text-gray-500 font-bold uppercase">Yaşatılan Arı</div>
+                    <div className="text-sm text-white font-heading font-black mt-1">~{Math.round(48000 / supportLevel).toLocaleString('tr-TR')}</div>
+                    <div className="text-[7px] text-gray-500 font-body">Kafkas Arı Irkı</div>
                   </div>
-                  <div className="bg-[#111827] p-3 rounded-xl border border-gray-850">
-                    <div className="text-[8px] text-primary font-bold uppercase">Kovan Paylaşım Fiyatı</div>
-                    <div className="text-xs text-primary font-black mt-0.5">{Math.round(480 / (familyCount * 0.7))} TL / Kg</div>
-                    <div className="text-[8px] text-emerald-400 font-body">Direkt Kovan Hasadı</div>
+                  
+                  <div className="bg-[#111827] p-3 rounded-xl border border-gray-850 text-center">
+                    <div className="text-[8px] text-primary font-bold uppercase">Tozlaşma Katkısı</div>
+                    <div className="text-sm text-primary font-heading font-black mt-1">~{Math.round(1200000 / supportLevel).toLocaleString('tr-TR')}</div>
+                    <div className="text-[7px] text-primary/70 font-body">Çiçek Tozlaşması / Yıl</div>
                   </div>
-                  <div className="bg-emerald-500/10 p-3 rounded-xl border border-emerald-500/20 text-center flex flex-col justify-center">
-                    <div className="text-[9px] text-emerald-400 font-black uppercase">Yıllık Toplam Tasarruf</div>
-                    <div className="text-sm text-emerald-400 font-extrabold mt-0.5">
-                      ~{Math.round((480 - 480 / (familyCount * 0.7)) * honeyNeed)} TL
-                    </div>
+
+                  <div className="bg-[#111827] p-3 rounded-xl border border-gray-850 text-center">
+                    <div className="text-[8px] text-gray-500 font-bold uppercase">Destek Alanı</div>
+                    <div className="text-sm text-white font-heading font-black mt-1">~{Math.round(150 / supportLevel)} m²</div>
+                    <div className="text-[7px] text-gray-500 font-body">Doğal Yayla Florası</div>
+                  </div>
+
+                  <div className="bg-emerald-500/10 p-3 rounded-xl border border-emerald-500/20 text-center">
+                    <div className="text-[8px] text-emerald-400 font-bold uppercase">Hasat Kazanımınız</div>
+                    <div className="text-sm text-emerald-400 font-heading font-black mt-1">~{Math.round(24 / supportLevel)} Kg</div>
+                    <div className="text-[7px] text-emerald-500 font-body">Saf Anzer Yayla Balı</div>
                   </div>
                 </div>
 
@@ -519,11 +544,11 @@ export default function KovanPortalPage() {
             <ul className="space-y-2 text-xs font-body text-gray-400">
               <li className="flex items-start gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span><strong>Fiyat Sabitleme Güvencesi:</strong> Ödemenizi yaptıktan sonra yıl boyu gerçekleşen enflasyon ve fiyat zamlarından etkilenmezsiniz.</span>
+                <span><strong>Ekolojik Koruma Güvencesi:</strong> Katkınızla, Rize Anzer Yaylası'nda kimyasal ilaçlardan uzak, sürdürülebilir doğal arıcılık ve biyoçeşitlilik doğrudan desteklenir.</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span><strong>Ortak Kovan Kamerası & Tahlil:</strong> Kovan paneli üzerinden arılarınızı izler, sıcaklık ve nem durumunu diğer ortaklarınızla birlikte takip edersiniz.</span>
+                <span><strong>İmece Kovan Kamerası & Canlı Takip:</strong> Kovan paneli üzerinden arılarınızın uçuş aktivitesini, sıcaklık ve nem durumunu diğer hamilerle birlikte canlı izlersiniz.</span>
               </li>
             </ul>
           </div>
@@ -548,59 +573,76 @@ export default function KovanPortalPage() {
             <div className="px-5 py-3 bg-primary/5 rounded-2xl border border-primary/10 flex items-center gap-3">
               <Heart className="w-5 h-5 text-primary fill-primary animate-pulse" />
               <div>
-                <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Evlat Edinen Veli</p>
-                <p className="text-xs text-white font-bold">{adoption.ownerName}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Birlikte Kovanım - Cooperative Ownership Panel */}
+                <p className="text-[10px] text-gray-400 uppercase fo          {/* İmece Kovanı - Cooperative Ownership Panel */}
           <div className="bg-[#111827]/40 border border-gray-800 p-6 md:p-8 rounded-3xl backdrop-blur-xl space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-gray-800/80">
               <div>
                 <span className="text-[9px] bg-primary/10 text-primary border border-primary/20 px-2.5 py-0.5 rounded-full font-heading font-black uppercase tracking-wider">
-                  Kovan Durumu: Birlikte Kovanım Ortağı
+                  Kovan Durumu: Kolektif Doğa Hamisi
                 </span>
                 <h3 className="text-lg font-heading font-black text-white uppercase tracking-tight mt-1 flex items-center gap-2">
-                  🛡️ Ortak Kovan Hissedarları (4 Ortak Aile)
+                  🛡️ Kovan Koruma Ekibi ve Ekosistem Halkası
                 </h3>
               </div>
               <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded-xl text-xs font-heading font-black uppercase tracking-wide">
-                Enflasyon Sabitleme Garantisi Aktif ✓
+                Biyoçeşitlilik Hamilik Sözleşmesi Aktif ✓
               </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               
               {/* Visual shared circle (SVG layout representing shares) */}
-              <div className="lg:col-span-4 flex flex-col items-center justify-center space-y-3">
-                <div className="relative w-40 h-40">
-                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#1F2937" strokeWidth="20" />
-                    {/* Share 1 (Ahmet B.) */}
-                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#FBBF24" strokeWidth="20" strokeDasharray="62.8 251.2" strokeDashoffset="0" />
-                    {/* Share 2 (Zeynep T.) */}
-                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#F59E0B" strokeWidth="20" strokeDasharray="62.8 251.2" strokeDashoffset="-62.8" />
-                    {/* Share 3 (Kemal Y.) */}
-                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#D97706" strokeWidth="20" strokeDasharray="62.8 251.2" strokeDashoffset="-125.6" />
-                    {/* Share 4 (Siz - Veli) */}
-                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#B45309" strokeWidth="20" strokeDasharray="62.8 251.2" strokeDashoffset="-188.4" />
+              <div className="lg:col-span-4 flex flex-col items-center justify-center space-y-4">
+                <div className="relative w-44 h-44 flex items-center justify-center bg-black/25 rounded-full border border-gray-800/80 shadow-2xl p-2">
+                  <svg className="w-full h-full" viewBox="0 0 120 120">
+                    <defs>
+                      <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="2" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                      </filter>
+                    </defs>
+                    
+                    {/* Glowing orbits */}
+                    <circle cx="60" cy="60" r="42" fill="none" stroke="#D97706" strokeWidth="0.75" strokeDasharray="4 4" className="opacity-40" />
+                    <circle cx="60" cy="60" r="28" fill="none" stroke="#FBBF24" strokeWidth="0.5" strokeDasharray="2 2" className="opacity-30" />
+                    
+                    {/* Connections */}
+                    <line x1="60" y1="60" x2="60" y2="18" stroke="#F59E0B" strokeWidth="1.5" strokeDasharray="3 3" className="opacity-60" />
+                    <line x1="60" y1="60" x2="102" y2="60" stroke="#FBBF24" strokeWidth="1.5" strokeDasharray="3 3" className="opacity-60" />
+                    <line x1="60" y1="60" x2="60" y2="102" stroke="#F59E0B" strokeWidth="1.5" strokeDasharray="3 3" className="opacity-60" />
+                    <line x1="60" y1="60" x2="18" y2="60" stroke="#B45309" strokeWidth="1.5" strokeDasharray="3 3" className="opacity-60" />
+
+                    {/* Central Golden Honeycomb Cell */}
+                    <polygon points="60,51 68,55 68,65 60,69 52,65 52,55" fill="#FBBF24" filter="url(#glow)" className="animate-pulse" />
+                    <polygon points="60,53 66,56 66,64 60,67 54,64 54,56" fill="#78350F" />
+                    <polygon points="60,55 64,57 64,63 60,65 56,63 56,57" fill="#F59E0B" />
+
+                    {/* Outer Guardian Nodes */}
+                    {/* 1. Ahmet B. (Top) */}
+                    <circle cx="60" cy="18" r="5" fill="#FBBF24" stroke="#78350F" strokeWidth="1.5" />
+                    {/* 2. Zeynep T. (Right) */}
+                    <circle cx="102" cy="60" r="5" fill="#F59E0B" stroke="#78350F" strokeWidth="1.5" />
+                    {/* 3. Kemal Y. (Bottom) */}
+                    <circle cx="60" cy="102" r="5" fill="#D97706" stroke="#78350F" strokeWidth="1.5" />
+                    {/* 4. Siz (Left - Glowing gold) */}
+                    <circle cx="18" cy="60" r="6" fill="#FBBF24" stroke="#FFF" strokeWidth="1" filter="url(#glow)" />
                   </svg>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                    <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">PAYINIZ</span>
-                    <span className="text-xl text-white font-extrabold">%25</span>
-                    <span className="text-[9px] text-primary font-bold">6 Kavanoz</span>
+                  
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+                    <span className="text-[7px] text-gray-500 font-bold uppercase tracking-widest">KORUMA HEDEFİ</span>
+                    <span className="text-[11px] text-white font-extrabold tracking-wider">AKTİF</span>
+                    <span className="text-[9px] text-primary font-bold">6 Kg Saf Bal</span>
                   </div>
                 </div>
-                <p className="text-[10px] text-gray-500 text-center font-body max-w-xs">
-                  Sezonluk kovan toplam hasat tahmini: 24 Kavanoz (Süzme Çiçek Balı)
+                <p className="text-[10px] text-gray-500 text-center font-body max-w-xs leading-relaxed">
+                  Sezonluk kovan toplam hasat tahmini: 24 Kg (Süzme Çiçek Balı)
                 </p>
               </div>
 
               {/* Partners list with shipping status */}
               <div className="lg:col-span-8 space-y-4">
                 <h4 className="text-[10px] font-heading font-black text-gray-400 uppercase tracking-widest">
-                  Kovan Hissedarları ve Dağıtım Durumu:
+                  Ekolojik Koruma Ekibi ve Hasat Dağıtımı:
                 </h4>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -608,17 +650,17 @@ export default function KovanPortalPage() {
                   <div className="bg-[#111827]/60 border border-gray-850 p-4 rounded-2xl flex items-center justify-between">
                     <div>
                       <div className="text-xs text-white font-bold">Ahmet B.</div>
-                      <div className="text-[9px] text-gray-500">Hissedar (İstanbul)</div>
+                      <div className="text-[9px] text-gray-500 font-heading">Yayla Florası Hamisi (İstanbul)</div>
                     </div>
                     <span className="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 rounded-full font-bold uppercase">
-                      Kargolandı (Yolda)
+                      Kargolandı (Ulaştı)
                     </span>
                   </div>
 
                   <div className="bg-[#111827]/60 border border-gray-850 p-4 rounded-2xl flex items-center justify-between">
                     <div>
                       <div className="text-xs text-white font-bold">Zeynep T.</div>
-                      <div className="text-[9px] text-gray-500">Hissedar (Bursa)</div>
+                      <div className="text-[9px] text-gray-500 font-heading">Arı Nesli Hamisi (Bursa)</div>
                     </div>
                     <span className="text-[9px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-0.5 rounded-full font-bold uppercase">
                       Paketlendi
@@ -628,7 +670,7 @@ export default function KovanPortalPage() {
                   <div className="bg-[#111827]/60 border border-gray-850 p-4 rounded-2xl flex items-center justify-between">
                     <div>
                       <div className="text-xs text-white font-bold">Kemal Y.</div>
-                      <div className="text-[9px] text-gray-500">Hissedar (Ankara)</div>
+                      <div className="text-[9px] text-gray-500 font-heading">Biyoçeşitlilik Hamisi (Ankara)</div>
                     </div>
                     <span className="text-[9px] bg-gray-800 text-gray-450 border border-gray-700 px-2 py-0.5 rounded-full font-bold uppercase">
                       Hasat Bekleniyor
@@ -637,8 +679,8 @@ export default function KovanPortalPage() {
 
                   <div className="bg-[#111827]/60 border border-primary/20 p-4 rounded-2xl flex items-center justify-between">
                     <div>
-                      <div className="text-xs text-primary font-black">Siz (Kovan Velisi)</div>
-                      <div className="text-[9px] text-gray-500">Hissedar (İzmir)</div>
+                      <div className="text-xs text-primary font-black">Siz (Baş Hami)</div>
+                      <div className="text-[9px] text-gray-500 font-heading">Kovan Baş Hamisi (İzmir)</div>
                     </div>
                     <span className="text-[9px] bg-gray-800 text-gray-455 border border-gray-700 px-2 py-0.5 rounded-full font-bold uppercase">
                       Hasat Bekleniyor
@@ -687,6 +729,300 @@ export default function KovanPortalPage() {
             </div>
           </div>
 
+          {/* Interactive Certificate Generator & Beekeeper's Seasonal Log */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            {/* Left side: Certificate Generator */}
+            <div className="lg:col-span-7 bg-[#111827]/40 border border-gray-800 p-6 md:p-8 rounded-3xl backdrop-blur-xl flex flex-col justify-between space-y-6">
+              <div>
+                <h3 className="text-sm font-heading font-black text-white uppercase tracking-wider flex items-center gap-2 mb-2">
+                  <Award className="w-4 h-4 text-primary" /> Arı Hamisi Dijital Sertifikası
+                </h3>
+                <p className="text-xs text-gray-400 font-body mb-4">
+                  Kovana olan doğa ortağı katkınızı tescilleyen dijital sertifikanızı adınıza özel düzenleyin ve sosyal medyada paylaşarak farkındalığı artırın.
+                </p>
+
+                {/* Name Input */}
+                <form onSubmit={handleShareCert} className="flex gap-2 mb-6">
+                  <input
+                    type="text"
+                    value={certName}
+                    onChange={(e) => setCertName(e.target.value)}
+                    placeholder="Sertifikadaki İsim..."
+                    className="flex-1 px-4 py-2.5 bg-gray-900/60 border border-gray-850 rounded-xl text-white text-xs outline-none focus:border-primary transition-colors font-heading font-bold"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className="px-4 py-2.5 bg-gradient-to-r from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-secondary text-[11px] font-heading font-black uppercase rounded-xl transition-all shadow-md flex items-center gap-1.5"
+                  >
+                    <Share2 className="w-3.5 h-3.5" /> Sertifikayı Güncelle
+                  </button>
+                </form>
+
+                {/* Certificate Display Mockup */}
+                <div className="relative aspect-[1.414/1] w-full bg-gradient-to-b from-[#1C1713] to-[#0A0908] border-[8px] border-double border-amber-600/30 rounded-2xl p-6 flex flex-col justify-between items-center text-center shadow-2xl select-none overflow-hidden">
+                  
+                  {/* Decorative corner borders */}
+                  <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-amber-500/40"></div>
+                  <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-amber-500/40"></div>
+                  <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-amber-500/40"></div>
+                  <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-amber-500/40"></div>
+                  
+                  {/* Faint Honeycomb Watermark */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.02]">
+                    <svg className="w-60 h-60 text-primary" viewBox="0 0 100 100" fill="currentColor">
+                      <polygon points="50,1 95,25 95,75 50,99 5,75 5,25" />
+                    </svg>
+                  </div>
+
+                  {/* Cert Header */}
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-center gap-1">
+                      <Sparkles className="w-3 h-3 text-primary" />
+                      <span className="text-[7px] text-primary uppercase font-bold tracking-widest font-heading">ARI HAYAT DOĞAL HAMİLİK HAREKETİ</span>
+                    </div>
+                    <h4 className="text-sm md:text-base font-heading font-black text-amber-500 uppercase tracking-wider">DOĞA DOSTU ARI HAMİSİ SERTİFİKASI</h4>
+                  </div>
+
+                  {/* Cert Body */}
+                  <div className="my-2 space-y-2">
+                    <p className="text-[8px] md:text-[9px] text-gray-400 italic">Bu belge, sürdürülebilir doğal arıcılığı desteklemek ve biyoçeşitli yayla florasını korumak amacıyla</p>
+                    <p className="text-base md:text-lg font-heading font-black text-white tracking-wide border-b border-amber-500/20 pb-1 px-4 inline-block">{certName || 'Doğa Dostu Koruyucu'}</p>
+                    <p className="text-[8px] md:text-[9px] text-gray-300 font-body leading-relaxed max-w-sm mx-auto">
+                      adına tescil edilmiştir. Rize Anzer Yaylası'nda yer alan <strong>{adoption.hive.name}</strong> kodlu İmece Kovanı'nı sahiplenerek, binlerce kır çiçeğinin tozlaşmasına ve canlı arı neslinin yaşatılmasına katkıda bulunmuştur. Doğa adına şükranlarimizi sunarız.
+                    </p>
+                  </div>
+
+                  {/* Cert Footer */}
+                  <div className="w-full flex justify-between items-end border-t border-gray-850 pt-2 text-[7px] md:text-[8px] text-gray-500">
+                    <div className="text-left">
+                      <div>Tarih: {new Date(adoption.startDate).toLocaleDateString('tr-TR')}</div>
+                      <div>Kod: {adoption.code}-CERT</div>
+                    </div>
+                    <div className="relative flex items-center justify-center w-10 h-10 border border-amber-500/30 rounded-full bg-amber-500/5">
+                      <Award className="w-5 h-5 text-amber-500" />
+                    </div>
+                    <div className="text-right">
+                      <div className="italic font-serif text-gray-300 font-bold">Ömer Asaf Efendi</div>
+                      <div>Arı Hayat Baş Arıcısı</div>
+                    </div>
+                  </div>
+
+                </div>
+
+                {certMessage && (
+                  <p className="text-[10px] text-amber-400 font-bold text-center mt-3 animate-pulse">{certMessage}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Right side: Beekeeper's Seasonal Log */}
+            <div className="lg:col-span-5 bg-[#111827]/40 border border-gray-800 p-6 md:p-8 rounded-3xl backdrop-blur-xl flex flex-col justify-between">
+              <div>
+                <h3 className="text-sm font-heading font-black text-white uppercase tracking-wider flex items-center gap-2 mb-2">
+                  <Calendar className="w-4 h-4 text-primary" /> Kovan Günlüğü & Arıcı Notları
+                </h3>
+                <p className="text-xs text-gray-400 font-body mb-6">
+                  Arıcımızın doğrudan yayladan paylaştığı notlarla, kovanınızın sezonluk gelişimini anlık takip edin.
+                </p>
+
+                {/* Vertical Timeline */}
+                <div className="space-y-6 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-800">
+                  
+                  <div className="relative pl-8 group">
+                    <div className="absolute left-1.5 top-1.5 w-3.5 h-3.5 rounded-full bg-gray-800 border border-gray-700 group-hover:border-primary transition-colors flex items-center justify-center">
+                      <div className="w-1.5 h-1.5 rounded-full bg-gray-600"></div>
+                    </div>
+                    <div>
+                      <span className="text-[9px] font-bold text-gray-500 font-heading uppercase">NİSAN 2026</span>
+                      <h4 className="text-xs text-white font-bold mt-0.5">Bahar Uyanışı ve Bakım</h4>
+                      <p className="text-[10px] text-gray-400 mt-1 leading-relaxed">
+                        Kovan sıcaklık kontrolleri yapıldı, kış uykusundan sağlıklı çıkan arılarımıza ilk organik besin desteği verilerek koloni gücü artırıldı.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="relative pl-8 group">
+                    <div className="absolute left-1.5 top-1.5 w-3.5 h-3.5 rounded-full bg-gray-800 border border-gray-700 group-hover:border-primary transition-colors flex items-center justify-center">
+                      <div className="w-1.5 h-1.5 rounded-full bg-gray-600"></div>
+                    </div>
+                    <div>
+                      <span className="text-[9px] font-bold text-gray-500 font-heading uppercase">MAYIS 2026</span>
+                      <h4 className="text-xs text-white font-bold mt-0.5">Yaylaya Yolculuk</h4>
+                      <p className="text-[10px] text-gray-400 mt-1 leading-relaxed">
+                        Kovanımız Rize Anzer Yaylası'ndaki zengin flora alanına başarıyla taşındı. Kestane ve endemik çiçeklerin açmasıyla polen girişi başladı.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="relative pl-8 group">
+                    <div className="absolute left-1.5 top-1.5 w-3.5 h-3.5 rounded-full bg-primary/20 border border-primary flex items-center justify-center">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></div>
+                    </div>
+                    <div>
+                      <span className="text-[9px] font-bold text-primary font-heading uppercase flex items-center gap-1">
+                        HAZİRAN 2026 <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span> canli
+                      </span>
+                      <h4 className="text-xs text-white font-bold mt-0.5">Nektar Akışı ve Bal Sırlama</h4>
+                      <p className="text-[10px] text-gray-450 mt-1 leading-relaxed">
+                        Hava sıcaklıkları ideal seviyede. Arıların yayla florasındaki nektarı kovana taşıma hızı en yüksek seviyeye ulaştı. Petekler sırlanıyor.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="relative pl-8 group">
+                    <div className="absolute left-1.5 top-1.5 w-3.5 h-3.5 rounded-full bg-gray-900 border border-gray-800 flex items-center justify-center">
+                      <div className="w-1.5 h-1.5 rounded-full bg-gray-700"></div>
+                    </div>
+                    <div>
+                      <span className="text-[9px] font-bold text-gray-500 font-heading uppercase">AĞUSTOS 2026 (Planlanan)</span>
+                      <h4 className="text-xs text-gray-500 font-bold mt-0.5">Yayla Hasadı & Analiz Raporlama</h4>
+                      <p className="text-[10px] text-gray-500 mt-1 leading-relaxed">
+                        Bal olgunlaşması tamamlandığında hasat edilecek. Laboratuvar saflık testlerinden sonra koruyucu payları taze olarak adreslere gönderilecek.
+                      </p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Yayla Günlüğü & Canlı Bildirim Bülteni */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Left Column: Kovan Fotoğraf Albümü (lg:col-span-5) */}
+            <div className="lg:col-span-5 bg-[#111827]/40 border border-gray-800 p-6 rounded-3xl backdrop-blur-xl flex flex-col justify-between">
+              <div>
+                <h3 className="text-sm font-heading font-black text-white uppercase tracking-wider flex items-center gap-2 mb-2">
+                  <Camera className="w-4 h-4 text-primary" /> Yayladan Güncel Fotoğraflar (Kovan Albümü)
+                </h3>
+                <p className="text-xs text-gray-400 font-body mb-4">
+                  Arıcımızın Rize Anzer Yaylası'nda çektiği en güncel kovan ve flora fotoğrafları.
+                </p>
+                
+                {/* Visual grid of polaroid-like photos */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-black/40 p-2 rounded-xl border border-gray-850 text-center hover:border-primary/20 transition-all duration-300">
+                    <div className="aspect-[4/3] bg-[#1a2236] rounded-lg overflow-hidden relative flex items-center justify-center">
+                      <svg className="w-full h-full p-4 text-amber-500/20" fill="currentColor" viewBox="0 0 100 100">
+                        <path d="M10,80 Q30,40 50,80 T90,80" fill="none" stroke="currentColor" strokeWidth="2" />
+                        <circle cx="30" cy="55" r="8" fill="#FBBF24" />
+                        <circle cx="70" cy="65" r="10" fill="#EF4444" />
+                      </svg>
+                      <span className="absolute bottom-1 right-2 text-[8px] bg-black/60 px-1.5 py-0.5 rounded text-gray-300">Mayıs 2026</span>
+                    </div>
+                    <p className="text-[9px] text-gray-400 font-bold mt-2">İlk Çiçeklerin Açışı</p>
+                  </div>
+
+                  <div className="bg-black/40 p-2 rounded-xl border border-gray-850 text-center hover:border-primary/20 transition-all duration-300">
+                    <div className="aspect-[4/3] bg-[#1a2236] rounded-lg overflow-hidden relative flex items-center justify-center">
+                      <svg className="w-full h-full p-4 text-primary/20" fill="currentColor" viewBox="0 0 100 100">
+                        <ellipse cx="50" cy="50" rx="15" ry="10" fill="#F59E0B" />
+                        <line x1="45" y1="40" x2="45" y2="60" stroke="#000" strokeWidth="4" />
+                        <line x1="55" y1="40" x2="55" y2="60" stroke="#000" strokeWidth="4" />
+                      </svg>
+                      <span className="absolute bottom-1 right-2 text-[8px] bg-black/60 px-1.5 py-0.5 rounded text-gray-300">Canlı</span>
+                    </div>
+                    <p className="text-[9px] text-gray-400 font-bold mt-2">Nektar Girişi Hızlandı</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-4 pt-4 border-t border-gray-800/60 text-[10px] text-gray-500 italic text-center">
+                * Fotoğraflar yayla şartlarında haftalık olarak güncellenmektedir.
+              </div>
+            </div>
+
+            {/* Right Column: Canlı SMS/WhatsApp Bülteni (lg:col-span-7) */}
+            <div className="lg:col-span-7 bg-[#111827]/40 border border-gray-800 p-6 md:p-8 rounded-3xl backdrop-blur-xl flex flex-col justify-between">
+              <div>
+                <h3 className="text-sm font-heading font-black text-white uppercase tracking-wider flex items-center gap-2 mb-2">
+                  <Bell className="w-4 h-4 text-primary" /> Yayla Canlı Bülten Aboneliği
+                </h3>
+                <p className="text-xs text-gray-400 font-body mb-6">
+                  Telefon numaranızı bırakarak, arıcımızın yayladan göndereceği kovan fotoğraflarını, hava durumu değişimlerini ve bal hasat raporlarını anlık bildirim olarak alın.
+                </p>
+
+                {smsRegistered ? (
+                  <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-6 rounded-2xl text-center space-y-3">
+                    <CheckCircle2 className="w-10 h-10 mx-auto text-emerald-400" />
+                    <h4 className="text-sm font-bold uppercase">Aboneliğiniz Başarıyla Oluşturuldu!</h4>
+                    <p className="text-xs text-gray-300">
+                      Girdiğiniz telefona canlı yayla güncellemeleri SMS ve WhatsApp kanalıyla haftalık olarak ulaştırılacaktır. Ekosistemimize katıldığınız için teşekkürler!
+                    </p>
+                    <button 
+                      type="button" 
+                      onClick={() => setSmsRegistered(false)} 
+                      className="text-[10px] text-primary underline hover:text-amber-500 font-bold animate-pulse"
+                    >
+                      Numarayı Değiştir
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={(e) => { e.preventDefault(); setSmsRegistered(true); }} className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Phone Input */}
+                      <div>
+                        <label className="block text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-1.5 font-heading">GSM Telefon Numaranız</label>
+                        <input 
+                          type="tel"
+                          value={smsPhone}
+                          onChange={(e) => setSmsPhone(e.target.value)}
+                          placeholder="05xx xxx xx xx"
+                          className="w-full px-4 py-2.5 bg-gray-900/60 border border-gray-850 rounded-xl text-white text-xs outline-none focus:border-primary transition-colors font-bold"
+                          required
+                        />
+                      </div>
+                      
+                      {/* Topics Options */}
+                      <div>
+                        <label className="block text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-1.5 font-heading">İlgi Alanlarınız</label>
+                        <div className="space-y-2">
+                          <label className="flex items-center gap-2 text-[10.5px] text-gray-300 cursor-pointer">
+                            <input 
+                              type="checkbox"
+                              checked={smsTopics.weather}
+                              onChange={(e) => setSmsTopics({ ...smsTopics, weather: e.target.checked })}
+                              className="accent-primary rounded"
+                            />
+                            <span>Yayla Hava Durumu & Kar Erimesi</span>
+                          </label>
+                          <label className="flex items-center gap-2 text-[10.5px] text-gray-300 cursor-pointer">
+                            <input 
+                              type="checkbox"
+                              checked={smsTopics.activity}
+                              onChange={(e) => setSmsTopics({ ...smsTopics, activity: e.target.checked })}
+                              className="accent-primary rounded"
+                            />
+                            <span>Kovan Uçuş Aktivitesi & Oğul Alarmları</span>
+                          </label>
+                          <label className="flex items-center gap-2 text-[10.5px] text-gray-300 cursor-pointer">
+                            <input 
+                              type="checkbox"
+                              checked={smsTopics.harvest}
+                              onChange={(e) => setSmsTopics({ ...smsTopics, harvest: e.target.checked })}
+                              className="accent-primary rounded"
+                            />
+                            <span>Hasat ve Analiz Çıktıları</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button 
+                      type="submit" 
+                      className="w-full mt-4 py-3 bg-gradient-to-r from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-secondary font-heading font-black text-xs uppercase rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5"
+                    >
+                      <Bell className="w-3.5 h-3.5" /> Canlı Bildirim Bültenine Kaydol
+                    </button>
+                  </form>
+                )}
+              </div>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Side: Live Feed & Telemetry Visuals */}
             <div className="lg:col-span-1 bg-[#111827]/40 border border-gray-800 p-6 rounded-3xl flex flex-col justify-between">
@@ -724,7 +1060,7 @@ export default function KovanPortalPage() {
                 <h3 className="text-sm font-heading font-black text-white uppercase tracking-wider flex items-center gap-2 mb-4">
                   <Compass className="w-4 h-4 text-primary" /> Arı Uçuş Simülasyonu (Nektar Haritası)
                 </h3>
-                <div className="w-full bg-black rounded-2xl overflow-hidden border border-gray-800 relative shadow-inner">
+                <div className="w-full bg-black rounded-2xl overflow-hidden border border-gray-850 relative shadow-inner">
                   <canvas ref={flightCanvasRef} className="w-full block" />
                   <div className="absolute top-4 right-4 bg-[#111827]/80 backdrop-blur border border-gray-800 p-3 rounded-xl text-[10px] font-bold space-y-1 z-10 text-gray-300">
                     <div className="flex justify-between gap-4">
