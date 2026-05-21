@@ -5,6 +5,7 @@ import {
   Search, Thermometer, Droplets, Tv, Award, Navigation, 
   Loader2, Lock, ShieldCheck, Heart, Sparkles, MapPin, Compass
 } from 'lucide-react';
+import { HiveAnatomyExplorer } from '@/components/kovan/HiveAnatomyExplorer';
 
 export default function KovanPortalPage() {
   const [code, setCode] = useState('');
@@ -547,6 +548,9 @@ export default function KovanPortalPage() {
               </div>
             </div>
           </div>
+
+          {/* Hive Anatomy Explorer */}
+          <HiveAnatomyExplorer />
         </div>
       )}
     </div>

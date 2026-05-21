@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Calendar, User, ArrowLeft, Share2, Bookmark } from 'lucide-react';
+import { BlogVoicePlayer } from '@/components/blog/BlogVoicePlayer';
 
 export default function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
     const resolvedParams = React.use(params);
@@ -19,7 +20,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
             } catch (e) {
                 console.error(e);
             } finally {
-                setLoading(false);
+                resolvedParams && setLoading(false);
             }
         };
         fetchPost();
@@ -95,6 +96,9 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
 
             {/* Content */}
             <div className="container mx-auto px-4 max-w-3xl pb-20">
+                {/* Voice Narration Player */}
+                <BlogVoicePlayer contentHtml={post.content} title={post.title} />
+
                 <div 
                     className="prose prose-sm sm:prose-base max-w-none font-body text-text-muted leading-relaxed
                                prose-headings:font-heading prose-headings:font-bold prose-headings:text-secondary prose-headings:uppercase
