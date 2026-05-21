@@ -158,6 +158,15 @@ export default function Navbar() {
             </div>
           </div>
 
+          <Link href="/gercek-bal" className="font-heading uppercase font-bold text-amber-600 hover:text-primary transition-colors text-sm tracking-wider">
+            Gerçek Bal & Şifa
+          </Link>
+          <Link href="/tarif-sihirbazi" className="font-heading uppercase font-bold text-secondary hover:text-primary transition-colors text-sm tracking-wider">
+            Tarif Sihirbazı
+          </Link>
+          <Link href="/kovanim" className="font-heading uppercase font-bold text-secondary hover:text-primary transition-colors text-sm tracking-wider">
+            Kovan Portalı
+          </Link>
           <Link href="/blog" className="font-heading uppercase font-bold text-secondary hover:text-primary transition-colors text-sm tracking-wider">
             Blog
           </Link>
@@ -252,6 +261,15 @@ export default function Navbar() {
             </div>
           </div>
 
+          <Link href="/gercek-bal" onClick={() => setIsMobileMenuOpen(false)} className="block font-heading uppercase font-bold text-amber-600 hover:text-primary transition-colors py-3 border-b border-gray-50 tracking-wider">
+            Gerçek Bal & Şifa
+          </Link>
+          <Link href="/tarif-sihirbazi" onClick={() => setIsMobileMenuOpen(false)} className="block font-heading uppercase font-bold text-secondary hover:text-primary transition-colors py-3 border-b border-gray-50 tracking-wider">
+            Tarif Sihirbazı
+          </Link>
+          <Link href="/kovanim" onClick={() => setIsMobileMenuOpen(false)} className="block font-heading uppercase font-bold text-secondary hover:text-primary transition-colors py-3 border-b border-gray-50 tracking-wider">
+            Kovan Portalı
+          </Link>
           <Link href="/blog" onClick={() => setIsMobileMenuOpen(false)} className="block font-heading uppercase font-bold text-secondary hover:text-primary transition-colors py-3 border-b border-gray-50 tracking-wider">
             Blog
           </Link>

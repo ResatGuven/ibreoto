@@ -3,7 +3,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Search, Thermometer, Droplets, Tv, Award, Navigation, 
-  Loader2, Lock, ShieldCheck, Heart, Sparkles, MapPin, Compass
+  Loader2, Lock, ShieldCheck, Heart, Sparkles, MapPin, Compass,
+  CheckCircle2, AlertTriangle, ArrowRight
 } from 'lucide-react';
 import { HiveAnatomyExplorer } from '@/components/kovan/HiveAnatomyExplorer';
 
@@ -13,6 +14,10 @@ export default function KovanPortalPage() {
   const [error, setError] = useState('');
   const [adoption, setAdoption] = useState<any>(null);
   
+  // Co-Adopt Calculator States (Logged out)
+  const [familyCount, setFamilyCount] = useState(4);
+  const [honeyNeed, setHoneyNeed] = useState(12);
+
   // Simulation views
   const [viewMode, setViewMode] = useState<'simulation' | 'video'>('simulation');
   
@@ -378,45 +383,151 @@ export default function KovanPortalPage() {
 
   return (
     <div className="min-h-screen bg-[#0B0F19] text-gray-100 py-12 px-4 md:px-8">
-      {/* 1. Login Gate */}
+      {/* 1. Login Gate & Cooperative Calculator */}
       {!adoption ? (
-        <div className="max-w-md mx-auto mt-20 p-8 bg-[#111827]/60 border border-gray-800 rounded-3xl shadow-2xl backdrop-blur-xl">
-          <div className="text-center mb-6">
-            <div className="w-16 h-16 bg-gradient-to-br from-primary to-amber-700 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-primary/20 mb-4 transform hover:rotate-6 transition-transform">
-              <Lock className="w-8 h-8 text-secondary" />
+        <div className="max-w-6xl mx-auto mt-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Left Column: Login Gate */}
+          <div className="lg:col-span-5 p-8 bg-[#111827]/60 border border-gray-800 rounded-3xl shadow-2xl backdrop-blur-xl">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-primary to-amber-700 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-primary/20 mb-4 transform hover:rotate-6 transition-transform">
+                <Lock className="w-8 h-8 text-secondary" />
+              </div>
+              <h1 className="text-2xl font-heading font-black text-white uppercase tracking-tight">Kovan Portalı Girişi</h1>
+              <p className="text-xs text-gray-400 mt-1 leading-relaxed">
+                Kovanınızın anlık durumunu, uçuş simülasyonunu ve laboratuvar değerlerini canlı izlemek için evlat edinme kodunuzu girin.
+              </p>
             </div>
-            <h1 className="text-2xl font-heading font-black text-white uppercase tracking-tight">Kovan Portalı Girişi</h1>
-            <p className="text-xs text-gray-400 mt-1 leading-relaxed">
-              Kovanınızın anlık durumunu, uçuş simülasyonunu ve laboratuvar değerlerini canlı izlemek için evlat edinme kodunuzu girin.
-            </p>
+
+            <form onSubmit={handleVerify} className="space-y-4">
+              <div>
+                <label className="block text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1.5 font-heading">Kovan Evlat Edinme Kodu</label>
+                <div className="relative">
+                  <input 
+                    type="text" 
+                    value={code} 
+                    onChange={e => setCode(e.target.value.toUpperCase())}
+                    placeholder="KOV-1234" 
+                    className="w-full pl-10 pr-4 py-3 bg-[#1F2937]/50 border border-gray-700 rounded-xl focus:border-primary outline-none text-white text-center font-heading font-bold placeholder-gray-600 transition-colors uppercase"
+                    required
+                  />
+                  <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-500" />
+                </div>
+              </div>
+
+              {error && <p className="text-xs text-red-500 font-medium text-center">{error}</p>}
+
+              <button 
+                type="submit" 
+                disabled={loading}
+                className="w-full py-3 bg-gradient-to-r from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-secondary font-heading font-black text-xs uppercase rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transform hover:scale-105"
+              >
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Kovana Bağlan'}
+              </button>
+            </form>
           </div>
 
-          <form onSubmit={handleVerify} className="space-y-4">
-            <div>
-              <label className="block text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1.5 font-heading">Kovan Evlat Edinme Kodu</label>
-              <div className="relative">
-                <input 
-                  type="text" 
-                  value={code} 
-                  onChange={e => setCode(e.target.value.toUpperCase())}
-                  placeholder="KOV-1234" 
-                  className="w-full pl-10 pr-4 py-3 bg-[#1F2937]/50 border border-gray-700 rounded-xl focus:border-primary outline-none text-white text-center font-heading font-bold placeholder-gray-600 transition-colors uppercase"
-                  required
-                />
-                <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-500" />
+          {/* Right Column: Birlikte Kovanım Info & Savings Calculator */}
+          <div className="lg:col-span-7 p-8 bg-[#111827]/40 border border-amber-500/10 rounded-3xl shadow-2xl backdrop-blur-xl space-y-6">
+            <span className="text-[9px] bg-amber-500/10 border border-amber-500/30 text-primary px-3 py-1 rounded-full font-black tracking-widest uppercase">
+              ENFLASYON GÜVENCESİ & ORTAK KOVAN MODELİ
+            </span>
+            <div className="space-y-2">
+              <h2 className="text-xl md:text-2xl font-heading font-black text-white uppercase tracking-tight">
+                BİRLİKTE KOVANIM İLE ENFLASYONA MEYDAN OKUYUN
+              </h2>
+              <p className="text-xs text-gray-400 font-body leading-relaxed">
+                Türkiye'deki gıda enflasyonu döneminde saf bala makul fiyatla ulaşmanın en yenilikçi yolu. Tek bir kovanın yıllık masrafını 2, 3 veya 4 aile olarak paylaşın. Hasat sonunda elde edilen saf süzme balları doğrudan kovanınızdan aracı maliyeti olmadan eşit olarak bölüşün!
+              </p>
+            </div>
+
+            {/* Savings Calculator Widget */}
+            <div className="bg-black/20 p-5 rounded-2xl border border-gray-850 space-y-5">
+              <h3 className="text-xs font-heading font-black text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-primary animate-pulse" /> Tasarruf ve Masraf Paylaşım Hesaplayıcısı
+              </h3>
+
+              <div className="space-y-4">
+                {/* Family Split selector */}
+                <div className="space-y-2">
+                  <label className="block text-[10px] text-gray-500 font-bold uppercase tracking-wider font-heading">
+                    Paylaşacak Aile Sayısı
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[2, 3, 4].map(num => (
+                      <button
+                        key={num}
+                        type="button"
+                        onClick={() => setFamilyCount(num)}
+                        className={`py-2 px-3 text-xs font-heading font-black uppercase rounded-lg border transition-all ${
+                          familyCount === num 
+                            ? 'bg-primary/20 border-primary text-primary' 
+                            : 'bg-gray-900 border-gray-800 text-gray-400 hover:border-gray-700'
+                        }`}
+                      >
+                        {num} Aile
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Honey need range slider */}
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs font-heading">
+                    <span className="text-gray-450 font-bold uppercase">Yıllık Aile Bal İhtiyacınız</span>
+                    <span className="text-primary font-black">{honeyNeed} kg</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="4"
+                    max="24"
+                    step="2"
+                    value={honeyNeed}
+                    onChange={(e) => setHoneyNeed(Number(e.target.value))}
+                    className="w-full h-1.5 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-primary"
+                  />
+                  <div className="flex justify-between text-[8px] text-gray-500">
+                    <span>4 kg (Temel Tüketim)</span>
+                    <span>12 kg (Standart Çekirdek Aile)</span>
+                    <span>24 kg (Geniş Aile / Kışlık)</span>
+                  </div>
+                </div>
+
+                {/* Savings output display */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-gray-800/80">
+                  <div className="bg-[#111827] p-3 rounded-xl border border-gray-850">
+                    <div className="text-[8px] text-gray-500 font-bold uppercase">Market Fiyatı (1 Kg)</div>
+                    <div className="text-xs text-white font-bold mt-0.5">480 TL</div>
+                    <div className="text-[8px] text-gray-500 font-body">Analizli Doğal Bal</div>
+                  </div>
+                  <div className="bg-[#111827] p-3 rounded-xl border border-gray-850">
+                    <div className="text-[8px] text-primary font-bold uppercase">Kovan Paylaşım Fiyatı</div>
+                    <div className="text-xs text-primary font-black mt-0.5">{Math.round(480 / (familyCount * 0.7))} TL / Kg</div>
+                    <div className="text-[8px] text-emerald-400 font-body">Direkt Kovan Hasadı</div>
+                  </div>
+                  <div className="bg-emerald-500/10 p-3 rounded-xl border border-emerald-500/20 text-center flex flex-col justify-center">
+                    <div className="text-[9px] text-emerald-400 font-black uppercase">Yıllık Toplam Tasarruf</div>
+                    <div className="text-sm text-emerald-400 font-extrabold mt-0.5">
+                      ~{Math.round((480 - 480 / (familyCount * 0.7)) * honeyNeed)} TL
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
 
-            {error && <p className="text-xs text-red-500 font-medium text-center">{error}</p>}
+            <ul className="space-y-2 text-xs font-body text-gray-400">
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                <span><strong>Fiyat Sabitleme Güvencesi:</strong> Ödemenizi yaptıktan sonra yıl boyu gerçekleşen enflasyon ve fiyat zamlarından etkilenmezsiniz.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                <span><strong>Ortak Kovan Kamerası & Tahlil:</strong> Kovan paneli üzerinden arılarınızı izler, sıcaklık ve nem durumunu diğer ortaklarınızla birlikte takip edersiniz.</span>
+              </li>
+            </ul>
+          </div>
 
-            <button 
-              type="submit" 
-              disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-secondary font-heading font-black text-xs uppercase rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transform hover:scale-105"
-            >
-              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Kovana Bağlan'}
-            </button>
-          </form>
         </div>
       ) : (
         /* 2. Logged In Adoption Dashboard */
@@ -440,6 +551,103 @@ export default function KovanPortalPage() {
                 <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Evlat Edinen Veli</p>
                 <p className="text-xs text-white font-bold">{adoption.ownerName}</p>
               </div>
+            </div>
+          </div>
+
+          {/* Birlikte Kovanım - Cooperative Ownership Panel */}
+          <div className="bg-[#111827]/40 border border-gray-800 p-6 md:p-8 rounded-3xl backdrop-blur-xl space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-gray-800/80">
+              <div>
+                <span className="text-[9px] bg-primary/10 text-primary border border-primary/20 px-2.5 py-0.5 rounded-full font-heading font-black uppercase tracking-wider">
+                  Kovan Durumu: Birlikte Kovanım Ortağı
+                </span>
+                <h3 className="text-lg font-heading font-black text-white uppercase tracking-tight mt-1 flex items-center gap-2">
+                  🛡️ Ortak Kovan Hissedarları (4 Ortak Aile)
+                </h3>
+              </div>
+              <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded-xl text-xs font-heading font-black uppercase tracking-wide">
+                Enflasyon Sabitleme Garantisi Aktif ✓
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              
+              {/* Visual shared circle (SVG layout representing shares) */}
+              <div className="lg:col-span-4 flex flex-col items-center justify-center space-y-3">
+                <div className="relative w-40 h-40">
+                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#1F2937" strokeWidth="20" />
+                    {/* Share 1 (Ahmet B.) */}
+                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#FBBF24" strokeWidth="20" strokeDasharray="62.8 251.2" strokeDashoffset="0" />
+                    {/* Share 2 (Zeynep T.) */}
+                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#F59E0B" strokeWidth="20" strokeDasharray="62.8 251.2" strokeDashoffset="-62.8" />
+                    {/* Share 3 (Kemal Y.) */}
+                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#D97706" strokeWidth="20" strokeDasharray="62.8 251.2" strokeDashoffset="-125.6" />
+                    {/* Share 4 (Siz - Veli) */}
+                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#B45309" strokeWidth="20" strokeDasharray="62.8 251.2" strokeDashoffset="-188.4" />
+                  </svg>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                    <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">PAYINIZ</span>
+                    <span className="text-xl text-white font-extrabold">%25</span>
+                    <span className="text-[9px] text-primary font-bold">6 Kavanoz</span>
+                  </div>
+                </div>
+                <p className="text-[10px] text-gray-500 text-center font-body max-w-xs">
+                  Sezonluk kovan toplam hasat tahmini: 24 Kavanoz (Süzme Çiçek Balı)
+                </p>
+              </div>
+
+              {/* Partners list with shipping status */}
+              <div className="lg:col-span-8 space-y-4">
+                <h4 className="text-[10px] font-heading font-black text-gray-400 uppercase tracking-widest">
+                  Kovan Hissedarları ve Dağıtım Durumu:
+                </h4>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  
+                  <div className="bg-[#111827]/60 border border-gray-850 p-4 rounded-2xl flex items-center justify-between">
+                    <div>
+                      <div className="text-xs text-white font-bold">Ahmet B.</div>
+                      <div className="text-[9px] text-gray-500">Hissedar (İstanbul)</div>
+                    </div>
+                    <span className="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 rounded-full font-bold uppercase">
+                      Kargolandı (Yolda)
+                    </span>
+                  </div>
+
+                  <div className="bg-[#111827]/60 border border-gray-850 p-4 rounded-2xl flex items-center justify-between">
+                    <div>
+                      <div className="text-xs text-white font-bold">Zeynep T.</div>
+                      <div className="text-[9px] text-gray-500">Hissedar (Bursa)</div>
+                    </div>
+                    <span className="text-[9px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-0.5 rounded-full font-bold uppercase">
+                      Paketlendi
+                    </span>
+                  </div>
+
+                  <div className="bg-[#111827]/60 border border-gray-850 p-4 rounded-2xl flex items-center justify-between">
+                    <div>
+                      <div className="text-xs text-white font-bold">Kemal Y.</div>
+                      <div className="text-[9px] text-gray-500">Hissedar (Ankara)</div>
+                    </div>
+                    <span className="text-[9px] bg-gray-800 text-gray-450 border border-gray-700 px-2 py-0.5 rounded-full font-bold uppercase">
+                      Hasat Bekleniyor
+                    </span>
+                  </div>
+
+                  <div className="bg-[#111827]/60 border border-primary/20 p-4 rounded-2xl flex items-center justify-between">
+                    <div>
+                      <div className="text-xs text-primary font-black">Siz (Kovan Velisi)</div>
+                      <div className="text-[9px] text-gray-500">Hissedar (İzmir)</div>
+                    </div>
+                    <span className="text-[9px] bg-gray-800 text-gray-455 border border-gray-700 px-2 py-0.5 rounded-full font-bold uppercase">
+                      Hasat Bekleniyor
+                    </span>
+                  </div>
+
+                </div>
+              </div>
+
             </div>
           </div>
 
