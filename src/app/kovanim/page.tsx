@@ -456,24 +456,24 @@ export default function KovanPortalPage() {
             </form>
           </div>
 
-          {/* Right Column: İmece Kovanı Info & Ecological Calculator */}
+          {/* Right Column: Doğal Kovan Hâmiliği Info & Ecological Calculator */}
           <div className="lg:col-span-7 p-8 bg-[#111827]/40 border border-amber-500/10 rounded-3xl shadow-2xl backdrop-blur-xl space-y-6">
             <span className="text-[9px] bg-amber-500/10 border border-amber-500/30 text-primary px-3 py-1 rounded-full font-black tracking-widest uppercase">
-              ANADOLU İMECE KÜLTÜRÜ & KOLEKTİF DOĞA HAREKETİ
+              BİREYSEL HAMİLİK & DOĞAL ARICILIK SEFERBERLİĞİ
             </span>
             <div className="space-y-2">
               <h2 className="text-xl md:text-2xl font-heading font-black text-white uppercase tracking-tight">
-                İMECE KOVANI İLE DOĞAYA SAHİP ÇIKIN
+                DOĞAL KOVAN HAMİLİĞİ İLE DOĞAYA SAHİP ÇIKIN
               </h2>
               <p className="text-xs text-gray-400 font-body leading-relaxed">
-                Anadolu'nun kadim imece kültürünü sürdürülebilir arıcılıkla buluşturuyoruz. Tek bir kovanın korunması ve yayla florasında hayat bulması için doğa koruyucuları olarak bir araya gelin. Sezon sonunda arılarınızın ürettiği saf ve sınırlı hasadı hamilik kademenize göre sevgiyle alın!
+                Rize Anzer Yaylası'nda sürdürülebilir arıcılık ve biyoçeşitliliğin korunmasını doğrudan destekleyin. Kendi adınıza bir kovan sahiplenerek yayla florasında hayat bulan Kafkas arılarının koruyucusu olun. Sezon sonunda kovanınızın ürettiği saf ve sınırlı hasadı hamilik kademenize göre sevgiyle teslim alın!
               </p>
             </div>
 
             {/* Ecological Calculator Widget */}
             <div className="bg-black/20 p-5 rounded-2xl border border-gray-850 space-y-5">
               <h3 className="text-xs font-heading font-black text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                <Sprout className="w-4 h-4 text-primary animate-pulse" /> İmece Kovanı Katkı ve Ekolojik Etki Simülatörü
+                <Sprout className="w-4 h-4 text-primary animate-pulse" /> Kovan Hamilik ve Ekolojik Etki Simülatörü
               </h3>
 
               <div className="space-y-4">
@@ -548,7 +548,7 @@ export default function KovanPortalPage() {
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span><strong>İmece Kovan Kamerası & Canlı Takip:</strong> Kovan paneli üzerinden arılarınızın uçuş aktivitesini, sıcaklık ve nem durumunu diğer hamilerle birlikte canlı izlersiniz.</span>
+                <span><strong>Canlı Kovan İzleme & Canlı Takip:</strong> Kovan paneli üzerinden arılarınızın uçuş aktivitesini, sıcaklık ve nem durumunu anlık ve canlı olarak izlersiniz.</span>
               </li>
             </ul>
           </div>
@@ -573,25 +573,31 @@ export default function KovanPortalPage() {
             <div className="px-5 py-3 bg-primary/5 rounded-2xl border border-primary/10 flex items-center gap-3">
               <Heart className="w-5 h-5 text-primary fill-primary animate-pulse" />
               <div>
-                <p className="text-[10px] text-gray-400 uppercase fo          {/* İmece Kovanı - Cooperative Ownership Panel */}
+                <p className="text-[10px] text-gray-400 uppercase font-heading">Kovan Durumu</p>
+                <p className="text-xs text-white font-heading font-black uppercase">AKTİF & SAĞLIKLI</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Özel Hamilik & Uzman Timi Panel */}
           <div className="bg-[#111827]/40 border border-gray-800 p-6 md:p-8 rounded-3xl backdrop-blur-xl space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-gray-800/80">
               <div>
                 <span className="text-[9px] bg-primary/10 text-primary border border-primary/20 px-2.5 py-0.5 rounded-full font-heading font-black uppercase tracking-wider">
-                  Kovan Durumu: Kolektif Doğa Hamisi
+                  Kovan Statüsü: Müstakil & Özel Hamilik
                 </span>
                 <h3 className="text-lg font-heading font-black text-white uppercase tracking-tight mt-1 flex items-center gap-2">
-                  🛡️ Kovan Koruma Ekibi ve Ekosistem Halkası
+                  🛡️ Kovanınızın Koruyucu Uzman Destek Kadrosu
                 </h3>
               </div>
               <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded-xl text-xs font-heading font-black uppercase tracking-wide">
-                Biyoçeşitlilik Hamilik Sözleşmesi Aktif ✓
+                Özel Hamilik Güvencesi Aktif ✓
               </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               
-              {/* Visual shared circle (SVG layout representing shares) */}
+              {/* Visual expert circle (SVG layout representing your Hive and the Experts) */}
               <div className="lg:col-span-4 flex flex-col items-center justify-center space-y-4">
                 <div className="relative w-44 h-44 flex items-center justify-center bg-black/25 rounded-full border border-gray-800/80 shadow-2xl p-2">
                   <svg className="w-full h-full" viewBox="0 0 120 120">
@@ -602,11 +608,11 @@ export default function KovanPortalPage() {
                       </filter>
                     </defs>
                     
-                    {/* Glowing orbits */}
+                    {/* Glowing orbits representing support loops */}
                     <circle cx="60" cy="60" r="42" fill="none" stroke="#D97706" strokeWidth="0.75" strokeDasharray="4 4" className="opacity-40" />
                     <circle cx="60" cy="60" r="28" fill="none" stroke="#FBBF24" strokeWidth="0.5" strokeDasharray="2 2" className="opacity-30" />
                     
-                    {/* Connections */}
+                    {/* Connections to experts */}
                     <line x1="60" y1="60" x2="60" y2="18" stroke="#F59E0B" strokeWidth="1.5" strokeDasharray="3 3" className="opacity-60" />
                     <line x1="60" y1="60" x2="102" y2="60" stroke="#FBBF24" strokeWidth="1.5" strokeDasharray="3 3" className="opacity-60" />
                     <line x1="60" y1="60" x2="60" y2="102" stroke="#F59E0B" strokeWidth="1.5" strokeDasharray="3 3" className="opacity-60" />
@@ -617,21 +623,21 @@ export default function KovanPortalPage() {
                     <polygon points="60,53 66,56 66,64 60,67 54,64 54,56" fill="#78350F" />
                     <polygon points="60,55 64,57 64,63 60,65 56,63 56,57" fill="#F59E0B" />
 
-                    {/* Outer Guardian Nodes */}
-                    {/* 1. Ahmet B. (Top) */}
+                    {/* Outer Expert Nodes */}
+                    {/* 1. Baş Arıcı (Top) */}
                     <circle cx="60" cy="18" r="5" fill="#FBBF24" stroke="#78350F" strokeWidth="1.5" />
-                    {/* 2. Zeynep T. (Right) */}
+                    {/* 2. Botanikçi (Right) */}
                     <circle cx="102" cy="60" r="5" fill="#F59E0B" stroke="#78350F" strokeWidth="1.5" />
-                    {/* 3. Kemal Y. (Bottom) */}
+                    {/* 3. Veteriner (Bottom) */}
                     <circle cx="60" cy="102" r="5" fill="#D97706" stroke="#78350F" strokeWidth="1.5" />
                     {/* 4. Siz (Left - Glowing gold) */}
-                    <circle cx="18" cy="60" r="6" fill="#FBBF24" stroke="#FFF" strokeWidth="1" filter="url(#glow)" />
+                    <circle cx="18" cy="60" r="6" fill="#FFF" stroke="#FBBF24" strokeWidth="1.5" filter="url(#glow)" />
                   </svg>
                   
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
                     <span className="text-[7px] text-gray-500 font-bold uppercase tracking-widest">KORUMA HEDEFİ</span>
-                    <span className="text-[11px] text-white font-extrabold tracking-wider">AKTİF</span>
-                    <span className="text-[9px] text-primary font-bold">6 Kg Saf Bal</span>
+                    <span className="text-[11px] text-white font-extrabold tracking-wider">TEK HAMİ</span>
+                    <span className="text-[9px] text-primary font-bold">Saf Yayla Balı</span>
                   </div>
                 </div>
                 <p className="text-[10px] text-gray-500 text-center font-body max-w-xs leading-relaxed">
@@ -639,50 +645,50 @@ export default function KovanPortalPage() {
                 </p>
               </div>
 
-              {/* Partners list with shipping status */}
+              {/* Expert list with assigned statuses */}
               <div className="lg:col-span-8 space-y-4">
                 <h4 className="text-[10px] font-heading font-black text-gray-400 uppercase tracking-widest">
-                  Ekolojik Koruma Ekibi ve Hasat Dağıtımı:
+                  Kovanınıza Atanmış Profesyonel Destek Timi:
                 </h4>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   
                   <div className="bg-[#111827]/60 border border-gray-850 p-4 rounded-2xl flex items-center justify-between">
                     <div>
-                      <div className="text-xs text-white font-bold">Ahmet B.</div>
-                      <div className="text-[9px] text-gray-500 font-heading">Yayla Florası Hamisi (İstanbul)</div>
+                      <div className="text-xs text-white font-bold">Ömer Asaf Efendi</div>
+                      <div className="text-[9px] text-gray-500 font-heading">Rize Anzer Yaylası Baş Arıcısı</div>
                     </div>
                     <span className="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 rounded-full font-bold uppercase">
-                      Kargolandı (Ulaştı)
+                      Bakım Tamamlandı
                     </span>
                   </div>
 
                   <div className="bg-[#111827]/60 border border-gray-850 p-4 rounded-2xl flex items-center justify-between">
                     <div>
-                      <div className="text-xs text-white font-bold">Zeynep T.</div>
-                      <div className="text-[9px] text-gray-500 font-heading">Arı Nesli Hamisi (Bursa)</div>
+                      <div className="text-xs text-white font-bold">Doç. Dr. Selim Tokgöz</div>
+                      <div className="text-[9px] text-gray-500 font-heading">KTÜ Botanik & Flora Danışmanı</div>
                     </div>
-                    <span className="text-[9px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-0.5 rounded-full font-bold uppercase">
-                      Paketlendi
+                    <span className="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 rounded-full font-bold uppercase">
+                      Polen Analizi ✓
                     </span>
                   </div>
 
                   <div className="bg-[#111827]/60 border border-gray-850 p-4 rounded-2xl flex items-center justify-between">
                     <div>
-                      <div className="text-xs text-white font-bold">Kemal Y.</div>
-                      <div className="text-[9px] text-gray-500 font-heading">Biyoçeşitlilik Hamisi (Ankara)</div>
+                      <div className="text-xs text-white font-bold">Dr. Canan Sever</div>
+                      <div className="text-[9px] text-gray-500 font-heading">Arı Sağlığı Uzmanı & Veteriner Hekim</div>
                     </div>
-                    <span className="text-[9px] bg-gray-800 text-gray-450 border border-gray-700 px-2 py-0.5 rounded-full font-bold uppercase">
-                      Hasat Bekleniyor
+                    <span className="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 rounded-full font-bold uppercase">
+                      Sağlık Raporu ✓
                     </span>
                   </div>
 
                   <div className="bg-[#111827]/60 border border-primary/20 p-4 rounded-2xl flex items-center justify-between">
                     <div>
-                      <div className="text-xs text-primary font-black">Siz (Baş Hami)</div>
-                      <div className="text-[9px] text-gray-500 font-heading">Kovan Baş Hamisi (İzmir)</div>
+                      <div className="text-xs text-primary font-black">Siz (Kovan Hâmisi)</div>
+                      <div className="text-[9px] text-gray-500 font-heading">Doğa Koruyucusu ve Tek Sponsor</div>
                     </div>
-                    <span className="text-[9px] bg-gray-800 text-gray-455 border border-gray-700 px-2 py-0.5 rounded-full font-bold uppercase">
+                    <span className="text-[9px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-0.5 rounded-full font-bold uppercase">
                       Hasat Bekleniyor
                     </span>
                   </div>
