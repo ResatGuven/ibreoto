@@ -2,7 +2,7 @@
 
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, Edit, Trash2, Image as ImageIcon, Search } from 'lucide-react';
+import { Plus, Edit, Trash2, Image as ImageIcon, Search, Sparkles, Loader2 } from 'lucide-react';
 import { useAdminToast } from '@/context/AdminToastContext';
 
 export default function AdminUrunlerPage() {
@@ -10,6 +10,7 @@ export default function AdminUrunlerPage() {
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState({ id: '', name: '', price: '', category: '', image: '', description: '', stock: '0', metaTitle: '', metaDescription: '' });
   const [loading, setLoading] = useState(true);
+  const [generatingProductAi, setGeneratingProductAi] = useState(false);
   
   // Hızlı stok güncelleme için state'ler
   const [editingStockId, setEditingStockId] = useState<string | null>(null);
@@ -24,6 +25,44 @@ export default function AdminUrunlerPage() {
       Object.values(deleteTimeouts.current).forEach(clearTimeout);
     };
   }, []);
+
+  const handleGenerateProductAi = async () => {
+    const geminiKey = localStorage.getItem('ari_hayat_gemini_key') || '';
+    if (!geminiKey) {
+      showToast('Lütfen önce Sistem Ayarları sayfasından Gemini API Anahtarınızı girin.', 'error');
+      return;
+    }
+
+    if (!formData.name.trim()) {
+      showToast('Lütfen önce ürün adını girin.', 'error');
+      return;
+    }
+
+    setGeneratingProductAi(true);
+    try {
+      const res = await fetch('/api/admin/products/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ geminiKey, productName: formData.name, category: formData.category })
+      });
+      const data = await res.json();
+      if (data.success && data.data) {
+        setFormData(prev => ({
+          ...prev,
+          description: data.data.description,
+          metaTitle: data.data.metaTitle,
+          metaDescription: data.data.metaDescription
+        }));
+        showToast('Ürün açıklaması ve SEO etiketleri AI ile dolduruldu!', 'success');
+      } else {
+        showToast(`Hata: ${data.error || 'İçerik üretilemedi'}`, 'error');
+      }
+    } catch (e) {
+      showToast('Ağ hatası. AI ile doldurma başarısız.', 'error');
+    } finally {
+      setGeneratingProductAi(false);
+    }
+  };
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -208,7 +247,27 @@ export default function AdminUrunlerPage() {
               </div>
             </div>
             <div>
-              <label className="block text-gray-400 mb-1 text-sm font-body">Açıklama</label>
+              <div className="flex justify-between items-center mb-1">
+                <label className="block text-gray-400 text-sm font-body">Açıklama</label>
+                <button
+                  type="button"
+                  onClick={handleGenerateProductAi}
+                  disabled={generatingProductAi}
+                  className="bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 hover:border-primary/40 px-3 py-1.5 rounded-xl font-heading font-bold text-xs uppercase flex items-center transition-all duration-300 disabled:opacity-50"
+                >
+                  {generatingProductAi ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
+                      Yazılıyor...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-3.5 h-3.5 mr-1.5 text-primary" />
+                      AI ile Doldur
+                    </>
+                  )}
+                </button>
+              </div>
               <textarea value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} rows={3} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white"></textarea>
             </div>
             

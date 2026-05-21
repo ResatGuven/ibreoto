@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { 
   LayoutDashboard, ShoppingBag, Settings, LogOut, FileText, Tag, MessageSquare, 
   Mail, Ticket, BookOpen, Menu, X, Image as ImageIcon, Users, Star, HelpCircle, 
-  Sparkles, ShieldAlert, Loader2 
+  Sparkles, ShieldAlert, Loader2, Compass, FlaskConical
 } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -14,6 +14,8 @@ import { AdminToastProvider } from '@/context/AdminToastContext';
 const menuItems = [
   { icon: LayoutDashboard, label: 'Genel Durum', href: '/yonetim' },
   { icon: ShoppingBag, label: 'Kovan & Ürünler', href: '/yonetim/urunler' },
+  { icon: Compass, label: 'Kovan Yönetimi', href: '/yonetim/kovanlar' },
+  { icon: FlaskConical, label: 'Bal Analizleri', href: '/yonetim/analizler' },
   { icon: Sparkles, label: 'Sosyal Medya Asistanı', href: '/yonetim/sosyal-medya' },
   { icon: Mail, label: 'Gelen Mesajlar', href: '/yonetim/mesajlar' },
   { icon: Users, label: 'Arıcılar (Müşteriler)', href: '/yonetim/musteriler' },

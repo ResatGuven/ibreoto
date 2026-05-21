@@ -75,3 +75,78 @@ export async function POST(req: Request) {
     );
   }
 }
+
+export async function GET(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const productId = searchParams.get('productId');
+
+    if (productId) {
+      // Public reviews for a specific product
+      const reviews = await prisma.review.findMany({
+        where: { productId },
+        include: {
+          user: {
+            select: {
+              name: true,
+              image: true,
+            }
+          }
+        },
+        orderBy: { createdAt: 'desc' }
+      });
+      return NextResponse.json({ success: true, reviews });
+    }
+
+    // Otherwise, this is admin listing all reviews. Secure it.
+    const session = await getServerSession(authOptions);
+    if (!session || (session.user as any).role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const reviews = await prisma.review.findMany({
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+          }
+        },
+        product: {
+          select: {
+            name: true,
+            slug: true,
+          }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    return NextResponse.json({ success: true, reviews });
+  } catch (error: any) {
+    console.error("Yorum listeleme hatası:", error);
+    return NextResponse.json({ error: 'Yorumlar yüklenemedi' }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session || (session.user as any).role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+    if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
+
+    await prisma.review.delete({
+      where: { id }
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error("Yorum silme hatası:", error);
+    return NextResponse.json({ error: 'Yorum silinemedi' }, { status: 500 });
+  }
+}

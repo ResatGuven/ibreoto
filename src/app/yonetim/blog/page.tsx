@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, Trash2, Edit, Save, FileText, Image as ImageIcon, Calendar, Tag } from 'lucide-react';
+import { Plus, Trash2, Edit, Save, FileText, Image as ImageIcon, Calendar, Tag, Sparkles, Wand2, Loader2 } from 'lucide-react';
 import { useAdminToast } from '@/context/AdminToastContext';
 
 export default function AdminBlogPage() {
@@ -9,6 +9,11 @@ export default function AdminBlogPage() {
   const [loading, setLoading] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState({ id: '', title: '', content: '', excerpt: '', image: '', author: 'Arı Hayat', category: 'Genel' });
+  const [aiTopic, setAiTopic] = useState('');
+  const [aiTone, setAiTone] = useState('scientific');
+  const [generatingAi, setGeneratingAi] = useState(false);
+  const [generatingAiImage, setGeneratingAiImage] = useState(false);
+  const [aiImagePrompt, setAiImagePrompt] = useState('');
   const { showToast } = useAdminToast();
   const deleteTimeouts = useRef<{ [key: string]: NodeJS.Timeout }>({});
 
@@ -19,6 +24,74 @@ export default function AdminBlogPage() {
       Object.values(deleteTimeouts.current).forEach(clearTimeout);
     };
   }, []);
+
+  const handleGenerateAiBlog = async () => {
+    const geminiKey = localStorage.getItem('ari_hayat_gemini_key') || '';
+    if (!geminiKey) {
+      showToast('Lütfen önce Sistem Ayarları sayfasından Gemini API Anahtarınızı girin.', 'error');
+      return;
+    }
+
+    if (!aiTopic.trim()) {
+      showToast('Lütfen üretilecek yazı konusunu girin.', 'error');
+      return;
+    }
+
+    setGeneratingAi(true);
+    try {
+      const res = await fetch('/api/admin/blog/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ geminiKey, topic: aiTopic, tone: aiTone })
+      });
+      const data = await res.json();
+      if (data.success && data.data) {
+        setFormData(prev => ({
+          ...prev,
+          title: data.data.title,
+          excerpt: data.data.excerpt,
+          content: data.data.content
+        }));
+        setAiImagePrompt(data.data.imagePrompt);
+        showToast('Yazı içeriği başarıyla oluşturuldu! Form alanları dolduruldu.', 'success');
+      } else {
+        showToast(`İçerik üretilirken hata oluştu: ${data.error || 'Bilinmeyen hata'}`, 'error');
+      }
+    } catch (e) {
+      showToast('Ağ hatası. İçerik üretilemedi.', 'error');
+    } finally {
+      setGeneratingAi(false);
+    }
+  };
+
+  const handleGenerateAiImage = async () => {
+    if (!aiImagePrompt) {
+      // Let's generate a quick fallback prompt if not present
+      showToast('Lütfen önce bir yazı içeriği üreterek görsel promptunun oluşturulmasını sağlayın.', 'error');
+      return;
+    }
+
+    setGeneratingAiImage(true);
+    try {
+      const seed = Math.floor(Math.random() * 1000000);
+      const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(aiImagePrompt)}?width=800&height=500&nologo=true&seed=${seed}`;
+      
+      const img = new Image();
+      img.src = url;
+      img.onload = () => {
+        setFormData(prev => ({ ...prev, image: url }));
+        setGeneratingAiImage(false);
+        showToast('Blog kapak görseli başarıyla çizildi!', 'success');
+      };
+      img.onerror = () => {
+        showToast('Görsel yüklenirken bir sorun oluştu.', 'error');
+        setGeneratingAiImage(false);
+      };
+    } catch (e) {
+      showToast('Görsel üretilemedi.', 'error');
+      setGeneratingAiImage(false);
+    }
+  };
 
   const fetchPosts = async () => {
     try {
@@ -125,6 +198,58 @@ export default function AdminBlogPage() {
           <h2 className="text-lg font-heading font-bold text-white mb-6 uppercase flex items-center">
             <FileText className="w-5 h-5 mr-2 text-red-500" /> {formData.id ? 'Yazıyı Düzenle' : 'Blog İçeriği Oluştur'}
           </h2>
+          
+          {/* AI Blog Assistant Panel */}
+          {!formData.id && (
+            <div className="mb-8 p-6 bg-red-950/20 border border-red-500/10 rounded-2xl">
+              <h3 className="text-sm font-heading font-bold text-white mb-4 uppercase flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-red-500 animate-pulse" /> Yapay Zeka Blog Asistanı
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                <div className="md:col-span-2">
+                  <label className="block text-gray-400 mb-1 text-[10px] font-body uppercase tracking-wider">Makale Konusu veya Ürün</label>
+                  <input 
+                    type="text" 
+                    value={aiTopic} 
+                    onChange={e => setAiTopic(e.target.value)} 
+                    placeholder="Örn: Hakiki Kestane Balı'nın 7 mucizevi faydası, Kışın propolis kullanımı..." 
+                    className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-400 mb-1 text-[10px] font-body uppercase tracking-wider">Yazım Tonu</label>
+                  <select 
+                    value={aiTone} 
+                    onChange={e => setAiTone(e.target.value)} 
+                    className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500 text-sm"
+                  >
+                    <option value="scientific">Bilimsel / Eğitici</option>
+                    <option value="friendly">Samimi / Aile Dostu</option>
+                    <option value="sales">Satış / Kampanya</option>
+                  </select>
+                </div>
+              </div>
+              <div className="mt-4 flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleGenerateAiBlog}
+                  disabled={generatingAi}
+                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-5 py-3 rounded-xl font-heading font-bold text-xs uppercase flex items-center gap-2 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {generatingAi ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" /> Yazı Yazılıyor...
+                    </>
+                  ) : (
+                    <>
+                      <Wand2 className="w-4 h-4" /> AI ile İçerik Üret
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+
           <form onSubmit={handleSave} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -144,6 +269,18 @@ export default function AdminBlogPage() {
               <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Kapak Görseli</label>
               <div className="flex space-x-2">
                 <input type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} placeholder="URL veya dosya" className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500 text-sm" />
+                {aiImagePrompt && (
+                  <button
+                    type="button"
+                    onClick={handleGenerateAiImage}
+                    disabled={generatingAiImage}
+                    className="bg-[#1F2937] hover:bg-gray-700 text-red-400 px-4 py-3 rounded-lg font-heading font-bold text-xs uppercase transition-colors flex items-center border border-gray-700 gap-1 disabled:opacity-50"
+                    title="Yazı içeriğine uygun AI resmi çiz"
+                  >
+                    {generatingAiImage ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+                    <span>Resim Çiz</span>
+                  </button>
+                )}
                 <label className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg cursor-pointer transition-colors flex items-center">
                   <ImageIcon className="w-4 h-4" />
                   <input type="file" className="hidden" onChange={handleFileChange} />

@@ -284,7 +284,7 @@ export default function SocialMediaAssistant() {
     const words: number[] = [];
     const asciiLength = ascii[lengthProperty] * 8;
     
-    const hash: number[] = [];
+    let hash: number[] = [];
     const k: number[] = [];
     let primeCounter = 0;
 
@@ -365,8 +365,8 @@ export default function SocialMediaAssistant() {
   };
 
   const getSecMsGecToken = async (): Promise<string> => {
-    const ticks = BigInt(Math.floor(Date.now() / 1000) + 11644473600) * 10000000n;
-    const truncatedTicks = ticks - (ticks % 3000000000n);
+    const ticks = BigInt(Math.floor(Date.now() / 1000) + 11644473600) * BigInt("10000000");
+    const truncatedTicks = ticks - (ticks % BigInt("3000000000"));
     const str = truncatedTicks.toString() + "6A5AA1D4EAFF4E9FB37E23D68491D6F4";
     return await sha256(str);
   };

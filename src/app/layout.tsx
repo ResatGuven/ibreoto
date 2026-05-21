@@ -5,6 +5,7 @@ import NavbarWrapper from "@/components/layout/NavbarWrapper";
 import FooterWrapper from "@/components/layout/FooterWrapper";
 import MainContentWrapper from "@/components/layout/MainContentWrapper";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
+import AsmrWidget from "@/components/layout/AsmrWidget";
 import { Providers } from "@/components/layout/Providers";
 import { CookieBanner } from "@/components/layout/CookieBanner";
 import Script from "next/script";
@@ -90,6 +91,7 @@ export default async function RootLayout({
           <MainContentWrapper>{children}</MainContentWrapper>
           <FooterWrapper />
           <WhatsAppButton />
+          <AsmrWidget />
           <CookieBanner />
         </Providers>
       </body>

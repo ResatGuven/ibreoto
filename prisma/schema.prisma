@@ -223,3 +223,46 @@ model Faq {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
 }
+
+model Hive {
+  id          String         @id @default(cuid())
+  name        String         // Örn: "Kovan Altın Petek"
+  status      String         @default("ACTIVE") // "ACTIVE" | "MAINTENANCE"
+  location    String         // Örn: "Rize, Anzer Yaylası"
+  temperature Float          @default(34.5)     // Kovan içi sıcaklık (Simüle/Manuel)
+  humidity    Float          @default(62.0)     // Kovan içi nem
+  beeCount    Int            @default(45000)    // Yaklaşık arı adedi
+  description String         @db.Text
+  image       String?        // Kovan görseli veya video döngüsü URL'i
+  adoptions   HiveAdoption[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model HiveAdoption {
+  id          String   @id @default(cuid())
+  hiveId      String
+  hive        Hive     @relation(fields: [hiveId], references: [id], onDelete: Cascade)
+  code        String   @unique // Benzersiz evlat edinme kodu (Örn: KOV-7492)
+  ownerName   String   // Evlat edinenin adı
+  ownerEmail  String   // E-postası
+  ownerPhone  String?
+  startDate   DateTime @default(now())
+  endDate     DateTime
+  status      String   @default("ACTIVE") // "ACTIVE" | "EXPIRED"
+  createdAt   DateTime @default(now())
+}
+
+model HoneyAnalysis {
+  id             String   @id @default(cuid())
+  batchNo        String   @unique // Kavanozdaki QR/Parti No (Örn: KESTANE-2026-01)
+  productName    String   // Ürün adı
+  proline        Float    // Prolin Değeri (mg/kg)
+  moisture       Float    // Nem Oranı (%)
+  diastase       Float    // Diastaz Sayısı
+  analysisDate   DateTime // Analiz tarihi
+  reportImageUrl String?  // Lab belgesi görseli
+  notes          String?  @db.Text // Lab notları ve yorumlar
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
