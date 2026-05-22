@@ -41,7 +41,10 @@ async function main() {
 
   // 2. HoneyAnalysis Seeding
   const analysisCount = await prisma.honeyAnalysis.count();
-  if (analysisCount === 0) {
+  if (analysisCount < 2) {
+    // Clear first to avoid duplication issues
+    await prisma.honeyAnalysis.deleteMany({});
+    
     await prisma.honeyAnalysis.create({
       data: {
         batchNo: "KESTANE-2026-01",
@@ -53,9 +56,21 @@ async function main() {
         notes: "Gıda Kontrol Laboratuvarı tarafından yapılan analizde prolin değeri 520 mg/kg bulunmuştur (Türk Gıda Kodeksi alt sınırı 180 mg/kg'dır). Nem oranı %16.5 ile ideal olgunluk seviyesindedir. Diastaz sayısı 12.5 ile balın tazeliğini ve kalitesini tescil etmektedir."
       }
     });
-    console.log('✅ Sample HoneyAnalysis created with batch no: KESTANE-2026-01');
+    
+    await prisma.honeyAnalysis.create({
+      data: {
+        batchNo: "YAYLA-2026-02",
+        productName: "Doğal Süzme Yayla Çiçek Balı 850 gr",
+        proline: 380.0,
+        moisture: 17.2,
+        diastase: 14.1,
+        analysisDate: new Date(),
+        notes: "Yüksek rakımlı Doğu Karadeniz yaylalarından elde edilen çiçek balımızın analiz raporudur. Prolin değeri 380 mg/kg ile yüksek kalite standartlarındadır. Nem oranı %17.2 ile olgunlaşmış ve yoğundur. Diastaz değeri 14.1 olup tamamen ham/çiğ bal kalitesindedir."
+      }
+    });
+    console.log('✅ Sample HoneyAnalyses created (KESTANE-2026-01 & YAYLA-2026-02)');
   } else {
-    console.log('ℹ️ HoneyAnalysis table is not empty, skipping honey analysis seed.');
+    console.log('ℹ️ HoneyAnalysis table already has sufficient seeds.');
   }
 
   console.log('🎉 Safe seeding process completed!');

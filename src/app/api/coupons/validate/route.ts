@@ -5,9 +5,36 @@ export async function POST(request: Request) {
   try {
     const { code, totalAmount } = await request.json();
 
-    const coupon = await prisma.coupon.findUnique({
+    let coupon = await prisma.coupon.findUnique({
       where: { code: code.toUpperCase() }
     });
+
+    if (!coupon) {
+      // Auto-create standard coupon codes if they are valid marketing codes
+      const marketingCoupons: Record<string, { discount: number; type: string }> = {
+        'ŞİFA10': { discount: 10, type: 'percentage' },
+        'KIS-SIFASI': { discount: 15, type: 'percentage' },
+        'UYE10': { discount: 10, type: 'percentage' }
+      };
+
+      const normalizedCode = code.toUpperCase();
+      if (marketingCoupons[normalizedCode]) {
+        try {
+          const promo = marketingCoupons[normalizedCode];
+          coupon = await prisma.coupon.create({
+            data: {
+              code: normalizedCode,
+              discount: promo.discount,
+              type: promo.type,
+              expiry: new Date('2030-12-31'),
+              isActive: true
+            }
+          });
+        } catch (dbErr) {
+          console.error("Failed to auto-create marketing coupon:", dbErr);
+        }
+      }
+    }
 
     if (!coupon) {
       return NextResponse.json({ error: 'Geçersiz kupon kodu.', message: 'Geçersiz kupon kodu.', valid: false, success: false }, { status: 400 });

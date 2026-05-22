@@ -66,17 +66,17 @@ export default function BalAsistaniPage() {
     // Logic matching products
     if (finalAnswers.goal === 'throat' || finalAnswers.taste === 'bitter') {
       result = {
-        name: "Hakiki Kestane Balı",
-        slug: "hakiki-kestane-bali",
+        name: "Kestane Ihlamur Balı 850 gr",
+        slug: "kestane-ihlamur-bali-850-gr",
         image: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=400",
-        description: "Boğaz ağrıları, öksürük ve solunum yolları tahrişlerinde bir numaralı doğal destektir. Kestane balı yüksek antioksidan ve prolin değerine sahiptir, şeker oranı çiçek ballarına göre oldukça düşüktür.",
+        description: "Boğaz ağrıları, öksürük ve solunum yolları tahrişlerinde bir numaralı doğal destektir. Kestane ve ıhlamurun eşsiz harmanı yüksek antioksidan ve prolin değerine sahiptir.",
         whyMatch: "Öksürük/boğaz rahatlatma hedefiniz ve odunsu aroma tercihiniz kestane balımızın yüksek biyoaktif bileşimiyle tam olarak uyuşuyor.",
         usage: "Günde bir tatlı kaşığı, sabah aç karnına veya ılık suya karıştırılarak tüketilmesi tavsiye edilir."
       };
     } else if (finalAnswers.goal === 'health' && (finalAnswers.age === 'adult' || finalAnswers.age === 'elderly')) {
       result = {
-        name: "Premium Arı Sütü, Polen & Propolis Karışımı",
-        slug: "premium-ari-sutu-polen-propolis-karisimi",
+        name: "Yetişkin Yerli Ham Bal, Polen, Arı Sütü ve Propolis Karışımı (850 gr)",
+        slug: "yetiskin-karisim-850-gr-tam",
         image: "https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&q=80&w=400",
         description: "Doğal propolis ekstraktı, taze arı sütü, kurutulmuş çiçek poleni ve süzme yayla balının dengeli bir karışımıdır. Hücresel direnç ve yüksek bağışıklık koruması için formüle edilmiştir.",
         whyMatch: "Yetişkin bağışıklık koruması hedefiniz için arı sütü ve propolisin yoğun antioksidan birleşimini içeren bu özel şifa formülü en etkili çözümdür.",
@@ -84,8 +84,8 @@ export default function BalAsistaniPage() {
       };
     } else if (finalAnswers.age === 'child' || finalAnswers.taste === 'sweet' || finalAnswers.goal === 'gourmet') {
       result = {
-        name: "Doğal Süzme Çiçek Balı",
-        slug: "dogal-suzme-cicek-bali",
+        name: "Doğal Süzme Çiçek Balı 850 gr",
+        slug: "cicek-bali-850-gr",
         image: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?auto=format&fit=crop&q=80&w=400",
         description: "Doğu Karadeniz yaylalarının zengin kır çiçeklerinden elde edilen, yumuşak içimli, boğazı yakmayan ve çocuklar tarafından çok sevilen klasik, saf süzme balımızdır.",
         whyMatch: "Hafif aromatik tat arayışınız ve yaş grubu gereksinimleriniz göz önüne alındığında, sindirimi en kolay ve lezzetli çiçek balımız sizin için idealdir.",
@@ -93,12 +93,12 @@ export default function BalAsistaniPage() {
       };
     } else {
       result = {
-        name: "Karakovan Petek Balı",
-        slug: "karakovan-petek-bali",
+        name: "Doğal Süzme Çam Balı 850 gr",
+        slug: "cam-bali-850-gr",
         image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&q=80&w=400",
-        description: "Arıların kovanın karanlık iç kısımlarında, harici petek mumu eklenmeksizin tamamen kendi salgıladıkları balmumuyla inşa ettikleri %100 doğal karakovan balıdır.",
-        whyMatch: "Doğal enerji kazanma ve geleneksel saf gurme lezzet arayışınız için katkısız karakovan petek balımız eşsiz bir besleyici kaynaktır.",
-        usage: "Sabah kahvaltılarında kaymak veya peynir eşliğinde peteğiyle birlikte çiğnenerek tüketilmesi tavsiye edilir."
+        description: "Ege ormanlarının kıymetli çam balı. Yoğun aroması ve şekerlenmeyen yapısıyla sofralarınızın vazgeçilmez şifa kaynağıdır.",
+        whyMatch: "Doğal enerji kazanma ve geleneksel saf gurme lezzet arayışınız için katkısız çam balımız eşsiz bir besleyici kaynaktır.",
+        usage: "Sabah kahvaltılarında kaymak veya peynir eşliğinde doğrudan tüketilmesi veya bitkisel çaylara karıştırılması tavsiye edilir."
       };
     }
 

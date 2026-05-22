@@ -25,7 +25,7 @@ export default function BlogPage() {
   }, []);
 
   return (
-    <div className="pt-24 min-h-screen bg-gray-50">
+    <div className="pt-24 min-h-screen bg-background honeycomb-bg">
       {/* Hero Header */}
       <div className="bg-secondary text-white py-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-honey-gradient honeycomb-bg opacity-20"></div>

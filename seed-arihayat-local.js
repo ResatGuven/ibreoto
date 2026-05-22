@@ -186,14 +186,30 @@ async function main() {
   // 6. Coupons
   console.log('🎫 Seeding coupons...');
   await prisma.coupon.deleteMany({});
-  await prisma.coupon.create({
-    data: {
-      code: 'UYE10',
-      discount: 10,
-      type: 'percentage',
-      expiry: new Date('2030-12-31'),
-      isActive: true
-    }
+  await prisma.coupon.createMany({
+    data: [
+      {
+        code: 'UYE10',
+        discount: 10,
+        type: 'percentage',
+        expiry: new Date('2030-12-31'),
+        isActive: true
+      },
+      {
+        code: 'ŞİFA10',
+        discount: 10,
+        type: 'percentage',
+        expiry: new Date('2030-12-31'),
+        isActive: true
+      },
+      {
+        code: 'KIS-SIFASI',
+        discount: 15,
+        type: 'percentage',
+        expiry: new Date('2030-12-31'),
+        isActive: true
+      }
+    ]
   });
   console.log('✅ Coupons seeded.');
 

@@ -55,9 +55,24 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Lütfen malzeme girin.' }, { status: 400 });
     }
 
+    // Helper to get fallback recipe based on ingredients
+    const getFallbackRecipe = (ingredientsList: string[]) => {
+      const listLower = (ingredientsList || []).map(i => i.toLowerCase());
+      const isChickenRelated = listLower.some(i => 
+        i.includes('tavuk') || 
+        i.includes('but') || 
+        i.includes('göğüs') || 
+        i.includes('chicken') || 
+        i.includes('et') || 
+        i.includes('sarımsak') || 
+        i.includes('soya')
+      );
+      return isChickenRelated ? fallbackRecipes[1] : fallbackRecipes[0];
+    };
+
     // No Gemini key? Return fallback recipes
     if (!geminiKey) {
-      return NextResponse.json({ success: true, isFallback: true, data: fallbackRecipes[0] });
+      return NextResponse.json({ success: true, isFallback: true, data: getFallbackRecipe(ingredients) });
     }
 
     const systemInstruction = `
@@ -100,7 +115,7 @@ Lütfen hazırlayacağın yazıyı tam olarak aşağıdaki JSON formatında tesl
 
     if (!response.ok) {
       // Fallback in case of external API error
-      return NextResponse.json({ success: true, isFallback: true, data: fallbackRecipes[0] });
+      return NextResponse.json({ success: true, isFallback: true, data: getFallbackRecipe(ingredients) });
     }
 
     const data = await response.json();
@@ -118,6 +133,23 @@ Lütfen hazırlayacağın yazıyı tam olarak aşağıdaki JSON formatında tesl
   } catch (error: any) {
     console.error("AI Recipe generate error:", error);
     // Silent recovery: return standard fallback on exception
-    return NextResponse.json({ success: true, isFallback: true, data: fallbackRecipes[0] });
+    // We try to parse body to get ingredients if possible, or default to fallbackRecipes[0]
+    let fallbackData = fallbackRecipes[0];
+    try {
+      const body = await req.clone().json();
+      const listLower = (body.ingredients || []).map((i: string) => i.toLowerCase());
+      const isChickenRelated = listLower.some((i: string) => 
+        i.includes('tavuk') || 
+        i.includes('but') || 
+        i.includes('göğüs') || 
+        i.includes('chicken') || 
+        i.includes('et') || 
+        i.includes('sarımsak') || 
+        i.includes('soya')
+      );
+      if (isChickenRelated) fallbackData = fallbackRecipes[1];
+    } catch (e) {}
+    
+    return NextResponse.json({ success: true, isFallback: true, data: fallbackData });
   }
 }

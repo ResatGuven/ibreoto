@@ -78,28 +78,28 @@ function BalAnaliziContent() {
       const element = document.createElement("a");
       const file = new Blob([`
 ======================================================
-         İBREOTO PREMİUM BAL ANALİZ SERTİFİKASI
+         ARI HAYAT PREMİUM BAL ANALİZ SERTİFİKASI
 ======================================================
-Barkod / Lot No: \${analysis.batchNo}
-Ürün Türü: \${analysis.productName}
-Analiz Tarihi: \${new Date(analysis.analysisDate).toLocaleDateString('tr-TR')}
+Barkod / Lot No: ${analysis.batchNo}
+Ürün Türü: ${analysis.productName}
+Analiz Tarihi: ${new Date(analysis.analysisDate).toLocaleDateString('tr-TR')}
 
 LABORATUVAR DEĞERLERİ:
-- Prolin Oranı: \${analysis.proline} mg/kg (Minimum Limit: 180 mg/kg)
-- Nem Oranı: %\${analysis.moisture} (Maksimum Limit: %20)
-- Diastaz Sayısı: \${analysis.diastase} (Minimum Limit: 8)
+- Prolin Oranı: ${analysis.proline} mg/kg (Minimum Limit: 180 mg/kg)
+- Nem Oranı: %${analysis.moisture} (Maksimum Limit: %20)
+- Diastaz Sayısı: ${analysis.diastase} (Minimum Limit: 8)
 
 GÜVENLİK VE SAFLIK ONAYI:
 Akredite Gıda Analiz Laboratuvarı test sonuçlarına göre bu ürün
 %100 saf ve çiğ (raw) bal olup, hiçbir harici şeker, katkı veya
 pestisit kalıntısı içermemektedir.
 
-İbreoto Beekeeping Co. © 2026
+Arı Hayat Arıcılık © 2026
 Doğallık ve Şeffaflık Taahhüdü
 ======================================================
       `], {type: 'text/plain'});
       element.href = URL.createObjectURL(file);
-      element.download = `ibreoto_sertifika_\${analysis.batchNo}.txt`;
+      element.download = `arihayat_sertifika_${analysis.batchNo}.txt`;
       document.body.appendChild(element);
       element.click();
       document.body.removeChild(element);
@@ -613,7 +613,7 @@ Doğallık ve Şeffaflık Taahhüdü
                     </button>
                     <button 
                       onClick={() => {
-                        const url = `https://api.whatsapp.com/send?text=Benim%20İbreoto%20Balımın%20Prolin%20Değeri%20${analysis.proline}!%20Analiz%20raporunu%20sorgulamak%20için%20barkod%20kodu:%20${analysis.batchNo}`;
+                        const url = `https://api.whatsapp.com/send?text=Benim%20Arı%20Hayat%20Balımın%20Prolin%20Değeri%20${analysis.proline}!%20Analiz%20raporunu%20sorgulamak%20için%20barkod%20kodu:%20${analysis.batchNo}`;
                         window.open(url, '_blank');
                       }}
                       className="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-500 hover:to-emerald-600 text-white font-heading font-bold text-[10.5px] uppercase rounded-xl transition-all flex items-center justify-center gap-1.5"
@@ -710,10 +710,10 @@ Doğallık ve Şeffaflık Taahhüdü
                       <p className="text-[11px] text-red-400/80 italic font-body">“{item.myth}”</p>
                     </div>
 
-                    <div className={`mt-4 pt-4 border-t border-gray-950 transition-all duration-300 \${isOpen ? 'max-h-[250px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-                      <span className="text-[9px] bg-red-500/10 text-red-400 px-2 py-0.5 rounded-full font-black border border-red-500/20 mr-2">\${item.truth}</span>
+                    <div className={`mt-4 pt-4 border-t border-gray-950 transition-all duration-300 ${isOpen ? 'max-h-[250px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+                      <span className="text-[9px] bg-red-500/10 text-red-400 px-2 py-0.5 rounded-full font-black border border-red-500/20 mr-2">{item.truth}</span>
                       <p className="text-[11px] text-gray-300 leading-relaxed font-body mt-2">
-                        \${item.explanation}
+                        {item.explanation}
                       </p>
                     </div>
                   </div>

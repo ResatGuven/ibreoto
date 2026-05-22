@@ -38,7 +38,7 @@ export default function FavorilerPage() {
   };
 
   return (
-    <div className="pt-24 pb-16 min-h-screen bg-white font-body">
+    <div className="pt-24 pb-16 min-h-screen bg-background honeycomb-bg font-body">
       <div className="container mx-auto px-4 max-w-5xl">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-heading font-bold text-secondary uppercase tracking-tight">Favorilerim</h1>
@@ -46,7 +46,7 @@ export default function FavorilerPage() {
         </div>
 
         {favorites.length === 0 ? (
-          <div className="text-center py-20 bg-surface rounded-2xl border border-dashed border-gray-200">
+          <div className="text-center py-20 bg-white/50 backdrop-blur-md rounded-2xl border border-dashed border-primary/20">
             <Heart className="w-16 h-16 text-gray-200 mx-auto mb-4" />
             <h3 className="text-xl font-heading font-bold text-secondary uppercase mb-2">Favori Listeniz Boş</h3>
             <p className="text-text-muted text-sm mb-8">Henüz hiçbir ürünü favorilerinize eklemediniz.</p>

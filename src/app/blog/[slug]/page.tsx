@@ -31,12 +31,12 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
     };
 
     if (loading) {
-        return <div className="pt-24 min-h-screen bg-white flex items-center justify-center">Yükleniyor...</div>;
+        return <div className="pt-24 min-h-screen bg-background honeycomb-bg flex items-center justify-center">Yükleniyor...</div>;
     }
 
     if (!post) {
         return (
-            <div className="pt-24 min-h-screen bg-white flex flex-col items-center justify-center">
+            <div className="pt-24 min-h-screen bg-background honeycomb-bg flex flex-col items-center justify-center">
                 <h1 className="text-2xl font-heading font-bold text-secondary mb-4">YAZI BULUNAMADI</h1>
                 <Link href="/blog" className="text-primary hover:underline font-body flex items-center">
                     <ArrowLeft className="w-4 h-4 mr-1" /> Blog'a Geri Dön
@@ -46,7 +46,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
     }
 
     return (
-        <div className="pt-20 min-h-screen bg-white">
+        <div className="pt-20 min-h-screen bg-background honeycomb-bg">
             {/* Header */}
             <div className="container mx-auto px-4 py-8 max-w-4xl">
                 <div className="text-sm text-text-muted mb-4 font-body flex items-center">

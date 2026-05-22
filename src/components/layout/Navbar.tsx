@@ -70,8 +70,8 @@ export default function Navbar() {
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <span className="text-primary font-bold">🐝 Arı Hayat</span>
-            <a href={`tel:${siteSettings?.contactPhone || '0506 157 89 63'}`} className="flex items-center hover:text-primary transition-colors">
-              <Phone className="w-3 h-3 mr-1" /> {siteSettings?.contactPhone || '0506 157 89 63'}
+            <a href={`tel:${siteSettings?.contactPhone || '0536 341 19 84'}`} className="flex items-center hover:text-primary transition-colors">
+              <Phone className="w-3 h-3 mr-1" /> {siteSettings?.contactPhone || '0536 341 19 84'}
             </a>
             <a href={`https://wa.me/${siteSettings?.whatsappNumber || '905353377251'}`} target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-green-400 transition-colors">
               <MessageCircle className="w-3 h-3 mr-1" /> WhatsApp Destek

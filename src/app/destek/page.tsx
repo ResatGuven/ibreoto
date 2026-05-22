@@ -6,7 +6,7 @@ import { ArrowLeft, Headphones, MessageCircle, Phone, Mail } from 'lucide-react'
 
 export default function DestekPage() {
   return (
-    <div className="pt-20 min-h-screen bg-white">
+    <div className="pt-20 min-h-screen bg-background honeycomb-bg">
       {/* Header */}
       <div className="bg-secondary text-white py-16">
         <div className="container mx-auto px-4 text-center">

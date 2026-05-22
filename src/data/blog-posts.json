@@ -1,52 +1,52 @@
 [
   {
-    "slug": "dogru-koltuk-kilifi-secimi",
-    "category": "Bakım",
-    "title": "Doğru Koltuk Kılıfı Seçimi Nasıl Yapılır?",
-    "excerpt": "Aracınızın içi için en uygun ve uzun ömürlü koltuk kılıfını seçerken nelere dikkat etmelisiniz?",
+    "slug": "dogal-balin-faydalari-nelerdir",
+    "category": "Sağlık",
+    "title": "Doğal Balın Faydaları Nelerdir?",
+    "excerpt": "Doğal ham balın sağlığımıza etkileri, bağışıklık sistemini destekleyici gücü ve doğru tüketim yolları.",
+    "date": "20 Mayıs 2026",
+    "author": "Arı Hayat Ekibi",
+    "image": "/images/blog/blog-1.webp",
+    "content": "<p>Doğal bal, yüzyıllardır insanlık için hem gıda hem de doğal bir şifa kaynağı olarak kabul edilmiştir. Arıların binlerce çiçekten topladığı nektarla ürettiği bu eşsiz besin, pastörize edilmemiş (ham) haliyle tüketildiğinde gerçek faydalarını gösterir.</p><h3>1. Güçlü Antioksidan Deposu</h3><p>Ham bal, serbest radikallerle savaşan ve vücudu hücresel düzeyde koruyan organik asitler ile fenolik bileşikler içerir. Bu sayede kalp sağlığını korur ve bağışıklığı güçlendirir.</p><h3>2. Doğal Boğaz Yumuşatıcı ve Öksürük Kesici</h3><p>Özellikle kış aylarında veya mevsim geçişlerinde yaşanan öksürük ve boğaz tahrişlerinde bal, boğazı koruyucu bir tabaka gibi sarar. Antibakteriyel özellikleri sayesinde enfeksiyon gelişimini hafifletmeye yardımcı olur.</p><h3>3. Hızlı ve Temiz Enerji Kaynağı</h3><p>Fruktoz ve glukoz gibi doğal şekerler içeren bal, kana hızlı karışarak sporcular ve güne zinde başlamak isteyenler için harika bir temiz enerji kaynağıdır.</p>"
+  },
+  {
+    "slug": "propolis-kullanimi-rehberi",
+    "category": "Rehber",
+    "title": "Propolis Nedir ve Nasıl Kullanılmalıdır?",
+    "excerpt": "Arıların kovanı korumak için ürettiği propolisin faydaları, kullanım oranları ve dikkat edilmesi gerekenler.",
+    "date": "18 Mayıs 2026",
+    "author": "Arı Hayat Ekibi",
+    "image": "/images/blog/blog-2.webp",
+    "content": "<p>Propolis, arıların bitki tomurcuklarından ve reçinelerinden topladığı maddeleri kendi salgılarıyla işlemesi sonucu oluşan reçinemsi bir maddedir. Arılar bu maddeyi kovanı sterilize etmek, çatlakları kapatmak ve kovanı zararlılardan korumak için kullanırlar. Dolayısıyla propolis, arı kovanının bağışıklık kalkanıdır.</p><h3>Nasıl Tüketilmelidir?</h3><p>İnsan vücudu propolisi ham haliyle sindiremez. Bu yüzden özel ekstraksiyon işlemlerinden geçmiş sıvı özütlerin tüketilmesi gerekir. Yetişkinler günde 10-20 damla, çocuklar ise 5-10 damla propolisi bal, yoğurt veya ılık içeceklere karıştırarak tüketebilir.</p><h3>Bağışıklığa Etkileri</h3><p>İçeriğindeki yüksek orandaki flavonoidler ve fenolik bileşenler, vücuttaki enfeksiyonlarla mücadele etmeye yardımcı olur. Özellikle soğuk algınlığı ve grip dönemlerinde koruyucu bir kalkan görevi görür.</p>"
+  },
+  {
+    "slug": "ari-sutu-ve-cilt-sagligi",
+    "category": "Güzellik",
+    "title": "Arı Sütü ile Gençleşin ve Yenilenin",
+    "excerpt": "Kraliçe arının besini olan arı sütünün cilt hücreleri üzerindeki mucizevi etkileri ve hücre yenileyici yapısı.",
+    "date": "15 Mayıs 2026",
+    "author": "Arı Hayat Ekibi",
+    "image": "/images/blog/blog-1.webp",
+    "content": "<p>Arı sütü, işçi arıların yutak üstü bezlerinden salgıladıkları, kraliçe arının ise ömrü boyunca beslendiği çok özel bir besindir. Diğer arılar sadece birkaç hafta yaşarken, sadece arı sütüyle beslenen kraliçe arı yıllarca yaşayabilir ve son derece üretkendir. Bu sır, arı sütünün hücre yenileyici gücünde saklıdır.</p><h3>Cilde ve Hücrelere Faydaları</h3><p>Arı sütü amino asitler, B grubu vitaminler, çinko, magnezyum ve 10-HDA adı verilen benzersiz bir yağ asidi içerir. Ciltteki kolajen üretimini destekleyerek yaşlanma belirtilerini geciktirir ve cilt bariyerini güçlendirir.</p><h3>Nasıl Kullanılır?</h3><p>Taze arı sütü dil altından emilerek tüketilebileceği gibi, doğal maskeler halinde cilde doğrudan da uygulanabilir. Serin yerde saklanması ve metal kaşık değdirilmemesi önemlidir.</p>"
+  },
+  {
+    "slug": "ari-ekmegi-perga-nedir",
+    "category": "Beslenme",
+    "title": "Arı Ekmeği (Perga): Doğal Probiyotik Kaynağı",
+    "excerpt": "Arıların poleni fermente ederek ürettiği, sindirimi kolay ve besin değeri çok yüksek olan perganın faydaları.",
+    "date": "12 Mayıs 2026",
+    "author": "Arı Hayat Ekibi",
+    "image": "/images/blog/blog-2.webp",
+    "content": "<p>Arı ekmeği (veya Latince adıyla Perga), arıların çiçeklerden topladığı polenleri kovan içinde bal ve kendi enzimleri ile mayalayarak oluşturdukları fermente bir besindir. Arılar bu besini larvaları beslemek için kilerlerinde saklarlar.</p><h3>Neden Normal Polenden Daha Değerli?</h3><p>Polen tanelerinin etrafında sindirimi zor olan selülozik bir zar bulunur. Arı ekmeği oluşurken fermantasyon süreci bu zarı parçalar, böylece içerisindeki tüm vitamin, mineral ve amino asitler insan vücudu tarafından neredeyse tamamen emilebilir hale gelir.</p><h3>Faydaları</h3><p>Doğal bir probiyotik kaynağı olan perga, sindirim sistemini düzenler, bağırsak florasını destekler ve kansızlığa karşı hücre üretimini hızlandırır.</p>"
+  },
+  {
+    "slug": "kestane-bali-mi-cicek-bali-mi",
+    "category": "Rehber",
+    "title": "Kestane Balı mı, Çiçek Balı mı? Farkları Nelerdir?",
+    "excerpt": "Koyu renkli kestane balı ile açık renkli çiçek balının lezzet, aroma ve fayda yönünden karşılaştırması.",
     "date": "10 Mayıs 2026",
-    "author": "İbreoto Ekibi",
-    "image": "/images/blog/koltuk_kilifi_blog.png",
-    "content": "<p>Aracınızın içi, tıpkı eviniz gibi kişisel alanınızdır. Zamanınızın büyük bir kısmını geçirdiğiniz bu alanın hem şık hem de temiz kalmasını istersiniz. İşte bu noktada koltuk kılıfları devreye girer. Ancak piyasada binlerce çeşit kılıf varken hangisini seçmelisiniz? İşte size rehber olacak ipuçları:</p><h3>1. Malzeme Kalitesi En Önemli Etkendir</h3><p>Koltuk kılıfı seçerken karşınıza suni deri, hakiki deri, tay tüyü, jakarlı kumaş gibi birçok seçenek çıkacaktır. Eğer lüks bir görünüm ve kolay temizlik istiyorsanız suni deri idealdir. Ancak yazın terletme yapabilir. Uzun ömürlü ve nefes alan bir kumaş istiyorsanız tay tüyü veya özel dokuma kumaşları tercih etmelisiniz.</p><h3>2. Aracınızın Modelini Göz Önünde Bulundurun</h3><p>Üniversal kılıflar her araca uysa da potluk yapabilir veya tam oturmayabilir. Aracınıza özel dikim veya aracınızın kalıbına tam uyumlu (3D/5D) kılıfları tercih etmek, orijinal döşeme görüntüsü elde etmenizi sağlar.</p><h3>3. Airbag (Hava Yastığı) Uyumu Hayati Önem Taşır</h3><p>Eğer aracınızın koltuklarında yan hava yastıkları (airbag) varsa, seçeceğiniz kılıfın mutlaka \"Airbag Uyumlu\" olması gerekir. Özel zayıflatılmış dikişler sayesinde olası bir kaza anında hava yastığının açılmasını engellemez.</p><h3>4. Temizlik ve Bakım Kolaylığı</h3><p>Özellikle çocuklu aileler veya evcil hayvan sahipleri için silinebilir veya makinede yıkanabilir kumaşlar büyük kolaylık sağlar. Leke tutmayan kumaş teknolojileri bu noktada hayat kurtarıcıdır.</p>"
-  },
-  {
-    "slug": "arac-ici-kameralarin-onemi",
-    "category": "Teknoloji",
-    "title": "Araç İçi Kameraların Önemi",
-    "excerpt": "Güvenliğiniz için araç içi kamera seçerken hangi özelliklere bakmalısınız?",
-    "date": "08 Mayıs 2026",
-    "author": "İbreoto Ekibi",
-    "image": "/images/blog/dash_cam_blog.png",
-    "content": "<p>Son yıllarda trafikte yaşanan olaylar, araç içi kameraların (dash cam) bir lüks değil, zorunlu bir ihtiyaç olduğunu gösteriyor. Hem kendi güvenliğiniz hem de hukuki süreçler için bu küçük cihazlar büyük roller üstleniyor.</p><h3>1. Kazalarda Haklılığınızı Kanıtlar</h3><p>Trafikte her an istenmeyen durumlarla karşılaşabiliriz. Kusurlu tarafın belirlenmesinde sözlü beyanlar bazen yetersiz kalır. Kamera kayıtları, kaza anını saniye saniye kaydederek sigorta şirketleri ve emniyet güçleri için kesin delil sunar.</p><h3>2. Park Halinde Güvenlik</h3><p>Gelişmiş kameralarda bulunan G-Sensörü ve park modu sayesinde, aracınız park halindeyken birisi çarptığında veya zarar verdiğinde kamera otomatik olarak kayda geçer. Faili meçhul hasarların önüne geçersiniz.</p><h3>3. Sürüş Kalitenizi Artırır</h3><p>Kendi sürüş hatalarınızı görmek veya yolculuk esnasındaki güzel manzaraları kaydetmek için de harika bir araçtır. Sosyal medyada paylaşabileceğiniz anılar biriktirmenizi sağlar.</p><h3>Hangi Özelliklere Bakmalısınız?</h3><p>Kamera alırken çözünürlüğün en az 1080p (Full HD) olmasına, gece görüş özelliğine (WDR/HDR) ve geniş görüş açısına (en az 140 derece) dikkat etmelisiniz. Çift kameralı (ön ve arka) setler tam koruma sağlar.</p>"
-  },
-  {
-    "slug": "ambiyans-aydinlatma-rehberi",
-    "category": "Aksesuar",
-    "title": "Ambiyans Aydınlatma Rehberi",
-    "excerpt": "Aracınızın havasını değiştirecek LED ambiyans aydınlatma uygulamaları.",
-    "date": "05 Mayıs 2026",
-    "author": "İbreoto Ekibi",
-    "image": "/images/blog/ambiyans_blog.png",
-    "content": "<p>Yeni nesil lüks araçlarda standart olarak sunulan ambiyans aydınlatma, artık her araca uygulanabiliyor. Aracınızın gece sürüşlerindeki havasını tamamen değiştiren bu sistemler hakkında bilmeniz gerekenleri derledik.</p><h3>1. Uygulama Alanları</h3><p>Ambiyans aydınlatma genellikle torpido hattı, kapı fitil araları, ayak aydınlatmaları ve vites konsolu çevresine uygulanır. İnce fiber optik kablolar veya esnek LED şeritler kullanılır.</p><h3>2. Kontrol ve Renk Seçenekleri</h3><p>Modern sistemler genellikle Bluetooth üzerinden akıllı telefon uygulamalarıyla kontrol edilir. Milyonlarca renk seçeneği arasından modunuza göre seçim yapabilir, müziğe duyarlı modlarla ışıkların ritme göre değişmesini sağlayabilirsiniz.</p><h3>3. Montajda Dikkat Edilmesi Gerekenler</h3><p>Kaliteli bir ambiyans aydınlatma dışarıdan bakıldığında kablo karmaşası göstermemelidir. Orijinal hatlara gizlenen sistemler en şık duranlardır. Ayrıca elektrik bağlantısının güvenli yapılması, aracın orijinal beynine zarar vermemesi gerekir.</p><h3>Neden Tercih Etmelisiniz?</h3><p>Sadece estetik değil, aynı zamanda gece sürüşlerinde gözü yormayan hafif bir ışık kaynağı sağlayarak kabin içi görünürlüğü artırır. Aracınıza değer katar ve premium bir his verir.</p>"
-  },
-  {
-    "slug": "arac-bakim-periyodlari",
-    "category": "Bakım",
-    "title": "Araç Bakım Periyodları Hakkında Bilmeniz Gerekenler",
-    "excerpt": "Aracınızın ömrünü uzatmak için hangi bakımları ne zaman yaptırmalısınız?",
-    "date": "03 Mayıs 2026",
-    "author": "İbreoto Ekibi",
-    "image": "/images/blog/bakim_blog.png",
-    "content": "<p>Aracınızın performansı ve güvenliği için düzenli bakım şarttır. Peki, hangi parçayı ne zaman kontrol etmelisiniz?</p><h3>1. Yağ ve Filtre Değişimi</h3><p>Motor yağı, motorun can damarıdır. Genellikle her 10.000 ile 15.000 kilometre arasında (veya yılda bir kez) yağ ve yağ filtresi değişimi yapılmalıdır.</p><h3>2. Fren Sistemi Kontrolü</h3><p>Fren balataları ve diskleri güvenliğiniz için hayati önem taşır. Her periyodik bakımda kontrol edilmeli, aşınma durumuna göre değiştirilmelidir.</p><h3>3. Lastik Bakımı</h3><p>Lastik hava basınçlarını haftalık olarak kontrol etmek yakıt tasarrufu sağlar. Ayrıca 10.000 km'de bir lastik rotasyonu yaptırmak aşınmayı dengeler.</p>"
-  },
-  {
-    "slug": "oto-aksesuar-trendleri-2026",
-    "category": "Trend",
-    "title": "2026 Oto Aksesuar Trendleri",
-    "excerpt": "Bu yıl araç sahipleri arasında en popüler olan aksesuarları keşfedin.",
-    "date": "01 Mayıs 2026",
-    "author": "İbreoto Ekibi",
-    "image": "/images/blog/trend_blog.png",
-    "content": "<p>2026 yılı otomotiv dünyasında teknoloji ve kişiselleştirmenin yılı oluyor. İşte bu yılın en popüler aksesuar trendleri:</p><h3>1. Akıllı Ambiyans Aydınlatmalar</h3><p>Artık sadece renk değiştirmek yetmiyor. Müziğe duyarlı, bölge kontrollü ve sesle kumanda edilebilen LED sistemler çok popüler.</p><h3>2. Kablosuz Şarj Çözümleri</h3><p>Aracın orijinal yapısını bozmadan eklenen hızlı kablosuz şarj standları ve magnetik tutucular her araçta yerini alıyor.</p><h3>3. Ekolojik ve Sürdürülebilir Malzemeler</h3><p>Geri dönüştürülmüş plastiklerden üretilen paspaslar ve vegan deri koltuk kılıfları çevre duyarlılığı olan sürücülerin ilk tercihi.</p>"
+    "author": "Arı Hayat Ekibi",
+    "image": "/images/blog/blog-1.webp",
+    "content": "<p>Bal alırken genellikle hangi türü seçeceğimiz konusunda kararsız kalırız. Kestane balı ve çiçek balı, hem elde ediliş kaynakları hem de tat profilleri açısından birbirlerinden tamamen ayrılır.</p><h3>Çiçek Balı: Günlük Tüketim İçin İdeal</h3><p>Yayla çiçeklerinin nektarından üretilen çiçek balı, hafif, tatlı ve meyvemsi bir aromaya sahiptir. Kahvaltılarda, çaylarda ve tatlılarda şeker yerine doğrudan kullanım için son derece uygundur.</p><h3>Kestane Balı: Yoğun Şifa ve Keskin Lezzet</h3><p>Kestane ağaçlarının çiçeklerinden haziran aylarında üretilen bu bal, koyu renkli, hafif acımsı ve odunsu bir lezzete sahiptir. Demir yönünden zengindir ve güçlü bir antioksidandır. Genellikle günlük kaşıkla ilaç niyetine tüketilir.</p>"
   }
 ]

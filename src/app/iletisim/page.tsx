@@ -55,7 +55,7 @@ export default function IletisimPage() {
   };
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-background honeycomb-bg min-h-screen">
       {/* Hero Section */}
       <section className="relative py-24 bg-secondary text-white overflow-hidden">
         <div className="absolute inset-0 bg-honey-gradient honeycomb-bg opacity-10"></div>

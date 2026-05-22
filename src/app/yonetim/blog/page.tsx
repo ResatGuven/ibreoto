@@ -258,7 +258,7 @@ export default function AdminBlogPage() {
               </div>
               <div>
                 <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Kategori</label>
-                <input type="text" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500 text-sm" placeholder="Örn: Bakım, Teknoloji..." />
+                <input type="text" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500 text-sm" placeholder="Örn: Sağlık, Apiterapi, Bal..." />
               </div>
             </div>
             <div>

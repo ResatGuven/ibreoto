@@ -38,7 +38,7 @@ export default function HakkimizdaPage() {
   ];
 
   return (
-    <div className="pt-20 min-h-screen bg-white">
+    <div className="pt-20 min-h-screen bg-background honeycomb-bg">
       {/* Hero Section */}
       <div className="relative bg-[#FFFBEB] text-secondary py-32 overflow-hidden">
         <div className="absolute inset-0 bg-honey-gradient honeycomb-bg opacity-30"></div>
@@ -74,7 +74,7 @@ export default function HakkimizdaPage() {
       </div>
 
       {/* Stats Section */}
-      <div className="bg-white py-16 border-b border-gray-100">
+      <div className="bg-background/80 py-16 border-b border-amber-100/50">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
             {stats.map((stat, i) => (
@@ -153,7 +153,7 @@ export default function HakkimizdaPage() {
       </div>
 
       {/* Testimonials */}
-      <div className="py-24 bg-white">
+      <div className="py-24 bg-background/50 border-t border-amber-100/50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-heading font-black text-secondary uppercase mb-4">Sizden Gelen <span className="text-primary">Yorumlar</span></h2>

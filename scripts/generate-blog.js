@@ -11,16 +11,16 @@ if (!API_KEY) {
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
 const prompt = `
-Bana oto aksesuarları, araç bakımı veya modifiye hakkında Türkçe, SEO uyumlu ve ilgi çekici bir blog yazısı yaz.
+Bana doğal bal, arıcılık, propolis, arı sütü, polen, apiterapi veya arıların doğadaki önemi hakkında Türkçe, SEO uyumlu ve ilgi çekici bir blog yazısı yaz.
 Yazı formatı mutlaka ama mutlaka şu JSON yapısında olmalıdır:
 {
-  "slug": "yazi-slugu-ornek-hizli-cila-nasil-yapilir",
-  "category": "Kategori Adı (Örn: Bakım, Teknoloji, Aksesuar)",
+  "slug": "yazi-slugu-ornek-kestane-balinin-faydalari",
+  "category": "Kategori Adı (Örn: Sağlık, Rehber, Beslenme, Arıcılık)",
   "title": "Yazı Başlığı",
   "excerpt": "Yazının kısa özeti (max 150 karakter)",
-  "date": "Bugünün tarihi (Örn: 12 Mayıs 2026)",
-  "author": "İbreoto Ekibi",
-  "image": "/images/blog/default_blog.png",
+  "date": "Bugünün tarihi (Örn: 22 Mayıs 2026)",
+  "author": "Arı Hayat Ekibi",
+  "image": "/images/blog/blog-1.webp",
   "content": "<p>Yazı içeriği HTML etiketleri ile olmalı. Başlıklar için h3, paragraflar için p kullanılmalı.</p>"
 }
 Sadece JSON çıktısını ver, başka açıklama yazma.

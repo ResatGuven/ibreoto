@@ -27,7 +27,7 @@ export default function SSSPage() {
   }, []);
 
   return (
-    <div className="pt-20 min-h-screen bg-white font-body">
+    <div className="pt-20 min-h-screen bg-background honeycomb-bg font-body">
       {/* Header */}
       <div className="bg-secondary text-white py-16 relative overflow-hidden">
         <div className="absolute inset-0 bg-honey-gradient honeycomb-bg opacity-10"></div>
