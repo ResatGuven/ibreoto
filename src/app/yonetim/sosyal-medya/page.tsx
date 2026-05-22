@@ -128,6 +128,7 @@ export default function SocialMediaAssistant() {
   // AI Trend State
   const [geminiKey, setGeminiKey] = useState('');
   const [geminiVoice, setGeminiVoice] = useState('Aoede');
+  const [replicateToken, setReplicateToken] = useState('');
   const [trendKeywords, setTrendKeywords] = useState('');
   const [analyzingTrends, setAnalyzingTrends] = useState(false);
 
@@ -162,6 +163,9 @@ export default function SocialMediaAssistant() {
     const savedGeminiVoice = localStorage.getItem('ari_hayat_gemini_voice');
     if (savedGeminiVoice) setGeminiVoice(savedGeminiVoice);
 
+    const savedReplicateToken = localStorage.getItem('ari_hayat_replicate_token');
+    if (savedReplicateToken) setReplicateToken(savedReplicateToken);
+
     const savedBufferToken = localStorage.getItem('ari_hayat_buffer_token');
     if (savedBufferToken) {
       setBufferToken(savedBufferToken);
@@ -174,10 +178,11 @@ export default function SocialMediaAssistant() {
     localStorage.setItem('ari_hayat_weekly_plan', JSON.stringify(updatedPlan));
   };
 
-  const saveSettings = (bToken: string, gKey: string, gVoice: string) => {
+  const saveSettings = (bToken: string, gKey: string, gVoice: string, rToken: string) => {
     localStorage.setItem('ari_hayat_buffer_token', bToken);
     localStorage.setItem('ari_hayat_gemini_key', gKey);
     localStorage.setItem('ari_hayat_gemini_voice', gVoice);
+    localStorage.setItem('ari_hayat_replicate_token', rToken);
     showToast('Bağlantı anahtarları ve ses ayarları başarıyla güncellendi!', 'success');
     if (bToken) fetchBufferProfiles(bToken);
   };
@@ -866,6 +871,85 @@ export default function SocialMediaAssistant() {
     }
   };
 
+  const handleGenerateVideoHailuo = async () => {
+    const token = localStorage.getItem('ari_hayat_replicate_token') || replicateToken;
+    if (!token) {
+      showToast('Replicate API anahtarı ayarlar kısmından tanımlanmalıdır.', 'error');
+      return;
+    }
+    if (!currentDayPlan.imageUrl) {
+      showToast('Video üretmek için öncelikle bir görsel üretmelisiniz.', 'error');
+      return;
+    }
+
+    setGeneratingVideo(true);
+    setVideoPollingStatus('Hailuo AI (MiniMax) ile video canlandırılıyor...');
+    updateCurrentDay({ videoUrl: null });
+
+    try {
+      const res = await fetch('/api/admin/generate-video', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          imageUrl: currentDayPlan.imageUrl,
+          replicateToken: token
+        })
+      });
+
+      const data = await res.json();
+      if (!data.success) {
+        throw new Error(data.error || 'Video canlandırma başlatılamadı.');
+      }
+
+      const predictionId = data.predictionId;
+      setVideoPollingStatus('Video çiziliyor, lütfen bekleyin (30-60 sn)...');
+
+      // Start polling
+      const pollInterval = setInterval(async () => {
+        try {
+          const pollRes = await fetch(`/api/admin/generate-video?id=${predictionId}&replicateToken=${token}`);
+          const pollData = await pollRes.json();
+          
+          if (!pollData.success) {
+            clearInterval(pollInterval);
+            setGeneratingVideo(false);
+            setVideoPollingStatus(null);
+            showToast(pollData.error || 'Video durumu sorgulanamadı.', 'error');
+            return;
+          }
+
+          if (pollData.status === 'succeeded') {
+            clearInterval(pollInterval);
+            const videoUrl = Array.isArray(pollData.output) ? pollData.output[0] : pollData.output;
+            updateCurrentDay({ videoUrl });
+            setGeneratingVideo(false);
+            setVideoPollingStatus(null);
+            showToast('Hailuo AI videosu başarıyla oluşturuldu!', 'success');
+          } else if (pollData.status === 'failed' || pollData.status === 'canceled') {
+            clearInterval(pollInterval);
+            setGeneratingVideo(false);
+            setVideoPollingStatus(null);
+            showToast('Video oluşturma başarısız oldu.', 'error');
+          } else {
+            setVideoPollingStatus(`Video hazırlanıyor (${pollData.status === 'starting' ? 'Başlatılıyor' : 'İşleniyor'})...`);
+          }
+        } catch (pollErr: any) {
+          clearInterval(pollInterval);
+          setGeneratingVideo(false);
+          setVideoPollingStatus(null);
+          showToast(`Sorgulama hatası: ${pollErr.message}`, 'error');
+        }
+      }, 4000);
+
+    } catch (err: any) {
+      setGeneratingVideo(false);
+      setVideoPollingStatus(null);
+      showToast(err.message || 'Bir hata oluştu.', 'error');
+    }
+  };
+
 
 
   const handleAutoShare = async () => {
@@ -1041,8 +1125,19 @@ export default function SocialMediaAssistant() {
                 />
               </div>
 
+              <div>
+                <label className="block text-gray-400 mb-1 text-[10px] uppercase font-bold">Replicate API Anahtarı (Hailuo AI Video)</label>
+                <input 
+                  type="password"
+                  placeholder="Replicate API Token (r8_...)..."
+                  value={replicateToken}
+                  onChange={e => setReplicateToken(e.target.value)}
+                  className="w-full p-2.5 bg-[#1F2937] border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                />
+              </div>
+
               <button
-                onClick={() => saveSettings(bufferToken, geminiKey, geminiVoice)}
+                onClick={() => saveSettings(bufferToken, geminiKey, geminiVoice, replicateToken)}
                 className="w-full py-2 bg-primary hover:bg-primary-hover text-secondary font-bold text-xs uppercase rounded-lg transition-colors flex items-center justify-center"
               >
                 <ShieldCheck className="w-4 h-4 mr-1.5" /> Bağlantıları Kaydet
@@ -1178,12 +1273,13 @@ export default function SocialMediaAssistant() {
                 onClick={handleGenerateVoice}
                 disabled={loading}
                 className="w-full bg-gradient-to-r from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-secondary p-3 rounded-xl font-heading font-black text-xs uppercase flex items-center justify-center transition-all shadow-lg disabled:opacity-50"
+                title="Ücretsiz Edge-TTS (Ahmet Sesi) veya Google Gemini Ses motorunu kullanarak ses sentezler"
               >
                 {loading ? (
                   <>Seslendiriliyor...</>
                 ) : (
                   <>
-                    <Music className="w-4 h-4 mr-2" /> Premium Ahmet Sesiyle Üret
+                    <Music className="w-4 h-4 mr-2" /> Premium Yapay Zeka Sesiyle Üret (Edge-TTS / Gemini)
                   </>
                 )}
               </button>
@@ -1380,6 +1476,7 @@ export default function SocialMediaAssistant() {
                     onClick={handleGenerateImage}
                     disabled={generatingImage}
                     className="flex-1 bg-primary hover:bg-primary-hover text-secondary p-3.5 rounded-xl font-heading font-black text-xs uppercase flex items-center justify-center transition-all disabled:opacity-50"
+                    title="Pollinations API ile Stable Diffusion kullanarak görsel üretir"
                   >
                     {generatingImage ? (
                       <>
@@ -1387,7 +1484,7 @@ export default function SocialMediaAssistant() {
                       </>
                     ) : (
                       <>
-                        <Sparkles className="w-4 h-4 mr-2" /> Görseli Oluştur
+                        <Sparkles className="w-4 h-4 mr-2" /> SD (Stable Diffusion) Görseli Oluştur
                       </>
                     )}
                   </button>
@@ -1477,10 +1574,12 @@ export default function SocialMediaAssistant() {
                 </div>
 
                 <div className="space-y-2">
+                  {/* Button 1: Free Video Rendering (Edits Compiler) */}
                   <button
                     onClick={handleGenerateVideoFree}
                     disabled={generatingVideo || !currentDayPlan.imageUrl || !currentDayPlan.audioUrl}
                     className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white p-3.5 rounded-xl font-heading font-black text-xs uppercase flex items-center justify-center transition-all disabled:opacity-50"
+                    title="Spektrumlu ve altyazılı hızlı video sentezleme motoru (Edits)"
                   >
                     {generatingVideo && videoPollingStatus?.includes('Sentezleniyor') ? (
                       <>
@@ -1488,7 +1587,25 @@ export default function SocialMediaAssistant() {
                       </>
                     ) : (
                       <>
-                        <Zap className="w-4 h-4 mr-2 text-yellow-300 fill-yellow-300" /> Ücretsiz Video Sentezle (Hızlı)
+                        <Zap className="w-4 h-4 mr-2 text-yellow-300 fill-yellow-300" /> Akıllı Web Montaj Motoru (Edits)
+                      </>
+                    )}
+                  </button>
+
+                  {/* Button 2: Hailuo AI Video Generation */}
+                  <button
+                    onClick={handleGenerateVideoHailuo}
+                    disabled={generatingVideo || !currentDayPlan.imageUrl}
+                    className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white p-3.5 rounded-xl font-heading font-black text-xs uppercase flex items-center justify-center transition-all disabled:opacity-50"
+                    title="Stable Diffusion görselini canlandırıp sinematik video üretmek için Hailuo (MiniMax) kullanın"
+                  >
+                    {generatingVideo && videoPollingStatus?.includes('canlandırılıyor') ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" /> {videoPollingStatus}
+                      </>
+                    ) : (
+                      <>
+                        <Video className="w-4 h-4 mr-2 text-white" /> Hailuo AI Sinematik Video Üret (Replicate)
                       </>
                     )}
                   </button>
@@ -1497,7 +1614,7 @@ export default function SocialMediaAssistant() {
                     <span className="text-[10px] text-red-400 block text-center">Öncelikle yukarıdan bir görsel üretmelisiniz.</span>
                   )}
                   {currentDayPlan.imageUrl && !currentDayPlan.audioUrl && (
-                    <span className="text-[10px] text-amber-400 block text-center">Ücretsiz video için önce premium ses dosyasını üretin.</span>
+                    <span className="text-[10px] text-amber-400 block text-center">Web montajı için önce premium ses dosyasını üretin.</span>
                   )}
                 </div>
               </div>

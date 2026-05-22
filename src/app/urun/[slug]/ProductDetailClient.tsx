@@ -321,16 +321,22 @@ export default function ProductDetailClient({ product, slug, relatedProducts }: 
 
       {/* Tabs */}
       <div className="bg-white rounded-xl shadow-sm border border-surface p-6 md:p-10 mb-8">
-        <div className="flex border-b border-surface mb-6 space-x-8">
+        <div className="flex border-b border-surface mb-6 space-x-8 overflow-x-auto scrollbar-hide">
           <button 
             onClick={() => setActiveTab('description')}
-            className={`font-heading font-bold uppercase pb-4 transition-colors ${activeTab === 'description' ? 'text-primary border-b-2 border-primary' : 'text-text-muted hover:text-secondary'}`}
+            className={`font-heading font-bold uppercase pb-4 transition-colors shrink-0 ${activeTab === 'description' ? 'text-primary border-b-2 border-primary' : 'text-text-muted hover:text-secondary'}`}
           >
             Ürün Açıklaması
           </button>
           <button 
+            onClick={() => setActiveTab('dosage')}
+            className={`font-heading font-bold uppercase pb-4 transition-colors shrink-0 ${activeTab === 'dosage' ? 'text-primary border-b-2 border-primary' : 'text-text-muted hover:text-secondary'}`}
+          >
+            Kullanım & Dozaj Kılavuzu
+          </button>
+          <button 
             onClick={() => setActiveTab('reviews')}
-            className={`font-heading font-bold uppercase pb-4 transition-colors ${activeTab === 'reviews' ? 'text-primary border-b-2 border-primary' : 'text-text-muted hover:text-secondary'}`}
+            className={`font-heading font-bold uppercase pb-4 transition-colors shrink-0 ${activeTab === 'reviews' ? 'text-primary border-b-2 border-primary' : 'text-text-muted hover:text-secondary'}`}
           >
             Yorumlar ({comments.length})
           </button>
@@ -339,6 +345,159 @@ export default function ProductDetailClient({ product, slug, relatedProducts }: 
         {activeTab === 'description' && (
           <div className="font-body text-text-muted leading-relaxed prose prose-amber max-w-none">
             <div dangerouslySetInnerHTML={{ __html: product.description.replace(/\n/g, '<br />') }} />
+          </div>
+        )}
+
+        {activeTab === 'dosage' && (
+          <div className="font-body text-text-muted leading-relaxed max-w-3xl">
+            {product.category === 'bal' && (
+              <div className="space-y-6">
+                <h4 className="font-heading font-bold text-secondary uppercase text-sm">Bal Tüketim Rehberi</h4>
+                <p className="text-xs text-gray-500">Doğal şifa kaynağı ham balın en yüksek faydayı sağlaması için önerilen kullanım şekli:</p>
+                <div className="overflow-hidden border border-gray-100 rounded-xl">
+                  <table className="min-w-full divide-y divide-gray-100 text-xs md:text-sm">
+                    <thead className="bg-surface">
+                      <tr>
+                        <th className="px-4 py-3 text-left font-bold text-secondary uppercase tracking-wider">Yaş Grubu</th>
+                        <th className="px-4 py-3 text-left font-bold text-secondary uppercase tracking-wider">Günlük Doz</th>
+                        <th className="px-4 py-3 text-left font-bold text-secondary uppercase tracking-wider">Öneri</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-100">
+                      <tr>
+                        <td className="px-4 py-3 font-bold text-secondary">Yetişkinler</td>
+                        <td className="px-4 py-3">1-2 Yemek Kaşığı</td>
+                        <td className="px-4 py-3">Sabah aç karnına doğrudan veya ılık suya katılarak tüketilmesi tavsiye edilir.</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-3 font-bold text-secondary">Çocuklar (1+ Yaş)</td>
+                        <td className="px-4 py-3">1-2 Tatlı Kaşığı</td>
+                        <td className="px-4 py-3">Ilık süt, meyve püresi veya yoğurt içerisine karıştırılarak verilebilir.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div className="bg-amber-50 border border-amber-200/50 rounded-xl p-4 text-xs space-y-2 text-amber-900">
+                  <p className="font-bold flex items-center gap-1.5 text-amber-800">⚠️ Bebek Sağlığı Uyarısı:</p>
+                  <p>1 yaşından küçük bebeklere botulizm riski nedeniyle kesinlikle bal veya bal içeren gıdalar verilmemelidir.</p>
+                </div>
+              </div>
+            )}
+
+            {product.category === 'propolis' && (
+              <div className="space-y-6">
+                <h4 className="font-heading font-bold text-secondary uppercase text-sm">Zeytinyağlı Propolis Kullanım Kılavuzu</h4>
+                <p className="text-xs text-gray-500">Saf propolis ekstraktının günlük bağışıklık desteği için kullanımı:</p>
+                <div className="overflow-hidden border border-gray-100 rounded-xl">
+                  <table className="min-w-full divide-y divide-gray-100 text-xs md:text-sm">
+                    <thead className="bg-surface">
+                      <tr>
+                        <th className="px-4 py-3 text-left font-bold text-secondary uppercase tracking-wider">Yaş Grubu</th>
+                        <th className="px-4 py-3 text-left font-bold text-secondary uppercase tracking-wider">Günlük Doz</th>
+                        <th className="px-4 py-3 text-left font-bold text-secondary uppercase tracking-wider">Tüketim Şekli</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-100">
+                      <tr>
+                        <td className="px-4 py-3 font-bold text-secondary">Yetişkinler</td>
+                        <td className="px-4 py-3">10-15 Damla</td>
+                        <td className="px-4 py-3">Su, süt, meyve suyu veya bir kaşık bal üzerine damlatılarak tüketilir.</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-3 font-bold text-secondary">Çocuklar (1+ Yaş)</td>
+                        <td className="px-4 py-3">5-8 Damla</td>
+                        <td className="px-4 py-3">Sıcak olmayan içeceklere veya yoğurda karıştırılarak verilir.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div className="bg-amber-50 border border-amber-200/50 rounded-xl p-4 text-xs space-y-2 text-amber-900">
+                  <p className="font-bold flex items-center gap-1.5 text-amber-800">🔬 Apiterapi Tavsiyesi:</p>
+                  <p>Propolis arı salgısı olduğundan, arı ürünlerine karşı yüksek alerji riski taşıyan kişilerin kullanım öncesinde bir hekime danışması önerilir.</p>
+                </div>
+              </div>
+            )}
+
+            {product.category === 'ari-sutu' && (
+              <div className="space-y-6">
+                <h4 className="font-heading font-bold text-secondary uppercase text-sm">Taze Arı Sütü Kullanım ve Saklama Rehberi</h4>
+                <p className="text-xs text-gray-500">Biyolojik olarak son derece hassas olan arı sütünün kullanımı:</p>
+                <div className="overflow-hidden border border-gray-100 rounded-xl">
+                  <table className="min-w-full divide-y divide-gray-100 text-xs md:text-sm">
+                    <thead className="bg-surface">
+                      <tr>
+                        <th className="px-4 py-3 text-left font-bold text-secondary uppercase tracking-wider">Kullanıcı</th>
+                        <th className="px-4 py-3 text-left font-bold text-secondary uppercase tracking-wider">Günlük Doz</th>
+                        <th className="px-4 py-3 text-left font-bold text-secondary uppercase tracking-wider">Tüketim Şekli</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-100">
+                      <tr>
+                        <td className="px-4 py-3 font-bold text-secondary">Yetişkinler</td>
+                        <td className="px-4 py-3">1 Gram (Yarım çay kaşığı)</td>
+                        <td className="px-4 py-3">Sabah aç karnına dil altına konularak 1-2 dakika emilerek tüketilir.</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-3 font-bold text-secondary">Çocuklar (2+ Yaş)</td>
+                        <td className="px-4 py-3">0.5 Gram (Çeyrek çay kaşığı)</td>
+                        <td className="px-4 py-3">Doğrudan dil altından veya bir miktar balla karıştırılarak tüketilir.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div className="bg-amber-50 border border-amber-200/50 rounded-xl p-4 text-xs space-y-2 text-amber-900">
+                  <p className="font-bold flex items-center gap-1.5 text-amber-800">💡 ÖNEMLİ BİLGİ:</p>
+                  <p>Arı sütünün içindeki aktif enzimlerin bozulmaması için kesinlikle metal kaşık temas ettirilmemelidir; plastik, cam veya ahşap kaşık kullanılmalıdır. Ürün derin dondurucuda (saf haliyle) saklanmalıdır.</p>
+                </div>
+              </div>
+            )}
+
+            {(product.category === 'karisim' || product.category === 'besli-karisim') && (
+              <div className="space-y-6">
+                <h4 className="font-heading font-bold text-secondary uppercase text-sm">Şifa Karışımları Tüketim Rehberi</h4>
+                <p className="text-xs text-gray-500">Arı Sütü, Bal, Polen, Propolis ve Arı Ekmeği içeren sinerjik karışımların tüketimi:</p>
+                <div className="overflow-hidden border border-gray-100 rounded-xl">
+                  <table className="min-w-full divide-y divide-gray-100 text-xs md:text-sm">
+                    <thead className="bg-surface">
+                      <tr>
+                        <th className="px-4 py-3 text-left font-bold text-secondary uppercase tracking-wider">Kullanıcı</th>
+                        <th className="px-4 py-3 text-left font-bold text-secondary uppercase tracking-wider">Günlük Doz</th>
+                        <th className="px-4 py-3 text-left font-bold text-secondary uppercase tracking-wider">Tüketim Şekli</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-100">
+                      <tr>
+                        <td className="px-4 py-3 font-bold text-secondary">Yetişkinler</td>
+                        <td className="px-4 py-3">1 Tatlı Kaşığı</td>
+                        <td className="px-4 py-3">Sabah aç karnına doğrudan tahta/plastik kaşıkla tüketilir.</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-3 font-bold text-secondary">Çocuklar (1+ Yaş)</td>
+                        <td className="px-4 py-3">1 Çay Kaşığı</td>
+                        <td className="px-4 py-3">Sabahları doğrudan tüketilebilir veya ılık süte katılarak verilebilir.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div className="bg-amber-50 border border-amber-200/50 rounded-xl p-4 text-xs space-y-2 text-amber-900">
+                  <p className="font-bold flex items-center gap-1.5 text-amber-800">🥄 Tüketim Tavsiyesi:</p>
+                  <p>Karışımın içindeki polen ve arı sütünün yapısını korumak amacıyla oda sıcaklığında saklanmalı, sıcak yiyeceklerle temas ettirilmemeli ve metal kaşık kullanılmamalıdır.</p>
+                </div>
+              </div>
+            )}
+
+            {!['bal', 'propolis', 'ari-sutu', 'karisim', 'besli-karisim'].includes(product.category) && (
+              <div className="space-y-6">
+                <h4 className="font-heading font-bold text-secondary uppercase text-sm">Genel Kullanım Önerisi</h4>
+                <p className="text-sm text-text-muted">
+                  Bu doğal arı ürünü/takviyesi, günlük beslenme rutininizin bir parçası olarak tüketilebilir. Yetişkinler için günlük 1 tatlı kaşığı/ölçek, çocuklar için 1 çay kaşığı olarak tüketilmesi önerilir.
+                </p>
+                <div className="bg-amber-50 border border-amber-200/50 rounded-xl p-4 text-xs text-amber-900">
+                  <p className="font-bold">Saklama Koşulu:</p>
+                  <p>Doğrudan güneş ışığı görmeyen, serin ve kuru bir ortamda kapağı kapalı olarak saklayınız.</p>
+                </div>
+              </div>
+            )}
           </div>
         )}
 

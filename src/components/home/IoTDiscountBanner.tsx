@@ -57,14 +57,14 @@ export function IoTDiscountBanner() {
           <div>
             <div className="flex items-center gap-2 mb-0.5">
               <span className="text-[10px] bg-primary/20 text-primary border border-primary/30 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">
-                CANLI IoT ALARMI
+                🐝 KOVANDAN CANLI HABER
               </span>
               <span className="text-xs text-gray-400 font-medium">
                 {hiveData.location} • <strong className="text-white">{hiveData.name}</strong>
               </span>
             </div>
-            <p className="text-sm text-gray-300">
-              Kovan içi sıcaklık <strong className="text-primary font-heading font-black">{temp}°C</strong>'ye düştü! Arılarımız kovanı ısıtmak için çalışıyor. Sizin de sağlığınız için kış şifası kampanyası başladı!
+            <p className="text-sm text-gray-300 font-body">
+              Bursa yaylalarında hava soğudu, kovan içi sıcaklık <strong className="text-primary font-heading font-black">{temp}°C</strong>. Arılarımız kovanı sıcak tutmak için kanat çırpıyor. Ailenizin kış şifası için özel indiriminiz hazır!
             </p>
           </div>
         </div>
