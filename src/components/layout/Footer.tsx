@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Facebook, Instagram, Mail, Phone, MapPin, Youtube } from 'lucide-react';
 
 export default function Footer() {
@@ -40,10 +41,13 @@ export default function Footer() {
         {/* Brand */}
         <div className="space-y-6">
           <div className="flex items-center">
-            <img 
+            <Image 
               src={siteSettings?.logoUrl || "/images/logo.jpg"} 
               alt="Arı Hayat" 
-              className="h-16 w-auto bg-white p-2 rounded-xl" 
+              width={128}
+              height={64}
+              unoptimized
+              className="h-16 w-auto bg-white p-2 rounded-xl object-contain" 
             />
           </div>
           <p className="text-gray-400 font-body text-sm leading-relaxed">
@@ -126,9 +130,9 @@ export default function Footer() {
           <div className="pt-4 flex flex-col space-y-2">
             <p className="text-[10px] text-gray-500 uppercase font-bold">Güvenli Ödeme Altyapısı</p>
             <div className="flex space-x-2 items-center grayscale opacity-70">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" alt="Visa" className="h-3" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" alt="Mastercard" className="h-4" />
-              <img src="https://www.troyodeme.com/assets/images/troy-logo.png" alt="Troy" className="h-3" />
+              <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" alt="Visa" width={36} height={12} unoptimized className="h-3 w-auto object-contain" />
+              <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" alt="Mastercard" width={26} height={16} unoptimized className="h-4 w-auto object-contain" />
+              <Image src="https://www.troyodeme.com/assets/images/troy-logo.png" alt="Troy" width={32} height={12} unoptimized className="h-3 w-auto object-contain" />
             </div>
           </div>
         </div>

@@ -5,10 +5,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Star, ShoppingCart, ArrowRight, Heart, Truck } from 'lucide-react';
+import { useCartStore } from '@/store/useCartStore';
+import { useToast } from '@/context/ToastContext';
 
 export const FeaturedProducts = () => {
   const [products, setProducts] = useState<any[]>([]);
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const addToCartStore = useCartStore((state) => state.addToCart);
+  const toggleFavoriteStore = useCartStore((state) => state.toggleFavorite);
+  const favoritesStore = useCartStore((state) => state.favorites);
+  const { showToast } = useToast();
 
   const defaultProducts = [
     { id: 'ari-02', name: 'Arı Sütü Yerli Üretim 50 gr', price: 2000, originalPrice: null, category: 'ari-sutu', image: '/images/products/ari-sutu.png', description: 'Kendi kovanlarımızdan taze sağım, dondurulmuş saf yerli arı sütü. 50 gr.', rating: 5, reviews: 42, isNew: false, isFreeShipping: true },
@@ -22,21 +27,7 @@ export const FeaturedProducts = () => {
   ];
 
   useEffect(() => {
-    const savedFavs = localStorage.getItem('favorites');
-    if (savedFavs) {
-      setFavorites(JSON.parse(savedFavs).map((p: any) => String(p.id)));
-    }
-
     fetchProducts();
-
-    const updateFavorites = () => {
-      const saved = localStorage.getItem('favorites');
-      if (saved) {
-        setFavorites(JSON.parse(saved).map((p: any) => String(p.id)));
-      }
-    };
-    window.addEventListener('favoritesUpdated', updateFavorites);
-    return () => window.removeEventListener('favoritesUpdated', updateFavorites);
   }, []);
 
   const fetchProducts = async () => {
@@ -61,36 +52,18 @@ export const FeaturedProducts = () => {
   };
 
   const toggleFavorite = (product: any) => {
-    const savedFavs = localStorage.getItem('favorites');
-    let favs = savedFavs ? JSON.parse(savedFavs) : [];
-    const isFav = favs.find((p: any) => String(p.id) === String(product.id));
-    
+    const isFav = favoritesStore.some((p: any) => String(p.id) === String(product.id));
+    toggleFavoriteStore(product);
     if (isFav) {
-      favs = favs.filter((p: any) => String(p.id) !== String(product.id));
-      setFavorites(favorites.filter(id => id !== String(product.id)));
+      showToast('Ürün favorilerinizden kaldırıldı.', 'info');
     } else {
-      favs.push(product);
-      setFavorites([...favorites, String(product.id)]);
+      showToast('Ürün favorilerinize eklendi!', 'success');
     }
-    
-    localStorage.setItem('favorites', JSON.stringify(favs));
-    window.dispatchEvent(new Event('favoritesUpdated'));
   };
 
   const addToCart = (product: any) => {
-    const savedCart = localStorage.getItem('cart');
-    let cart = savedCart ? JSON.parse(savedCart) : [];
-    
-    const existing = cart.find((item: any) => String(item.id) === String(product.id));
-    if (existing) {
-      existing.qty += 1;
-    } else {
-      cart.push({ ...product, qty: 1, price: `₺${product.price}` });
-    }
-    
-    localStorage.setItem('cart', JSON.stringify(cart));
-    window.dispatchEvent(new Event('cartUpdated'));
-    alert(`${product.name} sepete eklendi!`);
+    addToCartStore(product);
+    showToast(`${product.name} sepete eklendi!`, 'success');
   };
 
   return (
@@ -148,9 +121,9 @@ export const FeaturedProducts = () => {
 
               <button 
                 onClick={() => toggleFavorite(product)}
-                className={`absolute top-4 right-4 z-20 w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-all duration-300 ${favorites.includes(String(product.id)) ? 'bg-primary text-secondary' : 'bg-white text-secondary hover:text-primary'}`}
+                className={`absolute top-4 right-4 z-20 w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-all duration-300 ${favoritesStore.some((p: any) => String(p.id) === String(product.id)) ? 'bg-primary text-secondary' : 'bg-white text-secondary hover:text-primary'}`}
               >
-                <Heart className={`w-5 h-5 ${favorites.includes(String(product.id)) ? 'fill-current' : ''}`} />
+                <Heart className={`w-5 h-5 ${favoritesStore.some((p: any) => String(p.id) === String(product.id)) ? 'fill-current' : ''}`} />
               </button>
 
               {/* Image */}

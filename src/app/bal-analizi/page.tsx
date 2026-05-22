@@ -8,6 +8,7 @@ import {
   CheckCircle2, AlertTriangle, Info, Check,
   Flame, Droplets, Wind, Sparkles, Share2, Download, BookOpen, Heart, RefreshCw
 } from 'lucide-react';
+import { exportAnalysisPDF } from '@/utils/pdfExport';
 
 export default function BalAnaliziPage() {
   return (
@@ -34,7 +35,7 @@ function BalAnaliziContent() {
   const [certShareMessage, setCertShareMessage] = useState('');
 
   const getTastingNotes = (productName: string = "") => {
-    const lowerName = productName.toLowerCase();
+    const lowerName = productName.toLocaleLowerCase('tr-TR');
     if (lowerName.includes("kestane")) {
       return {
         bogaz: 8,
@@ -71,41 +72,17 @@ function BalAnaliziContent() {
     }
   };
 
-  const handleDownloadCert = () => {
+  const handleDownloadCert = async () => {
     setIsGeneratingCert(true);
-    setTimeout(() => {
-      setIsGeneratingCert(false);
-      const element = document.createElement("a");
-      const file = new Blob([`
-======================================================
-         ARI HAYAT PREMİUM BAL ANALİZ SERTİFİKASI
-======================================================
-Barkod / Lot No: ${analysis.batchNo}
-Ürün Türü: ${analysis.productName}
-Analiz Tarihi: ${new Date(analysis.analysisDate).toLocaleDateString('tr-TR')}
-
-LABORATUVAR DEĞERLERİ:
-- Prolin Oranı: ${analysis.proline} mg/kg (Minimum Limit: 180 mg/kg)
-- Nem Oranı: %${analysis.moisture} (Maksimum Limit: %20)
-- Diastaz Sayısı: ${analysis.diastase} (Minimum Limit: 8)
-
-GÜVENLİK VE SAFLIK ONAYI:
-Akredite Gıda Analiz Laboratuvarı test sonuçlarına göre bu ürün
-%100 saf ve çiğ (raw) bal olup, hiçbir harici şeker, katkı veya
-pestisit kalıntısı içermemektedir.
-
-Arı Hayat Arıcılık © 2026
-Doğallık ve Şeffaflık Taahhüdü
-======================================================
-      `], {type: 'text/plain'});
-      element.href = URL.createObjectURL(file);
-      element.download = `arihayat_sertifika_${analysis.batchNo}.txt`;
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-      setCertShareMessage("Sertifika analiz belgesi başarıyla cihazınıza indirildi! (.txt)");
+    try {
+      await exportAnalysisPDF(analysis);
+      setCertShareMessage("Sertifika analiz belgesi başarıyla PDF olarak indirildi!");
       setTimeout(() => setCertShareMessage(""), 5000);
-    }, 1500);
+    } catch (e) {
+      console.error("PDF generation failed:", e);
+    } finally {
+      setIsGeneratingCert(false);
+    }
   };
 
   // 1. Fetch analysis details
@@ -607,7 +584,7 @@ Doğallık ve Şeffaflık Taahhüdü
                         </>
                       ) : (
                         <>
-                          <Download className="w-3.5 h-3.5" /> İndir (.TXT)
+                          <Download className="w-3.5 h-3.5" /> İndir (PDF)
                         </>
                       )}
                     </button>

@@ -3,11 +3,16 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Trash2, ShoppingBag, Truck, ArrowRight, ShieldCheck } from 'lucide-react';
+import Image from 'next/image';
+import { useCartStore } from '@/store/useCartStore';
 
 const FREE_SHIPPING_THRESHOLD = 1000;
 
 export default function SepetPage() {
-  const [cartItems, setCartItems] = useState<any[]>([]);
+  const cartItems = useCartStore((state) => state.cart);
+  const removeItem = useCartStore((state) => state.removeFromCart);
+  const updateQty = useCartStore((state) => state.updateCartQty);
+  
   const [couponCode, setCouponCode] = useState('');
   const [couponMessage, setCouponMessage] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
@@ -23,41 +28,6 @@ export default function SepetPage() {
       setCouponMessage(`Kupon uygulandı: ${savedCoupon}`);
     }
   }, []);
-
-  useEffect(() => {
-    const updateCart = () => {
-      const savedCart = localStorage.getItem('cart');
-      if (savedCart) {
-        setCartItems(JSON.parse(savedCart));
-      }
-    };
-
-    updateCart();
-    window.addEventListener('cartUpdated', updateCart);
-    window.addEventListener('storage', updateCart);
-    
-    return () => {
-      window.removeEventListener('cartUpdated', updateCart);
-      window.removeEventListener('storage', updateCart);
-    };
-  }, []);
-
-  const removeItem = (id: any) => {
-    const updated = cartItems.filter(item => String(item.id) !== String(id));
-    setCartItems(updated);
-    localStorage.setItem('cart', JSON.stringify(updated));
-    window.dispatchEvent(new Event('cartUpdated'));
-  };
-
-  const updateQty = (id: any, newQty: number) => {
-    if (newQty < 1) return;
-    const updated = cartItems.map(item => 
-      String(item.id) === String(id) ? { ...item, qty: newQty } : item
-    );
-    setCartItems(updated);
-    localStorage.setItem('cart', JSON.stringify(updated));
-    window.dispatchEvent(new Event('cartUpdated'));
-  };
 
   const calculateTotal = () => {
     return cartItems.reduce((acc, item) => {
@@ -165,9 +135,9 @@ export default function SepetPage() {
                 {cartItems.map((item, index) => (
                   <div key={`${item.id}-${index}`} className="bg-white p-4 md:p-6 rounded-2xl border border-surface shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 group hover:border-primary/20 transition-colors">
                     <div className="flex items-center space-x-6 w-full sm:w-auto">
-                      <div className="w-20 h-20 bg-surface/50 rounded-xl flex items-center justify-center p-2 flex-shrink-0 border border-surface">
+                      <div className="w-20 h-20 bg-surface/50 rounded-xl flex items-center justify-center p-2 flex-shrink-0 border border-surface relative">
                         {item.image ? (
-                          <img src={item.image} alt={item.name} className="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-500" />
+                          <Image src={item.image} alt={item.name} fill unoptimized className="object-contain transform group-hover:scale-110 transition-transform duration-500 p-2" />
                         ) : (
                           <span className="text-[10px] text-text-muted font-heading uppercase">Görsel</span>
                         )}

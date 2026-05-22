@@ -165,7 +165,7 @@ export default function AdminYorumlarPage() {
     // Draw Product Name
     ctx.fillStyle = '#D97706'; // Gold/Amber
     ctx.font = 'bold 22px "Outfit", sans-serif';
-    ctx.fillText((review.product?.name || review.productId || 'Doğal Arı Ürünü').toUpperCase(), 540, 845);
+    ctx.fillText((review.product?.name || review.productId || 'Doğal Arı Ürünü').toLocaleUpperCase('tr-TR'), 540, 845);
 
     // Draw Logo Watermark at Bottom
     ctx.fillStyle = theme === 'gold-dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.4)';

@@ -8,6 +8,8 @@ import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { ShoppingBag, Star, Heart, Truck } from 'lucide-react';
 import { ProductsSkeleton } from '@/components/ui/ProductsSkeleton';
+import { useCartStore } from '@/store/useCartStore';
+import { useToast } from '@/context/ToastContext';
 
 export default function UrunlerPage() {
   return (
@@ -29,7 +31,7 @@ export default function UrunlerPage() {
 function UrunlerContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
-  const searchQuery = searchParams.get('search')?.toLowerCase() || '';
+  const searchQuery = searchParams.get('search')?.toLocaleLowerCase('tr-TR') || '';
 
   const [products, setProducts] = useState<any[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
@@ -41,7 +43,10 @@ function UrunlerContent() {
   const [appliedMax, setAppliedMax] = useState<number | null>(null);
   const [sortBy, setSortBy] = useState('recommended');
   const [loading, setLoading] = useState(true);
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const addToCartStore = useCartStore((state) => state.addToCart);
+  const toggleFavoriteStore = useCartStore((state) => state.toggleFavorite);
+  const favoritesStore = useCartStore((state) => state.favorites);
+  const { showToast } = useToast();
 
   const categoryNames: { [key: string]: string } = {
     'bal': 'Doğal Ballar',
@@ -52,14 +57,6 @@ function UrunlerContent() {
     'besli-karisim': 'Beşli Karışımlar',
     'bitkisel-yaglar': 'Bitkisel Yağlar'
   };
-
-
-  useEffect(() => {
-    const savedFavs = localStorage.getItem('favorites');
-    if (savedFavs) {
-      setFavorites(JSON.parse(savedFavs).map((p: any) => String(p.id)));
-    }
-  }, []);
 
   useEffect(() => {
     if (categoryParam) {
@@ -92,9 +89,9 @@ function UrunlerContent() {
     // Search filter
     if (searchQuery) {
       filtered = filtered.filter(p => 
-        p.name.toLowerCase().includes(searchQuery) || 
-        p.category?.name?.toLowerCase().includes(searchQuery) ||
-        p.description.toLowerCase().includes(searchQuery)
+        p.name.toLocaleLowerCase('tr-TR').includes(searchQuery) || 
+        p.category?.name?.toLocaleLowerCase('tr-TR').includes(searchQuery) ||
+        p.description.toLocaleLowerCase('tr-TR').includes(searchQuery)
       );
     }
 
@@ -142,36 +139,18 @@ function UrunlerContent() {
   };
 
   const toggleFavorite = (product: any) => {
-    const savedFavs = localStorage.getItem('favorites');
-    let favs = savedFavs ? JSON.parse(savedFavs) : [];
-    const isFav = favs.find((p: any) => String(p.id) === String(product.id));
-    
+    const isFav = favoritesStore.some((p: any) => String(p.id) === String(product.id));
+    toggleFavoriteStore(product);
     if (isFav) {
-      favs = favs.filter((p: any) => String(p.id) !== String(product.id));
-      setFavorites(favorites.filter(id => id !== String(product.id)));
+      showToast('Ürün favorilerinizden kaldırıldı.', 'info');
     } else {
-      favs.push(product);
-      setFavorites([...favorites, String(product.id)]);
+      showToast('Ürün favorilerinize eklendi!', 'success');
     }
-    
-    localStorage.setItem('favorites', JSON.stringify(favs));
-    window.dispatchEvent(new Event('favoritesUpdated'));
   };
 
   const addToCart = (product: any) => {
-    const savedCart = localStorage.getItem('cart');
-    let cart = savedCart ? JSON.parse(savedCart) : [];
-    
-    const existing = cart.find((item: any) => String(item.id) === String(product.id));
-    if (existing) {
-      existing.qty += 1;
-    } else {
-      cart.push({ ...product, qty: 1, price: `₺${product.price}` });
-    }
-    
-    localStorage.setItem('cart', JSON.stringify(cart));
-    window.dispatchEvent(new Event('cartUpdated'));
-    alert(`${product.name} sepete eklendi!`);
+    addToCartStore(product);
+    showToast(`${product.name} sepete eklendi!`, 'success');
   };
 
   return (
@@ -307,9 +286,9 @@ function UrunlerContent() {
                     
                     <button 
                       onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(product); }}
-                      className={`absolute top-4 right-4 w-11 h-11 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 z-20 ${favorites.includes(String(product.id)) ? 'bg-primary text-white' : 'bg-white text-secondary hover:text-primary'}`}
+                      className={`absolute top-4 right-4 w-11 h-11 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 z-20 ${favoritesStore.some((p: any) => String(p.id) === String(product.id)) ? 'bg-primary text-white' : 'bg-white text-secondary hover:text-primary'}`}
                     >
-                      <Heart className={`w-5 h-5 ${favorites.includes(String(product.id)) ? 'fill-current' : ''}`} />
+                      <Heart className={`w-5 h-5 ${favoritesStore.some((p: any) => String(p.id) === String(product.id)) ? 'fill-current' : ''}`} />
                     </button>
 
                     {/* Quick Add Button on Hover */}

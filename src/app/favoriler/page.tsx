@@ -1,40 +1,26 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { Heart, ShoppingBag, Trash2, ArrowLeft } from 'lucide-react';
+import Image from 'next/image';
+import { useCartStore } from '@/store/useCartStore';
+import { useToast } from '@/context/ToastContext';
 
 export default function FavorilerPage() {
-  const [favorites, setFavorites] = useState<any[]>([]);
-
-  useEffect(() => {
-    const savedFavorites = localStorage.getItem('favorites');
-    if (savedFavorites) {
-      setFavorites(JSON.parse(savedFavorites));
-    }
-  }, []);
+  const favorites = useCartStore((state) => state.favorites);
+  const removeFromFavorites = useCartStore((state) => state.removeFromFavorites);
+  const addToCartStore = useCartStore((state) => state.addToCart);
+  const { showToast } = useToast();
 
   const removeFavorite = (id: string) => {
-    const updated = favorites.filter(p => String(p.id) !== String(id));
-    setFavorites(updated);
-    localStorage.setItem('favorites', JSON.stringify(updated));
-    window.dispatchEvent(new Event('favoritesUpdated'));
+    removeFromFavorites(id);
+    showToast('Ürün favorilerinizden kaldırıldı.', 'info');
   };
 
   const addToCart = (product: any) => {
-    const savedCart = localStorage.getItem('cart');
-    let cart = savedCart ? JSON.parse(savedCart) : [];
-    
-    const existing = cart.find((item: any) => String(item.id) === String(product.id));
-    if (existing) {
-      existing.qty += 1;
-    } else {
-      cart.push({ ...product, qty: 1, price: `₺${product.price}` });
-    }
-    
-    localStorage.setItem('cart', JSON.stringify(cart));
-    window.dispatchEvent(new Event('cartUpdated'));
-    alert(`${product.name} sepete eklendi!`);
+    addToCartStore(product);
+    showToast(`${product.name} sepete eklendi!`, 'success');
   };
 
   return (
@@ -63,7 +49,7 @@ export default function FavorilerPage() {
               <div key={product.id} className="group bg-white border border-surface hover:border-primary/30 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col transform hover:-translate-y-1">
                 <div className="relative w-full h-48 bg-surface p-4 flex items-center justify-center overflow-hidden">
                   {product.image ? (
-                    <img src={product.image} alt={product.name} className="object-contain max-h-full transform group-hover:scale-110 transition-transform duration-700" />
+                    <Image src={product.image} alt={product.name} fill unoptimized className="object-contain transform group-hover:scale-110 transition-transform duration-700" />
                   ) : (
                     <div className="text-text-muted text-xs">[ Görsel Yok ]</div>
                   )}

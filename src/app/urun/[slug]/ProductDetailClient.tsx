@@ -4,7 +4,10 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { MessageSquare, Send, Heart, Share2, ShieldCheck, Truck, Clock, CheckCircle2, Ticket } from 'lucide-react';
+import Image from 'next/image';
 import { useSession } from 'next-auth/react';
+import { useCartStore } from '@/store/useCartStore';
+import { useToast } from '@/context/ToastContext';
 
 export default function ProductDetailClient({ product, slug, relatedProducts }: { product: any, slug: string, relatedProducts?: any[] }) {
   const { data: session } = useSession();
@@ -12,38 +15,24 @@ export default function ProductDetailClient({ product, slug, relatedProducts }: 
   const [comments, setComments] = useState<any[]>(product.reviews || []);
   const [newComment, setNewComment] = useState({ rating: 5, text: '' });
   const [activeTab, setActiveTab] = useState('description');
-  const [isFavorite, setIsFavorite] = useState(false);
   const [viewersCount, setViewersCount] = useState(0);
   const [cartCount, setCartCount] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const addToCartStore = useCartStore((state) => state.addToCart);
+  const toggleFavoriteStore = useCartStore((state) => state.toggleFavorite);
+  const isFavorite = useCartStore((state) => state.isFavorite(product.id));
+  const { showToast } = useToast();
 
   useEffect(() => {
     // Random social proof
     setViewersCount(Math.floor(Math.random() * 20) + 5);
     setCartCount(Math.floor(Math.random() * 10) + 3);
-
-    // Favorites logic
-    const savedFavs = localStorage.getItem('favorites');
-    if (savedFavs) {
-      const favs = JSON.parse(savedFavs);
-      setIsFavorite(favs.some((p: any) => String(p.id) === String(product.id)));
-    }
-  }, [product.id]);
+  }, []);
 
   const addToCart = () => {
-    const savedCart = localStorage.getItem('cart');
-    let cart = savedCart ? JSON.parse(savedCart) : [];
+    addToCartStore(product, qty);
     
-    const existing = cart.find((item: any) => String(item.id) === String(product.id));
-    if (existing) {
-      existing.qty += qty;
-    } else {
-      cart.push({ ...product, qty: qty, price: `₺${product.price}` });
-    }
-    
-    localStorage.setItem('cart', JSON.stringify(cart));
-    window.dispatchEvent(new Event('cartUpdated'));
-
     // Analytics Events
     if (typeof window !== 'undefined') {
       // GA4
@@ -66,24 +55,16 @@ export default function ProductDetailClient({ product, slug, relatedProducts }: 
       });
     }
 
-    alert(`${product.name} sepete eklendi!`);
+    showToast(`${product.name} sepete eklendi!`, 'success');
   };
 
   const toggleFavorite = () => {
-    const savedFavs = localStorage.getItem('favorites');
-    let favs = savedFavs ? JSON.parse(savedFavs) : [];
-    const index = favs.findIndex((p: any) => String(p.id) === String(product.id));
-    
-    if (index > -1) {
-      favs.splice(index, 1);
-      setIsFavorite(false);
+    toggleFavoriteStore(product);
+    if (isFavorite) {
+      showToast('Ürün favorilerinizden kaldırıldı.', 'info');
     } else {
-      favs.push(product);
-      setIsFavorite(true);
+      showToast('Ürün favorilerinize eklendi!', 'success');
     }
-    
-    localStorage.setItem('favorites', JSON.stringify(favs));
-    window.dispatchEvent(new Event('favoritesUpdated'));
   };
 
   const handleShare = () => {
@@ -95,14 +76,14 @@ export default function ProductDetailClient({ product, slug, relatedProducts }: 
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      alert('Link kopyalandı!');
+      showToast('Link panoya kopyalandı!', 'success');
     }
   };
 
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session) {
-      alert("Yorum yapabilmek için giriş yapmalısınız.");
+      showToast("Yorum yapabilmek için giriş yapmalısınız.", "error");
       return;
     }
 
@@ -128,12 +109,12 @@ export default function ProductDetailClient({ product, slug, relatedProducts }: 
           date: new Date(data.review.createdAt).toLocaleDateString('tr-TR')
         }, ...comments]);
         setNewComment({ rating: 5, text: '' });
-        alert("Yorumunuz başarıyla eklendi!");
+        showToast("Yorumunuz başarıyla eklendi!", "success");
       } else {
-        alert(data.error || "Bir hata oluştu.");
+        showToast(data.error || "Bir hata oluştu.", "error");
       }
     } catch (e) {
-      alert("Bir hata oluştu.");
+      showToast("Bir hata oluştu.", "error");
     } finally {
       setIsSubmitting(false);
     }
@@ -170,12 +151,12 @@ export default function ProductDetailClient({ product, slug, relatedProducts }: 
                   </div>
                 )}
               </div>
-              <img src={product.images[0]} alt={product.name} className="max-h-full object-contain transition-transform hover:scale-110 duration-500" />
+              <Image src={product.images[0]} alt={product.name} fill unoptimized className="object-contain transition-transform hover:scale-110 duration-500 p-4" />
             </div>
             <div className="flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
               {product.images.map((img: string, idx: number) => (
-                <div key={idx} className={`w-20 h-20 bg-surface rounded-md border-2 p-1 flex-shrink-0 flex items-center justify-center ${idx === 0 ? 'border-primary' : 'border-transparent hover:border-gray-200'}`}>
-                  <img src={img} alt={`${product.name}-${idx}`} className="max-h-full object-contain" />
+                <div key={idx} className={`w-20 h-20 bg-surface rounded-md border-2 p-1 flex-shrink-0 flex items-center justify-center relative ${idx === 0 ? 'border-primary' : 'border-transparent hover:border-gray-200'}`}>
+                  <Image src={img} alt={`${product.name}-${idx}`} fill unoptimized className="object-contain p-1" />
                 </div>
               ))}
             </div>
@@ -426,7 +407,7 @@ export default function ProductDetailClient({ product, slug, relatedProducts }: 
             {relatedProducts.map(rp => (
               <Link href={`/urun/${rp.slug}`} key={rp.id} className="bg-white rounded-xl shadow-sm border border-surface p-4 hover:border-primary transition-colors flex flex-col group h-full">
                 <div className="relative aspect-square bg-surface rounded-lg mb-4 flex items-center justify-center p-2 overflow-hidden">
-                  <img src={rp.images[0]} alt={rp.name} className="max-h-full object-contain transition-transform group-hover:scale-110 duration-500" />
+                  <Image src={rp.images[0]} alt={rp.name} fill unoptimized className="object-contain transition-transform group-hover:scale-110 duration-500 p-2" />
                 </div>
                 <div className="flex flex-col flex-grow">
                   <h3 className="font-bold text-secondary text-sm line-clamp-2 mb-2 group-hover:text-primary transition-colors">{rp.name}</h3>

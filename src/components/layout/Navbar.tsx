@@ -4,12 +4,17 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Search, Heart, ShoppingCart, User, X, Menu, Phone, MessageCircle, ChevronDown } from 'lucide-react';
+import Image from 'next/image';
+import { useCartStore } from '@/store/useCartStore';
 
 export default function Navbar() {
   const router = useRouter();
   const [searchOpen, setSearchOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
-  const [favoritesCount, setFavoritesCount] = useState(0);
+  const cart = useCartStore((state) => state.cart);
+  const favorites = useCartStore((state) => state.favorites);
+  const cartCount = cart.reduce((acc, item) => acc + item.qty, 0);
+  const favoritesCount = favorites.length;
+  
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [siteSettings, setSiteSettings] = useState<any>(null);
@@ -32,28 +37,17 @@ export default function Navbar() {
     fetchInfo();
   }, []);
 
+  // Lock body scroll when mobile menu is open
   useEffect(() => {
-    const updateCounts = () => {
-      const savedCart = localStorage.getItem('cart');
-      const cart = savedCart ? JSON.parse(savedCart) : [];
-      setCartCount(cart.reduce((acc: number, item: any) => acc + item.qty, 0));
-
-      const savedFavs = localStorage.getItem('favorites');
-      const favs = savedFavs ? JSON.parse(savedFavs) : [];
-      setFavoritesCount(favs.length);
-    };
-
-    updateCounts();
-    window.addEventListener('cartUpdated', updateCounts);
-    window.addEventListener('favoritesUpdated', updateCounts);
-    window.addEventListener('storage', updateCounts);
-    
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
     return () => {
-      window.removeEventListener('cartUpdated', updateCounts);
-      window.removeEventListener('favoritesUpdated', updateCounts);
-      window.removeEventListener('storage', updateCounts);
+      document.body.style.overflow = '';
     };
-  }, []);
+  }, [isMobileMenuOpen]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -102,10 +96,14 @@ export default function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <img 
+          <Image 
             src={siteSettings?.logoUrl || "/images/logo.png"} 
             alt="Arı Hayat" 
-            className="h-10 md:h-14 w-auto hover:opacity-90 transition-opacity" 
+            width={180}
+            height={56}
+            priority
+            unoptimized
+            className="h-10 md:h-14 w-auto hover:opacity-90 transition-opacity object-contain" 
           />
         </Link>
 
