@@ -412,7 +412,6 @@ export default function KovanPortalPage() {
 
   return (
     <div className="min-h-screen bg-background honeycomb-bg text-text-main py-12 px-4 md:px-8">
-    <div className="min-h-screen bg-gray-50 honeycomb-bg text-gray-900 py-12 px-4 md:px-8">
       {/* 1. Login Gate & Cooperative Calculator */}
       {!adoption ? (
         <div className="max-w-6xl mx-auto mt-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -421,6 +420,9 @@ export default function KovanPortalPage() {
           <div className="lg:col-span-5 p-8 bg-white border border-gray-200 shadow-sm rounded-3xl backdrop-blur-xl">
             <div className="text-center mb-6">
               <div className="w-16 h-16 bg-gradient-to-br from-primary to-amber-700 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-primary/20 mb-4 transform hover:rotate-6 transition-transform">
+                <Lock className="w-8 h-8 text-secondary" />
+              </div>
+              <h1 className="text-2xl font-heading font-black text-secondary uppercase tracking-tight">Kovan Portalı Girişi</h1>
               <p className="text-xs text-text-muted mt-1 leading-relaxed">
                 Hamilik yaptığınız kovanın anlık durumunu, uçuş simülasyonunu ve laboratuvar değerlerini canlı izlemek için doğa koruma kodunuzu girin.
               </p>
