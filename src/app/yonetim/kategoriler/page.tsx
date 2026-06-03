@@ -96,9 +96,6 @@ export default function AdminKategorilerPage() {
                 <label className="block text-text-muted mb-1 text-sm font-body">Kategori Adı</label>
                 <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-')})} className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all text-secondary" required />
               </div>
-                <label className="block text-gray-600 mb-1 text-sm font-body">Kategori Adı</label>
-                <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-')})} className="w-full p-3 bg-gray-50 border-gray-200 border rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all text-gray-900" required />
-              </div>
               <div>
                 <label className="block text-gray-600 mb-1 text-sm font-body">Slug</label>
                 <input type="text" value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} className="w-full p-3 bg-gray-50 border-gray-200 border rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all text-gray-900" required />

@@ -309,7 +309,6 @@ export default function AdminUrunlerPage() {
               <th className="p-4 text-right">İşlemler</th>
             </tr>
           </thead>
-          <tbody className="text-text-main">
           <tbody className="text-gray-900">
             {loading ? (
               <tr>
