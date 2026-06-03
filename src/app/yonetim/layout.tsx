@@ -113,7 +113,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-hover rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 mb-4 transform group-hover:rotate-6 transition-transform">
                 <span className="text-white font-black text-2xl italic">AH</span>
               </div>
-              <h1 className="text-2xl font-heading font-black text-white uppercase tracking-tighter italic">
+              <h1 className="text-2xl font-heading font-black text-gray-900 uppercase tracking-tighter italic">
                 ARI<span className="text-primary">HAYAT</span>
               </h1>
               <div className="h-0.5 w-12 bg-primary mt-2 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform" />
@@ -145,7 +145,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="p-6 border-t border-gray-200 bg-gray-50">
             <button 
               onClick={() => signOut({ callbackUrl: '/' })}
-              className="flex items-center space-x-4 px-5 py-4 w-full rounded-2xl text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-300 group"
+              className="flex items-center space-x-4 px-5 py-4 w-full rounded-2xl text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-300 group"
             >
               <LogOut size={18} className="group-hover:-translate-x-1 transition-transform" />
               <span className="font-heading font-black text-[11px] uppercase tracking-widest">Güvenli Çıkış</span>

@@ -182,7 +182,7 @@ export default function AdminBlogPage() {
             setFormData({ id: '', title: '', content: '', excerpt: '', image: '', author: 'Arı Hayat', category: 'Genel' });
             setIsAdding(true);
           }}
-          className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-4 py-2 rounded-xl font-heading font-bold text-sm uppercase flex items-center transition-all shadow-lg shadow-red-500/20"
+          className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-secondary px-4 py-2 rounded-xl font-heading font-bold text-sm uppercase flex items-center transition-all shadow-lg shadow-red-500/20"
         >
           <Plus className="w-4 h-4 mr-2" /> Yeni Yazı Yaz
         </button>
@@ -229,7 +229,7 @@ export default function AdminBlogPage() {
                   type="button"
                   onClick={handleGenerateAiBlog}
                   disabled={generatingAi}
-                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-5 py-3 rounded-xl font-heading font-bold text-xs uppercase flex items-center gap-2 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-secondary px-5 py-3 rounded-xl font-heading font-bold text-xs uppercase flex items-center gap-2 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {generatingAi ? (
                     <>
@@ -284,7 +284,7 @@ export default function AdminBlogPage() {
             </div>
             <div>
               <label className="block text-text-muted mb-1 text-xs font-body uppercase">İçerik (HTML destekli)</label>
-              <textarea value={formData.content} onChange={e => setFormData({...formData, content: e.target.value})} rows={10} className="w-full p-4 bg-[#1F2937] border border-gray-700 rounded-lg text-secondary outline-none focus:border-red-500 font-body text-sm" placeholder="Yazınızın detaylarını buraya yazın..."></textarea>
+              <textarea value={formData.content} onChange={e => setFormData({...formData, content: e.target.value})} rows={10} className="w-full p-4 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg text-secondary outline-none focus:border-red-500 font-body text-sm" placeholder="Yazınızın detaylarını buraya yazın..."></textarea>
             </div>
             <div className="flex justify-end space-x-2 pt-4">
               <button type="button" onClick={() => setIsAdding(false)} className="bg-gray-700 px-4 py-2 rounded-lg font-bold text-sm uppercase">Vazgeç</button>
@@ -298,12 +298,12 @@ export default function AdminBlogPage() {
 
       <div className="grid grid-cols-1 gap-6">
         {posts.map((post) => (
-          <div key={post.id} className="bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 overflow-hidden shadow-lg flex flex-col md:flex-row group">
-            <div className="w-full md:w-48 h-48 bg-gray-900 shrink-0 overflow-hidden">
+          <div key={post.id} className="bg-white border-gray-200 shadow-sm rounded-2xl border border-gray-200 overflow-hidden shadow-lg flex flex-col md:flex-row group">
+            <div className="w-full md:w-48 h-48 bg-gray-50 border-gray-200 shrink-0 overflow-hidden">
               {post.image ? (
                 <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               ) : (
-                <div className="flex items-center justify-center h-full text-gray-700 uppercase text-[10px]">Görsel Yok</div>
+                <div className="flex items-center justify-center h-full text-gray-400 uppercase text-[10px]">Görsel Yok</div>
               )}
             </div>
             <div className="p-6 flex flex-col justify-between flex-grow">
@@ -321,7 +321,7 @@ export default function AdminBlogPage() {
                 <h3 className="text-secondary font-heading font-bold text-xl uppercase mb-2 group-hover:text-red-500 transition-colors">{post.title}</h3>
                 <p className="text-text-muted text-sm line-clamp-2 font-body">{post.excerpt || 'Özet belirtilmemiş.'}</p>
               </div>
-              <div className="flex justify-end space-x-4 mt-4 border-t border-gray-800 pt-4">
+              <div className="flex justify-end space-x-4 mt-4 border-t border-gray-200 pt-4">
                 <button 
                   onClick={() => handleEdit(post)}
                   className="text-text-muted hover:text-secondary flex items-center text-xs uppercase font-bold"
@@ -339,7 +339,7 @@ export default function AdminBlogPage() {
           </div>
         ))}
         {posts.length === 0 && !loading && (
-          <div className="text-center py-20 bg-[#111827]/30 rounded-2xl border border-dashed border-gray-800">
+          <div className="text-center py-20 bg-white border-gray-200 shadow-sm rounded-2xl border border-dashed border-gray-200">
             <p className="text-gray-500 uppercase text-sm font-heading font-bold">Henüz hiç yazı yazılmamış.</p>
           </div>
         )}

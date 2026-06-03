@@ -200,13 +200,13 @@ export default function AdminYorumlarPage() {
   };
 
   return (
-    <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100 font-body">
+    <div className="p-6 bg-background min-h-screen text-text-main font-body">
       
       {/* Header */}
       <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-6">
         <div>
           <h1 className="text-3xl font-heading font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-yellow-500 uppercase tracking-tight">Ürün Yorumları</h1>
-          <p className="text-xs text-gray-400 font-body mt-1">Müşterilerden gelen ürün değerlendirmelerini görüntüleyin, yönetin ve sosyal paylaşım kartları üretin.</p>
+          <p className="text-xs text-text-muted font-body mt-1">Müşterilerden gelen ürün değerlendirmelerini görüntüleyin, yönetin ve sosyal paylaşım kartları üretin.</p>
         </div>
       </div>
 
@@ -215,11 +215,11 @@ export default function AdminYorumlarPage() {
           <Loader2 className="w-8 h-8 text-primary animate-spin" />
         </div>
       ) : (
-        <div className="bg-[#111827]/40 border border-gray-800/80 rounded-2xl overflow-hidden shadow-xl">
+        <div className="bg-white border-gray-200 shadow-sm border border-gray-200/80 rounded-2xl overflow-hidden shadow-xl">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-gray-800 text-[10px] uppercase font-heading font-black text-gray-500 bg-black/10">
+                <tr className="border-b border-gray-200 text-[10px] uppercase font-heading font-black text-gray-500 bg-black/10">
                   <th className="p-4">Tarih</th>
                   <th className="p-4">Müşteri</th>
                   <th className="p-4">Ürün</th>
@@ -228,27 +228,27 @@ export default function AdminYorumlarPage() {
                   <th className="p-4 text-right">İşlemler</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800/50">
+              <tbody className="divide-y divide-gray-200">
                 {reviews.map((rev) => (
-                  <tr key={rev.id} className="hover:bg-white/[0.02] transition-colors">
-                    <td className="p-4 text-gray-400 font-body">
+                  <tr key={rev.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="p-4 text-text-muted font-body">
                       {new Date(rev.createdAt || Date.now()).toLocaleDateString('tr-TR')}
                     </td>
                     <td className="p-4">
-                      <div className="font-heading font-bold text-white uppercase">{rev.user?.name || rev.name || 'Müşteri'}</div>
+                      <div className="font-heading font-bold text-secondary uppercase">{rev.user?.name || rev.name || 'Müşteri'}</div>
                       <div className="text-[10px] text-gray-500 font-body mt-0.5">{rev.user?.email}</div>
                     </td>
                     <td className="p-4 font-body">
                       {rev.product ? (
                         <div>
-                          <span className="font-bold text-white uppercase">{rev.product.name}</span>
+                          <span className="font-bold text-secondary uppercase">{rev.product.name}</span>
                           <span className="text-[9px] text-amber-600 block">{rev.product.slug}</span>
                         </div>
                       ) : (
                         <span className="text-gray-500 italic uppercase">Bilinmeyen Ürün ({rev.productId})</span>
                       )}
                     </td>
-                    <td className="p-4 text-gray-300 font-body max-w-xs truncate" title={rev.comment}>
+                    <td className="p-4 text-text-main font-body max-w-xs truncate" title={rev.comment}>
                       {rev.comment || <span className="text-gray-600 italic">Yorum yazılmamış...</span>}
                     </td>
                     <td className="p-4">
@@ -260,7 +260,7 @@ export default function AdminYorumlarPage() {
                             className={`w-3.5 h-3.5 ${
                               idx < rev.rating 
                                 ? 'text-amber-500 fill-amber-500' 
-                                : 'text-gray-700'
+                                : 'text-gray-300'
                             }`} 
                           />
                         ))}
@@ -304,21 +304,21 @@ export default function AdminYorumlarPage() {
 
       {/* CARD GENERATOR MODAL */}
       {selectedReview && (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-md animate-fade-in">
-          <div className="w-full max-w-4xl bg-[#111827] border border-gray-800 rounded-3xl p-6 md:p-8 relative shadow-2xl flex flex-col md:flex-row gap-8">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
+          <div className="w-full max-w-4xl bg-white border-gray-200 shadow-sm border border-gray-200 rounded-3xl p-6 md:p-8 relative shadow-2xl flex flex-col md:flex-row gap-8">
             
             <button 
               onClick={() => setSelectedReview(null)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white p-2"
+              className="absolute top-4 right-4 text-gray-400 hover:text-secondary p-2"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* Left Column: Visual Preview */}
             <div className="flex-1 flex flex-col items-center justify-center space-y-4">
-              <span className="text-[10px] font-heading font-black text-gray-400 uppercase tracking-widest">Görsel Kart Önizleme (1080x1080)</span>
+              <span className="text-[10px] font-heading font-black text-text-muted uppercase tracking-widest">Görsel Kart Önizleme (1080x1080)</span>
               
-              <div className="border border-gray-800 rounded-2xl overflow-hidden shadow-xl bg-slate-900 w-full max-w-[360px] aspect-square flex items-center justify-center relative">
+              <div className="border border-gray-200 rounded-2xl overflow-hidden shadow-xl bg-slate-900 w-full max-w-[360px] aspect-square flex items-center justify-center relative">
                 {generatingCard ? (
                   <div className="text-center space-y-2 text-xs text-gray-500">
                     <Loader2 className="w-6 h-6 animate-spin text-primary mx-auto" />
@@ -335,24 +335,24 @@ export default function AdminYorumlarPage() {
               
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-heading font-black text-white uppercase tracking-tight flex items-center gap-1.5">
+                  <h3 className="text-lg font-heading font-black text-secondary uppercase tracking-tight flex items-center gap-1.5">
                     <Sparkles className="w-5 h-5 text-primary animate-pulse" /> Sosyal Medya Kart Sihirbazı
                   </h3>
-                  <p className="text-[11px] text-gray-400 font-body leading-relaxed mt-1">
+                  <p className="text-[11px] text-text-muted font-body leading-relaxed mt-1">
                     Bu yorumu Instagram, Facebook veya Twitter hesabınızda hakiki apiterapi kalitesini sergilemek için göz alıcı bir tasarımla indirin.
                   </p>
                 </div>
 
                 {/* Theme Selector */}
                 <div className="space-y-2">
-                  <label className="text-[10px] font-heading font-black text-gray-400 uppercase tracking-widest block">Kart Tema Şablonu</label>
+                  <label className="text-[10px] font-heading font-black text-text-muted uppercase tracking-widest block">Kart Tema Şablonu</label>
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       onClick={() => handleThemeChange('gold-dark')}
                       className={`p-3 rounded-xl border text-xs font-bold text-center transition-all ${
                         cardTheme === 'gold-dark'
                           ? 'bg-primary/10 border-primary text-primary'
-                          : 'bg-[#1F2937]/50 border-gray-800 text-gray-400 hover:border-gray-700'
+                          : 'bg-gray-50 border-gray-200/50 border-gray-200 text-text-muted hover:border-gray-200'
                       }`}
                     >
                       Premium Altın (Koyu)
@@ -362,7 +362,7 @@ export default function AdminYorumlarPage() {
                       className={`p-3 rounded-xl border text-xs font-bold text-center transition-all ${
                         cardTheme === 'amber-light'
                           ? 'bg-amber-600/10 border-amber-600 text-amber-500'
-                          : 'bg-[#1F2937]/50 border-gray-800 text-gray-400 hover:border-gray-700'
+                          : 'bg-gray-50 border-gray-200/50 border-gray-200 text-text-muted hover:border-gray-200'
                       }`}
                     >
                       Kır Çiçeği (Açık)
@@ -371,11 +371,11 @@ export default function AdminYorumlarPage() {
                 </div>
 
                 {/* Review Details readout */}
-                <div className="p-4 bg-black/20 rounded-2xl border border-gray-800 text-xs leading-relaxed space-y-2 font-body">
-                  <div className="font-bold text-white flex items-center gap-1 text-[10px]">
+                <div className="p-4 bg-black/20 rounded-2xl border border-gray-200 text-xs leading-relaxed space-y-2 font-body">
+                  <div className="font-bold text-secondary flex items-center gap-1 text-[10px]">
                     <Quote className="w-3.5 h-3.5 text-primary" /> YORUM METNİ
                   </div>
-                  <p className="text-gray-400 italic font-body line-clamp-3">
+                  <p className="text-text-muted italic font-body line-clamp-3">
                     &ldquo;{selectedReview.comment}&rdquo;
                   </p>
                   <p className="text-right text-[10px] text-primary font-heading font-bold uppercase">
@@ -398,7 +398,7 @@ export default function AdminYorumlarPage() {
                 
                 <button
                   onClick={() => setSelectedReview(null)}
-                  className="w-full py-3 bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white rounded-xl font-bold text-xs uppercase transition-colors"
+                  className="w-full py-3 bg-gray-800 hover:bg-gray-700 text-text-muted hover:text-secondary rounded-xl font-bold text-xs uppercase transition-colors"
                 >
                   Kapat
                 </button>

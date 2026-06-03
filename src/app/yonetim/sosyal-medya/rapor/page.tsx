@@ -107,13 +107,13 @@ export default function SaasReportPage() {
   ];
 
   return (
-    <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100 font-body">
+    <div className="p-6 bg-background min-h-screen text-text-main font-body">
       
       {/* Back Button */}
       <div className="mb-6">
         <Link 
           href="/yonetim/sosyal-medya"
-          className="inline-flex items-center text-xs font-bold text-gray-400 hover:text-primary transition-colors uppercase tracking-wider"
+          className="inline-flex items-center text-xs font-bold text-text-muted hover:text-primary transition-colors uppercase tracking-wider"
         >
           <ArrowLeft className="w-4 h-4 mr-1" /> Asistana Geri Dön
         </Link>
@@ -125,10 +125,10 @@ export default function SaasReportPage() {
           <Layers className="w-8 h-8 text-primary animate-pulse" />
           <span className="text-xs bg-primary/20 text-primary border border-primary/30 px-3 py-1 rounded-full font-bold uppercase tracking-widest">SaaS Fırsat Raporu</span>
         </div>
-        <h1 className="text-3xl font-heading font-black uppercase text-white tracking-tight">
+        <h1 className="text-3xl font-heading font-black uppercase text-secondary tracking-tight">
           Sosyal Medya AI Ajanı Geliştirme Kılavuzu
         </h1>
-        <p className="text-sm text-gray-400 mt-2 max-w-2xl leading-relaxed">
+        <p className="text-sm text-text-muted mt-2 max-w-2xl leading-relaxed">
           Bu rapor, kurmayı hedeflediğiniz yapay zekalı sosyal medya otomasyon projesini **tamamen ücretsiz ve açık kaynaklı** araçlarla nasıl küresel bir SaaS girişimine (abone ol-öde yazılımı) dönüştürebileceğinizi açıklar.
         </p>
       </div>
@@ -136,21 +136,21 @@ export default function SaasReportPage() {
       {/* Grid of Solutions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         {sections.map((section, idx) => (
-          <div key={idx} className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-4 hover:border-gray-700 transition-all">
-            <div className="flex items-center space-x-3 border-b border-gray-800 pb-3">
+          <div key={idx} className="bg-white border-gray-200 shadow-sm backdrop-blur-xl p-6 rounded-2xl border border-gray-200 shadow-lg space-y-4 hover:border-gray-200 transition-all">
+            <div className="flex items-center space-x-3 border-b border-gray-200 pb-3">
               {section.icon}
-              <h3 className="text-md font-heading font-bold text-white uppercase">{section.title}</h3>
+              <h3 className="text-md font-heading font-bold text-secondary uppercase">{section.title}</h3>
             </div>
-            <p className="text-xs text-gray-400 leading-relaxed">{section.description}</p>
+            <p className="text-xs text-text-muted leading-relaxed">{section.description}</p>
             
             <div className="space-y-3 pt-2">
               {section.options.map((opt, oIdx) => (
-                <div key={oIdx} className="p-3.5 bg-gray-900/40 rounded-xl border border-gray-800/80 space-y-2 relative group">
+                <div key={oIdx} className="p-3.5 bg-gray-50 border-gray-200 rounded-xl border border-gray-200/80 space-y-2 relative group">
                   <div className="flex justify-between items-start">
-                    <span className="text-xs font-bold text-white">{opt.name}</span>
+                    <span className="text-xs font-bold text-secondary">{opt.name}</span>
                     <span className="bg-primary/10 text-primary border border-primary/20 text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">{opt.badge}</span>
                   </div>
-                  <p className="text-[11px] text-gray-400 leading-relaxed">{opt.details}</p>
+                  <p className="text-[11px] text-text-muted leading-relaxed">{opt.details}</p>
                   <a 
                     href={opt.url} 
                     target="_blank" 
@@ -166,16 +166,16 @@ export default function SaasReportPage() {
         ))}
 
         {/* Business Strategy Card */}
-        <div className="bg-gradient-to-br from-[#1E293B]/60 to-[#0F172A]/80 p-6 rounded-2xl border border-amber-900/30 shadow-lg flex flex-col justify-between">
+        <div className="bg-gray-50 border-gray-200/60 to-white border-gray-200 shadow-sm p-6 rounded-2xl border border-amber-900/30 shadow-lg flex flex-col justify-between">
           <div className="space-y-4">
-            <div className="flex items-center space-x-3 border-b border-gray-800 pb-3">
+            <div className="flex items-center space-x-3 border-b border-gray-200 pb-3">
               <Zap className="w-6 h-6 text-amber-500" />
-              <h3 className="text-md font-heading font-bold text-white uppercase">SaaS Gelir Modeli Önerisi</h3>
+              <h3 className="text-md font-heading font-bold text-secondary uppercase">SaaS Gelir Modeli Önerisi</h3>
             </div>
-            <p className="text-xs text-gray-300 leading-relaxed">
+            <p className="text-xs text-text-main leading-relaxed">
               Bu projeyi abonelikli bir yazılıma dönüştürdüğünüzde uygulayabileceğiniz en karlı model:
             </p>
-            <ul className="space-y-2 text-xs text-gray-400">
+            <ul className="space-y-2 text-xs text-text-muted">
               <li className="flex items-start">
                 <CheckCircle className="w-4 h-4 text-green-400 mr-2 flex-shrink-0 mt-0.5" />
                 <span><strong>Ücretsiz Paket:</strong> Kullanıcılara ayda 5 adet ücretsiz görsel ve seslendirme hakkı verin (Maliyeti size 0₺).</span>
@@ -191,7 +191,7 @@ export default function SaasReportPage() {
             </ul>
           </div>
           
-          <div className="pt-4 border-t border-gray-800/60 mt-4">
+          <div className="pt-4 border-t border-gray-200/60 mt-4">
             <div className="flex items-center justify-between text-[11px] text-gray-500 font-bold">
               <span>SaaS Geliştirme Raporu v1.0</span>
               <span className="text-primary flex items-center">

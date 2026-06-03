@@ -212,21 +212,21 @@ export default function AdminHivesPage() {
   };
 
   return (
-    <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100 font-body">
+    <div className="p-6 bg-background min-h-screen text-text-main font-body">
       
       {/* Header and Toggle Navigation */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-heading font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-yellow-500 uppercase tracking-tight">Kovan & Evlat Edinme</h1>
-          <p className="text-xs text-gray-400 font-body mt-1">Kovanların fiziki/telemetri durumunu ve evlat edinme işlemlerini yönetin.</p>
+          <p className="text-xs text-text-muted font-body mt-1">Kovanların fiziki/telemetri durumunu ve evlat edinme işlemlerini yönetin.</p>
         </div>
         
         {/* Tab Selector */}
-        <div className="flex bg-[#111827] border border-gray-800 rounded-xl p-1 shrink-0">
+        <div className="flex bg-[#111827] border border-gray-200 rounded-xl p-1 shrink-0">
           <button
             onClick={() => setActiveTab('hives')}
             className={`px-4 py-2 text-xs font-heading font-black uppercase rounded-lg transition-all ${
-              activeTab === 'hives' ? 'bg-primary text-secondary' : 'text-gray-400 hover:text-white'
+              activeTab === 'hives' ? 'bg-primary text-secondary' : 'text-text-muted hover:text-secondary'
             }`}
           >
             Fiziki Kovanlar
@@ -234,7 +234,7 @@ export default function AdminHivesPage() {
           <button
             onClick={() => setActiveTab('adoptions')}
             className={`px-4 py-2 text-xs font-heading font-black uppercase rounded-lg transition-all ${
-              activeTab === 'adoptions' ? 'bg-primary text-secondary' : 'text-gray-400 hover:text-white'
+              activeTab === 'adoptions' ? 'bg-primary text-secondary' : 'text-text-muted hover:text-secondary'
             }`}
           >
             Evlat Edinmeler
@@ -260,7 +260,7 @@ export default function AdminHivesPage() {
                       setHiveForm({ id: '', name: '', status: 'ACTIVE', location: '', temperature: 34.5, humidity: 62.0, beeCount: 45000, description: '', image: '' });
                       setIsAddingHive(true);
                     }}
-                    className="bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-700 hover:to-yellow-700 text-white px-4 py-2 rounded-xl font-heading font-bold text-xs uppercase flex items-center transition-all shadow-lg"
+                    className="bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-700 hover:to-yellow-700 text-secondary px-4 py-2 rounded-xl font-heading font-bold text-xs uppercase flex items-center transition-all shadow-lg"
                   >
                     <Plus className="w-4 h-4 mr-1.5" /> Yeni Kovan Ekle
                   </button>
@@ -268,40 +268,40 @@ export default function AdminHivesPage() {
               </div>
 
               {isAddingHive && (
-                <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-xl">
-                  <h2 className="text-sm font-heading font-black text-white uppercase tracking-wider mb-6 flex items-center gap-1.5">
+                <div className="bg-white border-gray-200 shadow-sm backdrop-blur-xl p-6 rounded-2xl border border-gray-200 shadow-xl">
+                  <h2 className="text-sm font-heading font-black text-secondary uppercase tracking-wider mb-6 flex items-center gap-1.5">
                     <Layers className="w-5 h-5 text-primary" /> {hiveForm.id ? 'Kovan Bilgilerini Güncelle' : 'Yeni Fiziki Kovan Ekle'}
                   </h2>
                   <form onSubmit={handleSaveHive} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
-                        <label className="block text-gray-400 mb-1 text-xs uppercase font-bold">Kovan Adı</label>
+                        <label className="block text-text-muted mb-1 text-xs uppercase font-bold">Kovan Adı</label>
                         <input
                           type="text"
                           required
                           placeholder="Örn: Kovan Altın Petek"
                           value={hiveForm.name}
                           onChange={e => setHiveForm({...hiveForm, name: e.target.value})}
-                          className="w-full p-3 bg-[#1F2937]/50 border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                          className="w-full p-3 bg-gray-50 border-gray-200/50 border border-gray-200 rounded-lg text-xs text-secondary outline-none focus:border-primary"
                         />
                       </div>
                       <div>
-                        <label className="block text-gray-400 mb-1 text-xs uppercase font-bold">Lokasyon</label>
+                        <label className="block text-text-muted mb-1 text-xs uppercase font-bold">Lokasyon</label>
                         <input
                           type="text"
                           required
                           placeholder="Örn: Rize, Anzer Yaylası"
                           value={hiveForm.location}
                           onChange={e => setHiveForm({...hiveForm, location: e.target.value})}
-                          className="w-full p-3 bg-[#1F2937]/50 border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                          className="w-full p-3 bg-gray-50 border-gray-200/50 border border-gray-200 rounded-lg text-xs text-secondary outline-none focus:border-primary"
                         />
                       </div>
                       <div>
-                        <label className="block text-gray-400 mb-1 text-xs uppercase font-bold">Durum</label>
+                        <label className="block text-text-muted mb-1 text-xs uppercase font-bold">Durum</label>
                         <select
                           value={hiveForm.status}
                           onChange={e => setHiveForm({...hiveForm, status: e.target.value})}
-                          className="w-full p-3 bg-[#1F2937]/50 border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary font-bold"
+                          className="w-full p-3 bg-gray-50 border-gray-200/50 border border-gray-200 rounded-lg text-xs text-secondary outline-none focus:border-primary font-bold"
                         >
                           <option value="ACTIVE">AKTİF</option>
                           <option value="MAINTENANCE">BAKIMDA</option>
@@ -311,54 +311,54 @@ export default function AdminHivesPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
-                        <label className="block text-gray-400 mb-1 text-xs uppercase font-bold">Sıcaklık (°C)</label>
+                        <label className="block text-text-muted mb-1 text-xs uppercase font-bold">Sıcaklık (°C)</label>
                         <input
                           type="number"
                           step="0.1"
                           value={hiveForm.temperature}
                           onChange={e => setHiveForm({...hiveForm, temperature: parseFloat(e.target.value) || 0})}
-                          className="w-full p-3 bg-[#1F2937]/50 border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                          className="w-full p-3 bg-gray-50 border-gray-200/50 border border-gray-200 rounded-lg text-xs text-secondary outline-none focus:border-primary"
                         />
                       </div>
                       <div>
-                        <label className="block text-gray-400 mb-1 text-xs uppercase font-bold">Nem (%)</label>
+                        <label className="block text-text-muted mb-1 text-xs uppercase font-bold">Nem (%)</label>
                         <input
                           type="number"
                           step="0.1"
                           value={hiveForm.humidity}
                           onChange={e => setHiveForm({...hiveForm, humidity: parseFloat(e.target.value) || 0})}
-                          className="w-full p-3 bg-[#1F2937]/50 border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                          className="w-full p-3 bg-gray-50 border-gray-200/50 border border-gray-200 rounded-lg text-xs text-secondary outline-none focus:border-primary"
                         />
                       </div>
                       <div>
-                        <label className="block text-gray-400 mb-1 text-xs uppercase font-bold">Arı Sayısı (Tahmini)</label>
+                        <label className="block text-text-muted mb-1 text-xs uppercase font-bold">Arı Sayısı (Tahmini)</label>
                         <input
                           type="number"
                           value={hiveForm.beeCount}
                           onChange={e => setHiveForm({...hiveForm, beeCount: parseInt(e.target.value) || 0})}
-                          className="w-full p-3 bg-[#1F2937]/50 border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                          className="w-full p-3 bg-gray-50 border-gray-200/50 border border-gray-200 rounded-lg text-xs text-secondary outline-none focus:border-primary"
                         />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 gap-4">
                       <div>
-                        <label className="block text-gray-400 mb-1 text-xs uppercase font-bold">Görsel / Video Döngü Linki</label>
+                        <label className="block text-text-muted mb-1 text-xs uppercase font-bold">Görsel / Video Döngü Linki</label>
                         <input
                           type="text"
                           placeholder="Unsplash görsel adresi veya mp4 kovan kamerası video linki"
                           value={hiveForm.image}
                           onChange={e => setHiveForm({...hiveForm, image: e.target.value})}
-                          className="w-full p-3 bg-[#1F2937]/50 border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                          className="w-full p-3 bg-gray-50 border-gray-200/50 border border-gray-200 rounded-lg text-xs text-secondary outline-none focus:border-primary"
                         />
                       </div>
                       <div>
-                        <label className="block text-gray-400 mb-1 text-xs uppercase font-bold">Açıklama & Notlar</label>
+                        <label className="block text-text-muted mb-1 text-xs uppercase font-bold">Açıklama & Notlar</label>
                         <textarea
                           placeholder="Kovan hakkında detaylı bilgileri yazın..."
                           value={hiveForm.description}
                           onChange={e => setHiveForm({...hiveForm, description: e.target.value})}
-                          className="w-full p-3 bg-[#1F2937]/50 border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary min-h-[100px]"
+                          className="w-full p-3 bg-gray-50 border-gray-200/50 border border-gray-200 rounded-lg text-xs text-secondary outline-none focus:border-primary min-h-[100px]"
                         />
                       </div>
                     </div>
@@ -385,10 +385,10 @@ export default function AdminHivesPage() {
               {/* Hives List Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {hives.map(hive => (
-                  <div key={hive.id} className="bg-[#111827]/40 border border-gray-800/80 rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between">
+                  <div key={hive.id} className="bg-white border-gray-200 shadow-sm border border-gray-200/80 rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between">
                     
                     {hive.image && (
-                      <div className="w-full h-32 bg-gray-900 rounded-xl overflow-hidden mb-4 border border-gray-800">
+                      <div className="w-full h-32 bg-gray-900 rounded-xl overflow-hidden mb-4 border border-gray-200">
                         {hive.image.endsWith('.mp4') ? (
                           <video src={hive.image} autoPlay loop muted playsInline className="w-full h-full object-cover" />
                         ) : (
@@ -400,7 +400,7 @@ export default function AdminHivesPage() {
                     <div className="space-y-4">
                       <div className="flex justify-between items-start">
                         <div>
-                          <h3 className="text-base font-heading font-black text-white uppercase tracking-tight">{hive.name}</h3>
+                          <h3 className="text-base font-heading font-black text-secondary uppercase tracking-tight">{hive.name}</h3>
                           <p className="text-xs text-gray-500 font-body flex items-center mt-1">
                             <MapPin className="w-3 h-3 text-primary mr-1" /> {hive.location}
                           </p>
@@ -417,33 +417,33 @@ export default function AdminHivesPage() {
                       <div className="grid grid-cols-3 gap-2 bg-black/20 p-3 rounded-xl">
                         <div className="text-center">
                           <span className="text-[9px] text-gray-500 uppercase block font-body">Sıcaklık</span>
-                          <span className="text-xs font-heading font-bold text-white flex items-center justify-center mt-0.5">
+                          <span className="text-xs font-heading font-bold text-secondary flex items-center justify-center mt-0.5">
                             <Thermometer className="w-3 h-3 text-red-400 mr-0.5" /> {hive.temperature}°C
                           </span>
                         </div>
                         <div className="text-center">
                           <span className="text-[9px] text-gray-500 uppercase block font-body">Nem</span>
-                          <span className="text-xs font-heading font-bold text-white flex items-center justify-center mt-0.5">
+                          <span className="text-xs font-heading font-bold text-secondary flex items-center justify-center mt-0.5">
                             <Droplets className="w-3 h-3 text-blue-400 mr-0.5" /> {hive.humidity}%
                           </span>
                         </div>
                         <div className="text-center">
                           <span className="text-[9px] text-gray-500 uppercase block font-body">Arı Sayısı</span>
-                          <span className="text-xs font-heading font-bold text-white flex items-center justify-center mt-0.5">
+                          <span className="text-xs font-heading font-bold text-secondary flex items-center justify-center mt-0.5">
                             <Users className="w-3 h-3 text-primary mr-0.5" /> {hive.beeCount.toLocaleString()}
                           </span>
                         </div>
                       </div>
 
-                      <p className="text-xs text-gray-400 leading-relaxed font-body line-clamp-2">
+                      <p className="text-xs text-text-muted leading-relaxed font-body line-clamp-2">
                         {hive.description || "Açıklama girilmemiş."}
                       </p>
                     </div>
 
-                    <div className="flex justify-end space-x-2 mt-6 pt-4 border-t border-gray-800/80">
+                    <div className="flex justify-end space-x-2 mt-6 pt-4 border-t border-gray-200/80">
                       <button
                         onClick={() => handleEditHive(hive)}
-                        className="p-2 text-gray-400 hover:text-white transition-colors"
+                        className="p-2 text-text-muted hover:text-secondary transition-colors"
                       >
                         <Edit className="w-4 h-4" />
                       </button>
@@ -459,7 +459,7 @@ export default function AdminHivesPage() {
                 ))}
 
                 {hives.length === 0 && (
-                  <div className="col-span-2 text-center py-20 bg-[#111827]/10 rounded-2xl border border-dashed border-gray-800">
+                  <div className="col-span-2 text-center py-20 bg-[#111827]/10 rounded-2xl border border-dashed border-gray-200">
                     <p className="text-gray-500 uppercase text-sm font-heading font-bold">Kayıtlı kovan bulunamadı.</p>
                   </div>
                 )}
@@ -481,7 +481,7 @@ export default function AdminHivesPage() {
                       setIsAddingAdoption(true);
                     }}
                     disabled={hives.length === 0}
-                    className="bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-700 hover:to-yellow-700 text-white disabled:from-gray-800 disabled:to-gray-900 disabled:text-gray-500 px-4 py-2 rounded-xl font-heading font-bold text-xs uppercase flex items-center transition-all shadow-lg"
+                    className="bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-700 hover:to-yellow-700 text-secondary disabled:from-gray-800 disabled:to-gray-900 disabled:text-gray-500 px-4 py-2 rounded-xl font-heading font-bold text-xs uppercase flex items-center transition-all shadow-lg"
                   >
                     <Plus className="w-4 h-4 mr-1.5" /> Yeni Evlat Edinme Kaydı
                   </button>
@@ -489,18 +489,18 @@ export default function AdminHivesPage() {
               </div>
 
               {isAddingAdoption && (
-                <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-xl">
-                  <h2 className="text-sm font-heading font-black text-white uppercase tracking-wider mb-6 flex items-center gap-1.5">
+                <div className="bg-white border-gray-200 shadow-sm backdrop-blur-xl p-6 rounded-2xl border border-gray-200 shadow-xl">
+                  <h2 className="text-sm font-heading font-black text-secondary uppercase tracking-wider mb-6 flex items-center gap-1.5">
                     <Compass className="w-5 h-5 text-primary" /> {adoptionForm.id ? 'Evlat Edinme Kaydını Düzenle' : 'Yeni Evlat Edinme Oluştur'}
                   </h2>
                   <form onSubmit={handleSaveAdoption} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
-                        <label className="block text-gray-400 mb-1 text-xs uppercase font-bold">Kovan Seçin</label>
+                        <label className="block text-text-muted mb-1 text-xs uppercase font-bold">Kovan Seçin</label>
                         <select
                           value={adoptionForm.hiveId}
                           onChange={e => setAdoptionForm({...adoptionForm, hiveId: e.target.value})}
-                          className="w-full p-3 bg-[#1F2937]/50 border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary font-bold"
+                          className="w-full p-3 bg-gray-50 border-gray-200/50 border border-gray-200 rounded-lg text-xs text-secondary outline-none focus:border-primary font-bold"
                         >
                           <option value="">Seçiniz...</option>
                           {hives.map(hive => (
@@ -509,21 +509,21 @@ export default function AdminHivesPage() {
                         </select>
                       </div>
                       <div>
-                        <label className="block text-gray-400 mb-1 text-xs uppercase font-bold">Evlat Edinme Kodu (Boş bırakılırsa otomatik üretilir)</label>
+                        <label className="block text-text-muted mb-1 text-xs uppercase font-bold">Evlat Edinme Kodu (Boş bırakılırsa otomatik üretilir)</label>
                         <input
                           type="text"
                           placeholder="Örn: KOV-7492"
                           value={adoptionForm.code}
                           onChange={e => setAdoptionForm({...adoptionForm, code: e.target.value})}
-                          className="w-full p-3 bg-[#1F2937]/50 border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                          className="w-full p-3 bg-gray-50 border-gray-200/50 border border-gray-200 rounded-lg text-xs text-secondary outline-none focus:border-primary"
                         />
                       </div>
                       <div>
-                        <label className="block text-gray-400 mb-1 text-xs uppercase font-bold">Durum</label>
+                        <label className="block text-text-muted mb-1 text-xs uppercase font-bold">Durum</label>
                         <select
                           value={adoptionForm.status}
                           onChange={e => setAdoptionForm({...adoptionForm, status: e.target.value})}
-                          className="w-full p-3 bg-[#1F2937]/50 border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary font-bold"
+                          className="w-full p-3 bg-gray-50 border-gray-200/50 border border-gray-200 rounded-lg text-xs text-secondary outline-none focus:border-primary font-bold"
                         >
                           <option value="ACTIVE">AKTİF</option>
                           <option value="EXPIRED">SÜRESİ DOLMUŞ</option>
@@ -533,56 +533,56 @@ export default function AdminHivesPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
-                        <label className="block text-gray-400 mb-1 text-xs uppercase font-bold">Sahip Adı Soyadı</label>
+                        <label className="block text-text-muted mb-1 text-xs uppercase font-bold">Sahip Adı Soyadı</label>
                         <input
                           type="text"
                           required
                           placeholder="Örn: Ahmet Yılmaz"
                           value={adoptionForm.ownerName}
                           onChange={e => setAdoptionForm({...adoptionForm, ownerName: e.target.value})}
-                          className="w-full p-3 bg-[#1F2937]/50 border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                          className="w-full p-3 bg-gray-50 border-gray-200/50 border border-gray-200 rounded-lg text-xs text-secondary outline-none focus:border-primary"
                         />
                       </div>
                       <div>
-                        <label className="block text-gray-400 mb-1 text-xs uppercase font-bold">E-Posta</label>
+                        <label className="block text-text-muted mb-1 text-xs uppercase font-bold">E-Posta</label>
                         <input
                           type="email"
                           required
                           placeholder="Örn: ahmet@gmail.com"
                           value={adoptionForm.ownerEmail}
                           onChange={e => setAdoptionForm({...adoptionForm, ownerEmail: e.target.value})}
-                          className="w-full p-3 bg-[#1F2937]/50 border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                          className="w-full p-3 bg-gray-50 border-gray-200/50 border border-gray-200 rounded-lg text-xs text-secondary outline-none focus:border-primary"
                         />
                       </div>
                       <div>
-                        <label className="block text-gray-400 mb-1 text-xs uppercase font-bold">Telefon (İsteğe Bağlı)</label>
+                        <label className="block text-text-muted mb-1 text-xs uppercase font-bold">Telefon (İsteğe Bağlı)</label>
                         <input
                           type="text"
                           placeholder="Örn: 053X XXX XX XX"
                           value={adoptionForm.ownerPhone}
                           onChange={e => setAdoptionForm({...adoptionForm, ownerPhone: e.target.value})}
-                          className="w-full p-3 bg-[#1F2937]/50 border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                          className="w-full p-3 bg-gray-50 border-gray-200/50 border border-gray-200 rounded-lg text-xs text-secondary outline-none focus:border-primary"
                         />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-gray-400 mb-1 text-xs uppercase font-bold">Başlangıç Tarihi</label>
+                        <label className="block text-text-muted mb-1 text-xs uppercase font-bold">Başlangıç Tarihi</label>
                         <input
                           type="date"
                           value={adoptionForm.startDate}
                           onChange={e => setAdoptionForm({...adoptionForm, startDate: e.target.value})}
-                          className="w-full p-3 bg-[#1F2937]/50 border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                          className="w-full p-3 bg-gray-50 border-gray-200/50 border border-gray-200 rounded-lg text-xs text-secondary outline-none focus:border-primary"
                         />
                       </div>
                       <div>
-                        <label className="block text-gray-400 mb-1 text-xs uppercase font-bold">Bitiş Tarihi</label>
+                        <label className="block text-text-muted mb-1 text-xs uppercase font-bold">Bitiş Tarihi</label>
                         <input
                           type="date"
                           value={adoptionForm.endDate}
                           onChange={e => setAdoptionForm({...adoptionForm, endDate: e.target.value})}
-                          className="w-full p-3 bg-[#1F2937]/50 border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                          className="w-full p-3 bg-gray-50 border-gray-200/50 border border-gray-200 rounded-lg text-xs text-secondary outline-none focus:border-primary"
                         />
                       </div>
                     </div>
@@ -607,11 +607,11 @@ export default function AdminHivesPage() {
               )}
 
               {/* Adoptions Table/List */}
-              <div className="bg-[#111827]/40 border border-gray-800/80 rounded-2xl overflow-hidden">
+              <div className="bg-white border-gray-200 shadow-sm border border-gray-200/80 rounded-2xl overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse text-xs">
                     <thead>
-                      <tr className="border-b border-gray-800 text-[10px] uppercase font-heading font-black text-gray-500 bg-black/10">
+                      <tr className="border-b border-gray-200 text-[10px] uppercase font-heading font-black text-gray-500 bg-black/10">
                         <th className="p-4">Evlat Edinme Kodu</th>
                         <th className="p-4">Sahip Bilgileri</th>
                         <th className="p-4">İlişkili Kovan</th>
@@ -629,7 +629,7 @@ export default function AdminHivesPage() {
                             </span>
                           </td>
                           <td className="p-4">
-                            <div className="font-heading font-bold text-white uppercase">{ad.ownerName}</div>
+                            <div className="font-heading font-bold text-secondary uppercase">{ad.ownerName}</div>
                             <div className="text-[10px] text-gray-500 font-body flex items-center mt-1 gap-1">
                               <Mail className="w-3 h-3 shrink-0" /> {ad.ownerEmail}
                             </div>
@@ -642,14 +642,14 @@ export default function AdminHivesPage() {
                           <td className="p-4 font-body">
                             {ad.hive ? (
                               <div>
-                                <span className="font-bold text-white uppercase">{ad.hive.name}</span>
+                                <span className="font-bold text-secondary uppercase">{ad.hive.name}</span>
                                 <span className="text-[9px] text-gray-500 block">{ad.hive.location}</span>
                               </div>
                             ) : (
                               <span className="text-red-400 italic">Bilinmeyen Kovan</span>
                             )}
                           </td>
-                          <td className="p-4 font-body text-gray-400">
+                          <td className="p-4 font-body text-text-muted">
                             <div className="flex items-center gap-1">
                               <Calendar className="w-3 h-3 text-primary shrink-0" />
                               <span>{new Date(ad.startDate).toLocaleDateString('tr-TR')}</span>
@@ -661,7 +661,7 @@ export default function AdminHivesPage() {
                             <span className={`text-[9px] px-2 py-0.5 rounded font-heading font-black ${
                               ad.status === 'ACTIVE' 
                                 ? 'bg-green-900/20 text-green-400 border border-green-500/20' 
-                                : 'bg-gray-900 text-gray-500 border border-gray-800'
+                                : 'bg-gray-900 text-gray-500 border border-gray-200'
                             }`}>
                               {ad.status === 'ACTIVE' ? 'AKTİF' : 'SÜRESİ DOLDU'}
                             </span>
@@ -670,7 +670,7 @@ export default function AdminHivesPage() {
                             <div className="flex justify-end space-x-2">
                               <button
                                 onClick={() => handleEditAdoption(ad)}
-                                className="p-1.5 text-gray-400 hover:text-white transition-colors"
+                                className="p-1.5 text-text-muted hover:text-secondary transition-colors"
                               >
                                 <Edit className="w-4 h-4" />
                               </button>

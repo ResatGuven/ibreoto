@@ -25,21 +25,23 @@ const RichTextEditor = ({ value, onChange }: { value: string; onChange: (val: st
   };
 
   return (
-    <div className="border border-gray-700 rounded-lg overflow-hidden bg-[#1F2937]">
+    <div className="border border-gray-200 rounded-lg overflow-hidden bg-gray-50 border-gray-200">
       <style>{`
         .editor-content h2 { font-size: 1.5rem; font-weight: 700; margin-top: 1rem; margin-bottom: 0.5rem; color: #fff; }
         .editor-content h3 { font-size: 1.25rem; font-weight: 700; margin-top: 0.75rem; margin-bottom: 0.5rem; color: #fff; }
-        .editor-content p { margin-bottom: 1rem; color: #d1d5db; line-height: 1.6; }
+        .editor-content h2 { font-size: 1.5rem; font-weight: 700; margin-top: 1rem; margin-bottom: 0.5rem; color: #111; }
+        .editor-content h3 { font-size: 1.25rem; font-weight: 700; margin-top: 0.75rem; margin-bottom: 0.5rem; color: #111; }
+        .editor-content p { margin-bottom: 1rem; color: #374151; line-height: 1.6; }
         .editor-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
         .editor-content ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1rem; }
         .editor-content a { color: #F59E0B; text-decoration: underline; }
       `}</style>
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-1 p-2 bg-[#111827] border-b border-gray-700 select-none">
+      <div className="flex flex-wrap items-center gap-1 p-2 bg-white border-gray-200 shadow-sm border-b border-gray-200 select-none">
         <button
           type="button"
           onClick={() => execCmd('bold')}
-          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs font-bold text-gray-300 hover:text-white transition-colors"
+          className="px-3 py-1.5 hover:bg-gray-50 border-gray-200 rounded text-xs font-bold text-text-main hover:text-secondary transition-colors"
           title="Kalın"
         >
           K
@@ -47,7 +49,7 @@ const RichTextEditor = ({ value, onChange }: { value: string; onChange: (val: st
         <button
           type="button"
           onClick={() => execCmd('italic')}
-          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs italic text-gray-300 hover:text-white transition-colors"
+          className="px-3 py-1.5 hover:bg-gray-50 border-gray-200 rounded text-xs italic text-text-main hover:text-secondary transition-colors"
           title="İtalik"
         >
           İ
@@ -55,16 +57,16 @@ const RichTextEditor = ({ value, onChange }: { value: string; onChange: (val: st
         <button
           type="button"
           onClick={() => execCmd('underline')}
-          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs underline text-gray-300 hover:text-white transition-colors"
+          className="px-3 py-1.5 hover:bg-gray-50 border-gray-200 rounded text-xs underline text-text-main hover:text-secondary transition-colors"
           title="Altı Çizili"
         >
           A
         </button>
-        <div className="w-[1px] h-6 bg-gray-700 mx-1"></div>
+        <div className="w-[1px] h-6 bg-gray-300 mx-1"></div>
         <button
           type="button"
           onClick={() => execCmd('formatBlock', '<h2>')}
-          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs font-bold text-gray-300 hover:text-white transition-colors"
+          className="px-3 py-1.5 hover:bg-gray-50 border-gray-200 rounded text-xs font-bold text-text-main hover:text-secondary transition-colors"
           title="Büyük Başlık"
         >
           H2
@@ -72,7 +74,7 @@ const RichTextEditor = ({ value, onChange }: { value: string; onChange: (val: st
         <button
           type="button"
           onClick={() => execCmd('formatBlock', '<h3>')}
-          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs font-bold text-gray-300 hover:text-white transition-colors"
+          className="px-3 py-1.5 hover:bg-gray-50 border-gray-200 rounded text-xs font-bold text-text-main hover:text-secondary transition-colors"
           title="Küçük Başlık"
         >
           H3
@@ -80,16 +82,16 @@ const RichTextEditor = ({ value, onChange }: { value: string; onChange: (val: st
         <button
           type="button"
           onClick={() => execCmd('formatBlock', '<p>')}
-          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs text-gray-300 hover:text-white transition-colors"
+          className="px-3 py-1.5 hover:bg-gray-50 border-gray-200 rounded text-xs text-text-main hover:text-secondary transition-colors"
           title="Paragraf"
         >
           P
         </button>
-        <div className="w-[1px] h-6 bg-gray-700 mx-1"></div>
+        <div className="w-[1px] h-6 bg-gray-300 mx-1"></div>
         <button
           type="button"
           onClick={() => execCmd('insertUnorderedList')}
-          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs text-gray-300 hover:text-white transition-colors"
+          className="px-3 py-1.5 hover:bg-gray-50 border-gray-200 rounded text-xs text-text-main hover:text-secondary transition-colors"
           title="Madde İşaretli Liste"
         >
           • Liste
@@ -97,16 +99,16 @@ const RichTextEditor = ({ value, onChange }: { value: string; onChange: (val: st
         <button
           type="button"
           onClick={() => execCmd('insertOrderedList')}
-          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs text-gray-300 hover:text-white transition-colors"
+          className="px-3 py-1.5 hover:bg-gray-50 border-gray-200 rounded text-xs text-text-main hover:text-secondary transition-colors"
           title="Numaralı Liste"
         >
           1. Liste
         </button>
-        <div className="w-[1px] h-6 bg-gray-700 mx-1"></div>
+        <div className="w-[1px] h-6 bg-gray-300 mx-1"></div>
         <button
           type="button"
           onClick={() => execCmd('justifyLeft')}
-          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs text-gray-300 hover:text-white transition-colors"
+          className="px-3 py-1.5 hover:bg-gray-50 border-gray-200 rounded text-xs text-text-main hover:text-secondary transition-colors"
           title="Sola Hizala"
         >
           Sola
@@ -114,7 +116,7 @@ const RichTextEditor = ({ value, onChange }: { value: string; onChange: (val: st
         <button
           type="button"
           onClick={() => execCmd('justifyCenter')}
-          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs text-gray-300 hover:text-white transition-colors"
+          className="px-3 py-1.5 hover:bg-gray-50 border-gray-200 rounded text-xs text-text-main hover:text-secondary transition-colors"
           title="Ortala"
         >
           Orta
@@ -122,19 +124,19 @@ const RichTextEditor = ({ value, onChange }: { value: string; onChange: (val: st
         <button
           type="button"
           onClick={() => execCmd('justifyRight')}
-          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs text-gray-300 hover:text-white transition-colors"
+          className="px-3 py-1.5 hover:bg-gray-50 border-gray-200 rounded text-xs text-text-main hover:text-secondary transition-colors"
           title="Sağa Hizala"
         >
           Sağa
         </button>
-        <div className="w-[1px] h-6 bg-gray-700 mx-1"></div>
+        <div className="w-[1px] h-6 bg-gray-300 mx-1"></div>
         <button
           type="button"
           onClick={() => {
             const url = window.prompt('Bağlantı URL adresini girin:');
             if (url) execCmd('createLink', url);
           }}
-          className="px-3 py-1.5 hover:bg-[#1F2937] rounded text-xs text-amber-500 hover:text-amber-400 transition-colors font-bold"
+          className="px-3 py-1.5 hover:bg-gray-50 border-gray-200 rounded text-xs text-amber-500 hover:text-amber-600 transition-colors font-bold"
           title="Bağlantı Ekle"
         >
           Link Ekle
@@ -142,7 +144,7 @@ const RichTextEditor = ({ value, onChange }: { value: string; onChange: (val: st
         <button
           type="button"
           onClick={() => execCmd('removeFormat')}
-          className="px-3 py-1.5 hover:bg-red-900/20 hover:text-red-400 rounded text-xs text-gray-400 transition-colors"
+          className="px-3 py-1.5 hover:bg-red-50 hover:text-red-600 rounded text-xs text-gray-500 transition-colors"
           title="Biçimlendirmeyi Temizle"
         >
           Temizle
@@ -154,7 +156,7 @@ const RichTextEditor = ({ value, onChange }: { value: string; onChange: (val: st
         ref={editorRef}
         contentEditable={true}
         onInput={handleInput}
-        className="w-full p-4 min-h-[300px] outline-none text-white overflow-y-auto text-sm editor-content"
+        className="w-full p-4 min-h-[300px] outline-none text-secondary overflow-y-auto text-sm editor-content"
       />
     </div>
   );
@@ -236,7 +238,7 @@ export default function AdminPagesPage() {
   };
 
   return (
-    <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
+    <div className="p-6 bg-gray-50 min-h-screen text-gray-900">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-700 uppercase tracking-tight">Sayfa Yönetimi</h1>
         <button 
@@ -244,44 +246,44 @@ export default function AdminPagesPage() {
             setFormData({ id: '', title: '', slug: '', content: '', isActive: true });
             setIsAdding(true);
           }}
-          className="bg-gradient-to-r from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-secondary px-4 py-2 rounded-xl font-heading font-bold text-sm uppercase flex items-center transition-all shadow-lg shadow-primary/20"
+          className="bg-gradient-to-r from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white px-4 py-2 rounded-xl font-heading font-bold text-sm uppercase flex items-center transition-all shadow-lg shadow-primary/20"
         >
           <Plus className="w-4 h-4 mr-2" /> Yeni Sayfa Ekle
         </button>
       </div>
 
       {isAdding && (
-        <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 mb-8 shadow-lg">
-          <h2 className="text-lg font-heading font-bold text-white mb-6 uppercase flex items-center">
+        <div className="bg-white border-gray-200 shadow-sm p-6 rounded-2xl border border-gray-200 mb-8 shadow-lg">
+          <h2 className="text-lg font-heading font-bold text-secondary mb-6 uppercase flex items-center">
             <FileText className="w-5 h-5 mr-2 text-primary" /> {formData.id ? 'Sayfayı Düzenle' : 'Sayfa Bilgileri'}
           </h2>
           <form onSubmit={handleSave} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Sayfa Başlığı (Örn: Hakkımızda)</label>
-                <input type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary font-heading font-bold" />
+                <label className="block text-gray-500 mb-1 text-xs font-body uppercase">Sayfa Başlığı (Örn: Hakkımızda)</label>
+                <input type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg text-secondary outline-none focus:border-primary font-heading font-bold" />
               </div>
               <div>
-                <label className="block text-gray-400 mb-1 text-xs font-body uppercase">URL (Slug) (Örn: hakkimizda)</label>
-                <input type="text" value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-primary" />
+                <label className="block text-gray-500 mb-1 text-xs font-body uppercase">URL (Slug) (Örn: hakkimizda)</label>
+                <input type="text" value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg text-secondary outline-none focus:border-primary" />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-gray-400 mb-2 text-xs font-body uppercase">İçerik Editörü (Görsel Zengin Editör)</label>
+                <label className="block text-gray-500 mb-2 text-xs font-body uppercase">İçerik Editörü (Görsel Zengin Editör)</label>
                 <RichTextEditor 
                   value={formData.content} 
                   onChange={val => setFormData({...formData, content: val})} 
                 />
               </div>
               <div>
-                <label className="flex items-center space-x-2 text-gray-400 cursor-pointer">
-                  <input type="checkbox" checked={formData.isActive} onChange={e => setFormData({...formData, isActive: e.target.checked})} className="w-4 h-4 rounded bg-gray-800 border-gray-700 text-primary focus:ring-primary focus:ring-offset-gray-900" />
+                <label className="flex items-center space-x-2 text-gray-500 cursor-pointer">
+                  <input type="checkbox" checked={formData.isActive} onChange={e => setFormData({...formData, isActive: e.target.checked})} className="w-4 h-4 rounded bg-gray-50 border-gray-300 text-primary focus:ring-primary" />
                   <span className="text-sm font-body uppercase">Sayfa Aktif (Yayında)</span>
                 </label>
               </div>
             </div>
             <div className="flex justify-end space-x-2 pt-4">
-              <button type="button" onClick={() => setIsAdding(false)} className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg font-bold text-sm uppercase transition-colors">İptal</button>
-              <button type="submit" className="bg-primary hover:bg-primary-hover text-secondary px-4 py-2 rounded-lg font-bold text-sm uppercase transition-colors">
+              <button type="button" onClick={() => setIsAdding(false)} className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-bold text-sm uppercase transition-colors">İptal</button>
+              <button type="submit" className="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg font-bold text-sm uppercase transition-colors">
                 {formData.id ? 'Güncelle' : 'Kaydet'}
               </button>
             </div>
@@ -289,10 +291,10 @@ export default function AdminPagesPage() {
         </div>
       )}
 
-      <div className="bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 overflow-hidden shadow-lg">
+      <div className="bg-white border-gray-200 shadow-sm rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-[#1F2937] text-gray-400 text-[10px] uppercase tracking-widest font-heading border-b border-gray-800">
+            <tr className="bg-gray-50 border-gray-200 text-gray-500 text-[10px] uppercase tracking-widest font-heading border-b border-gray-200">
               <th className="p-4 font-bold">Sayfa Başlığı</th>
               <th className="p-4 font-bold">URL (Slug)</th>
               <th className="p-4 font-bold">Durum</th>
@@ -300,22 +302,22 @@ export default function AdminPagesPage() {
               <th className="p-4 font-bold text-right">İşlemler</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-800/50 text-sm font-body">
+          <tbody className="divide-y divide-gray-100 text-sm font-body">
             {pages.map((page) => (
-              <tr key={page.id} className="hover:bg-white/[0.02] transition-colors group">
-                <td className="p-4 font-bold text-white">{page.title}</td>
-                <td className="p-4 text-gray-400">/{page.slug}</td>
+              <tr key={page.id} className="hover:bg-gray-50 transition-colors group">
+                <td className="p-4 font-bold text-gray-900">{page.title}</td>
+                <td className="p-4 text-gray-500">/{page.slug}</td>
                 <td className="p-4">
                   {page.isActive ? (
-                    <span className="bg-green-900/20 text-green-400 text-[10px] px-2 py-0.5 rounded-full border border-green-500/20 font-bold uppercase">Aktif</span>
+                    <span className="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full border border-green-200 font-bold uppercase">Aktif</span>
                   ) : (
-                    <span className="bg-gray-900/20 text-gray-500 text-[10px] px-2 py-0.5 rounded-full border border-gray-500/20 font-bold uppercase">Pasif</span>
+                    <span className="bg-gray-50 border-gray-200 text-gray-500 text-[10px] px-2 py-0.5 rounded-full border border-gray-300 font-bold uppercase">Pasif</span>
                   )}
                 </td>
                 <td className="p-4 text-gray-500">{new Date(page.createdAt).toLocaleDateString('tr-TR')}</td>
                 <td className="p-4 flex justify-end space-x-2">
-                  <button onClick={() => handleEdit(page)} className="text-gray-400 hover:text-white p-2 transition-colors"><Edit className="w-4 h-4" /></button>
-                  <button onClick={() => handleDelete(page.id)} className="text-red-500 hover:text-red-400 p-2 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                  <button onClick={() => handleEdit(page)} className="text-gray-400 hover:text-secondary p-2 transition-colors"><Edit className="w-4 h-4" /></button>
+                  <button onClick={() => handleDelete(page.id)} className="text-red-400 hover:text-red-600 p-2 transition-colors"><Trash2 className="w-4 h-4" /></button>
                 </td>
               </tr>
             ))}

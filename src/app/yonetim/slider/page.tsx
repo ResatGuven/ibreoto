@@ -102,7 +102,7 @@ export default function AdminSliderPage() {
   };
 
   return (
-    <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
+    <div className="p-6 bg-background min-h-screen text-text-main">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700 uppercase tracking-tight">Slider Yönetimi</h1>
         <button 
@@ -110,48 +110,48 @@ export default function AdminSliderPage() {
             setFormData({ id: '', title: '', subtitle: '', image: '', buttonText: 'Şimdi İncele', buttonLink: '/urunler', order: 0 });
             setIsAdding(true);
           }}
-          className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-4 py-2 rounded-xl font-heading font-bold text-sm uppercase flex items-center transition-all shadow-lg shadow-red-500/20"
+          className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-secondary px-4 py-2 rounded-xl font-heading font-bold text-sm uppercase flex items-center transition-all shadow-lg shadow-red-500/20"
         >
           <Plus className="w-4 h-4 mr-2" /> Yeni Görsel Ekle
         </button>
       </div>
 
       {isAdding && (
-        <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 mb-8 shadow-lg">
-          <h2 className="text-lg font-heading font-bold text-white mb-6 uppercase flex items-center">
+        <div className="bg-white border-gray-200 shadow-sm backdrop-blur-xl p-6 rounded-2xl border border-gray-200 mb-8 shadow-lg">
+          <h2 className="text-lg font-heading font-bold text-secondary mb-6 uppercase flex items-center">
             <ImageIcon className="w-5 h-5 mr-2 text-red-500" /> {formData.id ? 'Sliderı Düzenle' : 'Slider Bilgileri'}
           </h2>
           <form onSubmit={handleSave} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Ana Başlık</label>
-                <input type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500 font-heading font-bold" />
+                <label className="block text-text-muted mb-1 text-xs font-body uppercase">Ana Başlık</label>
+                <input type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg text-secondary outline-none focus:border-red-500 font-heading font-bold" />
               </div>
               <div>
-                <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Alt Başlık</label>
-                <input type="text" value={formData.subtitle} onChange={e => setFormData({...formData, subtitle: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" />
+                <label className="block text-text-muted mb-1 text-xs font-body uppercase">Alt Başlık</label>
+                <input type="text" value={formData.subtitle} onChange={e => setFormData({...formData, subtitle: e.target.value})} className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg text-secondary outline-none focus:border-red-500" />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Görsel (Dosya veya URL)</label>
+                <label className="block text-text-muted mb-1 text-xs font-body uppercase">Görsel (Dosya veya URL)</label>
                 <div className="flex space-x-2">
-                  <input type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} placeholder="URL girin veya seçin" className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500 text-sm" />
-                  <label className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg cursor-pointer transition-colors flex items-center border border-gray-600">
+                  <input type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} placeholder="URL girin veya seçin" className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg text-secondary outline-none focus:border-red-500 text-sm" />
+                  <label className="bg-gray-700 hover:bg-gray-600 text-secondary px-4 py-3 rounded-lg cursor-pointer transition-colors flex items-center border border-gray-600">
                     <ImageIcon className="w-4 h-4 mr-1" /> Seç
                     <input type="file" className="hidden" onChange={handleFileChange} />
                   </label>
                 </div>
               </div>
               <div>
-                <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Buton Metni</label>
-                <input type="text" value={formData.buttonText} onChange={e => setFormData({...formData, buttonText: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" />
+                <label className="block text-text-muted mb-1 text-xs font-body uppercase">Buton Metni</label>
+                <input type="text" value={formData.buttonText} onChange={e => setFormData({...formData, buttonText: e.target.value})} className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg text-secondary outline-none focus:border-red-500" />
               </div>
               <div>
-                <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Buton Linki</label>
-                <input type="text" value={formData.buttonLink} onChange={e => setFormData({...formData, buttonLink: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" />
+                <label className="block text-text-muted mb-1 text-xs font-body uppercase">Buton Linki</label>
+                <input type="text" value={formData.buttonLink} onChange={e => setFormData({...formData, buttonLink: e.target.value})} className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg text-secondary outline-none focus:border-red-500" />
               </div>
               <div>
-                <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Görüntüleme Sırası</label>
-                <input type="number" value={formData.order} onChange={e => setFormData({...formData, order: parseInt(e.target.value) || 0})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500" />
+                <label className="block text-text-muted mb-1 text-xs font-body uppercase">Görüntüleme Sırası</label>
+                <input type="number" value={formData.order} onChange={e => setFormData({...formData, order: parseInt(e.target.value) || 0})} className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg text-secondary outline-none focus:border-red-500" />
               </div>
             </div>
             <div className="flex justify-end space-x-2 pt-4">
@@ -166,20 +166,20 @@ export default function AdminSliderPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {sliders.map((slider) => (
-          <div key={slider.id} className="bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 overflow-hidden shadow-lg group">
+          <div key={slider.id} className="bg-white border-gray-200 shadow-sm backdrop-blur-xl rounded-2xl border border-gray-200 overflow-hidden shadow-lg group">
             <div className="relative h-48 overflow-hidden bg-gray-900">
               {slider.image ? (
                 <img src={slider.image} alt={slider.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
               ) : (
-                <div className="flex items-center justify-center h-full text-gray-600 uppercase text-xs font-heading font-bold">Görsel Yok</div>
+                <div className="flex items-center justify-center h-full text-text-main uppercase text-xs font-heading font-bold">Görsel Yok</div>
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
               <div className="absolute bottom-4 left-4 right-4">
-                <h3 className="text-white font-heading font-bold text-lg leading-tight uppercase truncate">{slider.title || 'Başlıksız'}</h3>
-                <p className="text-gray-400 text-xs mt-1 truncate">{slider.subtitle}</p>
+                <h3 className="text-secondary font-heading font-bold text-lg leading-tight uppercase truncate">{slider.title || 'Başlıksız'}</h3>
+                <p className="text-text-muted text-xs mt-1 truncate">{slider.subtitle}</p>
               </div>
             </div>
-            <div className="p-4 flex justify-between items-center bg-[#111827]">
+            <div className="p-4 flex justify-between items-center bg-white">
               <div className="flex items-center space-x-2">
                 <div className="bg-red-900/20 text-red-400 text-[10px] px-2 py-0.5 rounded-full border border-red-500/20 font-bold uppercase">
                   Sıra: {slider.order}
@@ -187,13 +187,13 @@ export default function AdminSliderPage() {
                 {slider.active ? (
                   <span className="bg-green-900/20 text-green-400 text-[10px] px-2 py-0.5 rounded-full border border-green-500/20 font-bold uppercase">Aktif</span>
                 ) : (
-                  <span className="bg-gray-900/20 text-gray-500 text-[10px] px-2 py-0.5 rounded-full border border-gray-500/20 font-bold uppercase">Pasif</span>
+                  <span className="bg-gray-50 border-gray-200 text-gray-500 text-[10px] px-2 py-0.5 rounded-full border border-gray-500/20 font-bold uppercase">Pasif</span>
                 )}
               </div>
               <div className="flex space-x-2">
                 <button 
                   onClick={() => handleEdit(slider)}
-                  className="text-gray-400 hover:text-white p-2 transition-colors"
+                  className="text-text-muted hover:text-secondary p-2 transition-colors"
                 >
                   <Edit className="w-4 h-4" />
                 </button>
@@ -208,7 +208,7 @@ export default function AdminSliderPage() {
           </div>
         ))}
         {sliders.length === 0 && !loading && (
-          <div className="col-span-full text-center py-20 bg-[#111827]/30 rounded-2xl border border-dashed border-gray-800">
+          <div className="col-span-full text-center py-20 bg-white border-gray-200 shadow-sm rounded-2xl border border-dashed border-gray-200">
             <p className="text-gray-500 uppercase text-sm font-heading font-bold">Henüz hiç slider eklenmemiş.</p>
           </div>
         )}

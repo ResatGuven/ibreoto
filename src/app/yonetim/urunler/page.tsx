@@ -195,7 +195,7 @@ export default function AdminUrunlerPage() {
   };
 
   return (
-    <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
+    <div className="p-6 bg-background min-h-screen text-text-main">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-700 uppercase">Arı Ürünleri & Kovan Yönetimi</h1>
         <button 
@@ -207,27 +207,27 @@ export default function AdminUrunlerPage() {
       </div>
 
       {isAdding && (
-        <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 mb-6 shadow-lg">
-          <h2 className="text-lg font-heading font-bold text-white mb-4 uppercase">{formData.id ? 'Düzenle' : 'Yeni Ekle'}</h2>
+        <div className="bg-white border-gray-200 shadow-sm backdrop-blur-xl p-6 rounded-2xl border border-gray-200 mb-6 shadow-lg">
+          <h2 className="text-lg font-heading font-bold text-secondary mb-4 uppercase">{formData.id ? 'Düzenle' : 'Yeni Ekle'}</h2>
           <form className="space-y-4" onSubmit={handleSave}>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-gray-400 mb-1 text-sm font-body">Adı (Bal, Kovan vb.)</label>
-                <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white" required />
+                <label className="block text-text-muted mb-1 text-sm font-body">Adı (Bal, Kovan vb.)</label>
+                <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-secondary" required />
               </div>
               <div>
-                <label className="block text-gray-400 mb-1 text-sm font-body">Fiyat (₺)</label>
-                <input type="text" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white" required />
+                <label className="block text-text-muted mb-1 text-sm font-body">Fiyat (₺)</label>
+                <input type="text" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-secondary" required />
               </div>
               <div>
-                <label className="block text-gray-400 mb-1 text-sm font-body">Stok (Adet/Kg)</label>
-                <input type="number" value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white" required />
+                <label className="block text-text-muted mb-1 text-sm font-body">Stok (Adet/Kg)</label>
+                <input type="number" value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-secondary" required />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-gray-400 mb-1 text-sm font-body">Kategori</label>
-                <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white" required>
+                <label className="block text-text-muted mb-1 text-sm font-body">Kategori</label>
+                <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-secondary" required>
                   <option value="">Seçiniz</option>
                   <option value="bal">Doğal Bal</option>
                   <option value="propolis">Propolis</option>
@@ -236,10 +236,10 @@ export default function AdminUrunlerPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-gray-400 mb-1 text-sm font-body">Görsel (Dosya veya URL)</label>
+                <label className="block text-text-muted mb-1 text-sm font-body">Görsel (Dosya veya URL)</label>
                 <div className="flex space-x-2">
-                  <input type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white text-sm" placeholder="URL girin veya dosya seçin" />
-                  <label className="bg-[#1F2937] hover:bg-gray-700 text-white px-4 py-3 rounded-lg font-heading font-bold text-sm uppercase cursor-pointer transition-colors flex items-center border border-gray-700">
+                  <input type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-secondary text-sm" placeholder="URL girin veya dosya seçin" />
+                  <label className="bg-gray-50 border-gray-200 hover:bg-gray-700 text-secondary px-4 py-3 rounded-lg font-heading font-bold text-sm uppercase cursor-pointer transition-colors flex items-center border border-gray-200">
                     <ImageIcon className="w-4 h-4 mr-1" /> Seç
                     <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
                   </label>
@@ -248,7 +248,7 @@ export default function AdminUrunlerPage() {
             </div>
             <div>
               <div className="flex justify-between items-center mb-1">
-                <label className="block text-gray-400 text-sm font-body">Açıklama</label>
+                <label className="block text-text-muted text-sm font-body">Açıklama</label>
                 <button
                   type="button"
                   onClick={handleGenerateProductAi}
@@ -268,38 +268,38 @@ export default function AdminUrunlerPage() {
                   )}
                 </button>
               </div>
-              <textarea value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} rows={3} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white"></textarea>
+              <textarea value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} rows={3} className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-secondary"></textarea>
             </div>
             
             {/* SEO Alanları */}
-            <div className="border-t border-gray-800 pt-4 mt-4">
-              <h3 className="text-md font-heading font-bold text-white mb-3 uppercase flex items-center">
+            <div className="border-t border-gray-200 pt-4 mt-4">
+              <h3 className="text-md font-heading font-bold text-secondary mb-3 uppercase flex items-center">
                 <Search className="w-4 h-4 mr-1 text-primary" /> SEO Yönetimi (Google'da Öne Çıkın)
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-gray-400 mb-1 text-sm font-body">SEO Başlığı (Meta Title)</label>
-                  <input type="text" value={formData.metaTitle} onChange={e => setFormData({...formData, metaTitle: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white text-sm" placeholder="Boş bırakılırsa ürün adı kullanılır" />
+                  <label className="block text-text-muted mb-1 text-sm font-body">SEO Başlığı (Meta Title)</label>
+                  <input type="text" value={formData.metaTitle} onChange={e => setFormData({...formData, metaTitle: e.target.value})} className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-secondary text-sm" placeholder="Boş bırakılırsa ürün adı kullanılır" />
                 </div>
                 <div>
-                  <label className="block text-gray-400 mb-1 text-sm font-body">SEO Açıklaması (Meta Description)</label>
-                  <input type="text" value={formData.metaDescription} onChange={e => setFormData({...formData, metaDescription: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white text-sm" placeholder="Arama sonuçlarında görünecek kısa açıklama" />
+                  <label className="block text-text-muted mb-1 text-sm font-body">SEO Açıklaması (Meta Description)</label>
+                  <input type="text" value={formData.metaDescription} onChange={e => setFormData({...formData, metaDescription: e.target.value})} className="w-full p-3 bg-gray-50 border-gray-200 border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-secondary text-sm" placeholder="Arama sonuçlarında görünecek kısa açıklama" />
                 </div>
               </div>
             </div>
 
             <div className="flex justify-end space-x-2">
-              <button type="button" onClick={() => setIsAdding(false)} className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase transition-colors">Vazgeç</button>
+              <button type="button" onClick={() => setIsAdding(false)} className="bg-gray-700 hover:bg-gray-600 text-secondary px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase transition-colors">Vazgeç</button>
               <button type="submit" className="bg-gradient-to-r from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-secondary px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase transition-colors">Kaydet</button>
             </div>
           </form>
         </div>
       )}
 
-      <div className="bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 overflow-hidden shadow-lg">
+      <div className="bg-white border-gray-200 shadow-sm backdrop-blur-xl rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[800px] text-left font-body text-sm">
-          <thead className="bg-[#1F2937] font-heading font-bold text-gray-300 text-xs uppercase">
+          <thead className="bg-gray-50 border-gray-200 font-heading font-bold text-text-main text-xs uppercase">
             <tr>
               <th className="p-4">Görsel</th>
               <th className="p-4">Ürün Adı</th>
@@ -309,22 +309,22 @@ export default function AdminUrunlerPage() {
               <th className="p-4 text-right">İşlemler</th>
             </tr>
           </thead>
-          <tbody className="text-gray-300">
+          <tbody className="text-text-main">
+          <tbody className="text-gray-900">
             {loading ? (
               <tr>
                 <td colSpan={6} className="p-4 text-center text-gray-500">Yükleniyor...</td>
               </tr>
             ) : products.map((product) => (
-              <tr key={product.id} className="border-t border-gray-800 hover:bg-[#1F2937]/50 transition-colors">
+              <tr key={product.id} className="border-t border-gray-100 hover:bg-gray-50 transition-colors">
                 <td className="p-4">
-                  <div className="w-12 h-12 bg-[#1F2937] rounded flex items-center justify-center text-gray-500 overflow-hidden border border-gray-700">
+                  <div className="w-12 h-12 bg-gray-100 border border-gray-200 rounded flex items-center justify-center text-gray-400 overflow-hidden">
                     {product.image ? <img src={product.image} alt="" className="w-full h-full object-cover" /> : <ImageIcon className="w-5 h-5" />}
                   </div>
                 </td>
-                <td className="p-4 font-medium text-white">{product.name}</td>
-                <td className="p-4 text-gray-400">{product.category}</td>
+                <td className="p-4 text-text-muted">{product.category}</td>
                 <td className="p-4 font-heading font-bold text-primary">₺{product.price}</td>
-                <td className="p-4 text-gray-400">
+                <td className="p-4 text-text-muted">
                   {editingStockId === product.id ? (
                     <input
                       type="number"
@@ -332,7 +332,7 @@ export default function AdminUrunlerPage() {
                       onChange={e => setTempStock(e.target.value)}
                       onBlur={() => handleQuickStockUpdate(product)}
                       onKeyDown={e => e.key === 'Enter' && handleQuickStockUpdate(product)}
-                      className="w-20 p-1 bg-[#1F2937] border border-primary rounded text-white text-center"
+                      className="w-20 p-1 bg-gray-50 border-gray-200 border border-primary rounded text-secondary text-center"
                       autoFocus
                     />
                   ) : (
