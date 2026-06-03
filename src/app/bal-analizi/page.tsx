@@ -13,7 +13,7 @@ import { exportAnalysisPDF } from '@/utils/pdfExport';
 export default function BalAnaliziPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[#0B0F19] text-gray-100 py-16 px-4 md:px-8 flex items-center justify-center">
+      <div className="min-h-screen bg-background honeycomb-bg text-text-main py-16 px-4 md:px-8 flex items-center justify-center">
         <Loader2 className="w-10 h-10 text-primary animate-spin" />
       </div>
     }>
@@ -128,7 +128,7 @@ function BalAnaliziContent() {
 
     // Calculate rating and comparison info dynamically
     let badgeText = "Standart";
-    let badgeStyle = "bg-gray-800 text-gray-400 border border-gray-700";
+    let badgeStyle = "bg-gray-800 text-text-muted border border-gray-700";
     let explanationText = "";
 
     if (label.includes("Prolin")) {
@@ -143,7 +143,7 @@ function BalAnaliziContent() {
         explanationText = `Doğal yayla florasından toplanan bu bal, ${value} mg/kg prolin değeriyle arının doğallığını ve besleyici gücünü kanıtlamaktadır.`;
       } else {
         badgeText = "Standart Çiçek Balı";
-        badgeStyle = "bg-gray-850 text-gray-400 border border-gray-800";
+        badgeStyle = "bg-gray-850 text-text-muted border border-gray-800";
         explanationText = "Normal sofralık çiçek balı limitlerindedir, günlük tüketime uygundur.";
       }
     } else if (label.includes("Nem")) {
@@ -177,9 +177,9 @@ function BalAnaliziContent() {
     }
 
     return (
-      <div className="bg-[#111827]/40 border border-gray-800 p-6 rounded-3xl text-center flex flex-col items-center justify-between h-full group hover:border-gray-700/50 transition-all duration-300">
+      <div className="bg-white border border-gray-200 shadow-sm p-6 rounded-3xl text-center flex flex-col items-center justify-between h-full group hover:border-gray-700/50 transition-all duration-300">
         <div className="w-full">
-          <h4 className="text-xs uppercase tracking-wider font-bold text-gray-400 font-heading mb-1">{label}</h4>
+          <h4 className="text-xs uppercase tracking-wider font-bold text-text-muted font-heading mb-1">{label}</h4>
           <p className="text-[10px] text-gray-500 font-body mb-3">{idealRange}</p>
           <div className="inline-block">
             <span className={`text-[8.5px] uppercase font-black px-2 py-0.5 rounded-full tracking-wider ${badgeStyle}`}>
@@ -207,13 +207,13 @@ function BalAnaliziContent() {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-2xl font-heading font-black text-white">{value}</span>
-            <span className="text-[9px] text-gray-400 uppercase font-bold">{unit}</span>
+            <span className="text-2xl font-heading font-black text-secondary">{value}</span>
+            <span className="text-[9px] text-text-muted uppercase font-bold">{unit}</span>
           </div>
         </div>
 
         <div className="w-full space-y-2 pt-3 border-t border-gray-800/80 mb-4">
-          <p className="text-[10.5px] text-gray-400 leading-relaxed font-body">{description}</p>
+          <p className="text-[10.5px] text-text-muted leading-relaxed font-body">{description}</p>
           {explanationText && (
             <p className="text-[10.5px] text-primary bg-primary/5 p-2 rounded-xl border border-primary/10 font-bold leading-relaxed">
               🔍 {explanationText}
@@ -249,7 +249,7 @@ function BalAnaliziContent() {
                 </div>
                 <div className="absolute left-[30%] top-2.5 flex flex-col items-center -translate-x-1/2">
                   <div className="w-0.5 h-1 bg-gray-700 mb-0.5"></div>
-                  <span className="text-[6.5px] text-gray-400 font-bold">300 (Yayla)</span>
+                  <span className="text-[6.5px] text-text-muted font-bold">300 (Yayla)</span>
                 </div>
                 <div className="absolute left-[50%] top-2.5 flex flex-col items-center -translate-x-1/2">
                   <div className="w-0.5 h-1 bg-amber-500 mb-0.5"></div>
@@ -264,7 +264,7 @@ function BalAnaliziContent() {
                 </div>
                 <div className="absolute left-[72%] top-2.5 flex flex-col items-center -translate-x-1/2">
                   <div className="w-0.5 h-1 bg-gray-700 mb-0.5"></div>
-                  <span className="text-[6.5px] text-gray-400 font-bold">%18 (Yoğun)</span>
+                  <span className="text-[6.5px] text-text-muted font-bold">%18 (Yoğun)</span>
                 </div>
                 <div className="absolute left-[80%] top-2.5 flex flex-col items-center -translate-x-1/2">
                   <div className="w-0.5 h-1 bg-red-500 mb-0.5"></div>
@@ -279,7 +279,7 @@ function BalAnaliziContent() {
                 </div>
                 <div className="absolute left-[48%] top-2.5 flex flex-col items-center -translate-x-1/2">
                   <div className="w-0.5 h-1 bg-gray-700 mb-0.5"></div>
-                  <span className="text-[6.5px] text-gray-400 font-bold">12 (Çiğ Bal)</span>
+                  <span className="text-[6.5px] text-text-muted font-bold">12 (Çiğ Bal)</span>
                 </div>
                 <div className="absolute left-[60%] top-2.5 flex flex-col items-center -translate-x-1/2">
                   <div className="w-0.5 h-1 bg-emerald-500 mb-0.5"></div>
@@ -297,14 +297,14 @@ function BalAnaliziContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-gray-100 py-16 px-4 md:px-8">
+    <div className="min-h-screen bg-background honeycomb-bg text-text-main py-16 px-4 md:px-8">
       {/* Page Header */}
       <div className="max-w-4xl mx-auto text-center mb-12">
         <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto border border-primary/20 mb-4 text-primary">
           <FlaskConical className="w-6 h-6 animate-pulse" />
         </div>
-        <h1 className="text-3xl md:text-4xl font-heading font-black text-white uppercase tracking-tight">Bal Analiz Raporu Sorgulama</h1>
-        <p className="text-xs text-gray-400 mt-2 max-w-xl mx-auto leading-relaxed">
+        <h1 className="text-3xl md:text-4xl font-heading font-black text-secondary uppercase tracking-tight">Bal Analiz Raporu Sorgulama</h1>
+        <p className="text-xs text-text-muted mt-2 max-w-xl mx-auto leading-relaxed">
           Kavanozunuzun arkasındaki Lot/Parti kodunu girerek, balınızın laboratuvar analiz sonuçlarını, prolin derecesini ve doğal saflık belgelerini sorgulayabilirsiniz.
         </p>
       </div>
@@ -318,7 +318,7 @@ function BalAnaliziContent() {
               value={batchNo} 
               onChange={e => setBatchNo(e.target.value.toUpperCase())}
               placeholder="Örn: KESTANE-2026-01" 
-              className="w-full pl-10 pr-4 py-3.5 bg-[#111827]/60 border border-gray-800 rounded-2xl focus:border-primary outline-none text-white font-heading font-bold text-center placeholder-gray-600 transition-colors uppercase tracking-wider text-sm shadow-xl"
+              className="w-full pl-10 pr-4 py-3.5 bg-[#111827]/60 border border-gray-800 rounded-2xl focus:border-primary outline-none text-secondary font-heading font-bold text-center placeholder-gray-600 transition-colors uppercase tracking-wider text-sm shadow-xl"
               required
             />
             <Search className="absolute left-3.5 top-4 w-4 h-4 text-gray-500" />
@@ -350,21 +350,21 @@ function BalAnaliziContent() {
       {analysis && (
         <div className="max-w-5xl mx-auto space-y-8 animate-fade-in">
           {/* Analysis Info Card */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-[#111827]/40 border border-gray-800 p-6 rounded-3xl backdrop-blur-xl">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white border border-gray-200 shadow-sm p-6 rounded-3xl backdrop-blur-xl">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center border border-green-500/20 text-green-400">
                 <ShieldCheck className="w-8 h-8" />
               </div>
               <div>
                 <span className="text-[9px] bg-green-900/20 text-green-400 font-black uppercase px-2 py-0.5 rounded-full border border-green-500/20 tracking-wider">Sertifikalı Saf Bal</span>
-                <h2 className="text-xl font-heading font-black text-white uppercase tracking-tight mt-1">{analysis.productName}</h2>
-                <p className="text-xs text-gray-400 flex items-center mt-1">
+                <h2 className="text-xl font-heading font-black text-secondary uppercase tracking-tight mt-1">{analysis.productName}</h2>
+                <p className="text-xs text-text-muted flex items-center mt-1">
                   <Calendar className="w-3.5 h-3.5 mr-1 text-primary" /> Analiz Tarihi: {new Date(analysis.analysisDate).toLocaleDateString('tr-TR')}
                 </p>
               </div>
             </div>
             <div className="px-5 py-3 bg-gray-900/40 rounded-2xl border border-gray-800 flex flex-col">
-              <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Lot / Parti No</span>
+              <span className="text-[10px] text-text-muted uppercase font-bold tracking-wider">Lot / Parti No</span>
               <span className="text-sm text-primary font-heading font-black tracking-widest">{analysis.batchNo}</span>
             </div>
           </div>
@@ -406,22 +406,22 @@ function BalAnaliziContent() {
             {(() => {
               const notes = getTastingNotes(analysis.productName);
               return (
-                <div className="bg-[#111827]/40 border border-gray-800 p-6 rounded-3xl backdrop-blur-xl flex flex-col justify-between">
+                <div className="bg-white border border-gray-200 shadow-sm p-6 rounded-3xl backdrop-blur-xl flex flex-col justify-between">
                   <div>
                     <span className="text-[9px] bg-primary/10 text-primary font-black uppercase px-2 py-0.5 rounded-full border border-primary/20 tracking-wider mb-3 inline-block">
                       Duyusal Profil
                     </span>
-                    <h3 className="text-lg font-heading font-black text-white uppercase tracking-wider flex items-center gap-2 mb-4">
+                    <h3 className="text-lg font-heading font-black text-secondary uppercase tracking-wider flex items-center gap-2 mb-4">
                       <Sparkles className="w-5 h-5 text-primary" /> Sommelier Tadım Profili
                     </h3>
-                    <p className="text-xs text-gray-300 leading-relaxed font-body mb-6">
+                    <p className="text-xs text-text-main leading-relaxed font-body mb-6">
                       {notes.description}
                     </p>
 
                     {/* Tasting Metrics */}
                     <div className="space-y-4 mb-6">
                       <div>
-                        <div className="flex justify-between text-xs font-heading font-bold text-gray-400 mb-1">
+                        <div className="flex justify-between text-xs font-heading font-bold text-text-muted mb-1">
                           <span>Boğaz Vurumu (Yakıcılık)</span>
                           <span className="text-primary">{notes.bogaz}/10</span>
                         </div>
@@ -432,7 +432,7 @@ function BalAnaliziContent() {
                       </div>
 
                       <div>
-                        <div className="flex justify-between text-xs font-heading font-bold text-gray-400 mb-1">
+                        <div className="flex justify-between text-xs font-heading font-bold text-text-muted mb-1">
                           <span>Aroma Karakteri & Kalıcılık</span>
                           <span className="text-primary">{notes.aroma}/10</span>
                         </div>
@@ -443,7 +443,7 @@ function BalAnaliziContent() {
                       </div>
 
                       <div>
-                        <div className="flex justify-between text-xs font-heading font-bold text-gray-400 mb-1">
+                        <div className="flex justify-between text-xs font-heading font-bold text-text-muted mb-1">
                           <span>Kıvam & Ağız Hissi</span>
                           <span className="text-primary">{notes.kivam}/10</span>
                         </div>
@@ -458,7 +458,7 @@ function BalAnaliziContent() {
                   {/* Flavor Tags */}
                   <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-800/60">
                     {notes.tags.map((tag, idx) => (
-                      <span key={idx} className="text-[9.5px] font-heading font-bold bg-[#1F2937]/50 text-gray-400 border border-gray-850 px-2.5 py-1 rounded-xl">
+                      <span key={idx} className="text-[9.5px] font-heading font-bold bg-[#1F2937]/50 text-text-muted border border-gray-850 px-2.5 py-1 rounded-xl">
                         🍃 {tag}
                       </span>
                     ))}
@@ -468,15 +468,15 @@ function BalAnaliziContent() {
             })()}
 
             {/* Smart Apitherapy Cures Wizard */}
-            <div className="bg-[#111827]/40 border border-gray-800 p-6 rounded-3xl backdrop-blur-xl flex flex-col justify-between">
+            <div className="bg-white border border-gray-200 shadow-sm p-6 rounded-3xl backdrop-blur-xl flex flex-col justify-between">
               <div>
                 <span className="text-[9px] bg-green-500/10 text-green-400 font-black uppercase px-2 py-0.5 rounded-full border border-green-500/20 tracking-wider mb-3 inline-block">
                   Apiterapi Sihirbazı
                 </span>
-                <h3 className="text-lg font-heading font-black text-white uppercase tracking-wider flex items-center gap-2 mb-4">
+                <h3 className="text-lg font-heading font-black text-secondary uppercase tracking-wider flex items-center gap-2 mb-4">
                   <BookOpen className="w-5 h-5 text-primary" /> Akıllı Kürler ve Doğal Reçeteler
                 </h3>
-                <p className="text-xs text-gray-400 leading-relaxed font-body mb-4">
+                <p className="text-xs text-text-muted leading-relaxed font-body mb-4">
                   Balınızın laboratuvar analiz değerleri (özellikle prolin amino asiti) dikkate alınarak hazırlanmış sağlıklı apiterapik tarifler:
                 </p>
 
@@ -484,19 +484,19 @@ function BalAnaliziContent() {
                 <div className="flex bg-black/30 p-1 rounded-xl border border-gray-800 mb-4 text-xs font-heading font-bold">
                   <button 
                     onClick={() => setActiveCureTab('immun')}
-                    className={`flex-1 py-2 text-center rounded-lg transition-all ${activeCureTab === 'immun' ? 'bg-primary text-secondary' : 'text-gray-400 hover:text-white'}`}
+                    className={`flex-1 py-2 text-center rounded-lg transition-all ${activeCureTab === 'immun' ? 'bg-primary text-secondary' : 'text-text-muted hover:text-secondary'}`}
                   >
                     Bağışıklık Kürü
                   </button>
                   <button 
                     onClick={() => setActiveCureTab('cough')}
-                    className={`flex-1 py-2 text-center rounded-lg transition-all ${activeCureTab === 'cough' ? 'bg-primary text-secondary' : 'text-gray-400 hover:text-white'}`}
+                    className={`flex-1 py-2 text-center rounded-lg transition-all ${activeCureTab === 'cough' ? 'bg-primary text-secondary' : 'text-text-muted hover:text-secondary'}`}
                   >
                     Boğaz Yumuşatıcı
                   </button>
                   <button 
                     onClick={() => setActiveCureTab('stomach')}
-                    className={`flex-1 py-2 text-center rounded-lg transition-all ${activeCureTab === 'stomach' ? 'bg-primary text-secondary' : 'text-gray-400 hover:text-white'}`}
+                    className={`flex-1 py-2 text-center rounded-lg transition-all ${activeCureTab === 'stomach' ? 'bg-primary text-secondary' : 'text-text-muted hover:text-secondary'}`}
                   >
                     Mide Dostu
                   </button>
@@ -506,8 +506,8 @@ function BalAnaliziContent() {
                 <div className="bg-black/25 border border-gray-900 rounded-2xl p-4 min-h-[140px] flex flex-col justify-between">
                   {activeCureTab === 'immun' && (
                     <div className="space-y-2">
-                      <h4 className="text-xs uppercase font-black tracking-wider text-white">🛡️ Hücresel Bağışıklık Kalkanı</h4>
-                      <p className="text-[11px] text-gray-400 leading-relaxed">
+                      <h4 className="text-xs uppercase font-black tracking-wider text-secondary">🛡️ Hücresel Bağışıklık Kalkanı</h4>
+                      <p className="text-[11px] text-text-muted leading-relaxed">
                         <strong className="text-primary font-bold">Formül:</strong> 1 Tatlı Kaşığı Bal + 1 Çay Kaşığı Taze Toz Zencefil + 3 damla sıvı propolis. Karıştırıp sabahları aç karna tüketin.
                       </p>
                       <p className="text-[10px] text-primary/80 font-bold bg-primary/5 border border-primary/10 p-1.5 rounded-lg">
@@ -517,8 +517,8 @@ function BalAnaliziContent() {
                   )}
                   {activeCureTab === 'cough' && (
                     <div className="space-y-2">
-                      <h4 className="text-xs uppercase font-black tracking-wider text-white">🍯 Tahriş Giderici & Boğaz Yumuşatma</h4>
-                      <p className="text-[11px] text-gray-400 leading-relaxed">
+                      <h4 className="text-xs uppercase font-black tracking-wider text-secondary">🍯 Tahriş Giderici & Boğaz Yumuşatma</h4>
+                      <p className="text-[11px] text-text-muted leading-relaxed">
                         <strong className="text-primary font-bold">Formül:</strong> 1 Yemek Kaşığı Bal + Yarım Limon Suyu + Ilık (en fazla 40°C) Adaçayı veya ıhlamur. Ilık içilmelidir.
                       </p>
                       <p className="text-[10px] text-green-400/80 font-bold bg-green-950/20 border border-green-500/10 p-1.5 rounded-lg">
@@ -528,8 +528,8 @@ function BalAnaliziContent() {
                   )}
                   {activeCureTab === 'stomach' && (
                     <div className="space-y-2">
-                      <h4 className="text-xs uppercase font-black tracking-wider text-white">🌱 Mide Doku & Sindirim Desteği</h4>
-                      <p className="text-[11px] text-gray-400 leading-relaxed">
+                      <h4 className="text-xs uppercase font-black tracking-wider text-secondary">🌱 Mide Doku & Sindirim Desteği</h4>
+                      <p className="text-[11px] text-text-muted leading-relaxed">
                         <strong className="text-primary font-bold">Formül:</strong> 1 Tatlı Kaşığı Bal + 1 Bardak Ilık İçme Suyu. Sabahları uyanınca ilk iş olarak için.
                       </p>
                       <p className="text-[10px] text-blue-400/80 font-bold bg-blue-950/20 border border-blue-500/10 p-1.5 rounded-lg">
@@ -547,12 +547,12 @@ function BalAnaliziContent() {
 
           {/* 2. Certificate Image Display & Digital Certification Download Widget */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 bg-[#111827]/40 border border-gray-800 p-6 rounded-3xl flex flex-col justify-between">
+            <div className="lg:col-span-2 bg-white border border-gray-200 shadow-sm p-6 rounded-3xl flex flex-col justify-between">
               <div>
-                <h3 className="text-sm font-heading font-black text-white uppercase tracking-wider flex items-center gap-2 mb-4">
+                <h3 className="text-sm font-heading font-black text-secondary uppercase tracking-wider flex items-center gap-2 mb-4">
                   <FileText className="w-4 h-4 text-primary" /> Laboratuvar Uzman Görüşü & Güvenlik Raporu
                 </h3>
-                <p className="text-xs text-gray-300 leading-relaxed font-body whitespace-pre-line bg-black/25 p-4 rounded-xl border border-gray-900">
+                <p className="text-xs text-text-main leading-relaxed font-body whitespace-pre-line bg-black/25 p-4 rounded-xl border border-gray-900">
                   {analysis.notes || "Bu bal örneği akredite gıda analiz laboratuvarlarında incelenmiştir. İçeriğinde tarım ilacı kalıntısı, glikoz veya nişasta bazlı harici şurup bulunmamaktadır. Türk Gıda Kodeksi Bal Tebliği standartlarına %100 uygundur."}
                 </p>
                 <div className="flex items-center gap-2 text-[10px] text-green-400 uppercase font-black tracking-widest mt-4">
@@ -568,15 +568,15 @@ function BalAnaliziContent() {
                       <ShieldCheck className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-heading font-black text-white uppercase">Dijital Saflık Sertifikası</h4>
-                      <p className="text-[10px] text-gray-400">Gıda analizi verilerini resmi olarak imzalayıp paylaşın.</p>
+                      <h4 className="text-xs font-heading font-black text-secondary uppercase">Dijital Saflık Sertifikası</h4>
+                      <p className="text-[10px] text-text-muted">Gıda analizi verilerini resmi olarak imzalayıp paylaşın.</p>
                     </div>
                   </div>
                   <div className="flex gap-2 w-full sm:w-auto">
                     <button 
                       onClick={handleDownloadCert}
                       disabled={isGeneratingCert}
-                      className="flex-1 sm:flex-none px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white font-heading font-bold text-[10.5px] uppercase rounded-xl border border-gray-700 transition-all flex items-center justify-center gap-1.5"
+                      className="flex-1 sm:flex-none px-4 py-2 bg-gray-800 hover:bg-gray-700 text-secondary font-heading font-bold text-[10.5px] uppercase rounded-xl border border-gray-700 transition-all flex items-center justify-center gap-1.5"
                     >
                       {isGeneratingCert ? (
                         <>
@@ -593,7 +593,7 @@ function BalAnaliziContent() {
                         const url = `https://api.whatsapp.com/send?text=Benim%20Arı%20Hayat%20Balımın%20Prolin%20Değeri%20${analysis.proline}!%20Analiz%20raporunu%20sorgulamak%20için%20barkod%20kodu:%20${analysis.batchNo}`;
                         window.open(url, '_blank');
                       }}
-                      className="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-500 hover:to-emerald-600 text-white font-heading font-bold text-[10.5px] uppercase rounded-xl transition-all flex items-center justify-center gap-1.5"
+                      className="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-500 hover:to-emerald-600 text-secondary font-heading font-bold text-[10.5px] uppercase rounded-xl transition-all flex items-center justify-center gap-1.5"
                     >
                       <Share2 className="w-3.5 h-3.5" /> Paylaş
                     </button>
@@ -607,12 +607,12 @@ function BalAnaliziContent() {
               </div>
             </div>
 
-            <div className="lg:col-span-1 bg-[#111827]/40 border border-gray-800 p-6 rounded-3xl flex flex-col justify-between">
+            <div className="lg:col-span-1 bg-white border border-gray-200 shadow-sm p-6 rounded-3xl flex flex-col justify-between">
               <div>
-                <h3 className="text-sm font-heading font-black text-white uppercase tracking-wider flex items-center gap-2 mb-3">
+                <h3 className="text-sm font-heading font-black text-secondary uppercase tracking-wider flex items-center gap-2 mb-3">
                   <FlaskConical className="w-4 h-4 text-primary" /> Resmi Analiz Belgesi
                 </h3>
-                <p className="text-[11px] text-gray-400 font-body mb-4">Laboratuvardan onaylı resmi rapor belgesi taranmış kopyası.</p>
+                <p className="text-[11px] text-text-muted font-body mb-4">Laboratuvardan onaylı resmi rapor belgesi taranmış kopyası.</p>
                 <div className="aspect-[3/4] w-full bg-black rounded-xl border border-gray-800 overflow-hidden relative group cursor-zoom-in">
                   {analysis.reportImageUrl ? (
                     <img 
@@ -632,11 +632,11 @@ function BalAnaliziContent() {
           </div>
 
           {/* 3. Sahte Bal vs. Laboratuvar Gerçeği */}
-          <div className="bg-[#111827]/40 border border-gray-800 p-8 rounded-3xl backdrop-blur-xl">
+          <div className="bg-white border border-gray-200 shadow-sm p-8 rounded-3xl backdrop-blur-xl">
             <div className="text-center mb-8">
               <span className="text-[9px] bg-amber-500/10 text-primary font-black uppercase px-3 py-1 rounded-full border border-amber-500/20 tracking-wider">Doğru Bilinen Yanlışlar</span>
-              <h3 className="text-2xl font-heading font-black text-white uppercase tracking-tight mt-2">Sahte Bal vs. Laboratuvar Gerçeği</h3>
-              <p className="text-xs text-gray-400 mt-2 max-w-xl mx-auto leading-relaxed">
+              <h3 className="text-2xl font-heading font-black text-secondary uppercase tracking-tight mt-2">Sahte Bal vs. Laboratuvar Gerçeği</h3>
+              <p className="text-xs text-text-muted mt-2 max-w-xl mx-auto leading-relaxed">
                 Kulaktan kulağa yayılan batıl test yöntemleri gıda saflığını belirleyemez. Bilimin ve laboratuvar analizlerinin ardındaki gerçekleri inceleyin.
               </p>
             </div>
@@ -683,13 +683,13 @@ function BalAnaliziContent() {
                     </div>
 
                     <div className="space-y-1 z-10">
-                      <h4 className="text-sm font-heading font-black text-white uppercase tracking-wider">{item.title}</h4>
+                      <h4 className="text-sm font-heading font-black text-secondary uppercase tracking-wider">{item.title}</h4>
                       <p className="text-[11px] text-red-400/80 italic font-body">“{item.myth}”</p>
                     </div>
 
                     <div className={`mt-4 pt-4 border-t border-gray-950 transition-all duration-300 ${isOpen ? 'max-h-[250px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
                       <span className="text-[9px] bg-red-500/10 text-red-400 px-2 py-0.5 rounded-full font-black border border-red-500/20 mr-2">{item.truth}</span>
-                      <p className="text-[11px] text-gray-300 leading-relaxed font-body mt-2">
+                      <p className="text-[11px] text-text-main leading-relaxed font-body mt-2">
                         {item.explanation}
                       </p>
                     </div>

@@ -51,14 +51,14 @@ export default function AdminDashboardPage() {
     <div className="space-y-10">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
-          <h1 className="text-4xl font-heading font-black text-white uppercase tracking-tighter italic mb-2">
+          <h1 className="text-4xl font-heading font-black text-secondary uppercase tracking-tighter italic mb-2">
             ARIHAYAT <span className="text-primary">YÖNETİM</span>
           </h1>
           <p className="text-gray-500 font-body text-[10px] uppercase tracking-[0.4em] font-bold ml-1">Doğal Şifa Kaynağı Performans Verileri</p>
         </div>
-        <div className="flex items-center space-x-3 bg-white/5 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/5 shadow-xl">
+        <div className="flex items-center space-x-3 bg-white px-6 py-3 rounded-2xl border border-gray-200 shadow-sm">
           <div className="w-2 h-2 bg-green-500 rounded-full animate-ping" />
-          <span className="text-[10px] font-heading font-black text-gray-300 uppercase tracking-widest">Sistem Aktif</span>
+          <span className="text-[10px] font-heading font-black text-text-main uppercase tracking-widest">Sistem Aktif</span>
         </div>
       </div>
 
@@ -67,13 +67,13 @@ export default function AdminDashboardPage() {
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <div key={index} className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg">
+            <div key={index} className="bg-white shadow-sm border border-gray-200">
               <div className="flex justify-between items-start">
                 <div>
                   <p className="text-gray-500 text-sm font-medium">{stat.label}</p>
-                  <h3 className="text-2xl font-heading font-bold text-white mt-1">{stat.value}</h3>
+                  <h3 className="text-2xl font-heading font-bold text-secondary mt-1">{stat.value}</h3>
                 </div>
-                <div className={`p-3 rounded-xl bg-[#1F2937] ${stat.color}`}>
+                <div className={`p-3 rounded-xl bg-gray-50 ${stat.color}`}>
                   <Icon size={20} />
                 </div>
               </div>
@@ -88,8 +88,8 @@ export default function AdminDashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
         {/* Sales Chart (Live) */}
-        <div className="lg:col-span-2 bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 p-6 shadow-lg">
-          <h3 className="font-heading font-bold text-lg text-white mb-4 uppercase flex justify-between items-center">
+        <div className="lg:col-span-2 bg-white shadow-sm border border-gray-200">
+          <h3 className="font-heading font-bold text-lg text-secondary mb-4 uppercase flex justify-between items-center">
             Haftalık Satış Analizi
             <span className="text-[10px] text-gray-500 font-body">Son 7 Gün</span>
           </h3>
@@ -99,7 +99,7 @@ export default function AdminDashboardPage() {
               return (
                 <div key={index} className="flex-1 flex flex-col items-center group relative">
                   {/* Tooltip */}
-                  <div className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-opacity bg-red-600 text-white text-[10px] px-2 py-1 rounded font-bold z-10 whitespace-nowrap">
+                  <div className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-opacity bg-red-600 text-secondary text-[10px] px-2 py-1 rounded font-bold z-10 whitespace-nowrap">
                     ₺{data.total.toLocaleString('tr-TR')}
                   </div>
                   <div 
@@ -117,13 +117,13 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Low Stock (Mock) */}
-        <div className="bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 p-6 shadow-lg">
-          <h3 className="font-heading font-bold text-lg text-white mb-4 uppercase">Kritik Stok Uyarısı</h3>
+        <div className="bg-white shadow-sm border border-gray-200">
+          <h3 className="font-heading font-bold text-lg text-secondary mb-4 uppercase">Kritik Stok Uyarısı</h3>
           <ul className="space-y-4 mt-4">
             {lowStock.map((item, index) => (
               <li key={index} className="flex justify-between items-center">
                 <div>
-                  <p className="text-sm font-medium text-white">{item.name}</p>
+                  <p className="text-sm font-medium text-secondary">{item.name}</p>
                 </div>
                 <div className={`px-3 py-1 rounded-full text-xs font-bold ${
                   item.stock === 0 ? 'bg-red-900/50 text-red-300 border border-red-700' : 'bg-yellow-900/50 text-yellow-300 border border-yellow-700'
@@ -140,23 +140,23 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Recent Orders */}
-      <div className="bg-[#111827]/60 backdrop-blur-xl rounded-2xl border border-gray-800 p-6 shadow-lg">
-        <h3 className="font-heading font-bold text-lg text-white mb-4 uppercase">Son Siparişler</h3>
+      <div className="bg-white shadow-sm border border-gray-200">
+        <h3 className="font-heading font-bold text-lg text-secondary mb-4 uppercase">Son Siparişler</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse font-body text-sm">
             <thead>
-              <tr className="border-b border-gray-800 text-gray-400">
+              <tr className="border-b border-gray-800 text-text-muted">
                 <th className="py-3 font-medium">Sipariş No</th>
                 <th className="py-3 font-medium">Müşteri</th>
                 <th className="py-3 font-medium">Tutar</th>
                 <th className="py-3 font-medium">Durum</th>
               </tr>
             </thead>
-            <tbody className="text-gray-300">
+            <tbody className="text-text-main">
               {orders.slice(0, 5).map((order) => (
-                <tr key={order.id} className="border-b border-gray-800 hover:bg-[#1F2937]/50 transition-colors">
+                <tr key={order.id} className="border-b border-gray-800 hover:bg-gray-50/50 transition-colors">
                   <td className="py-3 font-medium text-amber-400">#{order.id}</td>
-                  <td className="py-3 text-white">{order.customer}</td>
+                  <td className="py-3 text-secondary">{order.customer}</td>
                   <td className="py-3 font-medium text-amber-500">{order.total}</td>
                   <td className="py-3">
                     <span className={`px-2 py-1 rounded text-xs font-bold ${

@@ -45,7 +45,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   // 1. Loading state
   if (status === 'loading') {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#0B0F19] text-white">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-background text-text-main honeycomb-bg">
         <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
         <p className="text-sm font-bold uppercase tracking-widest text-gray-400">Giriş Bilgileri Doğrulanıyor...</p>
       </div>
@@ -55,8 +55,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   // 2. Unauthorized state (must have role === "ADMIN")
   if (!session || (session.user as any).role !== 'ADMIN') {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#0B0F19] text-white px-4">
-        <div className="p-8 bg-[#111827]/60 border border-red-950/40 rounded-3xl text-center max-w-md shadow-2xl backdrop-blur-xl">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-background text-text-main honeycomb-bg px-4">
+        <div className="p-8 bg-white shadow-sm border border-gray-200 rounded-3xl text-center max-w-md shadow-2xl backdrop-blur-xl">
           <ShieldAlert className="w-16 h-16 text-red-500 mx-auto mb-4 animate-bounce" />
           <h2 className="text-xl font-heading font-black uppercase text-red-400 tracking-tight">Yetkisiz Erişim Engellendi</h2>
           <p className="text-xs text-gray-400 mt-2 leading-relaxed">
@@ -84,11 +84,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   // 3. Authenticated Admin View
   return (
     <AdminToastProvider>
-      <div className="flex h-screen bg-[#0B0F19] text-gray-100 font-body overflow-hidden relative">
+      <div className="flex h-screen bg-background text-text-main honeycomb-bg font-body overflow-hidden relative">
         {/* Mobile Toggle Button */}
         <button 
           onClick={() => setIsSidebarOpen(!isSidebarOpen)} 
-          className="md:hidden fixed top-4 left-4 z-30 bg-[#1F2937] p-2 rounded-lg border border-gray-700 text-white shadow-lg"
+          className="md:hidden fixed top-4 left-4 z-30 bg-white text-secondary border border-gray-200 shadow-lg"
         >
           {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
@@ -105,7 +105,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <aside className={`
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
           md:translate-x-0 
-          w-72 bg-[#0F172A] border-r border-white/5 flex flex-col z-20 
+          w-72 bg-white border-r border-gray-200 flex flex-col z-20 
           fixed md:static h-full transition-transform duration-500 ease-in-out shadow-2xl shadow-black
         `}>
           <div className="p-8 mb-4">
@@ -132,7 +132,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   key={item.href} 
                   href={item.href} 
                   onClick={() => setIsSidebarOpen(false)}
-                  className="flex items-center space-x-4 px-5 py-3.5 rounded-2xl text-gray-400 hover:bg-white/5 hover:text-white transition-all duration-300 group relative overflow-hidden"
+                  className="flex items-center space-x-4 px-5 py-3.5 rounded-2xl text-text-muted hover:bg-primary/5 hover:text-secondary transition-all duration-300 group relative overflow-hidden"
                 >
                   <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary transform scale-y-0 group-hover:scale-y-100 transition-transform duration-300" />
                   <Icon size={18} className="group-hover:text-primary transition-colors z-10" />
@@ -142,7 +142,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             })}
           </nav>
           
-          <div className="p-6 border-t border-white/5 bg-black/20">
+          <div className="p-6 border-t border-gray-200 bg-gray-50">
             <button 
               onClick={() => signOut({ callbackUrl: '/' })}
               className="flex items-center space-x-4 px-5 py-4 w-full rounded-2xl text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-300 group"
@@ -154,7 +154,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 flex flex-col overflow-hidden bg-[#0B0F19] relative">
+        <main className="flex-1 flex flex-col overflow-hidden bg-background relative">
           {/* Background Glow */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
           

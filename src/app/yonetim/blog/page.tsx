@@ -174,7 +174,7 @@ export default function AdminBlogPage() {
   };
 
   return (
-    <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100">
+    <div className="p-6 bg-background text-text-main min-h-screen">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700 uppercase tracking-tight">Blog Yönetimi</h1>
         <button 
@@ -189,34 +189,34 @@ export default function AdminBlogPage() {
       </div>
 
       {isAdding && (
-        <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 mb-8 shadow-lg">
-          <h2 className="text-lg font-heading font-bold text-white mb-6 uppercase flex items-center">
+        <div className="bg-white p-6 rounded-2xl border border-gray-100 mb-8 shadow-sm">
+          <h2 className="text-lg font-heading font-bold text-gray-900 mb-6 uppercase flex items-center">
             <FileText className="w-5 h-5 mr-2 text-red-500" /> {formData.id ? 'Yazıyı Düzenle' : 'Blog İçeriği Oluştur'}
           </h2>
           
           {/* AI Blog Assistant Panel */}
           {!formData.id && (
-            <div className="mb-8 p-6 bg-red-950/20 border border-red-500/10 rounded-2xl">
-              <h3 className="text-sm font-heading font-bold text-white mb-4 uppercase flex items-center gap-2">
+            <div className="mb-8 p-6 bg-red-50 border border-red-100 rounded-2xl">
+              <h3 className="text-sm font-heading font-bold text-gray-900 mb-4 uppercase flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-red-500 animate-pulse" /> Yapay Zeka Blog Asistanı
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                 <div className="md:col-span-2">
-                  <label className="block text-gray-400 mb-1 text-[10px] font-body uppercase tracking-wider">Makale Konusu veya Ürün</label>
+                  <label className="block text-gray-500 mb-1 text-[10px] font-body uppercase tracking-wider">Makale Konusu veya Ürün</label>
                   <input 
                     type="text" 
                     value={aiTopic} 
                     onChange={e => setAiTopic(e.target.value)} 
                     placeholder="Örn: Hakiki Kestane Balı'nın 7 mucizevi faydası, Kışın propolis kullanımı..." 
-                    className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500 text-sm"
+                    className="w-full p-3 bg-white border border-gray-200 rounded-lg text-gray-900 outline-none focus:border-red-500 text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-400 mb-1 text-[10px] font-body uppercase tracking-wider">Yazım Tonu</label>
+                  <label className="block text-gray-500 mb-1 text-[10px] font-body uppercase tracking-wider">Yazım Tonu</label>
                   <select 
                     value={aiTone} 
                     onChange={e => setAiTone(e.target.value)} 
-                    className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500 text-sm"
+                    className="w-full p-3 bg-white border border-gray-200 rounded-lg text-gray-900 outline-none focus:border-red-500 text-sm"
                   >
                     <option value="scientific">Bilimsel / Eğitici</option>
                     <option value="friendly">Samimi / Aile Dostu</option>
@@ -248,43 +248,43 @@ export default function AdminBlogPage() {
           <form onSubmit={handleSave} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Yazı Başlığı</label>
-                <input type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500 font-heading font-bold" placeholder="İlgi çekici bir başlık girin..." required />
+                <label className="block text-gray-500 mb-1 text-xs font-body uppercase">Yazı Başlığı</label>
+                <input type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full p-3 bg-white border border-gray-200 rounded-lg text-gray-900 outline-none focus:border-red-500 font-heading font-bold" placeholder="İlgi çekici bir başlık girin..." required />
               </div>
               <div>
-                <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Kategori</label>
-                <input type="text" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500 text-sm" placeholder="Örn: Sağlık, Apiterapi, Bal..." />
+                <label className="block text-gray-500 mb-1 text-xs font-body uppercase">Kategori</label>
+                <input type="text" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-3 bg-white border border-gray-200 rounded-lg text-gray-900 outline-none focus:border-red-500 text-sm" placeholder="Örn: Sağlık, Apiterapi, Bal..." />
               </div>
             </div>
             <div>
-              <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Özet (Kısa Açıklama)</label>
-              <input type="text" value={formData.excerpt} onChange={e => setFormData({...formData, excerpt: e.target.value})} className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500 text-sm" placeholder="Arama sonuçlarında görünecek kısa özet..." />
+              <label className="block text-gray-500 mb-1 text-xs font-body uppercase">Özet (Kısa Açıklama)</label>
+              <input type="text" value={formData.excerpt} onChange={e => setFormData({...formData, excerpt: e.target.value})} className="w-full p-3 bg-white border border-gray-200 rounded-lg text-gray-900 outline-none focus:border-red-500 text-sm" placeholder="Arama sonuçlarında görünecek kısa özet..." />
             </div>
             <div>
-              <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Kapak Görseli</label>
+              <label className="block text-gray-500 mb-1 text-xs font-body uppercase">Kapak Görseli</label>
               <div className="flex space-x-2">
-                <input type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} placeholder="URL veya dosya" className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500 text-sm" />
+                <input type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} placeholder="URL veya dosya" className="w-full p-3 bg-white border border-gray-200 rounded-lg text-gray-900 outline-none focus:border-red-500 text-sm" />
                 {aiImagePrompt && (
                   <button
                     type="button"
                     onClick={handleGenerateAiImage}
                     disabled={generatingAiImage}
-                    className="bg-[#1F2937] hover:bg-gray-700 text-red-400 px-4 py-3 rounded-lg font-heading font-bold text-xs uppercase transition-colors flex items-center border border-gray-700 gap-1 disabled:opacity-50"
+                    className="bg-gray-50 border-gray-200 text-red-400 px-4 py-3 rounded-lg font-heading font-bold text-xs uppercase transition-colors flex items-center border border-gray-200 gap-1 disabled:opacity-50"
                     title="Yazı içeriğine uygun AI resmi çiz"
                   >
                     {generatingAiImage ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
                     <span>Resim Çiz</span>
                   </button>
                 )}
-                <label className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg cursor-pointer transition-colors flex items-center">
+                <label className="bg-gray-700 hover:bg-gray-600 text-secondary px-4 py-3 rounded-lg cursor-pointer transition-colors flex items-center">
                   <ImageIcon className="w-4 h-4" />
                   <input type="file" className="hidden" onChange={handleFileChange} />
                 </label>
               </div>
             </div>
             <div>
-              <label className="block text-gray-400 mb-1 text-xs font-body uppercase">İçerik (HTML destekli)</label>
-              <textarea value={formData.content} onChange={e => setFormData({...formData, content: e.target.value})} rows={10} className="w-full p-4 bg-[#1F2937] border border-gray-700 rounded-lg text-white outline-none focus:border-red-500 font-body text-sm" placeholder="Yazınızın detaylarını buraya yazın..."></textarea>
+              <label className="block text-text-muted mb-1 text-xs font-body uppercase">İçerik (HTML destekli)</label>
+              <textarea value={formData.content} onChange={e => setFormData({...formData, content: e.target.value})} rows={10} className="w-full p-4 bg-[#1F2937] border border-gray-700 rounded-lg text-secondary outline-none focus:border-red-500 font-body text-sm" placeholder="Yazınızın detaylarını buraya yazın..."></textarea>
             </div>
             <div className="flex justify-end space-x-2 pt-4">
               <button type="button" onClick={() => setIsAdding(false)} className="bg-gray-700 px-4 py-2 rounded-lg font-bold text-sm uppercase">Vazgeç</button>
@@ -318,13 +318,13 @@ export default function AdminBlogPage() {
                     </span>
                   )}
                 </div>
-                <h3 className="text-white font-heading font-bold text-xl uppercase mb-2 group-hover:text-red-500 transition-colors">{post.title}</h3>
-                <p className="text-gray-400 text-sm line-clamp-2 font-body">{post.excerpt || 'Özet belirtilmemiş.'}</p>
+                <h3 className="text-secondary font-heading font-bold text-xl uppercase mb-2 group-hover:text-red-500 transition-colors">{post.title}</h3>
+                <p className="text-text-muted text-sm line-clamp-2 font-body">{post.excerpt || 'Özet belirtilmemiş.'}</p>
               </div>
               <div className="flex justify-end space-x-4 mt-4 border-t border-gray-800 pt-4">
                 <button 
                   onClick={() => handleEdit(post)}
-                  className="text-gray-400 hover:text-white flex items-center text-xs uppercase font-bold"
+                  className="text-text-muted hover:text-secondary flex items-center text-xs uppercase font-bold"
                 >
                   <Edit className="w-4 h-4 mr-1" /> Düzenle
                 </button>

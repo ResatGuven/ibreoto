@@ -115,8 +115,8 @@ export default function BalAsistaniPage() {
   const currentQuestion = questions[step - 1];
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-gray-100 py-16 px-4 md:px-8 flex items-center justify-center">
-      <div className="w-full max-w-2xl bg-[#111827]/40 border border-gray-800 p-8 md:p-12 rounded-3xl shadow-2xl backdrop-blur-xl relative overflow-hidden">
+    <div className="min-h-screen bg-background honeycomb-bg text-text-main py-16 px-4 md:px-8 flex items-center justify-center">
+      <div className="w-full max-w-2xl bg-white border border-gray-200 shadow-sm p-8 md:p-12 rounded-3xl shadow-2xl backdrop-blur-xl relative overflow-hidden">
         {/* Shimmer decoration */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] pointer-events-none" />
 
@@ -125,7 +125,7 @@ export default function BalAsistaniPage() {
           <div className="space-y-6">
             <div className="flex justify-between items-center text-xs font-heading font-black text-gray-500 uppercase tracking-widest">
               {step > 1 ? (
-                <button onClick={handlePrev} className="flex items-center hover:text-white transition-colors">
+                <button onClick={handlePrev} className="flex items-center hover:text-secondary transition-colors">
                   <ArrowLeft className="w-3.5 h-3.5 mr-1" /> Geri
                 </button>
               ) : (
@@ -135,10 +135,10 @@ export default function BalAsistaniPage() {
             </div>
 
             <div className="space-y-2">
-              <h2 className="text-xl md:text-2xl font-heading font-black text-white uppercase tracking-tight leading-snug">
+              <h2 className="text-xl md:text-2xl font-heading font-black text-secondary uppercase tracking-tight leading-snug">
                 {currentQuestion.title}
               </h2>
-              <p className="text-xs text-gray-400 font-body leading-relaxed">
+              <p className="text-xs text-text-muted font-body leading-relaxed">
                 {currentQuestion.description}
               </p>
             </div>
@@ -150,14 +150,14 @@ export default function BalAsistaniPage() {
                   <button
                     key={opt.value}
                     onClick={() => handleSelectOption(currentQuestion.id, opt.value)}
-                    className="flex items-start text-left p-4 rounded-2xl bg-[#1F2937]/30 border border-gray-800 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 group"
+                    className="flex items-start text-left p-4 rounded-2xl bg-surface border border-gray-200 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 group"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-gray-800 group-hover:bg-primary/10 text-gray-400 group-hover:text-primary flex items-center justify-center mr-4 shrink-0 transition-colors">
+                    <div className="w-10 h-10 rounded-xl bg-gray-100 group-hover:bg-primary/10 text-gray-500 group-hover:text-primary flex items-center justify-center mr-4 shrink-0 transition-colors">
                       <Icon className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-heading font-bold text-white group-hover:text-primary transition-colors uppercase">{opt.label}</h4>
-                      <p className="text-xs text-gray-400 font-body mt-1 leading-relaxed">{opt.desc}</p>
+                      <h4 className="text-sm font-heading font-bold text-secondary group-hover:text-primary transition-colors uppercase">{opt.label}</h4>
+                      <p className="text-xs text-text-muted font-body mt-1 leading-relaxed">{opt.desc}</p>
                     </div>
                   </button>
                 );
@@ -173,8 +173,8 @@ export default function BalAsistaniPage() {
               <div className="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center mx-auto text-green-400 mb-2 border border-green-500/20">
                 <CheckCircle className="w-6 h-6" />
               </div>
-              <h2 className="text-2xl font-heading font-black text-white uppercase tracking-tight">Kişiselleştirilmiş Şifa Analiziniz Hazır!</h2>
-              <p className="text-xs text-gray-400 font-body">Seçtiğiniz hedeflere en uygun arı ürünü belirlendi:</p>
+              <h2 className="text-2xl font-heading font-black text-secondary uppercase tracking-tight">Kişiselleştirilmiş Şifa Analiziniz Hazır!</h2>
+              <p className="text-xs text-text-muted font-body">Seçtiğiniz hedeflere en uygun arı ürünü belirlendi:</p>
             </div>
 
             {/* Recommendation Display Card */}
@@ -184,8 +184,8 @@ export default function BalAsistaniPage() {
               </div>
               <div className="space-y-3">
                 <span className="text-[9px] bg-primary/10 text-primary px-2.5 py-1 rounded-full border border-primary/20 font-heading font-black uppercase tracking-wider">Tavsiye Edilen Eşleşme</span>
-                <h3 className="text-lg font-heading font-black text-white uppercase tracking-tight">{recommendation.name}</h3>
-                <p className="text-xs text-gray-400 leading-relaxed font-body">{recommendation.description}</p>
+                <h3 className="text-lg font-heading font-black text-secondary uppercase tracking-tight">{recommendation.name}</h3>
+                <p className="text-xs text-text-muted leading-relaxed font-body">{recommendation.description}</p>
                 <div className="p-3 bg-primary/5 rounded-xl border border-primary/10 text-xs text-primary leading-relaxed font-body">
                   <strong>Neden Bu Ürün?</strong> {recommendation.whyMatch}
                 </div>
@@ -194,19 +194,19 @@ export default function BalAsistaniPage() {
 
             {/* Usage Details */}
             <div className="space-y-2 bg-[#1F2937]/20 border border-gray-800 p-5 rounded-2xl">
-              <h4 className="text-[10px] font-heading font-black text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+              <h4 className="text-[10px] font-heading font-black text-text-muted uppercase tracking-widest flex items-center gap-1.5">
                 <Award className="w-4 h-4 text-primary" /> Tüketim ve Kullanım Önerisi
               </h4>
-              <p className="text-xs text-gray-300 leading-relaxed font-body">{recommendation.usage}</p>
+              <p className="text-xs text-text-main leading-relaxed font-body">{recommendation.usage}</p>
             </div>
 
             {/* Special Promo code to convert sale */}
             <div className="p-5 bg-gradient-to-r from-primary/10 to-amber-700/10 border border-primary/20 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
               <div>
-                <h4 className="text-xs font-heading font-bold text-white uppercase tracking-tight flex items-center justify-center md:justify-start gap-1">
+                <h4 className="text-xs font-heading font-bold text-secondary uppercase tracking-tight flex items-center justify-center md:justify-start gap-1">
                   <Sparkles className="w-4 h-4 text-primary animate-pulse" /> Sadece Size Özel Şifa İndirimi!
                 </h4>
-                <p className="text-[11px] text-gray-400 font-body mt-0.5">Asistanı kullandığınız için sepetinizde %10 indirim kazandınız.</p>
+                <p className="text-[11px] text-text-muted font-body mt-0.5">Asistanı kullandığınız için sepetinizde %10 indirim kazandınız.</p>
               </div>
               <div className="flex items-center gap-3">
                 <span className="px-4 py-2 bg-gray-900 border border-primary/30 rounded-xl font-heading font-black text-sm tracking-widest text-primary">ŞİFA10</span>
@@ -223,7 +223,7 @@ export default function BalAsistaniPage() {
             <div className="flex justify-center pt-2">
               <button 
                 onClick={handleReset}
-                className="text-xs text-gray-500 hover:text-white uppercase font-bold flex items-center gap-1.5 transition-colors"
+                className="text-xs text-gray-500 hover:text-secondary uppercase font-bold flex items-center gap-1.5 transition-colors"
               >
                 <RefreshCw className="w-3.5 h-3.5" /> Testi Yeniden Çöz
               </button>

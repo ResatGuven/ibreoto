@@ -953,7 +953,7 @@ export default function SocialMediaAssistant() {
   };
 
   return (
-    <div className="p-6 bg-[#0B0F19] min-h-screen text-gray-100 font-body">
+    <div className="p-6 bg-background min-h-screen text-text-main font-body">
       
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-white/5 pb-6">
@@ -961,7 +961,7 @@ export default function SocialMediaAssistant() {
           <h1 className="text-3xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-700 uppercase tracking-tight flex items-center">
             <Sparkles className="w-8 h-8 mr-2 text-primary animate-pulse" /> Sosyal Medya Asistanı
           </h1>
-          <p className="text-sm text-gray-400 font-body mt-1">Haftalık içeriklerinizi yönetin, premium sesler oluşturun ve otomatik paylaşın.</p>
+          <p className="text-sm text-text-muted font-body mt-1">Haftalık içeriklerinizi yönetin, premium sesler oluşturun ve otomatik paylaşın.</p>
         </div>
         
         <div className="flex space-x-2">
@@ -987,7 +987,7 @@ export default function SocialMediaAssistant() {
 
       {/* 📅 Weekly Calendar Timeline */}
       <div className="bg-[#111827]/40 backdrop-blur-xl p-4 rounded-2xl border border-gray-800/80 mb-8 overflow-x-auto shadow-inner">
-        <div className="flex items-center space-x-2 text-xs font-bold text-gray-400 uppercase mb-4 tracking-wider">
+        <div className="flex items-center space-x-2 text-xs font-bold text-text-muted uppercase mb-4 tracking-wider">
           <Calendar className="w-4 h-4 text-primary" /> Haftalık İçerik Planlama Akışı
         </div>
         
@@ -1004,13 +1004,13 @@ export default function SocialMediaAssistant() {
                 className={`flex-1 p-4 rounded-xl border transition-all text-left relative overflow-hidden group ${
                   isActive 
                     ? 'bg-gradient-to-br from-primary/10 to-amber-600/5 border-primary shadow-lg shadow-primary/5' 
-                    : 'bg-[#151D30]/40 border-gray-800 hover:border-gray-700'
+                    : 'bg-white border-gray-200 shadow-sm hover:border-gray-700'
                 }`}
               >
                 <div className={`absolute top-0 left-0 bottom-0 w-1 ${isActive ? 'bg-primary' : 'bg-transparent'}`} />
                 <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider block">{day.dayName}</span>
-                <span className="text-xs text-white font-bold block mt-1 truncate">{day.product}</span>
-                <span className="text-[9px] text-gray-400 italic block mt-0.5 capitalize">{day.style === 'trust' ? 'Güven/Analiz' : day.style === 'asmr' ? 'ASMR' : day.style === 'educational' ? 'Eğitici' : 'Kovan Hayatı'}</span>
+                <span className="text-xs text-secondary font-bold block mt-1 truncate">{day.product}</span>
+                <span className="text-[9px] text-text-muted italic block mt-0.5 capitalize">{day.style === 'trust' ? 'Güven/Analiz' : day.style === 'asmr' ? 'ASMR' : day.style === 'educational' ? 'Eğitici' : 'Kovan Hayatı'}</span>
                 
                 {/* Status Badges */}
                 <div className="mt-3 flex items-center justify-between">
@@ -1019,7 +1019,7 @@ export default function SocialMediaAssistant() {
                       ? 'bg-green-950/80 text-green-400 border-green-800/60'
                       : day.status === 'ready'
                       ? 'bg-blue-950/80 text-blue-400 border-blue-800/60'
-                      : 'bg-gray-800 text-gray-400 border-gray-700'
+                      : 'bg-gray-800 text-text-muted border-gray-700'
                   }`}>
                     {day.status === 'posted' ? 'Paylaşıldı' : day.status === 'ready' ? 'Hazır' : 'Taslak'}
                   </span>
@@ -1044,20 +1044,20 @@ export default function SocialMediaAssistant() {
           
           {/* Settings API Keys Panel */}
           <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-4">
-            <h2 className="text-sm font-heading font-bold text-white uppercase flex items-center">
+            <h2 className="text-sm font-heading font-bold text-secondary uppercase flex items-center">
               <Key className="w-4 h-4 mr-2 text-primary" /> Sosyal Medya & AI Bağlantıları
             </h2>
-            <p className="text-[11px] text-gray-400 leading-relaxed">Hesaplarınızı bağlayıp Premium AI araçlarını etkinleştirmek için anahtarlarınızı buraya girin.</p>
+            <p className="text-[11px] text-text-muted leading-relaxed">Hesaplarınızı bağlayıp Premium AI araçlarını etkinleştirmek için anahtarlarınızı buraya girin.</p>
 
             <div className="space-y-3 pt-2">
 
 
               <div>
-                <label className="block text-gray-400 mb-1 text-[10px] uppercase font-bold">Gemini Ses Tonu (Yapay Zeka Sesi)</label>
+                <label className="block text-text-muted mb-1 text-[10px] uppercase font-bold">Gemini Ses Tonu (Yapay Zeka Sesi)</label>
                 <select
                   value={geminiVoice}
                   onChange={e => setGeminiVoice(e.target.value)}
-                  className="w-full p-2.5 bg-[#1F2937] border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                  className="w-full p-2.5 bg-[#1F2937] border border-gray-700 rounded-lg text-xs text-secondary outline-none focus:border-primary"
                 >
                   <option value="Aoede">Aoede (Kadın - Akıcı ve Doğal)</option>
                   <option value="Puck">Puck (Erkek - Canlı ve Güçlü)</option>
@@ -1068,24 +1068,24 @@ export default function SocialMediaAssistant() {
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-1 text-[10px] uppercase font-bold">Buffer Access Token (Otomatik Paylaşım)</label>
+                <label className="block text-text-muted mb-1 text-[10px] uppercase font-bold">Buffer Access Token (Otomatik Paylaşım)</label>
                 <input 
                   type="password"
                   placeholder="Buffer Access Token..."
                   value={bufferToken}
                   onChange={e => setBufferToken(e.target.value)}
-                  className="w-full p-2.5 bg-[#1F2937] border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                  className="w-full p-2.5 bg-[#1F2937] border border-gray-700 rounded-lg text-xs text-secondary outline-none focus:border-primary"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-1 text-[10px] uppercase font-bold">Replicate API Anahtarı (Hailuo AI Video)</label>
+                <label className="block text-text-muted mb-1 text-[10px] uppercase font-bold">Replicate API Anahtarı (Hailuo AI Video)</label>
                 <input 
                   type="password"
                   placeholder="Replicate API Token (r8_...)..."
                   value={replicateToken}
                   onChange={e => setReplicateToken(e.target.value)}
-                  className="w-full p-2.5 bg-[#1F2937] border border-gray-700 rounded-lg text-xs text-white outline-none focus:border-primary"
+                  className="w-full p-2.5 bg-[#1F2937] border border-gray-700 rounded-lg text-xs text-secondary outline-none focus:border-primary"
                 />
               </div>
 
@@ -1103,7 +1103,7 @@ export default function SocialMediaAssistant() {
             <h2 className="text-sm font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400 uppercase flex items-center">
               <Sparkles className="w-4 h-4 mr-2 text-purple-400 animate-pulse" /> Yapay Zeka Gündem & Trend Analizi
             </h2>
-            <p className="text-[11px] text-gray-400 leading-relaxed">Gündemdeki konuları, rakip hesapları veya sektörünüzle ilgili anahtar kelimeleri girin. Yapay zeka bunu analiz edip sizin için viral olmaya aday yepyeni bir video konsepti, senaryo ve görsel komutu üretsin.</p>
+            <p className="text-[11px] text-text-muted leading-relaxed">Gündemdeki konuları, rakip hesapları veya sektörünüzle ilgili anahtar kelimeleri girin. Yapay zeka bunu analiz edip sizin için viral olmaya aday yepyeni bir video konsepti, senaryo ve görsel komutu üretsin.</p>
             
             <div className="space-y-3">
               <div>
@@ -1112,13 +1112,13 @@ export default function SocialMediaAssistant() {
                   placeholder="Örn: Tiktok bal asmr trendi, @rakiphesap son videosu, organik beslenme, şifa kaynağı..."
                   value={trendKeywords}
                   onChange={e => setTrendKeywords(e.target.value)}
-                  className="w-full p-3 bg-[#1F2937]/50 border border-purple-900/50 rounded-xl text-xs text-white outline-none focus:border-purple-500 min-h-[80px]"
+                  className="w-full p-3 bg-[#1F2937]/50 border border-purple-900/50 rounded-xl text-xs text-secondary outline-none focus:border-purple-500 min-h-[80px]"
                 />
               </div>
               <button
                 onClick={handleTrendAnalysis}
                 disabled={analyzingTrends}
-                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white p-3 rounded-xl font-heading font-black text-[11px] uppercase flex items-center justify-center transition-all shadow-lg disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-secondary p-3 rounded-xl font-heading font-black text-[11px] uppercase flex items-center justify-center transition-all shadow-lg disabled:opacity-50"
               >
                 {analyzingTrends ? (
                   <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Analiz Ediliyor...</>
@@ -1131,13 +1131,13 @@ export default function SocialMediaAssistant() {
 
           {/* Selected Day Setup */}
           <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-6 h-fit">
-            <h2 className="text-xs font-heading font-bold text-gray-400 uppercase flex items-center border-b border-gray-800 pb-3">
+            <h2 className="text-xs font-heading font-bold text-text-muted uppercase flex items-center border-b border-gray-800 pb-3">
               <Wand2 className="w-4 h-4 mr-2 text-primary" /> {currentDayPlan.dayName} Günü Ayarları
             </h2>
 
             {/* Product Select */}
             <div>
-              <label className="block text-gray-400 mb-2 text-xs font-body uppercase">Ürün</label>
+              <label className="block text-text-muted mb-2 text-xs font-body uppercase">Ürün</label>
               <select 
                 value={currentDayPlan.product} 
                 onChange={e => {
@@ -1151,7 +1151,7 @@ export default function SocialMediaAssistant() {
                     customPrompt: ''
                   });
                 }} 
-                className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-xl text-white outline-none focus:border-primary font-bold text-sm"
+                className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-xl text-secondary outline-none focus:border-primary font-bold text-sm"
               >
                 <option value="Kestane Balı">Kestane Balı</option>
                 <option value="Süzme Çiçek Balı">Süzme Çiçek Balı</option>
@@ -1163,7 +1163,7 @@ export default function SocialMediaAssistant() {
 
             {/* Style Select */}
             <div>
-              <label className="block text-gray-400 mb-2 text-xs font-body uppercase">Konsept Tarzı</label>
+              <label className="block text-text-muted mb-2 text-xs font-body uppercase">Konsept Tarzı</label>
               <div className="space-y-1.5">
                 {[
                   { id: 'educational', label: 'Eğitici & Sağlık Faydaları' },
@@ -1186,7 +1186,7 @@ export default function SocialMediaAssistant() {
                     className={`w-full text-left px-4 py-2.5 rounded-xl border text-xs font-bold transition-all flex justify-between items-center ${
                       currentDayPlan.style === styleOption.id 
                         ? 'bg-primary/10 border-primary text-primary' 
-                        : 'bg-[#1F2937]/50 border-gray-800 text-gray-400 hover:border-gray-700'
+                        : 'bg-[#1F2937]/50 border-gray-800 text-text-muted hover:border-gray-700'
                     }`}
                   >
                     {styleOption.label}
@@ -1198,7 +1198,7 @@ export default function SocialMediaAssistant() {
 
             {/* Status Tracker */}
             <div>
-              <label className="block text-gray-400 mb-2 text-xs font-body uppercase">Yayın Durumu</label>
+              <label className="block text-text-muted mb-2 text-xs font-body uppercase">Yayın Durumu</label>
               <div className="flex gap-2">
                 {[
                   { id: 'draft', label: 'Taslak' },
@@ -1211,7 +1211,7 @@ export default function SocialMediaAssistant() {
                     className={`flex-1 py-2 rounded-lg border text-xs font-bold text-center transition-all ${
                       currentDayPlan.status === s.id
                         ? 'bg-primary text-secondary border-primary'
-                        : 'bg-[#1F2937]/30 border-gray-800 text-gray-400 hover:border-gray-700'
+                        : 'bg-[#1F2937]/30 border-gray-800 text-text-muted hover:border-gray-700'
                     }`}
                   >
                     {s.label}
@@ -1247,7 +1247,7 @@ export default function SocialMediaAssistant() {
                 <a 
                   href={currentDayPlan.audioUrl} 
                   download={`ari-hayat-${currentDayPlan.dayKey}-${currentDayPlan.product.toLowerCase().replace(/\s+/g, '-')}.mp3`}
-                  className="w-full py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-xs font-bold text-center block text-white transition-colors flex items-center justify-center"
+                  className="w-full py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-xs font-bold text-center block text-secondary transition-colors flex items-center justify-center"
                 >
                   <Download className="w-4 h-4 mr-2" /> MP3 İndir
                 </a>
@@ -1276,7 +1276,7 @@ export default function SocialMediaAssistant() {
                   className={`flex-1 py-4 text-xs font-heading font-black uppercase tracking-widest border-b-2 transition-all ${
                     activeTab === tab.id 
                       ? 'border-primary text-primary bg-[#1F2937]/30' 
-                      : 'border-transparent text-gray-500 hover:text-gray-300'
+                      : 'border-transparent text-gray-500 hover:text-text-main'
                   }`}
                 >
                   {tab.label}
@@ -1290,7 +1290,7 @@ export default function SocialMediaAssistant() {
                 <div className="space-y-6">
                   <div className="bg-[#1F2937]/40 p-4 rounded-xl border border-gray-800 flex flex-col">
                     <div className="flex justify-between items-center mb-3">
-                      <span className="text-xs font-bold text-gray-400 uppercase">Dış Ses (Seslendirilecek Metin)</span>
+                      <span className="text-xs font-bold text-text-muted uppercase">Dış Ses (Seslendirilecek Metin)</span>
                       <button 
                         onClick={() => handleCopy(data.scriptText, 'Senaryo')}
                         className="text-primary hover:text-primary-hover text-xs font-bold flex items-center transition-colors"
@@ -1306,11 +1306,11 @@ export default function SocialMediaAssistant() {
                   </div>
 
                   <div className="space-y-3">
-                    <span className="text-xs font-bold text-gray-400 uppercase block">Kamera & Görsel Akış Talimatları</span>
+                    <span className="text-xs font-bold text-text-muted uppercase block">Kamera & Görsel Akış Talimatları</span>
                     {data.visuals.map((vis, idx) => (
                       <div key={idx} className="flex space-x-3 p-3 bg-gray-900/30 rounded-lg border border-gray-800/50">
                         <span className="text-xs font-mono font-bold text-primary">{vis.time}</span>
-                        <p className="text-xs text-gray-300">{vis.scene}</p>
+                        <p className="text-xs text-text-main">{vis.scene}</p>
                       </div>
                     ))}
                   </div>
@@ -1320,7 +1320,7 @@ export default function SocialMediaAssistant() {
               {activeTab === 'caption' && (
                 <div className="space-y-4 flex flex-col">
                   <div className="flex justify-between items-center">
-                    <span className="text-xs font-bold text-gray-400 uppercase">Açıklama & Etiketler</span>
+                    <span className="text-xs font-bold text-text-muted uppercase">Açıklama & Etiketler</span>
                     <button 
                       onClick={() => handleCopy(data.caption, 'Açıklama')}
                       className="text-primary hover:text-primary-hover text-xs font-bold flex items-center transition-colors"
@@ -1339,7 +1339,7 @@ export default function SocialMediaAssistant() {
               {activeTab === 'twitter' && (
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-xs font-bold text-gray-400 uppercase">X (Twitter) Flood</span>
+                    <span className="text-xs font-bold text-text-muted uppercase">X (Twitter) Flood</span>
                     <button 
                       onClick={() => handleCopy(data.tweets.join('\n\n'), 'Tweet Zinciri')}
                       className="text-primary hover:text-primary-hover text-xs font-bold flex items-center transition-colors"
@@ -1349,11 +1349,11 @@ export default function SocialMediaAssistant() {
                   </div>
                   <div className="space-y-3">
                     {data.tweets.map((tweet, idx) => (
-                      <div key={idx} className="p-4 bg-[#1F2937]/30 border border-gray-800 rounded-xl relative group flex flex-col">
+                      <div key={idx} className="p-4 bg-white border border-gray-200 shadow-sm rounded-xl relative group flex flex-col">
                         <div className="absolute right-3 top-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button 
                             onClick={() => handleCopy(tweet, `Tweet ${idx + 1}`)}
-                            className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 p-1.5 rounded"
+                            className="text-xs bg-gray-800 hover:bg-gray-700 text-text-main p-1.5 rounded"
                           >
                             Kopyala
                           </button>
@@ -1366,7 +1366,7 @@ export default function SocialMediaAssistant() {
                             newTweets[idx] = e.target.value;
                             updateCurrentDay({ tweets: newTweets });
                           }}
-                          className="w-full bg-[#1F2937]/80 border border-gray-700 rounded-lg text-sm text-gray-300 p-3 outline-none focus:border-primary resize-y min-h-[80px]"
+                          className="w-full bg-[#1F2937]/80 border border-gray-700 rounded-lg text-sm text-text-main p-3 outline-none focus:border-primary resize-y min-h-[80px]"
                         />
                       </div>
                     ))}
@@ -1379,7 +1379,7 @@ export default function SocialMediaAssistant() {
           {/* AI Image Generation Area */}
           <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-6">
             <div className="flex justify-between items-center border-b border-gray-800 pb-3">
-              <h3 className="text-md font-heading font-bold text-white uppercase flex items-center">
+              <h3 className="text-md font-heading font-bold text-secondary uppercase flex items-center">
                 <ImageIcon className="w-5 h-5 mr-2 text-primary" /> Görsel Oluşturucu ({currentDayPlan.dayName})
               </h3>
               <span className="bg-green-950 text-green-400 border border-green-800 text-[10px] px-2 py-0.5 rounded-full font-bold">ÜCRETSİZ & SINIRSIZ</span>
@@ -1387,7 +1387,7 @@ export default function SocialMediaAssistant() {
 
             {/* Sizing & Aspect Ratio Selector */}
             <div className="p-4 bg-gray-900/30 rounded-xl border border-gray-800 space-y-3">
-              <span className="text-xs font-bold text-white uppercase block">Boyutlandırma / Sosyal Medya Formatı</span>
+              <span className="text-xs font-bold text-secondary uppercase block">Boyutlandırma / Sosyal Medya Formatı</span>
               <div className="flex gap-2">
                 {[
                   { id: '9:16', label: '9:16 (Reels/TikTok/Story)' },
@@ -1400,7 +1400,7 @@ export default function SocialMediaAssistant() {
                     className={`flex-1 py-2.5 rounded-xl border text-[11px] font-bold text-center transition-all ${
                       (currentDayPlan.aspectRatio || '9:16') === ratio.id
                         ? 'bg-primary border-primary text-secondary'
-                        : 'bg-[#1F2937]/50 border-gray-800 text-gray-400 hover:border-gray-700'
+                        : 'bg-[#1F2937]/50 border-gray-800 text-text-muted hover:border-gray-700'
                     }`}
                   >
                     {ratio.label}
@@ -1414,11 +1414,11 @@ export default function SocialMediaAssistant() {
               {/* Prompt Controls */}
               <div className="space-y-4">
                 <div>
-                  <label className="block text-gray-400 mb-1 text-xs font-body uppercase">Görsel Oluşturma İstemi (Prompt)</label>
+                  <label className="block text-text-muted mb-1 text-xs font-body uppercase">Görsel Oluşturma İstemi (Prompt)</label>
                   <textarea 
                     value={currentDayPlan.customPrompt}
                     onChange={e => updateCurrentDay({ customPrompt: e.target.value })}
-                    className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-xl text-white outline-none focus:border-primary text-xs font-mono min-h-[120px]"
+                    className="w-full p-3 bg-[#1F2937] border border-gray-700 rounded-xl text-secondary outline-none focus:border-primary text-xs font-mono min-h-[120px]"
                     placeholder={data.imagePrompt}
                   />
                   <span className="text-[10px] text-gray-500 mt-1 block">Boş bırakırsanız varsayılan şablon komutu kullanılacaktır. En iyi sonuç için İngilizce yazın.</span>
@@ -1444,7 +1444,7 @@ export default function SocialMediaAssistant() {
 
                   <button
                     onClick={() => updateCurrentDay({ customPrompt: data.imagePrompt })}
-                    className="bg-gray-800 hover:bg-gray-700 text-white p-3 px-4 rounded-xl font-bold transition-colors flex items-center gap-1.5"
+                    className="bg-gray-800 hover:bg-gray-700 text-secondary p-3 px-4 rounded-xl font-bold transition-colors flex items-center gap-1.5"
                     title="Şablon İstemi Yükle"
                   >
                     <RefreshCw className="w-4 h-4" />
@@ -1461,13 +1461,13 @@ export default function SocialMediaAssistant() {
                     placeholder="Manuel Görsel URL'si Girebilirsiniz..."
                     value={currentDayPlan.imageUrl || ''}
                     onChange={e => updateCurrentDay({ imageUrl: e.target.value })}
-                    className="w-full bg-black/60 border border-gray-700 text-xs text-white p-2 rounded-lg backdrop-blur-sm outline-none focus:border-primary placeholder:text-gray-500"
+                    className="w-full bg-black/60 border border-gray-700 text-xs text-secondary p-2 rounded-lg backdrop-blur-sm outline-none focus:border-primary placeholder:text-gray-500"
                   />
                 </div>
                 {generatingImage ? (
                   <div className="text-center p-6 space-y-3">
                     <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto" />
-                    <span className="text-xs text-gray-400 block font-bold uppercase tracking-wider">Arı Hayat AI çizim yapıyor...</span>
+                    <span className="text-xs text-text-muted block font-bold uppercase tracking-wider">Arı Hayat AI çizim yapıyor...</span>
                   </div>
                 ) : currentDayPlan.imageUrl ? (
                   <div className="w-full flex items-center justify-center p-4">
@@ -1486,7 +1486,7 @@ export default function SocialMediaAssistant() {
                       <a 
                         href={currentDayPlan.imageUrl} 
                         download={`ari-hayat-ai-${currentDayPlan.dayKey}.png`}
-                        className="bg-black/80 hover:bg-black/95 text-white px-3 py-2 rounded-lg font-bold text-xs flex items-center backdrop-blur transition-all"
+                        className="bg-black/80 hover:bg-black/95 text-secondary px-3 py-2 rounded-lg font-bold text-xs flex items-center backdrop-blur transition-all"
                       >
                         <Download className="w-3.5 h-3.5 mr-1" /> Resmi İndir
                       </a>
@@ -1507,7 +1507,7 @@ export default function SocialMediaAssistant() {
           {/* AI Video Generation Card */}
           <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-6">
             <div className="flex justify-between items-center border-b border-gray-800 pb-3">
-              <h3 className="text-md font-heading font-bold text-white uppercase flex items-center">
+              <h3 className="text-md font-heading font-bold text-secondary uppercase flex items-center">
                 <Video className="w-5 h-5 mr-2 text-primary animate-pulse" /> Yapay Zeka Video Oluşturucu
               </h3>
               <span className="bg-primary/10 text-primary border border-primary/20 text-[10px] px-2 py-0.5 rounded-full font-bold">100% ÜCRETSİZ & PREMİUM</span>
@@ -1517,11 +1517,11 @@ export default function SocialMediaAssistant() {
               
               <div className="space-y-4 flex flex-col justify-between">
                 <div className="space-y-3">
-                  <p className="text-xs text-gray-400 leading-relaxed font-body">
+                  <p className="text-xs text-text-muted leading-relaxed font-body">
                     Oluşturduğunuz görsel ve seslendirmeyi birleştirerek **100% ücretsiz** ve hareketli/spektrumlu bir video üretebilir veya Replicate API'niz üzerinden canlandırabilirsiniz.
                   </p>
-                  <div className="p-3.5 bg-gray-900/40 rounded-xl border border-gray-800/80 text-[11px] text-gray-400 space-y-1.5">
-                    <span className="font-bold text-white block">💡 Video Format/Boyut Ayarı:</span>
+                  <div className="p-3.5 bg-gray-900/40 rounded-xl border border-gray-800/80 text-[11px] text-text-muted space-y-1.5">
+                    <span className="font-bold text-secondary block">💡 Video Format/Boyut Ayarı:</span>
                     Görsel hangi boyutta üretildiyse (9:16 dikey, 1:1 kare, veya 16:9 yatay), video da otomatik olarak o en boy oranında animasyonlu spektrumla hazırlanır.
                   </div>
                 </div>
@@ -1531,7 +1531,7 @@ export default function SocialMediaAssistant() {
                   <button
                     onClick={handleGenerateVideoFree}
                     disabled={generatingVideo || !currentDayPlan.imageUrl || !currentDayPlan.audioUrl}
-                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white p-3.5 rounded-xl font-heading font-black text-xs uppercase flex items-center justify-center transition-all disabled:opacity-50"
+                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-secondary p-3.5 rounded-xl font-heading font-black text-xs uppercase flex items-center justify-center transition-all disabled:opacity-50"
                     title="Spektrumlu ve altyazılı hızlı video sentezleme motoru (Edits)"
                   >
                     {generatingVideo && videoPollingStatus?.includes('Sentezleniyor') ? (
@@ -1549,7 +1549,7 @@ export default function SocialMediaAssistant() {
                   <button
                     onClick={handleGenerateVideoHailuo}
                     disabled={generatingVideo || !currentDayPlan.imageUrl}
-                    className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white p-3.5 rounded-xl font-heading font-black text-xs uppercase flex items-center justify-center transition-all disabled:opacity-50"
+                    className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-secondary p-3.5 rounded-xl font-heading font-black text-xs uppercase flex items-center justify-center transition-all disabled:opacity-50"
                     title="Stable Diffusion görselini canlandırıp sinematik video üretmek için Hailuo (MiniMax) kullanın"
                   >
                     {generatingVideo && videoPollingStatus?.includes('canlandırılıyor') ? (
@@ -1558,7 +1558,7 @@ export default function SocialMediaAssistant() {
                       </>
                     ) : (
                       <>
-                        <Video className="w-4 h-4 mr-2 text-white" /> Hailuo AI Sinematik Video Üret (Replicate)
+                        <Video className="w-4 h-4 mr-2 text-secondary" /> Hailuo AI Sinematik Video Üret (Replicate)
                       </>
                     )}
                   </button>
@@ -1580,13 +1580,13 @@ export default function SocialMediaAssistant() {
                     placeholder="Manuel Video URL'si Girebilirsiniz..."
                     value={currentDayPlan.videoUrl || ''}
                     onChange={e => updateCurrentDay({ videoUrl: e.target.value })}
-                    className="w-full bg-black/60 border border-gray-700 text-xs text-white p-2 rounded-lg backdrop-blur-sm outline-none focus:border-primary placeholder:text-gray-500"
+                    className="w-full bg-black/60 border border-gray-700 text-xs text-secondary p-2 rounded-lg backdrop-blur-sm outline-none focus:border-primary placeholder:text-gray-500"
                   />
                 </div>
                 {generatingVideo ? (
                   <div className="text-center p-6 space-y-3">
                     <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto" />
-                    <span className="text-xs text-gray-400 block font-bold uppercase tracking-wider">{videoPollingStatus}</span>
+                    <span className="text-xs text-text-muted block font-bold uppercase tracking-wider">{videoPollingStatus}</span>
                   </div>
                 ) : currentDayPlan.videoUrl ? (
                   <div className="w-full flex justify-center items-center p-4">
@@ -1609,7 +1609,7 @@ export default function SocialMediaAssistant() {
                         download={`ari-hayat-video-${currentDayPlan.dayKey}.mp4`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="bg-black/80 hover:bg-black/95 text-white px-3 py-2 rounded-lg font-bold text-xs flex items-center backdrop-blur transition-all"
+                        className="bg-black/80 hover:bg-black/95 text-secondary px-3 py-2 rounded-lg font-bold text-xs flex items-center backdrop-blur transition-all"
                       >
                         <Download className="w-3.5 h-3.5 mr-1" /> Videoyu İndir
                       </a>
@@ -1630,7 +1630,7 @@ export default function SocialMediaAssistant() {
           {/* Buffer Automated Social Publisher */}
           <div className="bg-[#111827]/60 backdrop-blur-xl p-6 rounded-2xl border border-gray-800 shadow-lg space-y-4">
             <div className="flex justify-between items-center border-b border-gray-800 pb-3">
-              <h3 className="text-sm font-heading font-bold text-white uppercase flex items-center">
+              <h3 className="text-sm font-heading font-bold text-secondary uppercase flex items-center">
                 <Share2 className="w-4 h-4 mr-2 text-primary" /> Sosyal Medya Otomatik Paylaşım (Buffer)
               </h3>
             </div>
@@ -1638,13 +1638,13 @@ export default function SocialMediaAssistant() {
             {bufferToken ? (
               <div className="space-y-4">
                 {loadingProfiles ? (
-                  <div className="flex items-center space-x-2 text-xs text-gray-400">
+                  <div className="flex items-center space-x-2 text-xs text-text-muted">
                     <Loader2 className="w-4 h-4 animate-spin text-primary" />
                     <span>Bağlı hesaplar çekiliyor...</span>
                   </div>
                 ) : profiles.length > 0 ? (
                   <div className="space-y-3">
-                    <label className="block text-gray-400 text-xs font-bold uppercase">Paylaşılacak Hesapları Seçin</label>
+                    <label className="block text-text-muted text-xs font-bold uppercase">Paylaşılacak Hesapları Seçin</label>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                       {profiles.map((profile) => {
                         const isSelected = selectedProfiles.includes(profile.id);
@@ -1660,14 +1660,14 @@ export default function SocialMediaAssistant() {
                             }}
                             className={`flex items-center space-x-2 p-2 rounded-lg border text-left transition-all ${
                               isSelected 
-                                ? 'bg-primary/10 border-primary text-white' 
-                                : 'bg-[#1F2937]/30 border-gray-800 text-gray-400 hover:border-gray-700'
+                                ? 'bg-primary/10 border-primary text-secondary' 
+                                : 'bg-[#1F2937]/30 border-gray-800 text-text-muted hover:border-gray-700'
                             }`}
                           >
                             <img src={profile.avatar} alt={profile.service} className="w-6 h-6 rounded-full border border-gray-800" />
                             <div className="overflow-hidden">
                               <span className="text-[10px] font-bold block uppercase text-primary">{profile.service}</span>
-                              <span className="text-[9px] text-gray-300 block truncate">@{profile.service_username}</span>
+                              <span className="text-[9px] text-text-main block truncate">@{profile.service_username}</span>
                             </div>
                           </button>
                         );
