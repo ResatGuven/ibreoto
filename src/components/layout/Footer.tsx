@@ -80,8 +80,6 @@ export default function Footer() {
           </ul>
           <h3 className="font-heading uppercase font-bold text-sm mt-6 mb-3 border-b border-gray-800 pb-1 inline-block tracking-widest text-primary">DENEYİM MERKEZİ</h3>
           <ul className="space-y-2 font-body text-gray-400 text-xs">
-            <li><Link href="/gercek-bal" className="hover:text-primary transition-colors font-bold text-amber-500">✨ Gerçek Bal & Şifa Rehberi</Link></li>
-            <li><Link href="/tarif-sihirbazi" className="hover:text-primary transition-colors">🍳 Akıllı Tarif Sihirbazı</Link></li>
             <li><Link href="/kovanim" className="hover:text-primary transition-colors">🐝 Kovanım Nerede? Portalı</Link></li>
           </ul>
         </div>

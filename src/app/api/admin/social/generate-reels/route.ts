@@ -11,10 +11,11 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { geminiKey, topic } = await req.json();
+    const { topic } = await req.json();
+    const geminiKey = process.env.GEMINI_API_KEY;
 
     if (!geminiKey) {
-      return NextResponse.json({ error: 'Gemini API Anahtarı eksik.' }, { status: 400 });
+      return NextResponse.json({ error: 'Sistemde Gemini API Anahtarı bulunamadı (.env dosyasına GEMINI_API_KEY ekleyin).' }, { status: 500 });
     }
 
     if (!topic) {

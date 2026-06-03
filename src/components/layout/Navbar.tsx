@@ -156,15 +156,28 @@ export default function Navbar() {
             </div>
           </div>
 
-          <Link href="/gercek-bal" className="font-heading uppercase font-bold text-amber-600 hover:text-primary transition-colors text-sm tracking-wider">
-            Gerçek Bal & Şifa
-          </Link>
-          <Link href="/tarif-sihirbazi" className="font-heading uppercase font-bold text-secondary hover:text-primary transition-colors text-sm tracking-wider">
-            Tarif Sihirbazı
-          </Link>
-          <Link href="/kovanim" className="font-heading uppercase font-bold text-secondary hover:text-primary transition-colors text-sm tracking-wider">
-            Kovan Portalı
-          </Link>
+
+          <div className="relative group">
+            <button 
+              className="flex items-center font-heading uppercase font-bold text-secondary hover:text-primary transition-colors text-sm tracking-wider py-2"
+            >
+              Deneyim Merkezi <ChevronDown className="w-4 h-4 ml-1" />
+            </button>
+            <div 
+              className="absolute top-full left-0 w-56 bg-white shadow-xl rounded-b-xl py-2 border-t-2 border-primary opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all duration-300"
+            >
+              <Link href="/kovanim" className="block px-6 py-2.5 text-xs font-bold uppercase text-secondary hover:bg-primary/5 hover:text-primary transition-colors">
+                🐝 Kovan Portalı
+              </Link>
+              <Link href="/bal-asistani" className="block px-6 py-2.5 text-xs font-bold uppercase text-secondary hover:bg-primary/5 hover:text-primary transition-colors">
+                🤖 Bal Asistanı
+              </Link>
+              <Link href="/bal-analizi" className="block px-6 py-2.5 text-xs font-bold uppercase text-secondary hover:bg-primary/5 hover:text-primary transition-colors">
+                🔬 Bal Analizi
+              </Link>
+            </div>
+          </div>
+
           <Link href="/blog" className="font-heading uppercase font-bold text-secondary hover:text-primary transition-colors text-sm tracking-wider">
             Blog
           </Link>
@@ -259,15 +272,22 @@ export default function Navbar() {
             </div>
           </div>
 
-          <Link href="/gercek-bal" onClick={() => setIsMobileMenuOpen(false)} className="block font-heading uppercase font-bold text-amber-600 hover:text-primary transition-colors py-3 border-b border-gray-50 tracking-wider">
-            Gerçek Bal & Şifa
-          </Link>
-          <Link href="/tarif-sihirbazi" onClick={() => setIsMobileMenuOpen(false)} className="block font-heading uppercase font-bold text-secondary hover:text-primary transition-colors py-3 border-b border-gray-50 tracking-wider">
-            Tarif Sihirbazı
-          </Link>
-          <Link href="/kovanim" onClick={() => setIsMobileMenuOpen(false)} className="block font-heading uppercase font-bold text-secondary hover:text-primary transition-colors py-3 border-b border-gray-50 tracking-wider">
-            Kovan Portalı
-          </Link>
+
+          <div className="py-3 border-b border-gray-50">
+            <p className="font-heading uppercase font-bold text-primary text-xs mb-3 tracking-widest">Deneyim Merkezi</p>
+            <div className="grid grid-cols-1 gap-3 pl-2">
+              <Link href="/kovanim" onClick={() => setIsMobileMenuOpen(false)} className="text-[12px] font-bold uppercase text-secondary hover:text-primary flex items-center">
+                🐝 Kovan Portalı
+              </Link>
+              <Link href="/bal-asistani" onClick={() => setIsMobileMenuOpen(false)} className="text-[12px] font-bold uppercase text-secondary hover:text-primary flex items-center">
+                🤖 Bal Asistanı
+              </Link>
+              <Link href="/bal-analizi" onClick={() => setIsMobileMenuOpen(false)} className="text-[12px] font-bold uppercase text-secondary hover:text-primary flex items-center">
+                🔬 Bal Analizi
+              </Link>
+            </div>
+          </div>
+
           <Link href="/blog" onClick={() => setIsMobileMenuOpen(false)} className="block font-heading uppercase font-bold text-secondary hover:text-primary transition-colors py-3 border-b border-gray-50 tracking-wider">
             Blog
           </Link>

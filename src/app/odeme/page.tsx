@@ -105,26 +105,29 @@ export default function CheckoutPage() {
     setIsProcessing(true);
     
     try {
-      const response = await fetch('/api/checkout', {
+      const orderId = 'ORD-' + Date.now();
+
+      const response = await fetch('/api/payment/iyzico', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           customer: formData,
           items: items,
           total: getTotalPrice() - discountAmount,
-          coupon: couponCode
+          coupon: couponCode,
+          orderId: orderId
         })
       });
 
       const data = await response.json();
-      if (data.success) {
+      if (data.success && data.paymentPageUrl) {
         localStorage.removeItem('cart');
         localStorage.removeItem('applied_discount');
         localStorage.removeItem('applied_coupon');
         window.dispatchEvent(new Event('cartUpdated'));
-        router.push(`/siparis-basarili?id=${data.orderId}`);
+        window.location.href = data.paymentPageUrl;
       } else {
-        alert('Ödeme sırasında bir hata oluştu. Lütfen tekrar deneyin.');
+        alert('Ödeme başlatılamadı: ' + (data.error || 'Bilinmeyen hata'));
       }
     } catch (error) {
       console.error('Checkout error:', error);

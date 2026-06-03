@@ -26,11 +26,6 @@ export default function AdminBlogPage() {
   }, []);
 
   const handleGenerateAiBlog = async () => {
-    const geminiKey = localStorage.getItem('ari_hayat_gemini_key') || '';
-    if (!geminiKey) {
-      showToast('Lütfen önce Sistem Ayarları sayfasından Gemini API Anahtarınızı girin.', 'error');
-      return;
-    }
 
     if (!aiTopic.trim()) {
       showToast('Lütfen üretilecek yazı konusunu girin.', 'error');
@@ -42,7 +37,7 @@ export default function AdminBlogPage() {
       const res = await fetch('/api/admin/blog/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ geminiKey, topic: aiTopic, tone: aiTone })
+        body: JSON.stringify({ topic: aiTopic, tone: aiTone })
       });
       const data = await res.json();
       if (data.success && data.data) {

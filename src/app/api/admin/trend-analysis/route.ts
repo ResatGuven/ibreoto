@@ -2,10 +2,11 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
-    const { geminiKey, keywords, product } = await req.json();
+    const { keywords, product } = await req.json();
+    const geminiKey = process.env.GEMINI_API_KEY;
 
     if (!geminiKey) {
-      return NextResponse.json({ success: false, error: 'Gemini API Anahtarı eksik.' }, { status: 400 });
+      return NextResponse.json({ success: false, error: 'Sistemde Gemini API Anahtarı bulunamadı (.env dosyasına GEMINI_API_KEY ekleyin).' }, { status: 500 });
     }
 
     if (!keywords) {
