@@ -212,7 +212,7 @@ export default function AdminHivesPage() {
   };
 
   return (
-    <div className="p-6 bg-background min-h-screen text-text-main font-body">
+    <div className="p-6 bg-background min-h-screen text-text-mainmain font-body">
       
       {/* Header and Toggle Navigation */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
@@ -222,7 +222,7 @@ export default function AdminHivesPage() {
         </div>
         
         {/* Tab Selector */}
-        <div className="flex bg-[#111827] border border-gray-200 rounded-xl p-1 shrink-0">
+        <div className="flex bg-white border-gray-200 shadow-sm border border-gray-200 rounded-xl p-1 shrink-0">
           <button
             onClick={() => setActiveTab('hives')}
             className={`px-4 py-2 text-xs font-heading font-black uppercase rounded-lg transition-all ${
@@ -388,7 +388,7 @@ export default function AdminHivesPage() {
                   <div key={hive.id} className="bg-white border-gray-200 shadow-sm border border-gray-200/80 rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between">
                     
                     {hive.image && (
-                      <div className="w-full h-32 bg-gray-900 rounded-xl overflow-hidden mb-4 border border-gray-200">
+                      <div className="w-full h-32 bg-gray-50 border-gray-200 rounded-xl overflow-hidden mb-4 border border-gray-200">
                         {hive.image.endsWith('.mp4') ? (
                           <video src={hive.image} autoPlay loop muted playsInline className="w-full h-full object-cover" />
                         ) : (
@@ -459,7 +459,7 @@ export default function AdminHivesPage() {
                 ))}
 
                 {hives.length === 0 && (
-                  <div className="col-span-2 text-center py-20 bg-[#111827]/10 rounded-2xl border border-dashed border-gray-200">
+                  <div className="col-span-2 text-center py-20 bg-white border-gray-200 shadow-sm rounded-2xl border border-dashed border-gray-200">
                     <p className="text-gray-500 uppercase text-sm font-heading font-bold">Kayıtlı kovan bulunamadı.</p>
                   </div>
                 )}
@@ -661,7 +661,7 @@ export default function AdminHivesPage() {
                             <span className={`text-[9px] px-2 py-0.5 rounded font-heading font-black ${
                               ad.status === 'ACTIVE' 
                                 ? 'bg-green-900/20 text-green-400 border border-green-500/20' 
-                                : 'bg-gray-900 text-gray-500 border border-gray-200'
+                                : 'bg-gray-50 border-gray-200 text-gray-500 border border-gray-200'
                             }`}>
                               {ad.status === 'ACTIVE' ? 'AKTİF' : 'SÜRESİ DOLDU'}
                             </span>

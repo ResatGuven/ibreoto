@@ -8,7 +8,7 @@ import {
   Sparkles, ShieldAlert, Loader2, Compass, FlaskConical
 } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { AdminToastProvider } from '@/context/AdminToastContext';
 
 const menuItems = [
@@ -34,6 +34,7 @@ const menuItems = [
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -127,15 +128,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <nav className="flex-1 px-4 space-y-2 overflow-y-auto">
             {menuItems.map((item) => {
               const Icon = item.icon;
+              const isActive = pathname === item.href || (item.href !== '/yonetim' && pathname.startsWith(item.href));
               return (
                 <Link 
                   key={item.href} 
                   href={item.href} 
                   onClick={() => setIsSidebarOpen(false)}
-                  className="flex items-center space-x-4 px-5 py-3.5 rounded-2xl text-text-muted hover:bg-primary/5 hover:text-secondary transition-all duration-300 group relative overflow-hidden"
+                  className={`flex items-center space-x-4 px-5 py-3.5 rounded-2xl transition-all duration-300 group relative overflow-hidden ${isActive ? 'bg-primary/10 text-primary' : 'text-text-muted hover:bg-primary/5 hover:text-secondary'}`}
                 >
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary transform scale-y-0 group-hover:scale-y-100 transition-transform duration-300" />
-                  <Icon size={18} className="group-hover:text-primary transition-colors z-10" />
+                  <div className={`absolute left-0 top-0 bottom-0 w-1 bg-primary transform transition-transform duration-300 ${isActive ? 'scale-y-100' : 'scale-y-0 group-hover:scale-y-100'}`} />
+                  <Icon size={18} className={`z-10 transition-colors ${isActive ? 'text-primary' : 'group-hover:text-primary'}`} />
                   <span className="font-heading font-bold text-[11px] uppercase tracking-widest z-10">{item.label}</span>
                 </Link>
               );

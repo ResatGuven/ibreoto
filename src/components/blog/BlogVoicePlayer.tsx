@@ -97,7 +97,7 @@ export function BlogVoicePlayer({ contentHtml, title }: BlogVoicePlayerProps) {
   }, []);
 
   return (
-    <div className="bg-[#111827] border border-amber-500/20 rounded-3xl p-5 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-body shadow-xl relative overflow-hidden group">
+    <div className="bg-white border-gray-200 shadow-sm border border-amber-500/20 rounded-3xl p-5 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-body shadow-xl relative overflow-hidden group">
       {/* Background soft light */}
       <div className="absolute -top-12 -left-12 w-32 h-32 bg-primary/10 rounded-full blur-2xl pointer-events-none group-hover:bg-primary/15 transition-all"></div>
       

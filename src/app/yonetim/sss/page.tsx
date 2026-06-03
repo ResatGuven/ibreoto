@@ -206,7 +206,7 @@ export default function AdminFaqPage() {
         })}
 
         {faqs.length === 0 && !loading && (
-          <div className="text-center py-20 bg-[#111827]/30 rounded-2xl border border-dashed border-gray-200">
+          <div className="text-center py-20 bg-white shadow-sm border-gray-200 rounded-2xl border border-dashed border-gray-200">
             <p className="text-gray-500 uppercase text-sm font-heading font-bold">Henüz hiç soru eklenmemiş.</p>
           </div>
         )}

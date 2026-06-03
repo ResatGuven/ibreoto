@@ -437,7 +437,7 @@ export default function KovanPortalPage() {
                     value={code} 
                     onChange={e => setCode(e.target.value.toUpperCase())}
                     placeholder="KOV-1234" 
-                    className="w-full pl-10 pr-4 py-3 bg-[#1F2937]/50 border border-gray-700 rounded-xl focus:border-primary outline-none text-secondary text-center font-heading font-bold placeholder-gray-600 transition-colors uppercase"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-primary outline-none text-gray-900 text-center font-heading font-bold placeholder-gray-400 transition-colors uppercase"
                     required
                   />
                   <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-500" />
@@ -457,7 +457,7 @@ export default function KovanPortalPage() {
           </div>
 
           {/* Right Column: Doğal Kovan Hâmiliği Info & Ecological Calculator */}
-          <div className="lg:col-span-7 p-8 bg-[#111827]/40 border border-amber-500/10 rounded-3xl shadow-2xl backdrop-blur-xl space-y-6">
+          <div className="lg:col-span-7 p-8 bg-white border border-gray-200 rounded-3xl shadow-sm backdrop-blur-xl space-y-6">
             <span className="text-[9px] bg-amber-500/10 border border-amber-500/30 text-primary px-3 py-1 rounded-full font-black tracking-widest uppercase">
               BİREYSEL HAMİLİK & DOĞAL ARICILIK SEFERBERLİĞİ
             </span>
@@ -471,7 +471,7 @@ export default function KovanPortalPage() {
             </div>
 
             {/* Ecological Calculator Widget */}
-            <div className="bg-black/20 p-5 rounded-2xl border border-gray-850 space-y-5">
+            <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-5 shadow-inner">
               <h3 className="text-xs font-heading font-black text-text-muted uppercase tracking-wider flex items-center gap-2">
                 <Sprout className="w-4 h-4 text-primary animate-pulse" /> Kovan Hamilik ve Ekolojik Etki Simülatörü
               </h3>
@@ -495,7 +495,7 @@ export default function KovanPortalPage() {
                         className={`py-2 px-3 text-xs font-heading font-black uppercase rounded-lg border transition-all ${
                           supportLevel === item.value 
                             ? 'bg-primary/20 border-primary text-primary' 
-                            : 'bg-gray-900 border-gray-800 text-text-muted hover:border-gray-700'
+                            : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300 shadow-sm'
                         }`}
                       >
                         {item.label}
@@ -505,7 +505,7 @@ export default function KovanPortalPage() {
                 </div>
 
                 {/* Tier Description */}
-                <div className="text-center text-[10px] text-text-muted italic bg-gray-900/30 p-2.5 rounded-xl border border-gray-800/40">
+                <div className="text-center text-[10px] text-gray-600 italic bg-white p-2.5 rounded-xl border border-gray-200 shadow-sm">
                   {supportLevel === 4 && "🌸 Flora Hamisi olarak yayladaki endemik kır çiçeklerinin tozlaşmasını ve Kafkas arılarının üremesini desteklersiniz."}
                   {supportLevel === 2 && "🐝 Biyoçeşitlilik Hamisi olarak arıcılık ekosisteminin korunmasını güçlendirir ve habitat zenginliğine büyük katkı sunarsınız."}
                   {supportLevel === 1 && "👑 Kovan Baş Hamisi olarak kovanın tüm bakım, arıcılık ve koruma sorumluluğunu üstlenerek doğada devasa bir iz bırakırsınız."}
@@ -513,19 +513,19 @@ export default function KovanPortalPage() {
 
                 {/* Ecological outputs display */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-gray-800/80">
-                  <div className="bg-[#111827] p-3 rounded-xl border border-gray-850 text-center">
+                  <div className="bg-white p-3 rounded-xl border border-gray-200 shadow-sm text-center">
                     <div className="text-[8px] text-gray-500 font-bold uppercase">Yaşatılan Arı</div>
                     <div className="text-sm text-secondary font-heading font-black mt-1">~{Math.round(48000 / supportLevel).toLocaleString('tr-TR')}</div>
                     <div className="text-[7px] text-gray-500 font-body">Kafkas Arı Irkı</div>
                   </div>
                   
-                  <div className="bg-[#111827] p-3 rounded-xl border border-gray-850 text-center">
+                  <div className="bg-white p-3 rounded-xl border border-gray-200 shadow-sm text-center">
                     <div className="text-[8px] text-primary font-bold uppercase">Tozlaşma Katkısı</div>
                     <div className="text-sm text-primary font-heading font-black mt-1">~{Math.round(1200000 / supportLevel).toLocaleString('tr-TR')}</div>
                     <div className="text-[7px] text-primary/70 font-body">Çiçek Tozlaşması / Yıl</div>
                   </div>
 
-                  <div className="bg-[#111827] p-3 rounded-xl border border-gray-850 text-center">
+                  <div className="bg-white p-3 rounded-xl border border-gray-200 shadow-sm text-center">
                     <div className="text-[8px] text-gray-500 font-bold uppercase">Destek Alanı</div>
                     <div className="text-sm text-secondary font-heading font-black mt-1">~{Math.round(150 / supportLevel)} m²</div>
                     <div className="text-[7px] text-gray-500 font-body">Doğal Yayla Florası</div>

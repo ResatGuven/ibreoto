@@ -67,7 +67,7 @@ export default function AdminDashboardPage() {
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <div key={index} className="bg-white shadow-sm border border-gray-200">
+            <div key={index} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
               <div className="flex justify-between items-start">
                 <div>
                   <p className="text-gray-500 text-sm font-medium">{stat.label}</p>
@@ -88,7 +88,7 @@ export default function AdminDashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
         {/* Sales Chart (Live) */}
-        <div className="lg:col-span-2 bg-white shadow-sm border border-gray-200">
+        <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
           <h3 className="font-heading font-bold text-lg text-secondary mb-4 uppercase flex justify-between items-center">
             Haftalık Satış Analizi
             <span className="text-[10px] text-gray-500 font-body">Son 7 Gün</span>
@@ -117,7 +117,7 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Low Stock (Mock) */}
-        <div className="bg-white shadow-sm border border-gray-200">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
           <h3 className="font-heading font-bold text-lg text-secondary mb-4 uppercase">Kritik Stok Uyarısı</h3>
           <ul className="space-y-4 mt-4">
             {lowStock.map((item, index) => (
@@ -126,7 +126,7 @@ export default function AdminDashboardPage() {
                   <p className="text-sm font-medium text-secondary">{item.name}</p>
                 </div>
                 <div className={`px-3 py-1 rounded-full text-xs font-bold ${
-                  item.stock === 0 ? 'bg-red-900/50 text-red-300 border border-red-700' : 'bg-yellow-900/50 text-yellow-300 border border-yellow-700'
+                  item.stock === 0 ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-yellow-50 text-yellow-700 border border-yellow-200'
                 }`}>
                   {item.status}
                 </div>
@@ -140,12 +140,12 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Recent Orders */}
-      <div className="bg-white shadow-sm border border-gray-200">
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
         <h3 className="font-heading font-bold text-lg text-secondary mb-4 uppercase">Son Siparişler</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse font-body text-sm">
             <thead>
-              <tr className="border-b border-gray-800 text-text-muted">
+              <tr className="border-b border-gray-200 text-text-muted">
                 <th className="py-3 font-medium">Sipariş No</th>
                 <th className="py-3 font-medium">Müşteri</th>
                 <th className="py-3 font-medium">Tutar</th>
@@ -154,15 +154,15 @@ export default function AdminDashboardPage() {
             </thead>
             <tbody className="text-text-main">
               {orders.slice(0, 5).map((order) => (
-                <tr key={order.id} className="border-b border-gray-800 hover:bg-gray-50/50 transition-colors">
-                  <td className="py-3 font-medium text-amber-400">#{order.id}</td>
+                <tr key={order.id} className="border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
+                  <td className="py-3 font-medium text-primary">#{order.id}</td>
                   <td className="py-3 text-secondary">{order.customer}</td>
-                  <td className="py-3 font-medium text-amber-500">{order.total}</td>
+                  <td className="py-3 font-medium text-amber-600">{order.total}</td>
                   <td className="py-3">
                     <span className={`px-2 py-1 rounded text-xs font-bold ${
-                      order.status === 'Teslim Edildi' ? 'bg-green-900/50 text-green-300 border border-green-700' :
-                      order.status === 'Kargoya Verildi' ? 'bg-blue-900/50 text-blue-300 border border-blue-700' :
-                      'bg-yellow-900/50 text-yellow-300 border border-yellow-700'
+                      order.status === 'Teslim Edildi' ? 'bg-green-50 text-green-700 border border-green-200' :
+                      order.status === 'Kargoya Verildi' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
+                      'bg-amber-50 text-amber-700 border border-amber-200'
                     }`}>
                       {order.status}
                     </span>

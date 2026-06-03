@@ -68,7 +68,7 @@ export function HiveAnatomyExplorer() {
   const currentLayer = layers.find(l => l.id === selectedLayer) || layers[1];
 
   return (
-    <div className="bg-[#111827]/40 border border-gray-800 p-8 rounded-[2.5rem] backdrop-blur-xl font-body shadow-2xl relative overflow-hidden">
+    <div className="bg-white border-gray-200 shadow-sm border border-gray-200 p-8 rounded-[2.5rem] backdrop-blur-xl font-body shadow-2xl relative overflow-hidden">
       
       {/* Decors */}
       <div className="absolute top-0 left-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -91,7 +91,7 @@ export function HiveAnatomyExplorer() {
                   className={`
                     w-full cursor-pointer transition-all duration-500 ease-out transform
                     bg-gradient-to-r ${layer.colorClass}
-                    border ${isSelected ? 'border-primary shadow-2xl shadow-primary/30 scale-105 z-20' : 'border-gray-800/40 hover:border-amber-500/40 scale-100 z-10'}
+                    border ${isSelected ? 'border-primary shadow-2xl shadow-primary/30 scale-105 z-20' : 'border-gray-200/40 hover:border-amber-500/40 scale-100 z-10'}
                     rounded-2xl p-4 flex items-center justify-between text-white font-heading font-black uppercase tracking-wider text-xs
                     ${layer.offsetY} Rotate-X-20 Preserve-3d shadow-xl
                   `}
@@ -142,7 +142,7 @@ export function HiveAnatomyExplorer() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Telemetry Target Info */}
-            <div className="bg-black/40 border border-gray-800/80 p-4 rounded-2xl flex flex-col justify-between">
+            <div className="bg-black/40 border border-gray-200/80 p-4 rounded-2xl flex flex-col justify-between">
               <div>
                 <p className="text-[9px] text-gray-500 uppercase tracking-widest font-black mb-1">Katman Sıcaklık Dengesi</p>
                 <p className="text-xs text-white font-medium font-body leading-tight">

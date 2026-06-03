@@ -64,7 +64,7 @@ export default function AsmrWidget() {
   return (
     <div className="fixed bottom-6 left-6 z-50 font-body">
       {isOpen ? (
-        <div className="bg-[#111827]/90 backdrop-blur-xl border border-gray-800 p-4 rounded-2xl shadow-2xl flex items-center space-x-3 transition-all duration-300 w-64">
+        <div className="bg-white border-gray-200 shadow-sm backdrop-blur-xl border border-gray-200 p-4 rounded-2xl shadow-2xl flex items-center space-x-3 transition-all duration-300 w-64">
           <button 
             onClick={togglePlay}
             className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-amber-700 hover:from-amber-600 hover:to-amber-800 text-secondary flex items-center justify-center transition-all shadow-lg shadow-primary/20 transform hover:scale-105"
@@ -105,7 +105,7 @@ export default function AsmrWidget() {
       ) : (
         <button
           onClick={() => setIsOpen(true)}
-          className="relative w-12 h-12 rounded-full bg-[#111827]/80 backdrop-blur-md border border-gray-800 hover:border-primary/50 text-primary hover:text-white flex items-center justify-center transition-all duration-300 shadow-xl group hover:scale-105"
+          className="relative w-12 h-12 rounded-full bg-white border-gray-200 shadow-sm backdrop-blur-md border border-gray-200 hover:border-primary/50 text-primary hover:text-white flex items-center justify-center transition-all duration-300 shadow-xl group hover:scale-105"
           title="Arıların Şarkısı (ASMR vızıltı)"
         >
           {isPlaying && (
